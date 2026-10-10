@@ -1,0 +1,87 @@
+// Shared helpers for every Edge Function: CORS, JSON responses, admin client,
+// Make.com forwarding, hashing and constant-time comparison.
+import { createClient, type SupabaseClient } from "npm:@supabase/supabase-js@2";
+
+// Browsers may call these functions only from the shop's own address.
+// ALLOWED_ORIGINS is optional: without it, the origin of SITE_URL is used.
+function originOf(url: string): string {
+  try { return new URL(url).origin; } catch { return ""; }
+}
+const allowed = (Deno.env.get("ALLOWED_ORIGINS") || originOf(Deno.env.get("SITE_URL") ?? ""))
+  .split(",").map((s) => s.trim()).filter(Boolean);
+
+/** CORS headers that echo the caller's origin only if it is on the allow-list. */
+export function cors(req: Request): Record<string, string> {
+  const origin = req.headers.get("origin") ?? "";
+  return {
+    "Access-Control-Allow-Origin": allowed.includes(origin) ? origin : allowed[0] ?? "",
+    "Access-Control-Allow-Headers": "authorization, apikey, content-type, x-client-info",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Vary": "Origin",
+  };
+}
+
+export function json(req: Request, body: unknown, status = 200): Response {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { ...cors(req), "content-type": "application/json; charset=utf-8" },
+  });
+}
+
+export const fail = (req: Request, error: string, status = 400) => json(req, { error }, status);
+
+/** Service-role client: bypasses RLS. Only ever used server-side. */
+export function admin(): SupabaseClient {
+  return createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!, {
+    auth: { persistSession: false, autoRefreshToken: false },
+  });
+}
+
+export const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+export function clientIp(req: Request): string {
+  return (req.headers.get("x-forwarded-for") ?? "").split(",")[0].trim();
+}
+
+export async function sha256Hex(text: string): Promise<string> {
+  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
+  return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+
+export async function hmacHex(secret: string, message: string): Promise<string> {
+  const key = await crypto.subtle.importKey(
+    "raw", new TextEncoder().encode(secret), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+  const sig = await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(message));
+  return [...new Uint8Array(sig)].map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+
+export function safeEqual(a: string, b: string): boolean {
+  if (a.length !== b.length) return false;
+  let diff = 0;
+  for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  return diff === 0;
+}
+
+/**
+ * Sends an event to a Make.com custom webhook. Never throws: Supabase is the
+ * system of record, so a Make outage must not fail a sale or a support request.
+ * The shared secret travels in the body (`secret`) and the x-mwp-secret header;
+ * each Make scenario's first filter checks it.
+ */
+export async function notifyMake(envName: string, payload: Record<string, unknown>): Promise<boolean> {
+  const url = Deno.env.get(envName);
+  if (!url) { console.warn(`${envName} not set; skipped Make.com notification`); return false; }
+  try {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "content-type": "application/json", "x-mwp-secret": Deno.env.get("MAKE_SHARED_SECRET") ?? "" },
+      body: JSON.stringify({ ...payload, secret: Deno.env.get("MAKE_SHARED_SECRET") ?? "", sent_at: new Date().toISOString() }),
+      signal: AbortSignal.timeout(8000),
+    });
+    if (!res.ok) console.error(`${envName} responded ${res.status}`);
+    return res.ok;
+  } catch (err) {
+    console.error(`${envName} failed`, err);
+    return false;
+  }
+}

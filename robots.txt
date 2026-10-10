@@ -1,0 +1,11 @@
+# Pre-launch: keep search engines out until the shop is approved and live.
+# At launch, replace the two lines below with the launch version.
+User-agent: *
+Disallow: /
+
+# Launch version:
+# User-agent: *
+# Disallow: /admin/
+# Disallow: /account.html
+# Disallow: /thank-you.html
+# Sitemap: https://presets.matanwildphotography.com/sitemap.xml

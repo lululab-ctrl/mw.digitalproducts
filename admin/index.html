@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Admin · MWP Presets</title>
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#0A0908">
+  <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400&display=swap">
+  <link rel="stylesheet" href="../assets/css/tokens.css">
+  <link rel="stylesheet" href="../assets/css/styles.css">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body class="admin">
+
+<!-- Sign-in -->
+<section class="admin-gate" id="gate">
+  <div class="panel stack-lg" style="width:min(440px,92vw)">
+    <div class="stack">
+      <p class="brand">MWP <small>Admin</small></p>
+      <h1 class="h3">Sign in to <strong>manage the shop.</strong></h1>
+      <p class="muted" id="gate-msg">We'll email you a one-time sign-in link.</p>
+    </div>
+    <form class="form" id="gate-form" novalidate>
+      <div class="field"><label for="gate-email">Email</label><input class="input" id="gate-email" name="email" type="email" autocomplete="email" required></div>
+      <button class="btn btn--accent" type="submit">Email me a link</button>
+      <p class="form-status" role="status"></p>
+    </form>
+  </div>
+</section>
+
+<!-- App -->
+<div class="admin-app" id="app" hidden>
+  <aside class="admin-side">
+    <p class="brand">MWP <small>Admin</small></p>
+    <nav class="admin-nav" aria-label="Admin sections">
+      <button type="button" data-tab="overview" aria-current="page">Overview</button>
+      <button type="button" data-tab="products">Products</button>
+      <button type="button" data-tab="orders">Orders</button>
+      <button type="button" data-tab="customers">Customers</button>
+      <button type="button" data-tab="support">Support <span class="pill" id="open-tickets" hidden></span></button>
+    </nav>
+    <div class="admin-side__foot">
+      <p class="meta" id="admin-email"></p>
+      <a class="meta" href="../index.html" target="_blank" rel="noopener">View shop ↗</a>
+      <button class="btn btn--sm btn--ghost" id="admin-signout" type="button">Sign out</button>
+    </div>
+  </aside>
+
+  <main class="admin-main" id="main">
+    <!-- Overview -->
+    <section data-panel="overview">
+      <header class="admin-head">
+        <h1 class="h3">Overview</h1>
+        <div class="row" role="group" aria-label="Period">
+          <button class="btn btn--sm" data-days="7" type="button">7 days</button>
+          <button class="btn btn--sm btn--ghost" data-days="30" type="button">30 days</button>
+          <button class="btn btn--sm btn--ghost" data-days="90" type="button">90 days</button>
+        </div>
+      </header>
+      <div class="tiles" id="tiles"></div>
+      <div class="panel admin-chart">
+        <div class="row row--between"><h2 class="admin-h2">Paid orders per day</h2><span class="meta" id="chart-total"></span></div>
+        <div id="chart" class="chart" role="img"></div>
+      </div>
+      <div class="panel">
+        <h2 class="admin-h2">Top packs</h2>
+        <div id="top-products"></div>
+      </div>
+    </section>
+
+    <!-- Products -->
+    <section data-panel="products" hidden>
+      <header class="admin-head">
+        <h1 class="h3">Products</h1>
+        <button class="btn btn--sm btn--accent" id="new-product" type="button">New product</button>
+      </header>
+      <div id="product-list"></div>
+    </section>
+
+    <!-- Product editor -->
+    <section data-panel="editor" hidden>
+      <header class="admin-head">
+        <button class="btn btn--sm btn--ghost" type="button" data-tab="products">← Products</button>
+        <h1 class="h3" id="editor-title">New product</h1>
+      </header>
+
+      <form class="form panel" id="product-form" novalidate>
+        <input type="hidden" name="id">
+        <div class="form-grid">
+          <div class="field"><label for="f-name">Name</label><input class="input" id="f-name" name="name" required placeholder="Savanna"></div>
+          <div class="field"><label for="f-emph">Bold part of the name</label><input class="input" id="f-emph" name="name_emphasis" placeholder="Golden Hour"></div>
+          <div class="field"><label for="f-slug">URL slug</label><input class="input" id="f-slug" name="slug" required pattern="[a-z0-9]+(-[a-z0-9]+)*" placeholder="savanna-golden-hour"></div>
+          <div class="field"><label for="f-badge">Badge (optional)</label><input class="input" id="f-badge" name="badge" placeholder="New"></div>
+        </div>
+        <div class="field"><label for="f-tagline">Tagline</label><input class="input" id="f-tagline" name="tagline" maxlength="160"></div>
+        <div class="field"><label for="f-desc">Description (blank line between paragraphs)</label><textarea class="textarea" id="f-desc" name="description"></textarea></div>
+        <div class="form-grid">
+          <div class="field"><label for="f-price">Price</label><input class="input" id="f-price" name="price" type="number" min="0" step="0.01" required></div>
+          <div class="field"><label for="f-compare">Was price (optional)</label><input class="input" id="f-compare" name="compare_at" type="number" min="0" step="0.01"></div>
+          <div class="field"><label for="f-currency">Currency</label><input class="input" id="f-currency" name="currency" value="USD" maxlength="3" required></div>
+          <div class="field"><label for="f-count">Number of presets</label><input class="input" id="f-count" name="preset_count" type="number" min="1"></div>
+        </div>
+        <div class="form-grid">
+          <div class="field"><label for="f-includes">What's included (one per line)</label><textarea class="textarea textarea--sm" id="f-includes" name="includes"></textarea></div>
+          <div class="field"><label for="f-compat">Works with (one per line)</label><textarea class="textarea textarea--sm" id="f-compat" name="compatibility"></textarea></div>
+        </div>
+        <div class="form-grid">
+          <div class="field"><label for="f-checkout">Checkout link (Lemon Squeezy)</label><input class="input" id="f-checkout" name="checkout_url" type="url" placeholder="https://yourstore.lemonsqueezy.com/buy/…"></div>
+          <div class="field"><label for="f-variant">Checkout variant ID</label><input class="input" id="f-variant" name="checkout_variant_id" inputmode="numeric"></div>
+          <div class="field"><label for="f-version">Version</label><input class="input" id="f-version" name="version" value="1.0"></div>
+          <div class="field"><label for="f-sort">Sort order</label><input class="input" id="f-sort" name="sort_order" type="number" value="100"></div>
+        </div>
+        <div class="row">
+          <label class="check"><input type="checkbox" name="is_featured"> Featured on the home page</label>
+          <label class="check"><input type="checkbox" name="is_active"> Live in the shop (only after copy, images and price are approved)</label>
+        </div>
+        <div class="row">
+          <button class="btn btn--accent" type="submit">Save product</button>
+          <p class="form-status" role="status"></p>
+        </div>
+      </form>
+
+      <div class="editor-media" id="editor-media" hidden>
+        <div class="panel stack">
+          <h2 class="admin-h2">Card images</h2>
+          <p class="meta">Resized to 2400 px and converted to WebP in your browser before upload.</p>
+          <div class="form-grid">
+            <div class="media-slot" data-slot="cover_path"><p class="meta">Cover (4:5)</p><div class="media-slot__img"></div><input type="file" accept="image/*"></div>
+            <div class="media-slot" data-slot="hover_path"><p class="meta">Hover image (4:5)</p><div class="media-slot__img"></div><input type="file" accept="image/*"></div>
+          </div>
+        </div>
+
+        <div class="panel stack">
+          <h2 class="admin-h2">Before / after pairs</h2>
+          <form class="form-grid" id="pair-form">
+            <div class="field"><label>Before</label><input type="file" name="before" accept="image/*" required></div>
+            <div class="field"><label>After</label><input type="file" name="after" accept="image/*" required></div>
+            <div class="field"><label>Alt text</label><input class="input" name="alt" placeholder="Kingfisher on a branch in forest shade" required></div>
+            <div class="field"><label>Caption</label><input class="input" name="caption" placeholder="Kingfisher · Forest shade"></div>
+            <button class="btn btn--sm" type="submit">Upload pair</button>
+          </form>
+          <div class="media-grid" id="pairs"></div>
+        </div>
+
+        <div class="panel stack">
+          <h2 class="admin-h2">Gallery</h2>
+          <form class="row" id="gallery-form">
+            <input type="file" name="files" accept="image/*" multiple required>
+            <input class="input" name="alt" placeholder="Alt text for these images" style="max-width:320px" required>
+            <button class="btn btn--sm" type="submit">Upload</button>
+          </form>
+          <div class="media-grid" id="gallery"></div>
+        </div>
+
+        <div class="panel stack">
+          <h2 class="admin-h2">Download file (.zip)</h2>
+          <p class="meta">Stored privately. Buyers only ever get a 5-minute link. Uploading a new version keeps the old file, so nothing breaks mid-download.</p>
+          <div id="file-info" class="meta"></div>
+          <form class="row" id="zip-form">
+            <input type="file" name="zip" accept=".zip,application/zip" required>
+            <button class="btn btn--sm" type="submit">Upload zip</button>
+          </form>
+          <progress id="zip-progress" max="100" value="0" hidden></progress>
+        </div>
+      </div>
+    </section>
+
+    <!-- Orders -->
+    <section data-panel="orders" hidden>
+      <header class="admin-head">
+        <h1 class="h3">Orders</h1>
+        <div class="row">
+          <input class="input input--sm" type="search" id="orders-search" placeholder="Search email or order number">
+          <button class="btn btn--sm btn--ghost" id="orders-csv" type="button">Export CSV</button>
+        </div>
+      </header>
+      <div class="table-wrap"><table class="table" id="orders-table"></table></div>
+    </section>
+
+    <!-- Customers -->
+    <section data-panel="customers" hidden>
+      <header class="admin-head">
+        <h1 class="h3">Customers</h1>
+        <div class="row">
+          <input class="input input--sm" type="search" id="customers-search" placeholder="Search email or name">
+          <button class="btn btn--sm btn--ghost" id="customers-csv" type="button">Export CSV</button>
+        </div>
+      </header>
+      <div class="table-wrap"><table class="table" id="customers-table"></table></div>
+    </section>
+
+    <!-- Support -->
+    <section data-panel="support" hidden>
+      <header class="admin-head">
+        <h1 class="h3">Support</h1>
+        <div class="row" role="group" aria-label="Filter tickets">
+          <button class="btn btn--sm" data-ticket-filter="open" type="button">Open</button>
+          <button class="btn btn--sm btn--ghost" data-ticket-filter="all" type="button">All</button>
+        </div>
+      </header>
+      <div id="tickets" class="stack"></div>
+    </section>
+  </main>
+</div>
+
+<div class="chart-tip" id="chart-tip" role="tooltip" hidden></div>
+<script type="module" src="admin.js"></script>
+</body>
+</html>

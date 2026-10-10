@@ -1,0 +1,111 @@
+# ============================================================================
+# Automatic deployment. Every push to main:
+#   1. publishes the website to GitHub Pages
+#   2. applies new database migrations, sets function secrets and deploys the
+#      Edge Functions to Supabase (runs from GitHub; skipped with a warning
+#      until SUPABASE_ACCESS_TOKEN and SUPABASE_DB_PASSWORD are set)
+# Run it by hand any time: Actions → Deploy → Run workflow.
+# ============================================================================
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+env:
+  SUPABASE_PROJECT_REF: tkkpxsyioetzexgbmbqy
+
+jobs:
+  website:
+    name: Website to GitHub Pages
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Collect the public site files
+        # Only the website goes online; server code, SQL and docs stay in the repository.
+        run: |
+          mkdir _site
+          cp *.html robots.txt sitemap.xml .nojekyll _site/
+          cp -r assets admin _site/
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - id: deploy
+        uses: actions/deploy-pages@v4
+
+  supabase:
+    name: Database and server functions to Supabase
+    runs-on: ubuntu-latest
+    env:
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+    steps:
+      - name: Check the Supabase secrets are set
+        id: ready
+        run: |
+          if [ -z "$SUPABASE_ACCESS_TOKEN" ] || [ -z "$SUPABASE_DB_PASSWORD" ]; then
+            echo "::warning title=Supabase deploy skipped::Add SUPABASE_ACCESS_TOKEN and SUPABASE_DB_PASSWORD under Settings > Secrets and variables > Actions, then re-run this workflow."
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/checkout@v4
+        if: steps.ready.outputs.ok == 'true'
+
+      - uses: supabase/setup-cli@v1
+        if: steps.ready.outputs.ok == 'true'
+        with:
+          version: latest
+
+      - name: Link the Supabase project
+        if: steps.ready.outputs.ok == 'true'
+        run: supabase link --project-ref "$SUPABASE_PROJECT_REF"
+
+      - name: Apply database migrations
+        # Only migrations not yet applied run; already-applied ones are skipped.
+        if: steps.ready.outputs.ok == 'true'
+        run: yes | supabase db push
+
+      - name: Set function secrets
+        if: steps.ready.outputs.ok == 'true'
+        env:
+          SITE_URL: ${{ vars.SITE_URL || 'https://lululab-ctrl.github.io/mw.digitalproducts' }}
+          DOWNLOAD_DAILY_LIMIT: ${{ vars.DOWNLOAD_DAILY_LIMIT || '5' }}
+          CHECKOUT_WEBHOOK_SECRET: ${{ secrets.CHECKOUT_WEBHOOK_SECRET }}
+          MAKE_SHARED_SECRET: ${{ secrets.MAKE_SHARED_SECRET }}
+          IP_HASH_SALT: ${{ secrets.IP_HASH_SALT }}
+          MAKE_ORDER_WEBHOOK: ${{ secrets.MAKE_ORDER_WEBHOOK }}
+          MAKE_SUPPORT_WEBHOOK: ${{ secrets.MAKE_SUPPORT_WEBHOOK }}
+          MAKE_SUBSCRIBE_WEBHOOK: ${{ secrets.MAKE_SUBSCRIBE_WEBHOOK }}
+        run: |
+          args=()
+          for name in SITE_URL DOWNLOAD_DAILY_LIMIT CHECKOUT_WEBHOOK_SECRET MAKE_SHARED_SECRET IP_HASH_SALT \
+                      MAKE_ORDER_WEBHOOK MAKE_SUPPORT_WEBHOOK MAKE_SUBSCRIBE_WEBHOOK; do
+            value="${!name}"
+            if [ -n "$value" ]; then args+=("$name=$value"); else echo "::notice::$name not set yet"; fi
+          done
+          supabase secrets set "${args[@]}" --project-ref "$SUPABASE_PROJECT_REF"
+
+      - name: Deploy server functions
+        # JWT settings per function come from supabase/config.toml
+        if: steps.ready.outputs.ok == 'true'
+        run: supabase functions deploy --project-ref "$SUPABASE_PROJECT_REF"

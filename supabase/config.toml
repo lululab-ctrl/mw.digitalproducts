@@ -1,0 +1,17 @@
+# Supabase CLI settings for this project (used by `supabase functions deploy`).
+# JWT verification at the gateway is off for every function because each one
+# authenticates its own callers. This also keeps working with Supabase's newer
+# non-JWT publishable keys.
+project_id = "mwp-presets"
+
+[functions.checkout-webhook]
+verify_jwt = false   # checkout provider: verified by HMAC signature
+
+[functions.get-download]
+verify_jwt = false   # verifies the customer's session token itself (auth.getUser)
+
+[functions.support]
+verify_jwt = false   # public form: honeypot + per-email rate limit
+
+[functions.subscribe]
+verify_jwt = false   # public form: validation + idempotent upsert

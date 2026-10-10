@@ -1,0 +1,10 @@
+# Secrets never go to GitHub
+.env
+.env.*
+supabase/.env
+supabase/functions/.env
+# Local tooling
+supabase/.branches
+supabase/.temp
+node_modules/
+.DS_Store
