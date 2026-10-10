@@ -2,6 +2,7 @@
 import { initChrome, toast } from "../lib/ui.js";
 import { supabase, currentUser, sendMagicLink, signOut, myLibrary, requestDownload, mediaUrl, esc, shortDate } from "../lib/api.js";
 import { EMAIL_RE, setBusy, setStatus } from "./shared-forms.js";
+import { countLabel } from "../lib/catalog.js";
 
 initChrome();
 
@@ -13,16 +14,16 @@ const who = document.getElementById("who");
 function libraryHTML(items) {
   if (!items.length) {
     return `<div class="empty stack">
-      <p>No packs on this email yet.</p>
+      <p>Nothing on this email yet.</p>
       <p class="meta">Bought with a different email? Sign out and use that one, or <a class="link" href="support.html">contact support</a> with your order number.</p>
     </div>`;
   }
   return items.map(({ id, granted_at, products: p }) => `
     <article class="library-item">
-      <img src="${esc(mediaUrl(p.cover_path, { width: 240 }))}" alt="" loading="lazy">
+      ${p.cover_path ? `<img src="${esc(mediaUrl(p.cover_path, { width: 240 }))}" alt="" loading="lazy">` : `<span class="thumb" aria-hidden="true"></span>`}
       <div>
         <h3 class="library-item__title">${esc(p.name)}${p.name_emphasis ? " " + esc(p.name_emphasis) : ""}</h3>
-        <p class="meta">Version ${esc(p.version)}${p.preset_count ? ` · ${p.preset_count} presets` : ""} · added ${shortDate(granted_at)}</p>
+        <p class="meta">Version ${esc(p.version)}${countLabel(p) ? `, ${esc(countLabel(p))}` : ""}. Added ${shortDate(granted_at)}</p>
       </div>
       <button class="btn btn--sm" type="button" data-download="${esc(p.slug)}">Download .zip</button>
     </article>`).join("");

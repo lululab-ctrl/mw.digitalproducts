@@ -4,6 +4,7 @@
 // ============================================================================
 import { CONFIG } from "../config.js";
 import { esc, mediaUrl, money } from "./api.js";
+import { CATEGORIES, ICONS, categoryOf, countLabel } from "./catalog.js";
 
 document.documentElement.classList.remove("no-js");
 
@@ -127,25 +128,35 @@ export function titleHTML(p) {
   return p.name_emphasis ? `${esc(p.name)} <strong>${esc(p.name_emphasis)}</strong>` : `<strong>${esc(p.name)}</strong>`;
 }
 
-export function productCardHTML(p) {
-  const cover = mediaUrl(p.cover_path, { width: 900 });
-  const hover = p.hover_path ? mediaUrl(p.hover_path, { width: 900 }) : "";
-  const price = p.compare_at_cents
+/** Designed tile shown in place of a product image until one is uploaded. */
+export function productArtHTML(p) {
+  const cat = categoryOf(p);
+  return `<div class="art art--${cat}" aria-hidden="true">${ICONS[cat]}<span class="art__name">${esc(p.name)}${p.name_emphasis ? " " + esc(p.name_emphasis) : ""}</span></div>`;
+}
+
+export function priceHTML(p) {
+  return p.compare_at_cents
     ? `<s>${money(p.compare_at_cents, p.currency)}</s>${money(p.price_cents, p.currency)}`
     : money(p.price_cents, p.currency);
+}
+
+export function productCardHTML(p) {
+  const cat = categoryOf(p);
+  const cover = p.cover_path ? mediaUrl(p.cover_path, { width: 900 }) : "";
+  const hover = p.hover_path ? mediaUrl(p.hover_path, { width: 900 }) : "";
+  const details = [countLabel(p), p.tagline].filter(Boolean).map(esc).join(". ");
   return `
-    <a class="product-card reveal" href="product.html?p=${encodeURIComponent(p.slug)}">
+    <a class="product-card" href="product.html?p=${encodeURIComponent(p.slug)}">
       <div class="product-card__media">
-        ${cover ? `<img src="${esc(cover)}" alt="" loading="lazy" decoding="async">` : ""}
-        ${hover ? `<img src="${esc(hover)}" alt="" loading="lazy" decoding="async">` : ""}
+        ${cover ? `<img src="${esc(cover)}" alt="" loading="lazy" decoding="async">` : productArtHTML(p)}
+        ${cover && hover ? `<img src="${esc(hover)}" alt="" loading="lazy" decoding="async">` : ""}
         ${p.badge ? `<span class="product-card__badge"><span class="tag">${esc(p.badge)}</span></span>` : ""}
       </div>
       <div class="product-card__body">
-        <div>
-          <h3 class="product-card__title">${titleHTML(p)}</h3>
-          <p class="meta">${p.preset_count ? `${p.preset_count} presets · ` : ""}${esc(p.tagline || "")}</p>
-        </div>
-        <span class="price">${price}</span>
+        <span class="product-card__cat">${esc(CATEGORIES[cat].one)}</span>
+        <h3 class="product-card__title">${titleHTML(p)}</h3>
+        <span class="price">${priceHTML(p)}</span>
+        ${details ? `<p class="meta">${details}</p>` : ""}
       </div>
     </a>`;
 }

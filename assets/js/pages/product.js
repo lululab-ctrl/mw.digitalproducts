@@ -1,6 +1,7 @@
-// Product page: gallery with before/after pairs, buy box, structured data for search engines.
-import { initChrome, initBeforeAfter, beforeAfterHTML, titleHTML, loadCheckout, checkoutHref, toast } from "../lib/ui.js";
-import { getProduct, splitMedia, mediaUrl, money, esc, currentUser } from "../lib/api.js";
+// Product page: breadcrumbs, gallery with before/after pairs, buy box, structured data for search engines.
+import { initChrome, initBeforeAfter, beforeAfterHTML, titleHTML, loadCheckout, checkoutHref, toast, productArtHTML, priceHTML } from "../lib/ui.js";
+import { getProduct, splitMedia, mediaUrl, esc, currentUser } from "../lib/api.js";
+import { CATEGORIES, ICONS, categoryOf, countLabel } from "../lib/catalog.js";
 import { CONFIG } from "../config.js";
 
 initChrome();
@@ -13,7 +14,7 @@ function paragraphs(text = "") {
 }
 
 function setMeta(p, image) {
-  const title = `${p.name}${p.name_emphasis ? " " + p.name_emphasis : ""} · MWP Presets`;
+  const title = `${p.name}${p.name_emphasis ? " " + p.name_emphasis : ""} · MWP Shop`;
   document.title = title;
   const desc = p.tagline || (p.description || "").slice(0, 155);
   const set = (sel, attr, val) => { const el = document.querySelector(sel); if (el) el.setAttribute(attr, val); };
@@ -61,7 +62,9 @@ function slideHTML(s, eager = false) {
 function galleryHTML(slides, p) {
   if (!slides.length) {
     const cover = mediaUrl(p.cover_path, { width: 1600 });
-    return cover ? `<img src="${esc(cover)}" alt="" style="border-radius:var(--r-md)">` : "<div></div>";
+    return cover
+      ? `<img src="${esc(cover)}" alt="" style="border-radius:var(--r-md)">`
+      : `<div class="product-gallery">${productArtHTML(p)}</div>`;
   }
   const thumbs = slides.length > 1
     ? `<div class="product-gallery__thumbs" role="group" aria-label="Choose an example">
@@ -93,40 +96,49 @@ async function load() {
   try {
     const p = await getProduct(slug);
     if (!p) {
-      root.innerHTML = `<div class="empty">This pack isn't available. <a class="link" href="shop.html">See all packs</a></div>`;
+      root.innerHTML = `<div class="empty">This product isn't available. <a class="link" href="shop.html">See all products</a></div>`;
       return;
     }
     const { pairs, gallery } = splitMedia(p.product_media);
     const slides = buildSlides(pairs, gallery);
     setMeta(p, mediaUrl(p.cover_path, { width: 1200 }));
     const user = await currentUser();
-    const price = p.compare_at_cents
-      ? `<s>${money(p.compare_at_cents, p.currency)}</s>${money(p.price_cents, p.currency)}`
-      : money(p.price_cents, p.currency);
+    const cat = categoryOf(p);
+    const crumbs = document.getElementById("crumbs");
+    if (crumbs) {
+      crumbs.innerHTML = `<a href="shop.html">Shop</a><span aria-hidden="true">/</span>
+        <a href="shop.html?cat=${cat}">${esc(CATEGORIES[cat].label)}</a><span aria-hidden="true">/</span>
+        <span aria-current="page">${esc(p.name)}${p.name_emphasis ? " " + esc(p.name_emphasis) : ""}</span>`;
+    }
 
     root.innerHTML = `
       <div class="product-layout">
         ${galleryHTML(slides, p)}
         <aside class="buy-box">
           <div class="stack">
-            ${p.badge ? `<span class="tag">${esc(p.badge)}</span>` : ""}
+            <div class="row"><span class="product-card__cat">${esc(CATEGORIES[cat].one)}</span>${p.badge ? `<span class="tag">${esc(p.badge)}</span>` : ""}</div>
             <h1 class="h2">${titleHTML(p)}</h1>
             ${p.tagline ? `<p class="lead">${esc(p.tagline)}</p>` : ""}
           </div>
-          <div class="buy-box__price"><span class="price">${price}</span><span class="meta">${esc(p.currency)} · one-time · instant download</span></div>
+          <div class="buy-box__price"><span class="price">${priceHTML(p)}</span><span class="meta">${esc(p.currency)}, one-time payment</span></div>
           ${p.checkout_url
-            ? `<a class="btn btn--accent btn--block lemonsqueezy-button" id="buy" href="${esc(checkoutHref(p.checkout_url, { email: user?.email }))}">Buy now <span class="arrow" aria-hidden="true">→</span></a>`
+            ? `<a class="btn btn--accent btn--block lemonsqueezy-button" id="buy" href="${esc(checkoutHref(p.checkout_url, { email: user?.email }))}">Buy now</a>`
             : `<button class="btn btn--block" disabled>Available soon</button>`}
+          <ul class="assure">
+            <li>${ICONS.download}Download right after payment</li>
+            <li>${ICONS.lock}Secure card checkout by Lemon Squeezy</li>
+            <li>${ICONS.refresh}Free updates to this product</li>
+          </ul>
           ${p.includes.length ? `<ul class="checklist">${p.includes.map((i) => `<li>${esc(i)}</li>`).join("")}</ul>` : ""}
           <dl class="spec">
-            ${p.preset_count ? `<dt>Presets</dt><dd>${p.preset_count}</dd>` : ""}
+            ${countLabel(p) ? `<dt>Contents</dt><dd>${esc(countLabel(p))}</dd>` : ""}
             ${p.compatibility.length ? `<dt>Works with</dt><dd>${p.compatibility.map(esc).join(", ")}</dd>` : ""}
             <dt>Version</dt><dd>${esc(p.version)}</dd>
-            <dt>Licence</dt><dd>Personal and client work · <a class="link" href="legal.html#licence">details</a></dd>
+            <dt>Licence</dt><dd>Personal and client work (<a class="link" href="legal.html#licence">details</a>)</dd>
           </dl>
         </aside>
       </div>
-      ${p.description ? `<section class="section prose">${paragraphs(p.description)}</section>` : ""}`;
+      ${p.description ? `<section class="section prose" aria-labelledby="about-title"><h2 id="about-title" style="margin-top:0">About this product</h2>${paragraphs(p.description)}</section>` : ""}`;
 
     bindGallery(slides);
     if (p.checkout_url) {

@@ -3,59 +3,70 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <title>My downloads · MWP Presets</title>
-  <meta name="description" content="Sign in with your email to download the presets you've bought.">
-  <meta name="theme-color" content="#0A0908">
+  <title>My downloads · MWP Shop</title>
+  <meta name="description" content="Sign in with your email to download what you've bought.">
+  <meta name="theme-color" content="#F2F3EF">
   <link rel="canonical" href="https://shop.mw.photography/account.html">
   <meta property="og:type" content="website">
-  <meta property="og:site_name" content="MWP Presets">
-  <meta property="og:title" content="My downloads · MWP Presets">
-  <meta property="og:description" content="Sign in with your email to download the presets you've bought.">
-  <meta property="og:image" content="https://mw.photography/img/og.jpg">
-  <meta name="twitter:card" content="summary_large_image">
+  <meta property="og:site_name" content="MWP Shop">
+  <meta property="og:title" content="My downloads · MWP Shop">
+  <meta property="og:description" content="Sign in with your email to download what you've bought.">
+  <meta name="twitter:card" content="summary">
   <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700&display=swap">
   <link rel="stylesheet" href="assets/css/tokens.css">
   <link rel="stylesheet" href="assets/css/styles.css">
   <meta name="robots" content="noindex">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
-<header class="site-header site-header--solid">
+<div class="announce">
   <div class="container">
-    <a class="brand" href="index.html" aria-label="MWP Presets, home">MWP <small>Presets</small></a>
+    <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>Instant download after payment</span>
+    <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>Secure card checkout</span>
+    <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11a8 8 0 0 0-14.5-4.5L4 8M4 4v4h4M4 13a8 8 0 0 0 14.5 4.5L20 16M20 20v-4h-4"/></svg>Free updates to everything you buy</span>
+  </div>
+</div>
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="index.html" aria-label="MWP Shop, home">MWP <small>Shop</small></a>
     <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Menu"><span></span><span></span></button>
     <nav class="nav" id="site-nav" aria-label="Main">
-      <a href="shop.html">Shop</a>
-      <a href="index.html#how">How it works</a>
-      <a href="support.html">Support</a>
-      <a href="https://mw.photography" rel="noopener">Matan Wild ↗</a>
-      <a class="btn btn--sm btn--ghost" href="account.html">My downloads</a>
+      <div class="nav__links">
+        <a href="shop.html">All products</a>
+        <a href="shop.html?cat=preset">Presets</a>
+        <a href="shop.html?cat=plugin">Plugins</a>
+        <a href="shop.html?cat=guide">Guides &amp; PDFs</a>
+        <a href="shop.html?cat=bundle">Bundles</a>
+      </div>
+      <div class="nav__end">
+        <a href="support.html">Help</a>
+        <a class="icon-link" href="account.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>My downloads</a>
+      </div>
     </nav>
   </div>
 </header>
 <main id="main">
   <section class="page-hero">
-    <div class="container container--text stack">
-      <p class="eyebrow"><span>Your library</span></p>
-      <h1 class="display">My <strong>downloads.</strong></h1>
+    <div class="container container--text">
+      <h1 class="display">My downloads</h1>
     </div>
   </section>
-  <section class="section section--tight">
+  <section class="section--tight">
     <div class="container container--text">
       <div id="signed-out" class="panel stack-lg">
         <div class="stack">
-          <h2 class="h3">Sign in with <strong>your email.</strong></h2>
-          <p class="muted">Use the email you paid with. We'll send a one-time sign-in link, no password needed.</p>
+          <h2 class="h3">Sign in with your email</h2>
+          <p class="muted">Use the email you paid with. We'll send a one-time sign-in link; there's no password.</p>
         </div>
         <form class="form" id="login-form" novalidate>
           <div class="field">
             <label for="login-email">Email</label>
             <input class="input" id="login-email" name="email" type="email" autocomplete="email" required>
           </div>
-          <button class="btn btn--accent" type="submit">Email me a sign-in link</button>
+          <button class="btn" type="submit">Email me a sign-in link</button>
           <p class="form-status" role="status"></p>
         </form>
       </div>
@@ -74,22 +85,25 @@
   <div class="container">
     <div class="site-footer__top">
       <div class="stack">
-        <a class="brand" href="index.html">MWP <small>Presets</small></a>
-        <p class="muted" style="max-width:32ch">Into the wild. Back with the story.</p>
+        <a class="brand" href="index.html">MWP <small>Shop</small></a>
+        <p class="muted" style="max-width:34ch">Editing tools and guides from wildlife photographer Matan Wild.</p>
       </div>
       <div>
         <h3>Shop</h3>
         <ul role="list">
-          <li><a href="shop.html">All packs</a></li>
-          <li><a href="index.html#sampler">Free sampler</a></li>
-          <li><a href="account.html">My downloads</a></li>
+          <li><a href="shop.html">All products</a></li>
+          <li><a href="shop.html?cat=preset">Presets</a></li>
+          <li><a href="shop.html?cat=plugin">Plugins</a></li>
+          <li><a href="shop.html?cat=guide">Guides &amp; PDFs</a></li>
+          <li><a href="shop.html?cat=bundle">Bundles</a></li>
         </ul>
       </div>
       <div>
         <h3>Help</h3>
         <ul role="list">
-          <li><a href="support.html">Support</a></li>
-          <li><a href="index.html#faq">FAQ</a></li>
+          <li><a href="account.html">My downloads</a></li>
+          <li><a href="support.html">Contact support</a></li>
+          <li><a href="index.html#faq">Questions</a></li>
           <li><a href="legal.html#refunds">Refunds</a></li>
           <li><a href="legal.html#licence">Licence</a></li>
         </ul>
@@ -97,15 +111,15 @@
       <div>
         <h3>MWP</h3>
         <ul role="list">
-          <li><a href="https://mw.photography" rel="noopener">Matan Wild ↗</a></li>
-          <li><a href="https://mw-phototours.com" rel="noopener">MW Photo Tours ↗</a></li>
-          <li><a href="https://www.instagram.com/mw_phototours" rel="noopener">Instagram ↗</a></li>
+          <li><a href="https://mw.photography" rel="noopener">Matan Wild</a></li>
+          <li><a href="https://mw-phototours.com" rel="noopener">MW Photo Tours</a></li>
+          <li><a href="https://www.instagram.com/mw_phototours" rel="noopener">Instagram</a></li>
         </ul>
       </div>
     </div>
     <div class="site-footer__bottom">
-      <p class="meta">© <span data-year>2026</span> Matan Wild Photography. Photographs may not be used without written permission.</p>
-      <p class="meta"><a href="legal.html#terms">Terms</a> · <a href="legal.html#privacy">Privacy</a></p>
+      <p class="meta">© <span data-year>2026</span> Matan Wild Photography</p>
+      <p class="meta pay-note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>Payments processed securely by Lemon Squeezy · <a href="legal.html#terms">Terms</a> · <a href="legal.html#privacy">Privacy</a></p>
     </div>
   </div>
 </footer>

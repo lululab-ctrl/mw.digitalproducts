@@ -8,6 +8,7 @@
 import { supabase, money, shortDate, bytes, esc, mediaUrl } from "../assets/js/lib/api.js";
 import { CONFIG, IS_CONFIGURED } from "../assets/js/config.js";
 import { toast } from "../assets/js/lib/ui.js";
+import { CATEGORIES } from "../assets/js/lib/catalog.js";
 import { EMAIL_RE, setBusy, setStatus } from "../assets/js/pages/shared-forms.js";
 
 document.documentElement.classList.remove("no-js");
@@ -172,7 +173,7 @@ function debounceResize(fn) { let t; return () => { clearTimeout(t); t = setTime
 // ---------------------------------------------------------------- products list
 async function loadProducts() {
   const { data, error } = await supabase.from("products")
-    .select("id, slug, name, name_emphasis, price_cents, currency, is_active, is_featured, cover_path, sort_order, product_files(path, version)")
+    .select("id, slug, name, name_emphasis, category, price_cents, currency, is_active, is_featured, cover_path, sort_order, product_files(path, version)")
     .order("sort_order");
   check(error);
   $("#product-list").innerHTML = data.length ? `<div class="panel" style="padding:0">${data.map((p) => `
@@ -180,7 +181,7 @@ async function loadProducts() {
       ${p.cover_path ? `<img src="${esc(mediaUrl(p.cover_path, { width: 160 }))}" alt="">` : `<span class="noimg"></span>`}
       <div>
         <p><strong>${esc(p.name)}</strong> ${esc(p.name_emphasis || "")}</p>
-        <p class="meta">${esc(p.slug)} · ${money(p.price_cents, p.currency)} · ${p.product_files ? `zip v${esc(p.product_files.version)}` : "no zip yet"}${p.is_featured ? " · featured" : ""}</p>
+        <p class="meta">${esc(CATEGORIES[p.category]?.one || "Product")} · ${esc(p.slug)} · ${money(p.price_cents, p.currency)} · ${p.product_files ? `zip v${esc(p.product_files.version)}` : "no zip yet"}${p.is_featured ? " · featured" : ""}</p>
       </div>
       <span class="status status--${p.is_active ? "live" : "draft"}">${p.is_active ? "Live" : "Draft"}</span>
       <button class="btn btn--sm btn--ghost" type="button" data-edit="${p.id}">Edit</button>
@@ -219,7 +220,7 @@ async function openEditor(id) {
     editing = data;
     const f = pf.elements;
     f.id.value = data.id;
-    ["name", "name_emphasis", "slug", "badge", "tagline", "description", "currency", "preset_count",
+    ["name", "name_emphasis", "slug", "badge", "category", "tagline", "description", "currency", "item_count",
       "checkout_url", "checkout_variant_id", "version", "sort_order"].forEach((k) => { f[k].value = data[k] ?? ""; });
     f.price.value = (data.price_cents / 100).toFixed(2);
     f.compare_at.value = data.compare_at_cents ? (data.compare_at_cents / 100).toFixed(2) : "";
@@ -249,7 +250,8 @@ pf.addEventListener("submit", async (e) => {
     price_cents: toCents(f.price.value),
     compare_at_cents: toCents(f.compare_at.value),
     currency: f.currency.value.trim().toUpperCase(),
-    preset_count: f.preset_count.value ? Number(f.preset_count.value) : null,
+    item_count: f.item_count.value ? Number(f.item_count.value) : null,
+    category: f.category.value,
     includes: lines(f.includes.value),
     compatibility: lines(f.compatibility.value),
     checkout_url: f.checkout_url.value.trim() || null,

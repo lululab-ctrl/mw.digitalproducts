@@ -1,71 +1,83 @@
 /* ==========================================================================
-   MWP Presets — design tokens
-   Mirrors mw.photography: near-black canvas (#0A0908), warm off-white type,
-   light/bold contrast inside one headline, numbered sections, photo-led.
-   If the MWP brand book v3 specifies exact values, change them HERE only;
-   every other stylesheet reads these variables.
+   MWP Shop — design tokens
+   A light "field notebook" storefront: cool off-white canvas, white product
+   surfaces, ink text and one forest-green accent. Product images carry the
+   colour; the interface stays quiet around them.
+   Change brand values here only; every stylesheet reads these variables.
    ========================================================================== */
 :root {
   /* Colour */
-  --c-ink: #0A0908;            /* page background (mw.photography theme-color) */
-  --c-ink-2: #14120F;          /* raised surfaces: cards, inputs */
-  --c-ink-3: #1E1B17;          /* hover surfaces, table stripes */
-  --c-line: rgba(242, 237, 228, 0.12);
-  --c-line-strong: rgba(242, 237, 228, 0.24);
-  --c-paper: #F2EDE4;          /* primary text */
-  --c-paper-2: rgba(242, 237, 228, 0.66);  /* secondary text */
-  --c-paper-3: rgba(242, 237, 228, 0.42);  /* captions, meta */
-  --c-accent: #D9A35B;         /* golden-hour accent: links, focus, price */
-  --c-accent-ink: #1A1206;     /* text on accent */
-  --c-success: #7FB38A;
-  --c-warning: #E0B25C;
-  --c-danger: #E07A6A;
+  --c-canvas: #F2F3EF;         /* page background */
+  --c-surface: #FFFFFF;        /* cards, panels, inputs */
+  --c-surface-2: #E8EAE4;      /* hover, stripes, placeholders */
+  --c-ink: #17191B;            /* primary text, dark bars */
+  --c-ink-2: #4A4F52;          /* secondary text */
+  --c-ink-3: #767C7F;          /* captions, meta (4.6:1 on canvas) */
+  --c-line: #DADDD5;
+  --c-line-strong: #C3C7BD;
+  --c-forest: #2E4A3B;         /* the one accent: buttons, links, focus */
+  --c-forest-2: #24392E;       /* accent hover */
+  --c-forest-tint: #E1E8E2;    /* accent backgrounds */
+  --c-sand: #B9A88C;           /* small highlights: badges, stars of the shelf */
+  --c-sand-tint: #EFEAE0;
+  --c-on-dark: #F2F3EF;
+  --c-success: #2F6B45;
+  --c-warning: #8A6514;
+  --c-danger: #A33A2E;
 
-  /* Type */
-  --f-sans: "Inter Tight", "Helvetica Neue", Arial, system-ui, sans-serif;
-  --f-he: "Heebo", "Inter Tight", Arial, sans-serif;  /* Hebrew pages */
-  --f-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  /* Back-compat aliases used by the admin stylesheet */
+  --c-paper: var(--c-ink);
+  --c-paper-2: var(--c-ink-2);
+  --c-paper-3: var(--c-ink-3);
+  --c-ink-2-bg: var(--c-surface);
+  --c-accent: var(--c-forest);
+  --c-accent-ink: #FFFFFF;
 
-  --fs-xs: 0.75rem;     /* 12 */
-  --fs-sm: 0.875rem;    /* 14 */
-  --fs-md: 1rem;        /* 16 */
+  /* Type: one family, set with intent */
+  --f-sans: "Schibsted Grotesk", "Helvetica Neue", Arial, system-ui, sans-serif;
+  --f-he: "Heebo", "Schibsted Grotesk", Arial, sans-serif;
+
+  --fs-xs: 0.8125rem;   /* 13 */
+  --fs-sm: 0.9375rem;   /* 15 */
+  --fs-md: 1.0625rem;   /* 17 */
   --fs-lg: 1.25rem;     /* 20 */
-  --fs-xl: clamp(1.5rem, 1.2rem + 1.2vw, 2rem);
-  --fs-2xl: clamp(2rem, 1.4rem + 2.6vw, 3.25rem);
-  --fs-3xl: clamp(2.6rem, 1.6rem + 4.6vw, 5.5rem);
+  --fs-xl: clamp(1.5rem, 1.25rem + 1vw, 1.875rem);
+  --fs-2xl: clamp(1.875rem, 1.4rem + 2vw, 2.75rem);
+  --fs-3xl: clamp(2.375rem, 1.6rem + 3.4vw, 4rem);
 
-  --fw-light: 300;
   --fw-regular: 400;
   --fw-medium: 500;
-  --fw-bold: 650;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+  --fw-light: 400;      /* alias kept for older class names */
 
-  --lh-tight: 1.04;
+  --lh-tight: 1.05;
   --lh-snug: 1.2;
-  --lh-body: 1.6;
-  --tracking-caps: 0.14em;
+  --lh-body: 1.55;
 
   /* Space (8-pt) */
   --s-1: 4px;  --s-2: 8px;  --s-3: 12px; --s-4: 16px; --s-5: 24px;
-  --s-6: 32px; --s-7: 48px; --s-8: 64px; --s-9: 96px; --s-10: 144px;
+  --s-6: 32px; --s-7: 48px; --s-8: 64px; --s-9: 96px; --s-10: 128px;
 
   /* Layout */
-  --w-page: 1360px;
+  --w-page: 1280px;
   --w-text: 680px;
-  --gutter: clamp(16px, 4vw, 48px);
-  --header-h: 72px;
+  --gutter: clamp(16px, 4vw, 40px);
+  --header-h: 68px;
 
-  /* Shape and motion */
-  --r-sm: 4px;
-  --r-md: 8px;
+  /* Shape and motion: radius follows hierarchy (controls small, surfaces larger) */
+  --r-xs: 4px;
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 16px;
   --r-pill: 999px;
   --ease: cubic-bezier(.2, .7, .2, 1);
-  --t-fast: 160ms;
-  --t-med: 420ms;
-  --t-slow: 900ms;
+  --t-fast: 140ms;
+  --t-med: 280ms;
 
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  :root { --t-fast: 0ms; --t-med: 0ms; --t-slow: 0ms; }
+  :root { --t-fast: 0ms; --t-med: 0ms; }
 }

@@ -60,7 +60,7 @@ export function esc(value) {
 // ---------------------------------------------------------------- catalogue
 const PRODUCT_FIELDS =
   "id, slug, name, name_emphasis, tagline, description, badge, price_cents, compare_at_cents, currency, " +
-  "preset_count, includes, compatibility, checkout_url, version, cover_path, hover_path, is_featured, sort_order";
+  "category, item_count, includes, compatibility, checkout_url, version, cover_path, hover_path, is_featured, sort_order, created_at";
 
 export async function listProducts({ featuredOnly = false } = {}) {
   let q = requireClient().from("products").select(PRODUCT_FIELDS).eq("is_active", true).order("sort_order");
@@ -117,7 +117,7 @@ export async function signOut() {
 export async function myLibrary() {
   const { data, error } = await requireClient()
     .from("entitlements")
-    .select("id, granted_at, revoked_at, products(slug, name, name_emphasis, cover_path, version, preset_count)")
+    .select("id, granted_at, revoked_at, products(slug, name, name_emphasis, category, cover_path, version, item_count)")
     .is("revoked_at", null)
     .order("granted_at", { ascending: false });
   if (error) throw new ApiError(error.message);
