@@ -1,0 +1,70 @@
+{
+  "workspace": { "name": "Digital Shop", "id": 7927573 },
+  "dashboard": { "name": "Shop Overview", "id": 13343601 },
+  "boards": {
+    "orders": {
+      "id": 5105799198,
+      "groups": { "orders": "topics", "refunds": "group_mm806rek", "test": "group_mm80apq3" },
+      "columns": {
+        "status": "color_mm80k318", "order_number": "text_mm801m2", "order_date": "date_mm80g3kg",
+        "customer": "board_relation_mm80b7mg", "products": "board_relation_mm80229m", "buyer_email": "email_mm80d5sm",
+        "subtotal": "numeric_mm807h7g", "discount": "numeric_mm80drf4", "tax": "numeric_mm80y605",
+        "total": "numeric_mm80a9g", "ls_fee": "numeric_mm809rwe", "refunded": "numeric_mm80vsjk",
+        "net": "formula_mm80h6zm", "currency": "text_mm80seb", "discount_code": "text_mm803ajn",
+        "invoice": "link_mm80xyay", "payout": "board_relation_mm80r3nm", "delivery": "color_mm80ztk6",
+        "source": "text_mm80svyn", "ls_order_id": "text_mm806h06", "notes": "long_text_mm80nr9g"
+      }
+    },
+    "customers": {
+      "id": 5105799189,
+      "columns": {
+        "email": "email_mm80mvf8", "country": "country_mm80kasq", "first_order": "date_mm80eahk",
+        "last_order": "date_mm80h8hh", "segment": "color_mm806z0h", "newsletter": "color_mm801rf2",
+        "source": "dropdown_mm80egg7", "tour_client": "boolean_mm80jyav", "notes": "long_text_mm80s2st"
+      }
+    },
+    "products": {
+      "id": 5105799186,
+      "groups": { "in_the_works": "topics", "live": "group_mm80bp79", "retired": "group_mm804tb0" },
+      "columns": {
+        "category": "color_mm80s3hp", "status": "color_mm80c109", "approved_by_matan": "boolean_mm80an1f",
+        "price": "numeric_mm80psz", "slug": "text_mm80txve", "ls_variant_id": "text_mm80962d",
+        "shop_page": "link_mm80eg76", "version": "text_mm80f6jz", "items": "numeric_mm80vj8n",
+        "launch_date": "date_mm8053nw", "owner": "multiple_person_mm80yje3", "notes": "long_text_mm80jkj9"
+      }
+    },
+    "support": {
+      "id": 5105799201,
+      "groups": { "open": "topics", "resolved": "group_mm80r9cb" },
+      "columns": {
+        "status": "color_mm808sp9", "type": "color_mm80qy4a", "email": "email_mm8082vk",
+        "customer": "board_relation_mm80aes6", "order": "board_relation_mm80hvrq", "message": "long_text_mm8059ba",
+        "received": "date_mm806h2f", "owner": "multiple_person_mm80x3g2", "ticket_id": "text_mm80cye9"
+      }
+    },
+    "payouts": {
+      "id": 5105799192,
+      "columns": {
+        "status": "color_mm809a4z", "payout_date": "date_mm805w6z", "sales_period": "timerange_mm8096h7",
+        "gross": "numeric_mm8013gm", "fees": "numeric_mm80mvd3", "refunds": "numeric_mm8012hc",
+        "net": "numeric_mm80x3rz", "currency": "text_mm80j987", "ls_ref": "text_mm80mptw",
+        "statement": "file_mm80z2t4", "reconciled": "boolean_mm80kqjz"
+      }
+    },
+    "expenses": {
+      "id": 5105799202,
+      "columns": {
+        "category": "color_mm80as3a", "billing": "color_mm80x9vp", "amount": "numeric_mm80d59j",
+        "currency": "text_mm80zavn", "next_renewal": "date_mm80r49k", "account_email": "email_mm808g1z",
+        "receipts": "file_mm80smcd", "notes": "long_text_mm80d10q"
+      }
+    },
+    "launch_tasks": {
+      "id": 5105799211,
+      "columns": {
+        "status": "color_mm803whw", "who": "color_mm804ktt", "needs_matan": "boolean_mm80qzk0",
+        "due": "date_mm80e60p", "notes": "long_text_mm80kg8x"
+      }
+    }
+  }
+}
