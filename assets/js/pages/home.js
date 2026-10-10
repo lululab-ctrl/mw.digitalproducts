@@ -9,12 +9,14 @@ initChrome();
 const shelf = document.getElementById("shelf");
 const grid = document.getElementById("featured-grid");
 
-function shelfHTML(counts) {
+// A category with exactly one product (the plugin, for now) opens that product directly.
+function shelfHTML(counts, only = {}) {
   return SHELF_ORDER.map((key, i) => {
     const c = CATEGORIES[key];
     const n = counts[key] || 0;
+    const href = n === 1 && only[key] ? `product.html?p=${encodeURIComponent(only[key])}` : `shop.html?cat=${key}`;
     return `
-      <a class="shelf__tile${i === 0 ? " shelf__tile--feature" : ""}" href="shop.html?cat=${key}">
+      <a class="shelf__tile${i === 0 ? " shelf__tile--feature" : ""}" href="${href}">
         <span class="shelf__icon">${ICONS[key]}</span>
         <span class="shelf__count">${n ? `${n} ${n === 1 ? "product" : "products"}` : "Coming soon"}</span>
         <span class="shelf__name">${esc(c.label)}</span>
@@ -31,7 +33,8 @@ async function load() {
   try {
     const all = await listProducts();
     const counts = all.reduce((acc, p) => { acc[categoryOf(p)] = (acc[categoryOf(p)] || 0) + 1; return acc; }, {});
-    shelf.innerHTML = shelfHTML(counts);
+    const only = Object.fromEntries(all.map((p) => [categoryOf(p), p.slug]));
+    shelf.innerHTML = shelfHTML(counts, only);
     const featured = all.filter((p) => p.is_featured);
     const show = (featured.length ? featured : all).slice(0, 8);
     grid.innerHTML = show.length

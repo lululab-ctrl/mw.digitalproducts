@@ -28,7 +28,7 @@ export const ICONS = {
 
 export const CATEGORIES = {
   preset: { label: "Presets", one: "Preset pack", unit: "presets", desc: "Lightroom and Camera Raw looks for real field light" },
-  plugin: { label: "Plugins", one: "Plugin", unit: null, desc: "Photoshop and Lightroom tools that save editing time" },
+  plugin: { label: "Plugin", one: "Plugin", unit: null, desc: "Our photo editing plugin" },
   guide: { label: "Guides & PDFs", one: "Guide", unit: "pages", desc: "Field guides and editing workflows to read and keep" },
   bundle: { label: "Bundles", one: "Bundle", unit: "products", desc: "Several products together for less" },
   other: { label: "More", one: "Product", unit: null, desc: "Everything else" },
