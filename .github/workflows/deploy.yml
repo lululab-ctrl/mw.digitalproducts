@@ -33,7 +33,7 @@ jobs:
       name: github-pages
       url: ${{ steps.deploy.outputs.page_url }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Collect the public site files
         # Only the website goes online; server code, SQL and docs stay in the repository.
@@ -68,7 +68,7 @@ jobs:
             echo "ok=true" >> "$GITHUB_OUTPUT"
           fi
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         if: steps.ready.outputs.ok == 'true'
 
       - uses: supabase/setup-cli@v1
@@ -78,12 +78,12 @@ jobs:
 
       - name: Link the Supabase project
         if: steps.ready.outputs.ok == 'true'
-        run: supabase link --project-ref "$SUPABASE_PROJECT_REF"
+        run: .github/scripts/run.sh "Supabase link" supabase link --project-ref "$SUPABASE_PROJECT_REF" --password "$SUPABASE_DB_PASSWORD"
 
       - name: Apply database migrations
         # Only migrations not yet applied run; already-applied ones are skipped.
         if: steps.ready.outputs.ok == 'true'
-        run: yes | supabase db push
+        run: .github/scripts/run.sh "Database migrations" supabase db push --password "$SUPABASE_DB_PASSWORD" --yes
 
       - name: Set function secrets
         if: steps.ready.outputs.ok == 'true'
@@ -103,9 +103,9 @@ jobs:
             value="${!name}"
             if [ -n "$value" ]; then args+=("$name=$value"); else echo "::notice::$name not set yet"; fi
           done
-          supabase secrets set "${args[@]}" --project-ref "$SUPABASE_PROJECT_REF"
+          .github/scripts/run.sh "Function secrets" supabase secrets set "${args[@]}" --project-ref "$SUPABASE_PROJECT_REF"
 
       - name: Deploy server functions
         # JWT settings per function come from supabase/config.toml
         if: steps.ready.outputs.ok == 'true'
-        run: supabase functions deploy --project-ref "$SUPABASE_PROJECT_REF"
+        run: .github/scripts/run.sh "Function deploy" supabase functions deploy --project-ref "$SUPABASE_PROJECT_REF" --use-api
