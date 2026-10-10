@@ -14,7 +14,7 @@ function paragraphs(text = "") {
 }
 
 function setMeta(p, image) {
-  const title = `${p.name}${p.name_emphasis ? " " + p.name_emphasis : ""} · MWP Shop`;
+  const title = `${p.name}${p.name_emphasis ? " " + p.name_emphasis : ""} · MWP`;
   document.title = title;
   const desc = p.tagline || (p.description || "").slice(0, 155);
   const set = (sel, attr, val) => { const el = document.querySelector(sel); if (el) el.setAttribute(attr, val); };
