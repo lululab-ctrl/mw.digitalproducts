@@ -5,7 +5,7 @@
 // in any file under /assets — those live in Supabase secrets.
 // ============================================================================
 // The site's own address, worked out from where this file is served
-// (e.g. https://mwphoto.github.io/mwp-presets or https://presets.matanwildphotography.com),
+// (e.g. https://mwphoto.github.io/mwp-presets or https://shop.mw.photography),
 // so nothing needs editing when the site moves to its own domain.
 const SITE_ROOT = new URL("../../", import.meta.url).href.replace(/\/$/, "");
 

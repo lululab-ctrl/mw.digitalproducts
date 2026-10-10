@@ -8,4 +8,4 @@ Disallow: /
 # Disallow: /admin/
 # Disallow: /account.html
 # Disallow: /thank-you.html
-# Sitemap: https://presets.matanwildphotography.com/sitemap.xml
+# Sitemap: https://shop.mw.photography/sitemap.xml

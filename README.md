@@ -117,7 +117,7 @@ Reporting (`003_admin_reporting.sql`): `admin_stats()` feeds the Overview tab in
 Customers and admins both sign in with a **magic link** (no passwords to leak or reset).
 
 1. Supabase → Authentication → Providers → Email: enabled. Magic links confirm the address by design, so no separate confirmation step is needed.
-2. Authentication → URL Configuration: Site URL `https://presets.matanwildphotography.com`; Redirect URLs: `https://presets.matanwildphotography.com/account.html`, `https://presets.matanwildphotography.com/admin/`, and `http://localhost:8000/**` for local testing.
+2. Authentication → URL Configuration: Site URL `https://shop.mw.photography`; Redirect URLs: `https://shop.mw.photography/account.html`, `https://shop.mw.photography/admin/`, and `http://localhost:8000/**` for local testing.
 3. Authentication → Emails → SMTP: connect a real sender (MailerLite, Resend or your domain's SMTP). Supabase's built-in sender is rate-limited and meant only for testing.
 4. Edit the "Magic Link" email template so it carries the MWP voice and logo.
 
@@ -175,7 +175,7 @@ supabase functions deploy subscribe
 
 | Secret | Value |
 | --- | --- |
-| `SITE_URL` | `https://presets.matanwildphotography.com` |
+| `SITE_URL` | `https://shop.mw.photography` |
 | `ALLOWED_ORIGINS` | the site URL, plus `http://localhost:8000` while testing |
 | `CHECKOUT_WEBHOOK_SECRET` | a long random string; the same one goes into Lemon Squeezy |
 | `MAKE_ORDER_WEBHOOK`, `MAKE_SUPPORT_WEBHOOK`, `MAKE_SUBSCRIBE_WEBHOOK` | the three Make.com custom webhook URLs |
@@ -189,7 +189,7 @@ Generate random strings with `openssl rand -hex 32`.
 
 1. Create the store; keep **Test mode** on until launch.
 2. One product per pack. Price it as approved. Do not attach the zip there (delivery is ours).
-3. On each product: Confirmation → redirect to `https://presets.matanwildphotography.com/thank-you.html`.
+3. On each product: Confirmation → redirect to `https://shop.mw.photography/thank-you.html`.
 4. Copy the product's **checkout link** and **variant ID** into the admin product form.
 5. Settings → Webhooks: URL `https://YOUR-PROJECT-REF.supabase.co/functions/v1/checkout-webhook`, signing secret = `CHECKOUT_WEBHOOK_SECRET`, events `order_created` and `order_refunded`.
 
@@ -221,7 +221,7 @@ Example order payload:
   "currency": "USD",
   "source": "instagram",
   "repeat_customer": false,
-  "downloads_url": "https://presets.matanwildphotography.com/account.html?email=jane%40example.com",
+  "downloads_url": "https://shop.mw.photography/account.html?email=jane%40example.com",
   "sent_at": "2026-10-10T08:15:00Z"
 }
 ```
