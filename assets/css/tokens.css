@@ -1,81 +1,92 @@
 /* ==========================================================================
-   MWP Shop — design tokens
-   A light "field notebook" storefront: cool off-white canvas, white product
-   surfaces, ink text and one forest-green accent. Product images carry the
-   colour; the interface stays quiet around them.
-   Change brand values here only; every stylesheet reads these variables.
+   MWP Shop — design tokens, matched to mw.photography
+   Brand values below are copied from mw.photography's own :root variables
+   (night, panel, off, muted, faint, rule, gold, goldsoft, Google Sans Flex,
+   64px pills, its easing curve). Change brand values here only.
    ========================================================================== */
 :root {
-  /* Colour */
-  --c-canvas: #F2F3EF;         /* page background */
-  --c-surface: #FFFFFF;        /* cards, panels, inputs */
-  --c-surface-2: #E8EAE4;      /* hover, stripes, placeholders */
-  --c-ink: #17191B;            /* primary text, dark bars */
-  --c-ink-2: #4A4F52;          /* secondary text */
-  --c-ink-3: #767C7F;          /* captions, meta (4.6:1 on canvas) */
-  --c-line: #DADDD5;
-  --c-line-strong: #C3C7BD;
-  --c-forest: #2E4A3B;         /* the one accent: buttons, links, focus */
-  --c-forest-2: #24392E;       /* accent hover */
-  --c-forest-tint: #E1E8E2;    /* accent backgrounds */
-  --c-sand: #B9A88C;           /* small highlights: badges, stars of the shelf */
-  --c-sand-tint: #EFEAE0;
-  --c-on-dark: #F2F3EF;
-  --c-success: #2F6B45;
-  --c-warning: #8A6514;
-  --c-danger: #A33A2E;
+  /* mw.photography brand values (verbatim) */
+  --night: #0A0908;
+  --night2: #100E0C;
+  --panel: #141210;
+  --off: #F4F4F4;
+  --muted: rgba(244, 244, 244, 0.74);
+  --faint: rgba(244, 244, 244, 0.58);
+  --rule: rgba(254, 251, 241, 0.12);
+  --gold: #F4AF56;
+  --goldsoft: #E4AA7C;
 
-  /* Back-compat aliases used by the admin stylesheet */
+  /* Semantic colours used by the shop */
+  --c-canvas: var(--night);            /* page background */
+  --c-surface: var(--panel);           /* cards, panels, inputs */
+  --c-surface-2: #1C1916;              /* hover, placeholders (one step up from panel) */
+  --c-ink: var(--off);                 /* primary text */
+  --c-ink-2: var(--muted);             /* secondary text */
+  --c-ink-3: var(--faint);             /* captions, meta */
+  --c-line: var(--rule);
+  --c-line-strong: rgba(254, 251, 241, 0.24);
+  --c-accent: var(--gold);             /* links, category labels, icons, focus */
+  --c-accent-2: var(--goldsoft);       /* accent hover, secondary highlights */
+  --c-accent-tint: rgba(244, 175, 86, 0.12);
+  --c-accent-ink: var(--night);        /* text on gold */
+  --c-btn: var(--off);                 /* primary button, as on mw.photography */
+  --c-btn-ink: var(--night);
+  --c-on-dark: var(--off);
+  --c-success: #8FC9A0;
+  --c-warning: var(--gold);
+  --c-danger: #F08A7A;
+
+  /* Older names kept so the admin stylesheet keeps working */
   --c-paper: var(--c-ink);
   --c-paper-2: var(--c-ink-2);
   --c-paper-3: var(--c-ink-3);
-  --c-ink-2-bg: var(--c-surface);
-  --c-accent: var(--c-forest);
-  --c-accent-ink: #FFFFFF;
 
-  /* Type: one family, set with intent */
-  --f-sans: "Schibsted Grotesk", "Helvetica Neue", Arial, system-ui, sans-serif;
-  --f-he: "Heebo", "Schibsted Grotesk", Arial, sans-serif;
+  /* Type: Google Sans Flex, light headlines with bold emphasis, like mw.photography */
+  --f-sans: "Google Sans Flex", "Google Sans", "Helvetica Neue", Arial, sans-serif;
+  --f-he: "Google Sans Flex", "Heebo", Arial, sans-serif;
 
   --fs-xs: 0.8125rem;   /* 13 */
   --fs-sm: 0.9375rem;   /* 15 */
   --fs-md: 1.0625rem;   /* 17 */
   --fs-lg: 1.25rem;     /* 20 */
   --fs-xl: clamp(1.5rem, 1.25rem + 1vw, 1.875rem);
-  --fs-2xl: clamp(1.875rem, 1.4rem + 2vw, 2.75rem);
-  --fs-3xl: clamp(2.375rem, 1.6rem + 3.4vw, 4rem);
+  --fs-2xl: clamp(2rem, 1.4rem + 2.4vw, 3.25rem);
+  --fs-3xl: clamp(2.5rem, 1.5rem + 4vw, 4.75rem);
 
+  --fw-display: 250;     /* mw.photography headline weight */
+  --fw-display-strong: 750;
   --fw-regular: 400;
   --fw-medium: 500;
   --fw-semibold: 600;
   --fw-bold: 700;
-  --fw-light: 400;      /* alias kept for older class names */
+  --fw-light: 300;
 
-  --lh-tight: 1.05;
+  --lh-tight: 1.04;
   --lh-snug: 1.2;
   --lh-body: 1.55;
+  --tracking-label: 0.2em;  /* mw.photography's spaced button and nav labels */
 
   /* Space (8-pt) */
   --s-1: 4px;  --s-2: 8px;  --s-3: 12px; --s-4: 16px; --s-5: 24px;
   --s-6: 32px; --s-7: 48px; --s-8: 64px; --s-9: 96px; --s-10: 128px;
 
   /* Layout */
-  --w-page: 1280px;
+  --w-page: 1360px;
   --w-text: 680px;
-  --gutter: clamp(16px, 4vw, 40px);
+  --gutter: clamp(16px, 5vw, 80px);    /* mw.photography gutter */
   --header-h: 68px;
 
-  /* Shape and motion: radius follows hierarchy (controls small, surfaces larger) */
-  --r-xs: 4px;
-  --r-sm: 6px;
-  --r-md: 10px;
-  --r-lg: 16px;
-  --r-pill: 999px;
-  --ease: cubic-bezier(.2, .7, .2, 1);
-  --t-fast: 140ms;
-  --t-med: 280ms;
+  /* Shape and motion: square surfaces and pill buttons, as on mw.photography */
+  --r-xs: 2px;
+  --r-sm: 2px;
+  --r-md: 4px;
+  --r-lg: 6px;
+  --r-pill: 64px;
+  --ease: cubic-bezier(.16, 1, .3, 1);
+  --t-fast: 160ms;
+  --t-med: 320ms;
 
-  color-scheme: light;
+  color-scheme: dark;
 }
 
 @media (prefers-reduced-motion: reduce) {
