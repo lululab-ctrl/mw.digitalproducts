@@ -74,7 +74,7 @@ jobs:
       - uses: supabase/setup-cli@v1
         if: steps.ready.outputs.ok == 'true'
         with:
-          version: latest
+          version: 2.120.0   # pinned: "latest" needs a GitHub API lookup that can be rate-limited
 
       - name: Link the Supabase project
         if: steps.ready.outputs.ok == 'true'
