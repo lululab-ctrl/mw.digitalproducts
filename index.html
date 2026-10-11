@@ -18,10 +18,10 @@
 <style>
 
 body{margin:0;background:#0A0908}
-a{color:#F2A541}a:hover{color:#FFD08A}
+a{color:#F4AF56}a:hover{color:#F8D29C}
 .pg{font-family:Montserrat,system-ui,sans-serif;color:#FEFBF1;background:#0A0908;overflow-x:clip;-webkit-font-smoothing:antialiased}
 .pg *{box-sizing:border-box}
-.pg :focus-visible{outline:3px solid #F2A541;outline-offset:3px;border-radius:12px}
+.pg :focus-visible{outline:3px solid #F4AF56;outline-offset:3px;border-radius:12px}
 .wrap{max-width:1200px;margin:0 auto;padding:0 40px}
 .en{font-family:Montserrat,Heebo,sans-serif;direction:ltr;unicode-bidi:isolate}
 /* type scale (same as MWP Panel) */
@@ -30,14 +30,14 @@ a{color:#F2A541}a:hover{color:#FFD08A}
 .h2{font-size:clamp(30px,3.6vw,52px);line-height:1.08;font-weight:400;letter-spacing:-.015em;margin:0;text-wrap:balance}
 .h3{font-size:21px;line-height:1.3;font-weight:800;margin:0}
 .b{font-weight:900}
-.grad{background:linear-gradient(90deg,#C4471C 0%,#E8832F 45%,#FFD08A 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.grad{background:linear-gradient(90deg,#E4AA7C 0%,#F4AF56 55%,#F8D29C 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
 .lead{font-size:clamp(16px,1.3vw,18px);line-height:1.65;color:#CDD7DD;margin:0}
 .body{font-size:16px;line-height:1.65;color:#CDD7DD;margin:0}
 .small{font-size:14px;line-height:1.55;color:#9CB1C2;margin:0}
 .head{display:flex;flex-direction:column;gap:16px;align-items:center;text-align:center;max-width:700px;margin:0 auto}
 /* buttons: one height, one radius */
 .btn,.ghost{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:0 28px;border-radius:64px;font:700 16px/1 Montserrat,sans-serif;text-decoration:none;white-space:nowrap;transition:filter .2s,border-color .2s,transform .2s}
-.btn{background:linear-gradient(90deg,#D9581F,#F2A541);color:#0A0908;box-shadow:0 10px 28px rgba(232,131,47,.22)}
+.btn{background:linear-gradient(90deg,#E4AA7C,#F4AF56);color:#0A0908;box-shadow:0 10px 28px rgba(244,175,86,.22)}
 .btn:hover{color:#0A0908;filter:brightness(1.08);transform:translateY(-1px)}
 .btn .pr{font-weight:600;opacity:.75}
 .ghost{border:1.5px solid rgba(254,251,241,.4);color:#FEFBF1;font-weight:700;background:rgba(10,9,8,.25)}
@@ -79,11 +79,11 @@ a{color:#F2A541}a:hover{color:#FFD08A}
 .fly4 .front img{width:100%;height:100%;object-fit:cover;display:block}
 .fly4 .lab{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:18px;background:linear-gradient(0deg,rgba(10,9,8,.94) 0%,rgba(10,9,8,0) 58%,rgba(10,9,8,.5) 100%)}
 .fly4 .bn{font:800 8px Montserrat,sans-serif;letter-spacing:.3em;color:#FEFBF1;direction:ltr;text-align:left}
-.fly4 .gk{font-size:10px;font-weight:700;letter-spacing:.24em;color:#F2A541}
+.fly4 .gk{font-size:10px;font-weight:700;letter-spacing:.24em;color:#F4AF56}
 .fly4 .ttl{font-size:30px;font-weight:900;line-height:1;letter-spacing:-.02em;margin-top:4px;color:#FEFBF1}
 .fly4 .sub{font-size:12px;color:#CDD7DD;margin-top:6px}
 .fly4 .spine{width:56px;height:272px;left:0;background:linear-gradient(180deg,#023C4C,#0C2925);transform:rotateY(90deg) translateZ(182px);display:flex;align-items:center;justify-content:center}
-.fly4 .spine span{writing-mode:vertical-rl;transform:rotate(180deg);font:800 9px Montserrat,sans-serif;letter-spacing:.3em;color:#F2A541;direction:ltr}
+.fly4 .spine span{writing-mode:vertical-rl;transform:rotate(180deg);font:800 9px Montserrat,sans-serif;letter-spacing:.3em;color:#F4AF56;direction:ltr}
 .fly4 .top{width:210px;height:56px;background:#0C2925;transform:rotateX(90deg) translateZ(28px)}
 .fly4 .shadow{position:absolute;bottom:-50px;left:20px;width:180px;height:30px;background:radial-gradient(closest-side,rgba(0,0,0,.75),rgba(0,0,0,0));filter:blur(6px)}
 .chips{display:flex;flex-wrap:wrap;gap:10px}
@@ -106,7 +106,7 @@ a{color:#F2A541}a:hover{color:#FFD08A}
 .viewer img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
 .pager{display:flex;justify-content:center;gap:10px;margin-top:20px}
 .pbtn{min-height:38px;padding:0 16px;border-radius:64px;border:1.5px solid rgba(156,177,194,.35);background:transparent;color:#CDD7DD;font:700 14px Montserrat,sans-serif;cursor:pointer}
-.pbtn.on{border-color:#F2A541;color:#F2A541}
+.pbtn.on{border-color:#F4AF56;color:#F4AF56}
 /* cards */
 .cols{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;margin-top:72px}
 .card{position:relative;aspect-ratio:3/4.3;border-radius:20px;overflow:hidden;background:#111}
@@ -137,8 +137,8 @@ a{color:#F2A541}a:hover{color:#FFD08A}
 /* bundles */
 .plans{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px;margin-top:64px;align-items:stretch}
 .plan{position:relative;display:flex;flex-direction:column;gap:18px;padding:30px 26px;border-radius:22px;background:rgba(254,251,241,.04);border:1px solid rgba(156,177,194,.18)}
-.plan.hi{border-color:rgba(242,165,65,.7);background:rgba(232,131,47,.07)}
-.plan .tagx{position:absolute;top:-13px;left:24px;padding:5px 12px;border-radius:64px;background:#F2A541;color:#0A0908;font-size:12px;font-weight:800}
+.plan.hi{border-color:rgba(244,175,86,.7);background:rgba(244,175,86,.07)}
+.plan .tagx{position:absolute;top:-13px;left:24px;padding:5px 12px;border-radius:64px;background:#F4AF56;color:#0A0908;font-size:12px;font-weight:800}
 .plan .price{font-size:22px;font-weight:800;color:#FEFBF1}
 .plan ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;flex:1}
 .plan li{display:flex;gap:10px;align-items:flex-start;font-size:15px;line-height:1.5;color:#CDD7DD}
@@ -149,8 +149,8 @@ a{color:#F2A541}a:hover{color:#FFD08A}
 /* faq */
 .faq{max-width:820px;margin:56px auto 0;border-top:1px solid rgba(156,177,194,.2)}
 .q{width:100%;min-height:64px;display:flex;justify-content:space-between;align-items:center;gap:24px;padding:20px 0;background:none;border:0;border-bottom:1px solid rgba(156,177,194,.2);color:#FEFBF1;font:700 17px/1.4 Montserrat,sans-serif;text-align:left;cursor:pointer}
-.q:hover{color:#FFD08A}
-.q .pm{flex:none;width:36px;height:36px;border-radius:50%;border:1.5px solid rgba(242,165,65,.6);display:flex;align-items:center;justify-content:center;color:#F2A541;font-size:22px;font-weight:500;line-height:1}
+.q:hover{color:#F8D29C}
+.q .pm{flex:none;width:36px;height:36px;border-radius:50%;border:1.5px solid rgba(244,175,86,.6);display:flex;align-items:center;justify-content:center;color:#F4AF56;font-size:22px;font-weight:500;line-height:1}
 .ans{padding:16px 60px 28px 0;color:#CDD7DD;font-size:17px;line-height:1.7;border-bottom:1px solid rgba(156,177,194,.2)}
 /* final */
 .final{position:relative;padding:150px 0;overflow:hidden}
@@ -202,7 +202,7 @@ a{color:#F2A541}a:hover{color:#FFD08A}
 .ba .line{position:absolute;top:0;bottom:0;width:2px;background:#FEFBF1;transform:translateX(-1.5px);pointer-events:none}
 .ba .knob{position:absolute;top:50%;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;background:#FEFBF1;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 30px rgba(0,0,0,.5);pointer-events:none}
 .ba input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:ew-resize;margin:0}
-.ba:has(input:focus-visible){outline:3px solid #F2A541;outline-offset:4px}
+.ba:has(input:focus-visible){outline:3px solid #F4AF56;outline-offset:4px}
 .recipe{display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap;margin-top:20px}
 .rc{padding:6px 14px;border-radius:30px;background:#CDD7DD;color:#0C2925;font-weight:700;font-size:13px}
 .rf{padding:6px 14px;border-radius:9px;border:1px solid #CDD7DD;background:#262626;font-weight:600;font-size:13px}
@@ -216,33 +216,41 @@ a{color:#F2A541}a:hover{color:#FFD08A}
 .tstage .line{position:absolute;top:0;bottom:0;width:2px;background:#FEFBF1;transform:translateX(-1px);pointer-events:none}
 .tstage .knob{position:absolute;top:50%;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;background:#FEFBF1;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 30px rgba(0,0,0,.5);pointer-events:none}
 .tstage input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:ew-resize;margin:0}
-.tstage:has(input:focus-visible){outline:3px solid #F2A541;outline-offset:4px}
+.tstage:has(input:focus-visible){outline:3px solid #F4AF56;outline-offset:4px}
 .tstage .lbl{position:absolute;top:18px;padding:7px 12px;border-radius:30px;background:rgba(10,9,8,.72);backdrop-filter:blur(6px);font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;pointer-events:none}
-.tstage .lbl.l{left:18px;color:#FEFBF1}.tstage .lbl.r{right:18px;color:#F2A541}
+.tstage .lbl.l{left:18px;color:#FEFBF1}.tstage .lbl.r{right:18px;color:#F4AF56}
 .tstage .note{position:absolute;left:18px;right:18px;bottom:16px;font-size:12px;line-height:1.4;color:#CDD7DD;background:rgba(10,9,8,.7);padding:8px 12px;border-radius:10px;pointer-events:none}
 .app{display:flex;flex-direction:column;gap:18px;padding:22px;border-radius:24px;background:#141210;border:1px solid rgba(156,177,194,.16)}
-.seg{display:grid;grid-template-columns:1fr 1fr;padding:4px;border-radius:14px;background:#0A0908;border:1px solid rgba(156,177,194,.16)}
-.seg button{min-height:52px;border:0;border-radius:10px;background:none;color:#9CB1C2;font:700 14px/1.2 inherit;font-family:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.seg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));padding:4px;border-radius:14px;background:#0A0908;border:1px solid rgba(156,177,194,.16)}
+.seg button{min-height:56px;padding:0 4px;text-align:center;border:0;border-radius:10px;background:none;color:#9CB1C2;font:700 14px/1.2 inherit;font-family:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
 .seg button small{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;opacity:.8}
 .seg button.on{background:#FEFBF1;color:#0A0908}
 .grp{margin:0 0 10px;font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#9CB1C2}
 .looks{display:grid;gap:8px}
 .look{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:46px;padding:0 16px;border-radius:12px;border:1px solid rgba(156,177,194,.22);background:#1b1916;color:#FEFBF1;font:600 15px inherit;font-family:inherit;cursor:pointer;text-align:start}
 .look:hover{border-color:#FEFBF1}
-.look.on{border-color:#F2A541;background:rgba(242,165,65,.1)}
+.look.on{border-color:#F4AF56;background:rgba(244,175,86,.1)}
 .look .dot{width:9px;height:9px;border-radius:50%;background:rgba(156,177,194,.35)}
-.look.on .dot{background:#F2A541;box-shadow:0 0 0 4px rgba(242,165,65,.2)}
+.look.on .dot{background:#F4AF56;box-shadow:0 0 0 4px rgba(244,175,86,.2)}
 .fx{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .fx .look{min-height:44px;padding:0 12px;font-size:14px}
 .fx .look.locked{color:#6f7a82;border-style:dashed;background:none;cursor:not-allowed}
 .fx .look.locked:hover{border-color:rgba(156,177,194,.22)}
 .more{margin:12px 0 0;font-size:13px;line-height:1.5;color:#9CB1C2;transition:color .2s}
-.more.nudge{color:#F2A541}
+.more.nudge{color:#F4AF56}
 .amt{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;font-weight:700;font-size:14px}
-.amt output{font-variant-numeric:tabular-nums;color:#F2A541}
-.amt input{grid-column:1/-1;width:100%;accent-color:#F2A541;height:28px;margin:0;cursor:pointer}
-.app .go{margin-top:auto;display:flex;align-items:center;justify-content:center;min-height:50px;border-radius:30px;background:linear-gradient(90deg,#DA5A22,#F2A541);color:#0A0908;font-weight:800;text-decoration:none}
+.amt output{font-variant-numeric:tabular-nums;color:#F4AF56}
+.amt input{grid-column:1/-1;width:100%;accent-color:#F4AF56;height:28px;margin:0;cursor:pointer}
+.app .go{margin-top:auto;display:flex;align-items:center;justify-content:center;min-height:50px;border-radius:30px;background:linear-gradient(90deg,#E4AA7C,#F4AF56);color:#0A0908;font-weight:800;text-decoration:none}
 .try-hint{text-align:center;margin-top:16px}
+.tstage.page{background:#0A0908}
+.tstage.page img{object-fit:contain}
+.tstage.page #try-after{clip-path:none!important;opacity:1!important}
+.tstage.page #try-before,.tstage.page .line,.tstage.page .knob,.tstage.page .lbl.l,.tstage.page #try-split,.tstage.page .note{display:none}
+.try.pages .amt,.try.pages + .try-hint{visibility:hidden}
+.pager{display:none;position:absolute;bottom:16px;left:50%;transform:translateX(-50%);gap:8px}
+.tstage.page .pager{display:flex}
+.pager button{width:44px;height:44px;border-radius:50%;border:0;background:rgba(254,251,241,.92);color:#0A0908;cursor:pointer;display:inline-flex;align-items:center;justify-content:center}
 @media (min-width:981px){.tstage{aspect-ratio:auto;width:100%;height:100%;min-height:520px}}
 @media (max-width:980px){.try{grid-template-columns:minmax(0,1fr)}}
 @media (max-width:600px){.tstage{aspect-ratio:4/5;border-radius:18px}.app{padding:18px}}
@@ -259,12 +267,12 @@ a{color:#F2A541}a:hover{color:#FFD08A}
 .navr a.nl{color:#CDD7DD;text-decoration:none;font-weight:600;font-size:15px}
 .navr a.nl:hover{color:#FEFBF1}
 .fly4 a.pos{text-decoration:none;color:inherit}
-.fly4 a.pos:focus-visible{outline:3px solid #F2A541;outline-offset:8px}
+.fly4 a.pos:focus-visible{outline:3px solid #F4AF56;outline-offset:8px}
 
 /* the collection: three cards, every row lines up */
 .shop{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;margin-top:64px}
 .card{display:grid;grid-template-columns:minmax(0,1fr);grid-row:span 6;grid-template-rows:subgrid;row-gap:0;border-radius:24px;overflow:hidden;background:#141210;border:1px solid rgba(156,177,194,.14);transition:transform .35s cubic-bezier(.16,1,.3,1),border-color .35s}
-.card:hover{transform:translateY(-6px);border-color:rgba(242,165,65,.45)}
+.card:hover{transform:translateY(-6px);border-color:rgba(244,175,86,.45)}
 .card .ph{position:relative;display:block;aspect-ratio:4/3;overflow:hidden}
 .card .ph img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .8s cubic-bezier(.16,1,.3,1)}
 .card:hover .ph img{transform:scale(1.04)}
@@ -288,9 +296,9 @@ a{color:#F2A541}a:hover{color:#FFD08A}
 
 .faq details{border-bottom:1px solid rgba(156,177,194,.2)}
 .faq summary{display:flex;justify-content:space-between;align-items:center;gap:24px;min-height:64px;padding:20px 0;font-weight:600;font-size:17px;cursor:pointer;list-style:none}
-.faq summary:hover{color:#FFD08A}
+.faq summary:hover{color:#F8D29C}
 .faq summary::-webkit-details-marker{display:none}
-.faq summary::after{content:"+";flex:none;width:36px;height:36px;border-radius:50%;border:1.5px solid rgba(242,165,65,.6);display:flex;align-items:center;justify-content:center;color:#F2A541;font-size:18px;font-weight:500}
+.faq summary::after{content:"+";flex:none;width:36px;height:36px;border-radius:50%;border:1.5px solid rgba(244,175,86,.6);display:flex;align-items:center;justify-content:center;color:#F4AF56;font-size:18px;font-weight:500}
 .faq details[open] summary::after{content:"\2212"}
 .faq details div{padding:0 0 26px;color:#CDD7DD;font-size:17px;line-height:1.7;max-width:680px}
 
@@ -357,7 +365,7 @@ a{color:#F2A541}a:hover{color:#FFD08A}
 <p class="tg">Lightroom presets</p>
 <h3 class="nm" data-no-i18n>MWP <span class="grad">Presets</span></h3>
 <p class="ln">The look behind every MWP frame.</p>
-<ul><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F2A541" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>50 Lightroom presets, 12 adaptive</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F2A541" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>50 mobile files and 33 LUTs</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F2A541" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>Install guide for every program</span></li></ul>
+<ul><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>50 Lightroom presets, 12 adaptive</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>50 mobile files and 33 LUTs</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>Install guide for every program</span></li></ul>
 <div class="act"><a class="btn" href="presets/">See MWP Presets</a><a class="ghost" href="presets/#buy">[YOUR PRICE]</a></div>
 </div>
 </article>
@@ -367,7 +375,7 @@ a{color:#F2A541}a:hover{color:#FFD08A}
 <p class="tg">Photoshop plugin</p>
 <h3 class="nm" data-no-i18n>MWP <span class="grad">Panel</span></h3>
 <p class="ln">You were there. Now make the photo show it.</p>
-<ul><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F2A541" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>8 one-click effects</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F2A541" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>11 looks and 4 painted lights</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F2A541" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>User manual and install guide</span></li></ul>
+<ul><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>8 one-click effects</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>11 looks and 4 painted lights</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>User manual and install guide</span></li></ul>
 <div class="act"><a class="btn" href="panel/">See MWP Panel</a><a class="ghost" href="panel/#buy">[YOUR PRICE]</a></div>
 </div>
 </article>
@@ -377,7 +385,7 @@ a{color:#F2A541}a:hover{color:#FFD08A}
 <p class="tg">PDF field guides</p>
 <h3 class="nm" data-no-i18n>MWP <span class="grad">Field Guides</span></h3>
 <p class="ln">See the photo before you press the shutter.</p>
-<ul><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F2A541" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>4 PDF guides, 137 lessons</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F2A541" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>Composition, colour, light and planning</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F2A541" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>English and Hebrew</span></li></ul>
+<ul><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>4 PDF guides, 137 lessons</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>Composition, colour, light and planning</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>English and Hebrew</span></li></ul>
 <div class="act"><a class="btn" href="field-guides/">See the Field Guides</a><a class="ghost" href="field-guides/#buy">[YOUR PRICE]</a></div>
 </div>
 </article>
@@ -401,12 +409,14 @@ a{color:#F2A541}a:hover{color:#FFD08A}
 <span class="lbl l">RAW</span>
 <span class="lbl r" id="try-tag" data-no-i18n>MWP · Blue Hour</span>
 <input type="range" id="try-split" min="0" max="100" value="50" aria-label="Drag to compare with the RAW file">
+<div class="pager"><button type="button" data-step="-1" aria-label="Previous page"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><button type="button" data-step="1" aria-label="Next page"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button></div>
 <p class="note">PLACEHOLDER: the finished frames are Matan's full edits. Replace with the same RAW edited only with the preset or effect before launch.</p>
 </div>
 <aside class="app" aria-label="Try the tools">
 <div class="seg" role="group" aria-label="Choose a tool">
 <button type="button" class="on" data-tool="presets" aria-pressed="true"><small>Lightroom</small><span data-no-i18n>MWP Presets</span></button>
 <button type="button" data-tool="panel" aria-pressed="false"><small>Photoshop</small><span data-no-i18n>MWP Panel</span></button>
+<button type="button" data-tool="guides" aria-pressed="false"><small>PDF</small><span>Field Guides</span></button>
 </div>
 <div data-pane="presets">
 <p class="grp">Light and Scene</p>
@@ -417,6 +427,11 @@ a{color:#F2A541}a:hover{color:#FFD08A}
 <p class="grp">Edit</p>
 <div class="fx"><button type="button" class="look" data-look="2" aria-pressed="false"><span data-no-i18n>Subject · Pop</span><span class="dot" aria-hidden="true"></span></button><button type="button" class="look locked" data-locked aria-disabled="true"><span data-no-i18n>Eye</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></button><button type="button" class="look locked" data-locked aria-disabled="true"><span data-no-i18n>Sky</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></button><button type="button" class="look" data-look="3" aria-pressed="false"><span data-no-i18n>Background · Darken</span><span class="dot" aria-hidden="true"></span></button><button type="button" class="look locked" data-locked aria-disabled="true"><span data-no-i18n>Lights</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></button><button type="button" class="look locked" data-locked aria-disabled="true"><span data-no-i18n>Darks</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></button><button type="button" class="look locked" data-locked aria-disabled="true"><span data-no-i18n>Dodge & Burn</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></button><button type="button" class="look locked" data-locked aria-disabled="true"><span data-no-i18n>Vignette</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></button></div>
 <p class="more" id="try-more">Two effects are open to try. The full plugin has 8 one-click effects, 11 looks and 4 painted lights.</p>
+</div>
+<div data-pane="guides" hidden>
+<p class="grp">Sample pages</p>
+<div class="looks"><button type="button" class="look" data-look="4" aria-pressed="false"><span>Rule of thirds</span><span class="dot" aria-hidden="true"></span></button><button type="button" class="look" data-look="5" aria-pressed="false"><span>Fix white balance first</span><span class="dot" aria-hidden="true"></span></button><button type="button" class="look" data-look="6" aria-pressed="false"><span>Side light</span><span class="dot" aria-hidden="true"></span></button><button type="button" class="look" data-look="7" aria-pressed="false"><span>Light under the storm</span><span class="dot" aria-hidden="true"></span></button></div>
+<p class="more">The full set: 4 PDF guides, 137 lessons on 229 pages, in English and Hebrew.</p>
 </div>
 <div class="amt"><label for="try-amount">Amount</label><output id="try-amt" for="try-amount">100%</output><input type="range" id="try-amount" min="0" max="100" value="100"></div>
 <a class="go" id="try-cta" href="presets/">Get MWP Presets</a>
@@ -434,10 +449,10 @@ a{color:#F2A541}a:hover{color:#FFD08A}
 <p class="lead">MWP Field Guides teach what happens before the click: composition, colour, light and planning, in 4 PDF guides in English and Hebrew. The presets and the Panel carry it on into the edit, in the same look.</p>
 </div>
 <div class="plans">
-<div class="plan"><div><h3 class="h3">MWP Presets</h3><p class="small" style="margin-top: 6px">Edit in Lightroom</p></div><div class="price">[YOUR PRICE]</div><ul><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F2A541" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>50 Lightroom presets, 12 adaptive</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F2A541" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>50 mobile files and 33 LUTs</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F2A541" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>Install guide for every program</span></li></ul><a class="ghost sm" href="presets/#buy">Get the presets</a></div>
-<div class="plan"><div><h3 class="h3">Presets + Field Guides</h3><p class="small" style="margin-top: 6px">Shoot it, then edit it</p></div><div class="price">[BUNDLE PRICE]</div><ul><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F2A541" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>MWP Presets: 50 presets and 33 LUTs</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F2A541" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>MWP Field Guides: 4 PDF guides, 137 lessons</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F2A541" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>Composition, colour, light and planning</span></li></ul><a class="ghost sm" href="field-guides/#bundles">Get the bundle</a></div>
-<div class="plan"><div><h3 class="h3">Presets + Panel</h3><p class="small" style="margin-top: 6px">Lightroom and Photoshop</p></div><div class="price">[BUNDLE PRICE]</div><ul><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F2A541" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>MWP Presets: 50 presets and 33 LUTs</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F2A541" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>MWP Panel: the Photoshop plugin</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F2A541" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>User manual and install guide</span></li></ul><a class="ghost sm" href="panel/#buy">Get the bundle</a></div>
-<div class="plan hi"><span class="tagx">EVERYTHING</span><div><h3 class="h3">The full set</h3><p class="small" style="margin-top: 6px">From the shot to the share</p></div><div class="price">[BUNDLE PRICE]</div><ul><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F2A541" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>MWP Presets: 50 presets and 33 LUTs</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F2A541" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>MWP Panel: the Photoshop plugin</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F2A541" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>MWP Field Guides: 4 PDF guides, 137 lessons</span></li></ul><a class="btn sm" href="presets/#bundles">Get the full set</a></div>
+<div class="plan"><div><h3 class="h3">MWP Presets</h3><p class="small" style="margin-top: 6px">Edit in Lightroom</p></div><div class="price">[YOUR PRICE]</div><ul><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>50 Lightroom presets, 12 adaptive</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>50 mobile files and 33 LUTs</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>Install guide for every program</span></li></ul><a class="ghost sm" href="presets/#buy">Get the presets</a></div>
+<div class="plan"><div><h3 class="h3">Presets + Field Guides</h3><p class="small" style="margin-top: 6px">Shoot it, then edit it</p></div><div class="price">[BUNDLE PRICE]</div><ul><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>MWP Presets: 50 presets and 33 LUTs</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>MWP Field Guides: 4 PDF guides, 137 lessons</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>Composition, colour, light and planning</span></li></ul><a class="ghost sm" href="field-guides/#bundles">Get the bundle</a></div>
+<div class="plan"><div><h3 class="h3">Presets + Panel</h3><p class="small" style="margin-top: 6px">Lightroom and Photoshop</p></div><div class="price">[BUNDLE PRICE]</div><ul><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>MWP Presets: 50 presets and 33 LUTs</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>MWP Panel: the Photoshop plugin</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>User manual and install guide</span></li></ul><a class="ghost sm" href="panel/#buy">Get the bundle</a></div>
+<div class="plan hi"><span class="tagx">EVERYTHING</span><div><h3 class="h3">The full set</h3><p class="small" style="margin-top: 6px">From the shot to the share</p></div><div class="price">[BUNDLE PRICE]</div><ul><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>MWP Presets: 50 presets and 33 LUTs</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>MWP Panel: the Photoshop plugin</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>MWP Field Guides: 4 PDF guides, 137 lessons</span></li></ul><a class="btn sm" href="presets/#bundles">Get the full set</a></div>
 </div>
 <p class="small" style="text-align: center; margin-top: 28px">[Bundle prices and discounts: Matan to decide]</p>
 </div>
@@ -480,23 +495,26 @@ a{color:#F2A541}a:hover{color:#FFD08A}
 <script>
 // Try it yourself: choose a tool and a look, set the amount, drag to compare with the RAW file.
 (function () {
-  var L = [['presets', 'assets/pages/img/3c14b23dbb00f051684ad60fb205ed10.jpg', 'assets/pages/img/fbaf19aea2af10f26b2949ab31fff094.jpg', 'Blue Hour'], ['presets', 'assets/pages/img/7c359a77f23f632596ebda32f1e9a72f.jpg', 'assets/pages/img/84c2340ddf79f1f703f8c905e9b986be.jpg', 'Macro Ground'], ['panel', 'assets/pages/img/c339384fe0c6d91e7b1388d0fed7d1ae.jpg', 'assets/pages/img/52e0c3d2c90942f72d31faa689449bd0.jpg', 'Pop'], ['panel', 'assets/pages/img/af0d1799831d0417d338c0b162975a7b.jpg', 'assets/pages/img/95e0579188ba924ac89563eb21facef6.jpg', 'Darken']];
+  var L = [['presets', 'assets/pages/img/3c14b23dbb00f051684ad60fb205ed10.jpg', 'assets/pages/img/fbaf19aea2af10f26b2949ab31fff094.jpg', 'Blue Hour'], ['presets', 'assets/pages/img/7c359a77f23f632596ebda32f1e9a72f.jpg', 'assets/pages/img/84c2340ddf79f1f703f8c905e9b986be.jpg', 'Macro Ground'], ['panel', 'assets/pages/img/c339384fe0c6d91e7b1388d0fed7d1ae.jpg', 'assets/pages/img/52e0c3d2c90942f72d31faa689449bd0.jpg', 'Pop'], ['panel', 'assets/pages/img/af0d1799831d0417d338c0b162975a7b.jpg', 'assets/pages/img/95e0579188ba924ac89563eb21facef6.jpg', 'Darken'], ['guides', '', 'assets/pages/img/b8dddf776b0555122fbe159c327fb896.jpg', 'Rule of thirds'], ['guides', '', 'assets/pages/img/349a280dc465d732b2db94a66d8bda5f.jpg', 'Fix white balance first'], ['guides', '', 'assets/pages/img/4e5149d41f2cb2860f2e76848243a157.jpg', 'Side light'], ['guides', '', 'assets/pages/img/b49a68a97187304be4385b9dacfa7a8b.jpg', 'Light under the storm']];
   var he = function () { return document.documentElement.lang === "he"; };
   var stage = document.getElementById("try-stage");
   var before = document.getElementById("try-before"), after = document.getElementById("try-after");
   var line = stage.querySelector(".line"), knob = stage.querySelector(".knob"), split = document.getElementById("try-split");
   var amount = document.getElementById("try-amount"), out = document.getElementById("try-amt"), tag = document.getElementById("try-tag");
   var cta = document.getElementById("try-cta");
-  var CTA = { presets: ["presets/", "Get MWP Presets", "לפריסטים"], panel: ["panel/", "Get MWP Panel", "לפאנל"] };
+  var CTA = { presets: ["presets/", "Get MWP Presets", "לפריסטים"], panel: ["panel/", "Get MWP Panel", "לפאנל"], guides: ["field-guides/", "Get the Field Guides", "למדריכי השטח"] };
+  var wrap = document.querySelector("#try .try"), cur = 0;
   function setSplit(v) { after.style.clipPath = "inset(0 0 0 " + v + "%)"; line.style.left = v + "%"; knob.style.left = v + "%"; }
   function setAmount(v) { after.style.opacity = v / 100; out.textContent = v + "%"; }
   function pick(i) {
-    var l = L[i];
+    var l = L[i]; cur = i;
+    var page = !l[1];
+    stage.classList.toggle("page", page); wrap.classList.toggle("pages", page);
     // preload, then swap both frames together so they never mismatch
     var a = new Image(), b = new Image(), n = 0;
-    function done() { if (++n < 2) return; before.src = l[1]; after.src = l[2]; }
-    a.onload = b.onload = a.onerror = b.onerror = done; a.src = l[1]; b.src = l[2];
-    tag.textContent = "MWP · " + l[3];
+    function done() { if (++n < 2) return; if (l[1]) before.src = l[1]; after.src = l[2]; }
+    a.onload = b.onload = a.onerror = b.onerror = done; a.src = l[1] || l[2]; b.src = l[2];
+    tag.textContent = page ? (he() ? "מדריכי השטח" : "MWP · Field Guides") : "MWP · " + l[3];
     document.querySelectorAll("#try .look[data-look]").forEach(function (o) { var on = +o.dataset.look === i; o.classList.toggle("on", on); o.setAttribute("aria-pressed", on); });
     amount.value = 100; setAmount(100); split.value = 50; setSplit(50);
   }
@@ -506,6 +524,10 @@ a{color:#F2A541}a:hover{color:#FFD08A}
     cta.href = CTA[t][0]; cta.textContent = he() ? CTA[t][2] : CTA[t][1];
     for (var i = 0; i < L.length; i++) if (L[i][0] === t) { pick(i); break; }
   }
+  stage.querySelectorAll("[data-step]").forEach(function (b) { b.addEventListener("click", function () {
+    var same = []; for (var k = 0; k < L.length; k++) if (L[k][0] === L[cur][0]) same.push(k);
+    var at = same.indexOf(cur); pick(same[(at + +b.dataset.step + same.length) % same.length]);
+  }); });
   split.addEventListener("input", function () { setSplit(split.value); });
   amount.addEventListener("input", function () { setAmount(amount.value); });
   document.querySelectorAll("#try .seg button").forEach(function (b) { b.addEventListener("click", function () { tool(b.dataset.tool); }); });
