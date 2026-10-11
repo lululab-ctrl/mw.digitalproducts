@@ -320,6 +320,7 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 .seg button.on{background:#FEFBF1;color:#0A0908}
 .grp{margin:0 0 8px;font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#9CB1C2}
 .looks{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.looks .look:last-child:nth-child(odd){grid-column:1/-1}
 .look{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:40px;padding:0 12px;border-radius:12px;border:1px solid rgba(156,177,194,.22);background:#1b1916;color:#FEFBF1;font-weight:600;font-size:14px;line-height:1.2;font-family:inherit;cursor:pointer;text-align:start}
 .look:hover{border-color:#FEFBF1}
 .look.on{border-color:#F4AF56;background:rgba(244,175,86,.1)}
@@ -507,7 +508,7 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 </div>
 <div data-pane="presets">
 <p class="grp">Looks</p>
-<div class="looks"><button type="button" class="look" data-look="0" aria-pressed="false"><span>Matan's edit</span><span class="dot" aria-hidden="true"></span></button><button type="button" class="look" data-look="1" aria-pressed="false"><span>Golden Hour</span><span class="dot" aria-hidden="true"></span></button><button type="button" class="look" data-look="2" aria-pressed="false"><span>Cool Dusk</span><span class="dot" aria-hidden="true"></span></button><button type="button" class="look" data-look="3" aria-pressed="false"><span>Matte Earth</span><span class="dot" aria-hidden="true"></span></button><button type="button" class="look" data-look="4" aria-pressed="false"><span>Deep Contrast</span><span class="dot" aria-hidden="true"></span></button><button type="button" class="look" data-look="5" aria-pressed="false"><span>Soft Light</span><span class="dot" aria-hidden="true"></span></button></div>
+<div class="looks"><button type="button" class="look" data-look="0" aria-pressed="false"><span>Golden Hour</span><span class="dot" aria-hidden="true"></span></button><button type="button" class="look" data-look="1" aria-pressed="false"><span>Cool Dusk</span><span class="dot" aria-hidden="true"></span></button><button type="button" class="look" data-look="2" aria-pressed="false"><span>Matte Earth</span><span class="dot" aria-hidden="true"></span></button><button type="button" class="look" data-look="3" aria-pressed="false"><span>Deep Contrast</span><span class="dot" aria-hidden="true"></span></button><button type="button" class="look" data-look="4" aria-pressed="false"><span>Soft Light</span><span class="dot" aria-hidden="true"></span></button></div>
 <p class="more">The full pack: 50 Lightroom presets, 50 mobile files and 33 LUTs.</p>
 </div>
 <div data-pane="panel" hidden>
@@ -578,7 +579,7 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 <script>
 // Try it yourself: one photo, edited live on a canvas. A look (presets) plus stackable effects (Panel).
 (function () {
-  var LOOKS = [{"img": 1}, {"e": 0.05, "t": 0.4, "g": 0.02, "c": 0.1, "s": 0.06, "h": 0.1, "sat": 0.1, "f": 0, "sc": [0.012, 0.004, -0.025], "hc": [0.04, 0.02, -0.03]}, {"e": 0, "t": -0.25, "g": 0, "c": 0.1, "s": 0.05, "h": 0.08, "sat": 0.08, "f": 0, "sc": [-0.012, 0, 0.03], "hc": [0, 0.008, 0.02]}, {"e": 0.02, "t": 0.15, "g": 0.01, "c": -0.04, "s": 0.1, "h": 0.1, "sat": -0.12, "f": 0.3, "sc": [0.014, 0.007, 0], "hc": [0.018, 0.012, 0]}, {"e": -0.03, "t": 0.04, "g": 0, "c": 0.24, "s": -0.04, "h": 0.06, "sat": 0.1, "f": 0, "sc": [0, 0, 0.01], "hc": [0.012, 0.006, 0]}, {"e": 0.1, "t": 0.08, "g": 0, "c": -0.05, "s": 0.18, "h": 0.22, "sat": 0.03, "f": 0.06, "sc": [0, 0, 0.012], "hc": [0.015, 0.012, 0.008]}], NAMES = ["Matan's edit", "Golden Hour", "Cool Dusk", "Matte Earth", "Deep Contrast", "Soft Light"], FX = {"pop": "Subject \u00b7 Pop", "bg": "Background \u00b7 Darken", "sky": "Sky", "lights": "Lights", "darks": "Darks", "vig": "Vignette"};
+  var LOOKS = [{"e": 0.05, "t": 0.4, "g": 0.02, "c": 0.1, "s": 0.06, "h": 0.1, "sat": 0.1, "f": 0, "sc": [0.012, 0.004, -0.025], "hc": [0.04, 0.02, -0.03]}, {"e": 0, "t": -0.25, "g": 0, "c": 0.1, "s": 0.05, "h": 0.08, "sat": 0.08, "f": 0, "sc": [-0.012, 0, 0.03], "hc": [0, 0.008, 0.02]}, {"e": 0.02, "t": 0.15, "g": 0.01, "c": -0.04, "s": 0.1, "h": 0.1, "sat": -0.12, "f": 0.3, "sc": [0.014, 0.007, 0], "hc": [0.018, 0.012, 0]}, {"e": -0.03, "t": 0.04, "g": 0, "c": 0.24, "s": -0.04, "h": 0.06, "sat": 0.1, "f": 0, "sc": [0, 0, 0.01], "hc": [0.012, 0.006, 0]}, {"e": 0.1, "t": 0.08, "g": 0, "c": -0.05, "s": 0.18, "h": 0.22, "sat": 0.03, "f": 0.06, "sc": [0, 0, 0.012], "hc": [0.015, 0.012, 0.008]}], NAMES = ["Golden Hour", "Cool Dusk", "Matte Earth", "Deep Contrast", "Soft Light"], FX = {"pop": "Subject \u00b7 Pop", "bg": "Background \u00b7 Darken", "sky": "Sky", "lights": "Lights", "darks": "Darks", "vig": "Vignette"};
   var HE_NAMES = {"Matan's edit": "העריכה של מתן", "Golden Hour": "שעת זהב", "Cool Dusk": "דמדומים קרים", "Matte Earth": "אדמה מט", "Deep Contrast": "ניגודיות עמוקה", "Soft Light": "אור רך"};
   var he = function () { return document.documentElement.lang === "he"; };
   var stage = document.getElementById("try-stage"), before = document.getElementById("try-before"), base = document.getElementById("try-base");

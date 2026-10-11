@@ -11,7 +11,6 @@ LOCK = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="curr
 # Looks: e exposure (stops), t temperature, g tint, c contrast, s shadows, h highlights,
 # sat saturation, f fade, sc / hc split-tone colour for shadows / highlights.
 LOOKS = [
-    ("Matan's edit", dict(img=1)),   # the real finished frame from the Presets design, faded in by Amount
     # The other looks are colour grades on top of Matan's finished frame, faded in from the RAW by Amount.
     ("Golden Hour", dict(e=.05, t=.4, g=.02, c=.1, s=.06, h=.1, sat=.1, f=0, sc=[.012, .004, -.025], hc=[.04, .02, -.03])),
     ("Cool Dusk", dict(e=0, t=-.25, g=0, c=.1, s=.05, h=.08, sat=.08, f=0, sc=[-.012, 0, .03], hc=[0, .008, .02])),
@@ -44,6 +43,7 @@ CSS = """
 .seg button.on{background:#FEFBF1;color:#0A0908}
 .grp{margin:0 0 8px;font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#9CB1C2}
 .looks{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.looks .look:last-child:nth-child(odd){grid-column:1/-1}
 .look{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:40px;padding:0 12px;border-radius:12px;border:1px solid rgba(156,177,194,.22);background:#1b1916;color:#FEFBF1;font-weight:600;font-size:14px;line-height:1.2;font-family:inherit;cursor:pointer;text-align:start}
 .look:hover{border-color:#FEFBF1}
 .look.on{border-color:#F2A541;background:rgba(242,165,65,.1)}
