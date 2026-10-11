@@ -130,7 +130,7 @@ html = f'''<!doctype html>
 <div class="wrap container">
 <a class="brand" href="./" aria-label="MWP, home"><img src="{IMG}2dd3356528167ddf9a64c0c7301c8aa3.png" alt=""><span>MWP</span></a>
 <div class="links"><a href="#shop">Shop</a><a href="#ba">The edits</a><a href="#bundles">Bundles</a><a href="#faq">Questions</a></div>
-<div class="navr"><a class="nl hide-sm" href="support.html">Help</a><a class="nl" href="account.html">My downloads</a></div>
+<div class="navr"><a class="nl hide-sm" href="support.html">Help</a></div>
 </div>
 </nav>
 
@@ -284,7 +284,9 @@ html = f'''<!doctype html>
 </script>
 <script type="module">
   import {{ initI18n }} from "./assets/js/i18n.js";
+  import {{ initCart }} from "./assets/js/lib/cart.js";
   initI18n();
+  initCart();
 </script>
 </body>
 </html>

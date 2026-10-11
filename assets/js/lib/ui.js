@@ -2,6 +2,7 @@
 // Shared interface behaviour: header, mobile nav, scroll reveal, toasts,
 // before/after slider, product cards, checkout loader.
 // ============================================================================
+import { initCart } from "./cart.js";
 import { CONFIG } from "../config.js";
 import { esc, mediaUrl, money } from "./api.js";
 import { CATEGORIES, ICONS, categoryOf, countLabel } from "./catalog.js";
@@ -12,6 +13,7 @@ document.documentElement.classList.remove("no-js");
 // ---------------------------------------------------------------- header + nav
 export function initChrome() {
   initI18n();
+  initCart();
   const header = document.querySelector(".site-header");
   if (header && !header.classList.contains("site-header--solid")) {
     const onScroll = () => header.classList.toggle("is-solid", window.scrollY > 24);

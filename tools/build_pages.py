@@ -58,7 +58,6 @@ HEADER = f"""<body>
       </div>
       <div class="nav__end">
         <a href="support.html">Help</a>
-        <a class="icon-link" href="account.html">{ICON['user']}My downloads</a>
       </div>
     </nav>
   </div>

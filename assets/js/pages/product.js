@@ -3,6 +3,7 @@ import { initChrome, initBeforeAfter, beforeAfterHTML, titleHTML, loadCheckout, 
 import { getProduct, splitMedia, mediaUrl, esc, currentUser } from "../lib/api.js";
 import { CATEGORIES, ICONS, categoryOf, countLabel } from "../lib/catalog.js";
 import { CONFIG } from "../config.js";
+import { addToCart } from "../lib/cart.js";
 
 initChrome();
 
@@ -124,6 +125,7 @@ async function load() {
           ${p.checkout_url
             ? `<a class="btn btn--accent btn--block lemonsqueezy-button" id="buy" href="${esc(checkoutHref(p.checkout_url, { email: user?.email }))}">Buy now</a>`
             : `<button class="btn btn--block" disabled>Available soon</button>`}
+          <button class="btn btn--ghost btn--block" type="button" id="add-to-cart">Add to cart</button>
           <ul class="assure">
             <li>${ICONS.download}Download right after payment</li>
             <li>${ICONS.lock}Secure card checkout by Lemon Squeezy</li>
@@ -141,6 +143,9 @@ async function load() {
       ${p.description ? `<section class="section prose" aria-labelledby="about-title"><h2 id="about-title" style="margin-top:0">About this product</h2><div data-no-i18n>${paragraphs(p.description)}</div></section>` : ""}`;
 
     bindGallery(slides);
+    root.querySelector("#add-to-cart").addEventListener("click", () => {
+      addToCart({ slug: p.slug, name: `${p.name}${p.name_emphasis ? " " + p.name_emphasis : ""}`, price_cents: p.price_cents, currency: p.currency, checkout_url: p.checkout_url ? checkoutHref(p.checkout_url, { email: user?.email }) : null, image: p.cover_path ? mediaUrl(p.cover_path, { width: 200 }) : null });
+    });
     if (p.checkout_url) {
       loadCheckout();
       root.querySelector("#buy").addEventListener("click", () => {

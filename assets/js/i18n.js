@@ -248,6 +248,7 @@ const HE = {
   "Browse all products": "לכל המוצרים",
   "Home": "דף הבית",
   // home: interactive shop
+  "Add to cart": "הוספה לעגלה",
   "The edits": "העריכות",
   "See the edits": "לצפייה בעריכות",
   "From RAW to final": "מ-RAW לתמונה הסופית",
