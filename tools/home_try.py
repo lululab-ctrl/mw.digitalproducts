@@ -20,7 +20,7 @@ PAIRS = [
 ]
 
 CSS = """
-.cmps{display:flex;flex-direction:column;gap:clamp(88px,11vw,140px);margin-top:clamp(56px,7vw,96px)}
+.cmps{display:flex;flex-direction:column;gap:clamp(88px,11vw,140px)}
 .cmp{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);align-items:center;gap:clamp(40px,6vw,88px)}
 .cmp.flip{grid-template-columns:minmax(0,1fr) minmax(0,1.45fr)}
 .cmp.flip .ba2{order:2}
@@ -81,13 +81,8 @@ def _pair(p):
 
 
 def html():
-    return f"""<section class="sec alt" id="try">
+    return f"""<section class="sec alt" id="try" aria-label="From RAW to final">
 <div class="wrap">
-<div class="head">
-<p class="kick">From RAW to final</p>
-<h2 class="h2">See what the tools <span class="b grad">do to a photo.</span></h2>
-<p class="lead">Two of Matan's photos, straight from the camera and finished with the tools. Drag across each one to compare.</p>
-</div>
 <div class="cmps">
 {"".join(_pair(p) for p in PAIRS)}
 </div>

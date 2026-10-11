@@ -54,8 +54,8 @@ def _chapter_text(i, c):
 STORY = f"""<section class="st-ch" id="shop" aria-label="The collection">
 <div class="wrap st-ch-head">
 <p class="kick">The collection</p>
-<h2 class="h2">Shoot it, edit it, <span class="b grad">finish it.</span></h2>
-<p class="lead">Three products, one look. Each one works on its own, and together they take a photo from the field to the share.</p>
+<h2 class="h2">Three tools. <span class="b grad">One workflow.</span></h2>
+<p class="lead">Field guides for the shoot. Presets and a plugin for the edit. Use one, or all three.</p>
 </div>
 <div class="st-track">
 <div class="st-sticky">
