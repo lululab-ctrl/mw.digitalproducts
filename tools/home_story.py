@@ -107,7 +107,7 @@ CSS = home_devices.CSS + """
 .st-hero-in .ctas{margin-top:36px}
 .st-h1{margin:18px 0 0;font-size:clamp(52px,8.4vw,132px);line-height:.94;font-weight:400;letter-spacing:-.04em;color:#FEFBF1}
 .st-h1 .grad{font-weight:600}
-.st-l{display:block;overflow:hidden;padding-bottom:.06em}
+.st-l{display:block;overflow:hidden;padding-bottom:.22em;margin-bottom:-.16em}
 .st-l > span{display:inline-block;animation:strise 1.2s cubic-bezier(.2,.7,.1,1) both;animation-delay:calc(var(--i) * .12s + .2s)}
 @keyframes strise{from{transform:translateY(105%)}to{transform:none}}
 .st-in{animation:stfade 1.1s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(var(--i) * .12s + .25s)}
@@ -115,7 +115,8 @@ CSS = home_devices.CSS + """
 
 /* ---------- landing: pinned story ---------- */
 .st-ch{position:relative;background:#0A0908}
-.st-ch-head{display:flex;flex-direction:column;gap:16px;align-items:center;text-align:center;max-width:720px;margin:0 auto;padding-top:clamp(96px,14vh,160px)}
+.st-ch-head{display:flex;flex-direction:column;gap:16px;align-items:center;text-align:center;max-width:720px;margin:0 auto;padding-top:clamp(96px,14vh,160px);padding-bottom:clamp(56px,8vh,88px)}
+.st-ch-head .lead{text-wrap:balance}
 .st-track{position:relative;height:300vh}
 .st-sticky{position:sticky;top:0;height:100vh;overflow:hidden}
 .st-grid{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);height:100%;width:100%}
