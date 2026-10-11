@@ -25,7 +25,7 @@ EFFECTS = [("pop", "Subject · Pop"), ("bg", "Background · Darken"), ("sky", "S
 LOCKED = ["Eye", "Dodge & Burn"]
 
 CSS = """
-.try{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:24px;margin-top:48px;align-items:stretch}
+.try{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:20px;margin-top:48px;align-items:stretch}
 .tstage{position:relative;border-radius:24px;overflow:hidden;background:#111;aspect-ratio:16/10;box-shadow:0 40px 120px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.06);touch-action:pan-y}
 .tstage img,.tstage canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
 .tstage img[hidden]{display:none}
@@ -37,34 +37,34 @@ CSS = """
 .tstage .lbl{position:absolute;top:18px;padding:7px 12px;border-radius:30px;background:rgba(10,9,8,.72);backdrop-filter:blur(6px);font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;pointer-events:none;max-width:45%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tstage .lbl.l{left:18px;color:#FEFBF1}.tstage .lbl.r{right:18px;color:#F2A541}
 .tstage .note{position:absolute;left:18px;right:18px;bottom:16px;margin:0;font-size:12px;line-height:1.4;color:#CDD7DD;background:rgba(10,9,8,.7);padding:8px 12px;border-radius:10px;pointer-events:none}
-.app{display:flex;flex-direction:column;gap:18px;padding:22px;border-radius:24px;background:#141210;border:1px solid rgba(156,177,194,.16)}
+.app{display:flex;flex-direction:column;gap:14px;padding:20px;border-radius:24px;background:#141210;border:1px solid rgba(156,177,194,.16)}
 .seg{display:grid;grid-template-columns:1fr 1fr;padding:4px;border-radius:14px;background:#0A0908;border:1px solid rgba(156,177,194,.16)}
-.seg button{min-height:56px;padding:0 4px;text-align:center;border:0;border-radius:10px;background:none;color:#9CB1C2;font-weight:700;font-size:14px;line-height:1.2;font-family:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.seg button{min-height:48px;padding:0 4px;text-align:center;border:0;border-radius:10px;background:none;color:#9CB1C2;font-weight:700;font-size:14px;line-height:1.2;font-family:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
 .seg button small{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;opacity:.8}
 .seg button.on{background:#FEFBF1;color:#0A0908}
-.grp{margin:0 0 10px;font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#9CB1C2}
-.looks{display:grid;gap:8px}
-.look{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:44px;padding:0 14px;border-radius:12px;border:1px solid rgba(156,177,194,.22);background:#1b1916;color:#FEFBF1;font-weight:600;font-size:15px;font-family:inherit;cursor:pointer;text-align:start}
+.grp{margin:0 0 8px;font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#9CB1C2}
+.looks{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.look{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:40px;padding:0 12px;border-radius:12px;border:1px solid rgba(156,177,194,.22);background:#1b1916;color:#FEFBF1;font-weight:600;font-size:14px;line-height:1.2;font-family:inherit;cursor:pointer;text-align:start}
 .look:hover{border-color:#FEFBF1}
 .look.on{border-color:#F2A541;background:rgba(242,165,65,.1)}
 .look.cur{box-shadow:0 0 0 2px rgba(242,165,65,.35)}
 .look .dot{flex:none;width:9px;height:9px;border-radius:50%;background:rgba(156,177,194,.35)}
 .look.on .dot{background:#F2A541;box-shadow:0 0 0 4px rgba(242,165,65,.2)}
 .fx{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.fx .look{min-height:44px;padding:0 12px;font-size:14px}
+.fx .look{min-height:36px;padding:3px 10px;font-size:13px}
 .fx .look.locked{color:#6f7a82;border-style:dashed;background:none;cursor:not-allowed}
 .fx .look.locked:hover{border-color:rgba(156,177,194,.22)}
-.more{margin:12px 0 0;font-size:13px;line-height:1.5;color:#9CB1C2;transition:color .2s}
+.more{margin:8px 0 0;font-size:12px;line-height:1.5;color:#9CB1C2;transition:color .2s}
 .more.nudge{color:#F2A541}
 .amt{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;font-weight:700;font-size:14px}
 .amt output{font-variant-numeric:tabular-nums;color:#F2A541}
-.amt input{grid-column:1/-1;width:100%;accent-color:#F2A541;height:28px;margin:0;cursor:pointer}
+.amt input{grid-column:1/-1;width:100%;accent-color:#F2A541;height:22px;margin:0;cursor:pointer}
 .amt.off{opacity:.4;pointer-events:none}
 .reset{justify-self:start;align-self:flex-start;border:0;background:none;color:#9CB1C2;font-family:inherit;font-size:13px;font-weight:600;text-decoration:underline;text-underline-offset:3px;cursor:pointer;padding:0}
-.app .go{margin-top:auto;display:flex;align-items:center;justify-content:center;min-height:50px;border-radius:30px;background:linear-gradient(90deg,#DA5A22,#F2A541);color:#0A0908;font-weight:800;text-decoration:none}
+.app .go{margin-top:auto;display:flex;align-items:center;justify-content:center;min-height:46px;border-radius:30px;background:linear-gradient(90deg,#DA5A22,#F2A541);color:#0A0908;font-weight:800;text-decoration:none}
 .try-hint{text-align:center;margin-top:16px}
-@media (min-width:981px){.tstage{aspect-ratio:auto;width:100%;height:100%;min-height:560px}}
-@media (max-width:980px){.try{grid-template-columns:minmax(0,1fr)}}
+@media (min-width:1181px){.tstage{align-self:start}}
+@media (max-width:1180px){.try{grid-template-columns:minmax(0,1fr)}.tstage{align-self:auto}}
 @media (max-width:600px){.tstage{aspect-ratio:4/5;border-radius:18px}.app{padding:18px}}
 """
 
