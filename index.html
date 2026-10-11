@@ -585,7 +585,8 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
   var amtBox = document.querySelector("#try .amt"), tag = document.getElementById("try-tag"), cta = document.getElementById("try-cta");
   var CTA = { presets: ["presets/", "Get MWP Presets", "לפריסטים"], panel: ["panel/", "Get MWP Panel", "לפאנל"] };
   var state = { look: -1, lookAmt: 100, fx: {}, cur: null };   // fx: key -> amount (0-100)
-  var FULL = null, FAST = null, idle = 0;   // full-resolution and quick preview buffers
+  var FULL = null, FAST = null, idle = 0;
+  function setSplit(v) { cv.style.clipPath = "inset(0 0 0 " + v + "%)"; line.style.left = v + "%"; knob.style.left = v + "%"; }   // full-resolution and quick preview buffers
 
   function layer(w, h) {
     var c = document.createElement("canvas"); c.width = w; c.height = h;
