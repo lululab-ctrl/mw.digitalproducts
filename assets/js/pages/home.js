@@ -4,6 +4,9 @@ import { listProducts, subscribe, esc } from "../lib/api.js";
 import { CATEGORIES, ICONS, SHELF_ORDER, categoryOf } from "../lib/catalog.js";
 import { bindSubscribeForm } from "./shared-forms.js";
 
+// Presets, the plugin and the field guides each have their own sales page.
+const SALES_PAGE = { preset: "presets/", plugin: "panel/", guide: "field-guides/" };
+
 initChrome();
 
 const shelf = document.getElementById("shelf");
@@ -14,7 +17,7 @@ function shelfHTML(counts, only = {}) {
   return SHELF_ORDER.map((key, i) => {
     const c = CATEGORIES[key];
     const n = counts[key] || 0;
-    const href = n === 1 && only[key] ? `product.html?p=${encodeURIComponent(only[key])}` : `shop.html?cat=${key}`;
+    const href = SALES_PAGE[key] || (n === 1 && only[key] ? `product.html?p=${encodeURIComponent(only[key])}` : `shop.html?cat=${key}`);
     return `
       <a class="shelf__tile${i === 0 ? " shelf__tile--feature" : ""}" href="${href}">
         <span class="shelf__icon">${ICONS[key]}</span>
