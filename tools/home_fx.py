@@ -38,11 +38,11 @@ JS = """<script>
   var io = new IntersectionObserver(function (es) { es.forEach(function (e) {
     if (!e.isIntersecting) return; e.target.classList.add("in"); io.unobserve(e.target);
   }); }, { threshold: .15, rootMargin: "0px 0px -8% 0px" });
-  var SEL = ".st-ch-head,.try,#bundles .head,#faq .head,.plan,.trust > *,.faq details,.st-close .wrap > *";
+  var SEL = ".st-ch-head,.try,#bundles .head,#faq .head,.plan,.trust > *,.faq details";
   document.querySelectorAll(SEL).forEach(function (el) {
     el.classList.add("rv");
     var i = Array.prototype.indexOf.call(el.parentElement.children, el);
-    if (/plan/.test(el.className) || el.parentElement.classList.contains("trust") || el.closest(".st-close")) el.style.setProperty("--d", (i * 0.1) + "s");
+    if (/plan/.test(el.className) || el.parentElement.classList.contains("trust")) el.style.setProperty("--d", (i * 0.1) + "s");
     io.observe(el);
   });
   document.addEventListener("pointermove", function (e) {

@@ -700,13 +700,6 @@ html[lang=he] body,html[lang=he] body *:not(svg):not(svg *),html body [lang=he],
 </div>
 </section>
 
-<section class="st-close">
-<div class="wrap">
-<p class="kick">MWP · by Matan Wild</p>
-<h2 class="st-big"><span>Shoot it. Edit it.</span> <span class="grad">Finish it.</span></h2>
-<div class="ctas"><a class="btn" href="#shop">Shop the collection</a><a class="ghost" href="#try">Try the tools</a></div>
-</div>
-</section>
 </main>
 
 <footer style="padding: 40px 0; border-top: 1px solid rgba(156,177,194,.15)">
@@ -877,11 +870,11 @@ html[lang=he] body,html[lang=he] body *:not(svg):not(svg *),html body [lang=he],
   var io = new IntersectionObserver(function (es) { es.forEach(function (e) {
     if (!e.isIntersecting) return; e.target.classList.add("in"); io.unobserve(e.target);
   }); }, { threshold: .15, rootMargin: "0px 0px -8% 0px" });
-  var SEL = ".st-ch-head,.try,#bundles .head,#faq .head,.plan,.trust > *,.faq details,.st-close .wrap > *";
+  var SEL = ".st-ch-head,.try,#bundles .head,#faq .head,.plan,.trust > *,.faq details";
   document.querySelectorAll(SEL).forEach(function (el) {
     el.classList.add("rv");
     var i = Array.prototype.indexOf.call(el.parentElement.children, el);
-    if (/plan/.test(el.className) || el.parentElement.classList.contains("trust") || el.closest(".st-close")) el.style.setProperty("--d", (i * 0.1) + "s");
+    if (/plan/.test(el.className) || el.parentElement.classList.contains("trust")) el.style.setProperty("--d", (i * 0.1) + "s");
     io.observe(el);
   });
   document.addEventListener("pointermove", function (e) {

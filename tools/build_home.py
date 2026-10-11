@@ -194,7 +194,6 @@ html = f'''<!doctype html>
 </div>
 </section>
 
-{home_story.CLOSE}
 </main>
 
 <footer style="padding: 40px 0; border-top: 1px solid rgba(156,177,194,.15)">
