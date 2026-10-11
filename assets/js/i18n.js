@@ -124,6 +124,12 @@ const HE = {
   "4 guides · 137 lessons · 229 pages · English and Hebrew": "4 מדריכים · 137 שיעורים · 229 עמודים · עברית ואנגלית",
   "See the Field Guides": "למדריכי השטח",
   "Before you buy": "לפני שקונים",
+  "Lightroom presets": "פריסטים ללייטרום",
+  "Photoshop plugin": "פלאגין לפוטושופ",
+  "PDF field guides": "מדריכי שטח ב-PDF",
+  "The look behind every MWP frame.": "המראה של כל פריים של MWP.",
+  "You were there. Now make the photo show it.": "הייתם שם. עכשיו תנו לתמונה להראות את זה.",
+  "See the photo before you press the shutter.": "לראות את התמונה לפני שלוחצים.",
   "Footer": "קישורים",
   "All photos: Matan Wild · contact@matanwildphotography.com": "כל הצילומים: מתן וויילד · contact@matanwildphotography.com",
 

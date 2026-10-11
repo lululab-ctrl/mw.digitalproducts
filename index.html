@@ -65,16 +65,17 @@ img{display:block;max-width:100%}
 .hero .lead{max-width:600px}
 
 /* the three products */
-.trio{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;padding-bottom:120px}
-.card{position:relative;display:flex;flex-direction:column;min-height:620px;border-radius:24px;overflow:hidden;text-decoration:none;color:#FEFBF1;background:#141210;border:1px solid rgba(156,177,194,.14);isolation:isolate;transition:transform .35s cubic-bezier(.16,1,.3,1),border-color .35s}
+.trio{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;padding-bottom:120px}
+.card{position:relative;display:flex;flex-direction:column;min-height:560px;border-radius:24px;overflow:hidden;text-decoration:none;color:#FEFBF1;background:#141210;border:1px solid rgba(156,177,194,.14);isolation:isolate;transition:transform .35s cubic-bezier(.16,1,.3,1),border-color .35s}
 .card:hover{color:#FEFBF1;transform:translateY(-6px);border-color:rgba(242,165,65,.45)}
 .card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;transition:transform .8s cubic-bezier(.16,1,.3,1)}
 .card:hover img{transform:scale(1.04)}
-.card::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(10,9,8,.15) 0%,rgba(10,9,8,.2) 35%,rgba(10,9,8,.92) 72%,#0A0908 100%)}
-.card .body{margin-top:auto;padding:32px;display:flex;flex-direction:column;gap:14px}
-.card h2{font-size:clamp(26px,2.3vw,32px);line-height:1.15;font-weight:400;letter-spacing:-.02em;margin:0;text-wrap:balance}
-.card .facts{font-size:14px;color:#CDD7DD;margin:0;line-height:1.5}
-.card .go{display:inline-flex;align-items:center;gap:10px;margin-top:8px;font-weight:700;font-size:15px;color:#F2A541}
+.card::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(10,9,8,0) 0%,rgba(10,9,8,.05) 40%,rgba(10,9,8,.85) 68%,#0A0908 92%)}
+.card .body{margin-top:auto;padding:36px 36px 40px;display:flex;flex-direction:column;gap:12px}
+.card .tag{margin:0;font-size:13px;font-weight:600;color:#9CB1C2}
+.card .name{margin:0;font-size:clamp(28px,2.4vw,34px);line-height:1.05;font-weight:800;letter-spacing:-.02em}
+.card .line{margin:0;font-size:16px;line-height:1.55;color:#CDD7DD;max-width:30ch}
+.card .go{display:inline-flex;align-items:center;gap:10px;margin-top:14px;font-weight:700;font-size:15px;color:#F2A541}
 .card:hover .go{color:#FFD08A}
 .card .go svg{width:18px;height:18px}
 
@@ -161,27 +162,27 @@ footer nav a:hover{color:#FEFBF1}
       <a class="card" href="presets/">
         <img src="assets/pages/img/8cb56471dbe5940badc7a93cad5c8bf1.jpg" alt="">
         <div class="body">
-          <p class="kick">MWP Presets · Lightroom</p>
-          <h2>The look behind every MWP frame. <span class="b grad">Now one click away.</span></h2>
-          <p class="facts">50 presets, 12 of them adaptive · 33 LUTs for video</p>
+          <p class="tag">Lightroom presets</p>
+          <h2 class="name" data-no-i18n>MWP <span class="grad">Presets</span></h2>
+          <p class="line">The look behind every MWP frame.</p>
           <span class="go">See MWP Presets <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
         </div>
       </a>
       <a class="card" href="panel/">
         <img src="assets/pages/img/866c1bdb5cf29c21c1a04f6fc87b03e9.jpg" alt="">
         <div class="body">
-          <p class="kick">MWP Panel · Photoshop</p>
-          <h2>You were there. <span class="b grad">Now make the photo show it.</span></h2>
-          <p class="facts">8 one-click effects · 11 looks · 4 painted lights</p>
+          <p class="tag">Photoshop plugin</p>
+          <h2 class="name" data-no-i18n>MWP <span class="grad">Panel</span></h2>
+          <p class="line">You were there. Now make the photo show it.</p>
           <span class="go">See MWP Panel <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
         </div>
       </a>
       <a class="card" href="field-guides/">
         <img src="assets/pages/img/5275cc7bcd4fb7560d8f7163592e3122.jpg" alt="">
         <div class="body">
-          <p class="kick">MWP Field Guides · PDF</p>
-          <h2>See the photo <span class="b grad">before you press the shutter.</span></h2>
-          <p class="facts">4 guides · 137 lessons · 229 pages · English and Hebrew</p>
+          <p class="tag">PDF field guides</p>
+          <h2 class="name" data-no-i18n>MWP <span class="grad">Field Guides</span></h2>
+          <p class="line">See the photo before you press the shutter.</p>
           <span class="go">See the Field Guides <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
         </div>
       </a>
