@@ -33,7 +33,7 @@ home_css = """
 
 /* the collection: three cards, every row lines up */
 .shop{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;margin-top:64px}
-.card{display:grid;grid-row:span 6;grid-template-rows:subgrid;row-gap:0;border-radius:24px;overflow:hidden;background:#141210;border:1px solid rgba(156,177,194,.14);transition:transform .35s cubic-bezier(.16,1,.3,1),border-color .35s}
+.card{display:grid;grid-template-columns:minmax(0,1fr);grid-row:span 6;grid-template-rows:subgrid;row-gap:0;border-radius:24px;overflow:hidden;background:#141210;border:1px solid rgba(156,177,194,.14);transition:transform .35s cubic-bezier(.16,1,.3,1),border-color .35s}
 .card:hover{transform:translateY(-6px);border-color:rgba(242,165,65,.45)}
 .card .ph{position:relative;display:block;aspect-ratio:4/3;overflow:hidden}
 .card .ph img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .8s cubic-bezier(.16,1,.3,1)}
@@ -45,8 +45,8 @@ home_css = """
 .card ul{list-style:none;margin:6px 0 0;padding:16px 0 0;border-top:1px solid rgba(156,177,194,.15);display:flex;flex-direction:column;gap:9px}
 .card li{display:flex;gap:10px;align-items:flex-start;font-size:15px;line-height:1.45;color:#CDD7DD}
 .card li svg{flex:none;margin-top:3px}
-.card .act{display:flex;gap:10px;margin-top:12px}
-.card .act .btn,.card .act .ghost{flex:1;min-height:46px;padding:0 16px;font-size:15px}
+.card .act{display:flex;flex-direction:column;gap:10px;margin-top:12px;align-self:end}
+.card .act .btn,.card .act .ghost{width:100%;white-space:nowrap;min-height:46px;padding:0 16px;font-size:15px}
 [dir="rtl"] .arrow{transform:scaleX(-1)}
 [dir="rtl"] .kick,[dir="rtl"] .card .tg,[dir="rtl"] .stat .t{letter-spacing:normal}
 [dir="rtl"] .pg{font-family:Heebo,Montserrat,system-ui,sans-serif}
@@ -92,10 +92,10 @@ def plan(title, sub, price, points, cta, href, hi=False):
     return f'<div class="plan{" hi" if hi else ""}">{tag}<div><h3 class="h3">{title}</h3><p class="small" style="margin-top: 6px">{sub}</p></div><div class="price">{price}</div><ul>{lis}</ul><a class="{btn}" href="{href}">{cta}</a></div>'
 
 PAIRS = [
-    ("Presets · Blue Hour", "3c14b23dbb00f051684ad60fb205ed10.jpg", "fbaf19aea2af10f26b2949ab31fff094.jpg", "Light and Scene", "Blue Hour", "100%", "AFTER · MWP PRESET"),
-    ("Presets · Macro Ground", "7c359a77f23f632596ebda32f1e9a72f.jpg", "84c2340ddf79f1f703f8c905e9b986be.jpg", "Light and Scene", "Macro Ground", "100%", "AFTER · MWP PRESET"),
-    ("Panel · Subject Pop", "c339384fe0c6d91e7b1388d0fed7d1ae.jpg", "52e0c3d2c90942f72d31faa689449bd0.jpg", "Subject", "Pop", "60%", "AFTER"),
-    ("Panel · Background Darken", "af0d1799831d0417d338c0b162975a7b.jpg", "95e0579188ba924ac89563eb21facef6.jpg", "Background", "Darken", "45%", "AFTER"),
+    ("Presets · Blue Hour", "3c14b23dbb00f051684ad60fb205ed10.jpg", "fbaf19aea2af10f26b2949ab31fff094.jpg", "Light and Scene", "Blue Hour", "100%", "FINAL · MWP PRESET"),
+    ("Presets · Macro Ground", "7c359a77f23f632596ebda32f1e9a72f.jpg", "84c2340ddf79f1f703f8c905e9b986be.jpg", "Light and Scene", "Macro Ground", "100%", "FINAL · MWP PRESET"),
+    ("Panel · Subject Pop", "c339384fe0c6d91e7b1388d0fed7d1ae.jpg", "52e0c3d2c90942f72d31faa689449bd0.jpg", "Subject", "Pop", "60%", "FINAL · MWP PANEL"),
+    ("Panel · Background Darken", "af0d1799831d0417d338c0b162975a7b.jpg", "95e0579188ba924ac89563eb21facef6.jpg", "Background", "Darken", "45%", "FINAL · MWP PANEL"),
 ]
 
 html = f'''<!doctype html>
@@ -129,7 +129,7 @@ html = f'''<!doctype html>
 <nav class="nav site-header" aria-label="Main">
 <div class="wrap container">
 <a class="brand" href="./" aria-label="MWP, home"><img src="{IMG}2dd3356528167ddf9a64c0c7301c8aa3.png" alt=""><span>MWP</span></a>
-<div class="links"><a href="#shop">Shop</a><a href="#ba">Before and after</a><a href="#bundles">Bundles</a><a href="#faq">Questions</a></div>
+<div class="links"><a href="#shop">Shop</a><a href="#ba">The edits</a><a href="#bundles">Bundles</a><a href="#faq">Questions</a></div>
 <div class="navr"><a class="nl hide-sm" href="support.html">Help</a><a class="nl" href="account.html">My downloads</a></div>
 </div>
 </nav>
@@ -144,7 +144,7 @@ html = f'''<!doctype html>
 <p class="kick">MWP · by Matan Wild</p>
 <h1 class="h1">Editing tools <span class="b grad">from the field.</span></h1>
 <p class="lead" style="max-width: 540px">Lightroom presets, a Photoshop plugin and field guides from wildlife photographer Matan Wild. Instant download, secure checkout.</p>
-<div class="ctas"><a class="btn" href="#shop">Shop the collection</a><a class="ghost" href="#ba">See before and after</a></div>
+<div class="ctas"><a class="btn" href="#shop">Shop the collection</a><a class="ghost" href="#ba">See the edits</a></div>
 <p class="small">English and Hebrew · Mac and Windows · Download right after payment</p>
 </div>
 <div class="fly4" role="group" aria-label="The MWP collection">
@@ -183,7 +183,7 @@ html = f'''<!doctype html>
 <section class="sec alt" id="ba">
 <div class="wrap">
 <div class="head">
-<p class="kick">Before and after</p>
+<p class="kick">From RAW to final</p>
 <h2 class="h2">Your RAW file. <span class="b grad">In MWP light.</span></h2>
 <p class="lead">Pick an example and drag the handle: the RAW file on one side, the same photo finished with MWP on the other.</p>
 </div>
@@ -191,14 +191,14 @@ html = f'''<!doctype html>
 {"".join(f'<button type="button" class="tab{" on" if i == 0 else ""}" data-i="{i}" aria-pressed="{str(i == 0).lower()}">{p[0]}</button>' for i, p in enumerate(PAIRS))}
 </div>
 <div class="ba" id="ba-box">
-<img id="ba-before" src="{IMG}{PAIRS[0][1]}" alt="Before: the RAW file as shot">
-<img id="ba-after" src="{IMG}{PAIRS[0][2]}" alt="After: finished with MWP" style="clip-path: inset(0 0 0 50%)">
+<img id="ba-before" src="{IMG}{PAIRS[0][1]}" alt="The RAW file as shot">
+<img id="ba-after" src="{IMG}{PAIRS[0][2]}" alt="The final edit, finished with MWP" style="clip-path: inset(0 0 0 50%)">
 <div class="line" style="left: 50%"></div>
 <div class="knob" style="left: 50%" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0A0908" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l-6 6 6 6"></path><path d="M15 6l6 6-6 6"></path></svg></div>
-<span class="tag" style="left: 22px">BEFORE</span>
-<span class="tag" id="ba-after-tag" style="right: 22px; color: #F2A541">AFTER · MWP PRESET</span>
-<input type="range" min="0" max="100" value="50" aria-label="Drag to compare before and after">
-<div class="ph">PLACEHOLDER: the "after" here is Matan's finished edit. Replace with the same RAW edited only with the preset before launch.</div>
+<span class="tag" style="left: 22px">RAW</span>
+<span class="tag" id="ba-after-tag" style="right: 22px; color: #F2A541">FINAL · MWP PRESET</span>
+<input type="range" min="0" max="100" value="50" aria-label="Drag to compare the RAW file and the final edit">
+<div class="ph">PLACEHOLDER: the final frame here is Matan's finished edit. Replace with the same RAW edited only with the preset before launch.</div>
 </div>
 <div class="recipe" data-no-i18n><span class="rc" id="ba-group">{PAIRS[0][3]}</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#CDD7DD" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg><span class="rf" id="ba-name">{PAIRS[0][4]}</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#CDD7DD" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg><span id="ba-amount" style="font-weight: 800; font-size: 14px; padding: 0 8px">{PAIRS[0][5]}</span></div>
 <p class="small hint">Drag the handle to compare.</p>
@@ -275,7 +275,7 @@ html = f'''<!doctype html>
       document.getElementById("ba-group").textContent = p[2];
       document.getElementById("ba-name").textContent = p[3];
       document.getElementById("ba-amount").textContent = p[4];
-      document.getElementById("ba-after-tag").textContent = document.documentElement.lang === "he" ? (p[5] === "AFTER" ? "אחרי" : "אחרי · פריסט MWP") : p[5];
+      document.getElementById("ba-after-tag").textContent = document.documentElement.lang === "he" ? (p[5].indexOf("PANEL") > -1 ? "סופי · MWP Panel" : "סופי · פריסט MWP") : p[5];
       document.querySelectorAll(".tabs .tab").forEach(function (o) {{ o.classList.toggle("on", o === t); o.setAttribute("aria-pressed", o === t); }});
       range.value = 50; setPos(50);
     }});
