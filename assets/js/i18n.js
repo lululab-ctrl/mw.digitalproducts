@@ -248,6 +248,11 @@ const HE = {
   "Browse all products": "לכל המוצרים",
   "Home": "דף הבית",
   // home: interactive shop
+  "One photo by Matan. Try a look, stack a few Panel effects, set the amount, then drag across the photo to compare with the original.": "תמונה אחת של מתן. נסו מראה, הוסיפו כמה אפקטים של הפאנל, כוונו את העוצמה, ואז גררו על התמונה כדי להשוות למקור.",
+  "The original photo by Matan Wild": "התמונה המקורית של מתן וויילד",
+  "Original": "מקור",
+  "Drag to compare with the original": "גררו כדי להשוות למקור",
+  "Drag across the photo to compare with the original.": "גררו על התמונה כדי להשוות למקור.",
   "One photo, straight from the camera. Try a look, stack a few Panel effects, set the amount, then drag across the photo to see where it started.": "תמונה אחת, ישר מהמצלמה. נסו מראה, הוסיפו כמה אפקטים של הפאנל, כוונו את העוצמה, ואז גררו על התמונה כדי לראות מאיפה היא התחילה.",
   "The same photo with your edits": "אותה תמונה עם העריכה שלכם",
   "Live preview in your browser. The real presets and plugin go further, with masks, detail and colour work on every frame.": "תצוגה חיה בדפדפן. הפריסטים והפלאגין האמיתיים הולכים רחוק יותר, עם מסכות, פרטים ועבודת צבע בכל פריים.",

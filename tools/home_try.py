@@ -1,20 +1,20 @@
-"""'Try it yourself' on the home page: one RAW photo, edited live in the browser.
+"""'Try it yourself' on the home page: one of Matan's photos, edited live in the browser.
 Visitors pick a look and switch on Panel-style effects; everything is drawn on the same photo with a
 canvas, so nothing has to be exported or uploaded. These are browser previews of the kinds of edits
 the products make, not the actual preset or plugin output, and the page says so."""
 
 IMG = "assets/pages/img/"
-BASE = "3c14b23dbb00f051684ad60fb205ed10.jpg"   # Matan's RAW (ibex at blue hour), 1800 x 1125
+BASE = "fbaf19aea2af10f26b2949ab31fff094.jpg"   # Matan's high-quality ibex photo from the Presets design, 1800 x 1125
 LOCK = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>'
 
 # Looks: e exposure (stops), t temperature, g tint, c contrast, s shadows, h highlights,
 # sat saturation, f fade, sc / hc split-tone colour for shadows / highlights.
 LOOKS = [
-    ("Golden Hour", dict(e=1.05, t=.32, g=.03, c=.1, s=.3, h=.25, sat=.02, f=0, sc=[.01, 0, -.02], hc=[.035, .018, -.03])),
-    ("Cool Dusk", dict(e=1.15, t=-.18, g=0, c=.08, s=.35, h=.15, sat=.08, f=0, sc=[-.01, 0, .03], hc=[.0, .01, .02])),
-    ("Matte Earth", dict(e=1.0, t=.18, g=.02, c=.02, s=.35, h=.2, sat=-.12, f=.35, sc=[.015, .008, 0], hc=[.02, .012, 0])),
-    ("Deep Contrast", dict(e=1.1, t=.06, g=0, c=.32, s=.25, h=.2, sat=.12, f=0, sc=[0, 0, .01], hc=[.015, .008, 0])),
-    ("Soft Light", dict(e=1.0, t=.1, g=.01, c=.06, s=.45, h=.35, sat=.06, f=0, sc=[0, 0, .015], hc=[.02, .015, .01])),
+    ("Golden Hour", dict(e=.05, t=.55, g=.04, c=.12, s=.1, h=.15, sat=.1, f=0, sc=[.015, .005, -.03], hc=[.05, .025, -.04])),
+    ("Cool Dusk", dict(e=-.1, t=-.4, g=0, c=.1, s=.05, h=.1, sat=.05, f=0, sc=[-.02, 0, .04], hc=[0, .01, .03])),
+    ("Matte Earth", dict(e=0, t=.2, g=.02, c=-.06, s=.15, h=.15, sat=-.2, f=.45, sc=[.02, .01, 0], hc=[.03, .02, 0])),
+    ("Deep Contrast", dict(e=-.05, t=.05, g=0, c=.35, s=-.1, h=.1, sat=.12, f=0, sc=[0, 0, .01], hc=[.015, .008, 0])),
+    ("Soft Light", dict(e=.15, t=.1, g=.01, c=-.08, s=.25, h=.3, sat=0, f=.1, sc=[0, 0, .015], hc=[.02, .015, .01])),
 ]
 # Panel's Edit tab (names from the Panel sales page). Open ones can be stacked; the rest are a teaser.
 EFFECTS = [("pop", "Subject · Pop"), ("bg", "Background · Darken"), ("sky", "Sky"), ("lights", "Lights"),
@@ -79,17 +79,17 @@ def html():
 <div class="head">
 <p class="kick">Try it yourself</p>
 <h2 class="h2">Get your hands <span class="b grad">on the tools.</span></h2>
-<p class="lead">One photo, straight from the camera. Try a look, stack a few Panel effects, set the amount, then drag across the photo to see where it started.</p>
+<p class="lead">One photo by Matan. Try a look, stack a few Panel effects, set the amount, then drag across the photo to compare with the original.</p>
 </div>
 <div class="try">
 <div class="tstage" id="try-stage">
-<img id="try-before" src="{IMG}{BASE}" alt="The RAW file as shot">
+<img id="try-before" src="{IMG}{BASE}" alt="The original photo by Matan Wild">
 <canvas id="try-after" role="img" aria-label="The same photo with your edits" style="clip-path: inset(0 0 0 50%)"></canvas>
 <div class="line" style="left: 50%"></div>
 <div class="knob" style="left: 50%" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0A0908" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l-6 6 6 6"></path><path d="M15 6l6 6-6 6"></path></svg></div>
-<span class="lbl l">RAW</span>
+<span class="lbl l">Original</span>
 <span class="lbl r" id="try-tag" data-no-i18n>Your edit</span>
-<input type="range" id="try-split" min="0" max="100" value="50" aria-label="Drag to compare with the RAW file">
+<input type="range" id="try-split" min="0" max="100" value="50" aria-label="Drag to compare with the original">
 <p class="note">Live preview in your browser. The real presets and plugin go further, with masks, detail and colour work on every frame.</p>
 </div>
 <aside class="app" aria-label="Try the tools">
@@ -112,7 +112,7 @@ def html():
 <a class="go" id="try-cta" href="presets/">Get MWP Presets</a>
 </aside>
 </div>
-<p class="small try-hint">Drag across the photo to compare with the RAW file.</p>
+<p class="small try-hint">Drag across the photo to compare with the original.</p>
 </div>
 </section>"""
 
@@ -146,7 +146,7 @@ def js():
     for (var y = 0; y < h; y++) for (var x = 0; x < w; x++) {
       var i = y * w + x, nx = x / w, ny = y / h;
       var dx = (nx - 0.48) / 0.5, dy = (ny - 0.6) / 0.3, d = Math.sqrt(dx * dx + dy * dy);
-      L.subj[i] = 255 * Math.max(0, Math.min(1, 1.25 - d));
+      var q = Math.max(0, Math.min(1, (1.6 - d) / 1.2)); L.subj[i] = 255 * q * q * (3 - 2 * q);
       L.sky[i] = 255 * Math.max(0, Math.min(1, (0.55 - ny) / 0.3));
       var vx = nx - 0.5, vy = (ny - 0.5) * 0.8, v = Math.sqrt(vx * vx + vy * vy) / 0.64;
       L.vig[i] = 255 * Math.max(0, Math.min(1, (v - 0.45) / 0.55));
@@ -154,7 +154,7 @@ def js():
     return L;
   }
   function prepare() {
-    // Full resolution so the photo stays as sharp as the RAW beside it; a smaller copy keeps sliders smooth.
+    // Full resolution so the photo stays as sharp as the original beside it; a smaller copy keeps sliders smooth.
     var w = before.naturalWidth, h = before.naturalHeight;
     cv.width = w; cv.height = h;
     FULL = layer(w, h);
@@ -184,7 +184,7 @@ def js():
         L = 0.2126 * r + 0.7152 * gg + 0.0722 * b;
         var lift = s * 0.32 * (1 - L) * (1 - L), roll = h * 0.3 * L * L;
         r += lift - roll; gg += lift - roll; b += lift - roll;
-        r = (r - 0.38) * (1 + c) + 0.38; gg = (gg - 0.38) * (1 + c) + 0.38; b = (b - 0.38) * (1 + c) + 0.38;
+        r = (r - 0.45) * (1 + c) + 0.45; gg = (gg - 0.45) * (1 + c) + 0.45; b = (b - 0.45) * (1 + c) + 0.45;
         L = 0.2126 * r + 0.7152 * gg + 0.0722 * b;
         r = L + (r - L) * (1 + sat); gg = L + (gg - L) * (1 + sat); b = L + (b - L) * (1 + sat);
         r += a * ((1 - L) * sc[0] + L * hc[0]); gg += a * ((1 - L) * sc[1] + L * hc[1]); b += a * ((1 - L) * sc[2] + L * hc[2]);

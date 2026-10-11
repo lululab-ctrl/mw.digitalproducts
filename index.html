@@ -484,17 +484,17 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 <div class="head">
 <p class="kick">Try it yourself</p>
 <h2 class="h2">Get your hands <span class="b grad">on the tools.</span></h2>
-<p class="lead">One photo, straight from the camera. Try a look, stack a few Panel effects, set the amount, then drag across the photo to see where it started.</p>
+<p class="lead">One photo by Matan. Try a look, stack a few Panel effects, set the amount, then drag across the photo to compare with the original.</p>
 </div>
 <div class="try">
 <div class="tstage" id="try-stage">
-<img id="try-before" src="assets/pages/img/3c14b23dbb00f051684ad60fb205ed10.jpg" alt="The RAW file as shot">
+<img id="try-before" src="assets/pages/img/fbaf19aea2af10f26b2949ab31fff094.jpg" alt="The original photo by Matan Wild">
 <canvas id="try-after" role="img" aria-label="The same photo with your edits" style="clip-path: inset(0 0 0 50%)"></canvas>
 <div class="line" style="left: 50%"></div>
 <div class="knob" style="left: 50%" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0A0908" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l-6 6 6 6"></path><path d="M15 6l6 6-6 6"></path></svg></div>
-<span class="lbl l">RAW</span>
+<span class="lbl l">Original</span>
 <span class="lbl r" id="try-tag" data-no-i18n>Your edit</span>
-<input type="range" id="try-split" min="0" max="100" value="50" aria-label="Drag to compare with the RAW file">
+<input type="range" id="try-split" min="0" max="100" value="50" aria-label="Drag to compare with the original">
 <p class="note">Live preview in your browser. The real presets and plugin go further, with masks, detail and colour work on every frame.</p>
 </div>
 <aside class="app" aria-label="Try the tools">
@@ -517,7 +517,7 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 <a class="go" id="try-cta" href="presets/">Get MWP Presets</a>
 </aside>
 </div>
-<p class="small try-hint">Drag across the photo to compare with the RAW file.</p>
+<p class="small try-hint">Drag across the photo to compare with the original.</p>
 </div>
 </section>
 
@@ -575,7 +575,7 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 <script>
 // Try it yourself: one photo, edited live on a canvas. A look (presets) plus stackable effects (Panel).
 (function () {
-  var LOOKS = [{"e": 1.05, "t": 0.32, "g": 0.03, "c": 0.1, "s": 0.3, "h": 0.25, "sat": 0.02, "f": 0, "sc": [0.01, 0, -0.02], "hc": [0.035, 0.018, -0.03]}, {"e": 1.15, "t": -0.18, "g": 0, "c": 0.08, "s": 0.35, "h": 0.15, "sat": 0.08, "f": 0, "sc": [-0.01, 0, 0.03], "hc": [0.0, 0.01, 0.02]}, {"e": 1.0, "t": 0.18, "g": 0.02, "c": 0.02, "s": 0.35, "h": 0.2, "sat": -0.12, "f": 0.35, "sc": [0.015, 0.008, 0], "hc": [0.02, 0.012, 0]}, {"e": 1.1, "t": 0.06, "g": 0, "c": 0.32, "s": 0.25, "h": 0.2, "sat": 0.12, "f": 0, "sc": [0, 0, 0.01], "hc": [0.015, 0.008, 0]}, {"e": 1.0, "t": 0.1, "g": 0.01, "c": 0.06, "s": 0.45, "h": 0.35, "sat": 0.06, "f": 0, "sc": [0, 0, 0.015], "hc": [0.02, 0.015, 0.01]}], NAMES = ["Golden Hour", "Cool Dusk", "Matte Earth", "Deep Contrast", "Soft Light"], FX = {"pop": "Subject \u00b7 Pop", "bg": "Background \u00b7 Darken", "sky": "Sky", "lights": "Lights", "darks": "Darks", "vig": "Vignette"};
+  var LOOKS = [{"e": 0.05, "t": 0.55, "g": 0.04, "c": 0.12, "s": 0.1, "h": 0.15, "sat": 0.1, "f": 0, "sc": [0.015, 0.005, -0.03], "hc": [0.05, 0.025, -0.04]}, {"e": -0.1, "t": -0.4, "g": 0, "c": 0.1, "s": 0.05, "h": 0.1, "sat": 0.05, "f": 0, "sc": [-0.02, 0, 0.04], "hc": [0, 0.01, 0.03]}, {"e": 0, "t": 0.2, "g": 0.02, "c": -0.06, "s": 0.15, "h": 0.15, "sat": -0.2, "f": 0.45, "sc": [0.02, 0.01, 0], "hc": [0.03, 0.02, 0]}, {"e": -0.05, "t": 0.05, "g": 0, "c": 0.35, "s": -0.1, "h": 0.1, "sat": 0.12, "f": 0, "sc": [0, 0, 0.01], "hc": [0.015, 0.008, 0]}, {"e": 0.15, "t": 0.1, "g": 0.01, "c": -0.08, "s": 0.25, "h": 0.3, "sat": 0, "f": 0.1, "sc": [0, 0, 0.015], "hc": [0.02, 0.015, 0.01]}], NAMES = ["Golden Hour", "Cool Dusk", "Matte Earth", "Deep Contrast", "Soft Light"], FX = {"pop": "Subject \u00b7 Pop", "bg": "Background \u00b7 Darken", "sky": "Sky", "lights": "Lights", "darks": "Darks", "vig": "Vignette"};
   var HE_NAMES = {"Golden Hour": "שעת זהב", "Cool Dusk": "דמדומים קרים", "Matte Earth": "אדמה מט", "Deep Contrast": "ניגודיות עמוקה", "Soft Light": "אור רך"};
   var he = function () { return document.documentElement.lang === "he"; };
   var stage = document.getElementById("try-stage"), before = document.getElementById("try-before");
@@ -596,7 +596,7 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
     for (var y = 0; y < h; y++) for (var x = 0; x < w; x++) {
       var i = y * w + x, nx = x / w, ny = y / h;
       var dx = (nx - 0.48) / 0.5, dy = (ny - 0.6) / 0.3, d = Math.sqrt(dx * dx + dy * dy);
-      L.subj[i] = 255 * Math.max(0, Math.min(1, 1.25 - d));
+      var q = Math.max(0, Math.min(1, (1.6 - d) / 1.2)); L.subj[i] = 255 * q * q * (3 - 2 * q);
       L.sky[i] = 255 * Math.max(0, Math.min(1, (0.55 - ny) / 0.3));
       var vx = nx - 0.5, vy = (ny - 0.5) * 0.8, v = Math.sqrt(vx * vx + vy * vy) / 0.64;
       L.vig[i] = 255 * Math.max(0, Math.min(1, (v - 0.45) / 0.55));
@@ -604,7 +604,7 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
     return L;
   }
   function prepare() {
-    // Full resolution so the photo stays as sharp as the RAW beside it; a smaller copy keeps sliders smooth.
+    // Full resolution so the photo stays as sharp as the original beside it; a smaller copy keeps sliders smooth.
     var w = before.naturalWidth, h = before.naturalHeight;
     cv.width = w; cv.height = h;
     FULL = layer(w, h);
@@ -634,7 +634,7 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
         L = 0.2126 * r + 0.7152 * gg + 0.0722 * b;
         var lift = s * 0.32 * (1 - L) * (1 - L), roll = h * 0.3 * L * L;
         r += lift - roll; gg += lift - roll; b += lift - roll;
-        r = (r - 0.38) * (1 + c) + 0.38; gg = (gg - 0.38) * (1 + c) + 0.38; b = (b - 0.38) * (1 + c) + 0.38;
+        r = (r - 0.45) * (1 + c) + 0.45; gg = (gg - 0.45) * (1 + c) + 0.45; b = (b - 0.45) * (1 + c) + 0.45;
         L = 0.2126 * r + 0.7152 * gg + 0.0722 * b;
         r = L + (r - L) * (1 + sat); gg = L + (gg - L) * (1 + sat); b = L + (b - L) * (1 + sat);
         r += a * ((1 - L) * sc[0] + L * hc[0]); gg += a * ((1 - L) * sc[1] + L * hc[1]); b += a * ((1 - L) * sc[2] + L * hc[2]);
