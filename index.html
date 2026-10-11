@@ -209,9 +209,49 @@ a{color:#F2A541}a:hover{color:#FFD08A}
 .hint{text-align:center;margin-top:12px}
 @media (max-width:600px){.ba{aspect-ratio:4/5;border-radius:18px}.rc,.rf{padding:6px 12px;font-size:13px}}
 
+.try{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:24px;margin-top:48px;align-items:stretch}
+.tstage{position:relative;border-radius:24px;overflow:hidden;background:#111;aspect-ratio:16/10;box-shadow:0 40px 120px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.06);touch-action:pan-y}
+.tstage img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.tstage #try-after{transition:opacity .25s}
+.tstage .line{position:absolute;top:0;bottom:0;width:2px;background:#FEFBF1;transform:translateX(-1px);pointer-events:none}
+.tstage .knob{position:absolute;top:50%;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;background:#FEFBF1;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 30px rgba(0,0,0,.5);pointer-events:none}
+.tstage input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:ew-resize;margin:0}
+.tstage:has(input:focus-visible){outline:3px solid #F2A541;outline-offset:4px}
+.tstage .lbl{position:absolute;top:18px;padding:7px 12px;border-radius:30px;background:rgba(10,9,8,.72);backdrop-filter:blur(6px);font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;pointer-events:none}
+.tstage .lbl.l{left:18px;color:#FEFBF1}.tstage .lbl.r{right:18px;color:#F2A541}
+.tstage .note{position:absolute;left:18px;right:18px;bottom:16px;font-size:12px;line-height:1.4;color:#CDD7DD;background:rgba(10,9,8,.7);padding:8px 12px;border-radius:10px;pointer-events:none}
+.app{display:flex;flex-direction:column;gap:18px;padding:22px;border-radius:24px;background:#141210;border:1px solid rgba(156,177,194,.16)}
+.seg{display:grid;grid-template-columns:1fr 1fr;padding:4px;border-radius:14px;background:#0A0908;border:1px solid rgba(156,177,194,.16)}
+.seg button{min-height:52px;border:0;border-radius:10px;background:none;color:#9CB1C2;font:700 14px/1.2 inherit;font-family:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.seg button small{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;opacity:.8}
+.seg button.on{background:#FEFBF1;color:#0A0908}
+.grp{margin:0 0 10px;font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#9CB1C2}
+.looks{display:grid;gap:8px}
+.look{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:46px;padding:0 16px;border-radius:12px;border:1px solid rgba(156,177,194,.22);background:#1b1916;color:#FEFBF1;font:600 15px inherit;font-family:inherit;cursor:pointer;text-align:start}
+.look:hover{border-color:#FEFBF1}
+.look.on{border-color:#F2A541;background:rgba(242,165,65,.1)}
+.look .dot{width:9px;height:9px;border-radius:50%;background:rgba(156,177,194,.35)}
+.look.on .dot{background:#F2A541;box-shadow:0 0 0 4px rgba(242,165,65,.2)}
+.fx{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.fx .look{min-height:44px;padding:0 12px;font-size:14px}
+.fx .look.locked{color:#6f7a82;border-style:dashed;background:none;cursor:not-allowed}
+.fx .look.locked:hover{border-color:rgba(156,177,194,.22)}
+.more{margin:12px 0 0;font-size:13px;line-height:1.5;color:#9CB1C2;transition:color .2s}
+.more.nudge{color:#F2A541}
+.amt{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;font-weight:700;font-size:14px}
+.amt output{font-variant-numeric:tabular-nums;color:#F2A541}
+.amt input{grid-column:1/-1;width:100%;accent-color:#F2A541;height:28px;margin:0;cursor:pointer}
+.app .go{margin-top:auto;display:flex;align-items:center;justify-content:center;min-height:50px;border-radius:30px;background:linear-gradient(90deg,#DA5A22,#F2A541);color:#0A0908;font-weight:800;text-decoration:none}
+.try-hint{text-align:center;margin-top:16px}
+@media (min-width:981px){.tstage{aspect-ratio:auto;width:100%;height:100%;min-height:520px}}
+@media (max-width:980px){.try{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:600px){.tstage{aspect-ratio:4/5;border-radius:18px}.app{padding:18px}}
+
+
 /* ---- home only ---- */
 .skip{position:absolute;inset-inline-start:16px;top:-60px;background:#FEFBF1;color:#0A0908;padding:10px 16px;border-radius:64px;font-weight:700;z-index:50}
 .skip:focus{top:12px}
+.nav .wrap{justify-content:flex-start}.nav .links{margin-inline:auto}.navr{margin-inline-start:auto}.nav .links + .navr{margin-inline-start:0}.navr + .lang-toggle{margin-inline-start:-6px}
 .lang-toggle{display:inline-flex;align-items:center;flex:none;height:34px;padding:3px;border-radius:64px;border:1px solid rgba(156,177,194,.35);direction:ltr}
 .lang-toggle span,.lang-toggle button{display:inline-flex;align-items:center;justify-content:center;min-width:38px;height:26px;padding:0 10px;border:0;border-radius:64px;background:none;font:600 12px/1 Montserrat,Heebo,sans-serif;letter-spacing:.06em;color:#9CB1C2;cursor:pointer}
 .lang-toggle button:hover{color:#FEFBF1}
@@ -267,7 +307,7 @@ a{color:#F2A541}a:hover{color:#FFD08A}
 <nav class="nav site-header" aria-label="Main">
 <div class="wrap container">
 <a class="brand" href="./" aria-label="MWP, home"><img src="assets/pages/img/2dd3356528167ddf9a64c0c7301c8aa3.png" alt=""><span>MWP</span></a>
-<div class="links"><a href="#shop">Shop</a><a href="#ba">The edits</a><a href="#bundles">Bundles</a><a href="#faq">Questions</a></div>
+<div class="links"><a href="#shop">Shop</a><a href="#try">Try it</a><a href="#bundles">Bundles</a><a href="#faq">Questions</a></div>
 <div class="navr"><a class="nl hide-sm" href="support.html">Help</a></div>
 </div>
 </nav>
@@ -282,7 +322,7 @@ a{color:#F2A541}a:hover{color:#FFD08A}
 <p class="kick">MWP · by Matan Wild</p>
 <h1 class="h1">Editing tools <span class="b grad">from the field.</span></h1>
 <p class="lead" style="max-width: 540px">Lightroom presets, a Photoshop plugin and field guides from wildlife photographer Matan Wild. Instant download, secure checkout.</p>
-<div class="ctas"><a class="btn" href="#shop">Shop the collection</a><a class="ghost" href="#ba">See the edits</a></div>
+<div class="ctas"><a class="btn" href="#shop">Shop the collection</a><a class="ghost" href="#try">Try the tools</a></div>
 <p class="small">English and Hebrew · Mac and Windows · Download right after payment</p>
 </div>
 <div class="fly4" role="group" aria-label="The MWP collection">
@@ -345,28 +385,44 @@ a{color:#F2A541}a:hover{color:#FFD08A}
 </div>
 </section>
 
-<section class="sec alt" id="ba">
+<section class="sec alt" id="try">
 <div class="wrap">
 <div class="head">
-<p class="kick">From RAW to final</p>
-<h2 class="h2">Your RAW file. <span class="b grad">In MWP light.</span></h2>
-<p class="lead">Pick an example and drag the handle: the RAW file on one side, the same photo finished with MWP on the other.</p>
+<p class="kick">Try it yourself</p>
+<h2 class="h2">Get your hands <span class="b grad">on the tools.</span></h2>
+<p class="lead">Pick a tool, tap a look and set the amount. Then drag across the photo to see where it started. A small taste of what's inside.</p>
 </div>
-<div class="tabs" role="group" aria-label="Choose an example" data-no-i18n>
-<button type="button" class="tab on" data-i="0" aria-pressed="true">Presets · Blue Hour</button><button type="button" class="tab" data-i="1" aria-pressed="false">Presets · Macro Ground</button><button type="button" class="tab" data-i="2" aria-pressed="false">Panel · Subject Pop</button><button type="button" class="tab" data-i="3" aria-pressed="false">Panel · Background Darken</button>
-</div>
-<div class="ba" id="ba-box">
-<img id="ba-before" src="assets/pages/img/3c14b23dbb00f051684ad60fb205ed10.jpg" alt="The RAW file as shot">
-<img id="ba-after" src="assets/pages/img/fbaf19aea2af10f26b2949ab31fff094.jpg" alt="The final edit, finished with MWP" style="clip-path: inset(0 0 0 50%)">
+<div class="try">
+<div class="tstage" id="try-stage">
+<img id="try-before" src="assets/pages/img/3c14b23dbb00f051684ad60fb205ed10.jpg" alt="The RAW file as shot">
+<img id="try-after" src="assets/pages/img/fbaf19aea2af10f26b2949ab31fff094.jpg" alt="The same photo with the selected MWP look" style="clip-path: inset(0 0 0 50%)">
 <div class="line" style="left: 50%"></div>
 <div class="knob" style="left: 50%" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0A0908" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l-6 6 6 6"></path><path d="M15 6l6 6-6 6"></path></svg></div>
-<span class="tag" style="left: 22px">RAW</span>
-<span class="tag" id="ba-after-tag" style="right: 22px; color: #F2A541">FINAL · MWP PRESET</span>
-<input type="range" min="0" max="100" value="50" aria-label="Drag to compare the RAW file and the final edit">
-<div class="ph">PLACEHOLDER: the final frame here is Matan's finished edit. Replace with the same RAW edited only with the preset before launch.</div>
+<span class="lbl l">RAW</span>
+<span class="lbl r" id="try-tag" data-no-i18n>MWP · Blue Hour</span>
+<input type="range" id="try-split" min="0" max="100" value="50" aria-label="Drag to compare with the RAW file">
+<p class="note">PLACEHOLDER: the finished frames are Matan's full edits. Replace with the same RAW edited only with the preset or effect before launch.</p>
 </div>
-<div class="recipe" data-no-i18n><span class="rc" id="ba-group">Light and Scene</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#CDD7DD" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg><span class="rf" id="ba-name">Blue Hour</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#CDD7DD" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg><span id="ba-amount" style="font-weight: 800; font-size: 14px; padding: 0 8px">100%</span></div>
-<p class="small hint">Drag the handle to compare.</p>
+<aside class="app" aria-label="Try the tools">
+<div class="seg" role="group" aria-label="Choose a tool">
+<button type="button" class="on" data-tool="presets" aria-pressed="true"><small>Lightroom</small><span data-no-i18n>MWP Presets</span></button>
+<button type="button" data-tool="panel" aria-pressed="false"><small>Photoshop</small><span data-no-i18n>MWP Panel</span></button>
+</div>
+<div data-pane="presets">
+<p class="grp">Light and Scene</p>
+<div class="looks"><button type="button" class="look on" data-look="0" aria-pressed="true"><span data-no-i18n>Blue Hour</span><span class="dot" aria-hidden="true"></span></button><button type="button" class="look" data-look="1" aria-pressed="false"><span data-no-i18n>Macro Ground</span><span class="dot" aria-hidden="true"></span></button></div>
+<p class="more">The full pack: 50 Lightroom presets, 50 mobile files and 33 LUTs.</p>
+</div>
+<div data-pane="panel" hidden>
+<p class="grp">Edit</p>
+<div class="fx"><button type="button" class="look" data-look="2" aria-pressed="false"><span data-no-i18n>Subject · Pop</span><span class="dot" aria-hidden="true"></span></button><button type="button" class="look locked" data-locked aria-disabled="true"><span data-no-i18n>Eye</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></button><button type="button" class="look locked" data-locked aria-disabled="true"><span data-no-i18n>Sky</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></button><button type="button" class="look" data-look="3" aria-pressed="false"><span data-no-i18n>Background · Darken</span><span class="dot" aria-hidden="true"></span></button><button type="button" class="look locked" data-locked aria-disabled="true"><span data-no-i18n>Lights</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></button><button type="button" class="look locked" data-locked aria-disabled="true"><span data-no-i18n>Darks</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></button><button type="button" class="look locked" data-locked aria-disabled="true"><span data-no-i18n>Dodge & Burn</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></button><button type="button" class="look locked" data-locked aria-disabled="true"><span data-no-i18n>Vignette</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></button></div>
+<p class="more" id="try-more">Two effects are open to try. The full plugin has 8 one-click effects, 11 looks and 4 painted lights.</p>
+</div>
+<div class="amt"><label for="try-amount">Amount</label><output id="try-amt" for="try-amount">100%</output><input type="range" id="try-amount" min="0" max="100" value="100"></div>
+<a class="go" id="try-cta" href="presets/">Get MWP Presets</a>
+</aside>
+</div>
+<p class="small try-hint">Drag across the photo to compare with the RAW file.</p>
 </div>
 </section>
 
@@ -422,29 +478,42 @@ a{color:#F2A541}a:hover{color:#FFD08A}
 </div>
 
 <script>
-// Before / after: tabs pick the example, the range input moves the divider.
+// Try it yourself: choose a tool and a look, set the amount, drag to compare with the RAW file.
 (function () {
-  var P = [['assets/pages/img/3c14b23dbb00f051684ad60fb205ed10.jpg', 'assets/pages/img/fbaf19aea2af10f26b2949ab31fff094.jpg', 'Light and Scene', 'Blue Hour', '100%', 'FINAL · MWP PRESET'], ['assets/pages/img/7c359a77f23f632596ebda32f1e9a72f.jpg', 'assets/pages/img/84c2340ddf79f1f703f8c905e9b986be.jpg', 'Light and Scene', 'Macro Ground', '100%', 'FINAL · MWP PRESET'], ['assets/pages/img/c339384fe0c6d91e7b1388d0fed7d1ae.jpg', 'assets/pages/img/52e0c3d2c90942f72d31faa689449bd0.jpg', 'Subject', 'Pop', '60%', 'FINAL · MWP PANEL'], ['assets/pages/img/af0d1799831d0417d338c0b162975a7b.jpg', 'assets/pages/img/95e0579188ba924ac89563eb21facef6.jpg', 'Background', 'Darken', '45%', 'FINAL · MWP PANEL']];
-  var box = document.getElementById("ba-box");
-  var before = document.getElementById("ba-before"), after = document.getElementById("ba-after");
-  var line = box.querySelector(".line"), knob = box.querySelector(".knob"), range = box.querySelector("input");
-  function setPos(v) {
-    after.style.clipPath = "inset(0 0 0 " + v + "%)";
-    line.style.left = v + "%"; knob.style.left = v + "%";
+  var L = [['presets', 'assets/pages/img/3c14b23dbb00f051684ad60fb205ed10.jpg', 'assets/pages/img/fbaf19aea2af10f26b2949ab31fff094.jpg', 'Blue Hour'], ['presets', 'assets/pages/img/7c359a77f23f632596ebda32f1e9a72f.jpg', 'assets/pages/img/84c2340ddf79f1f703f8c905e9b986be.jpg', 'Macro Ground'], ['panel', 'assets/pages/img/c339384fe0c6d91e7b1388d0fed7d1ae.jpg', 'assets/pages/img/52e0c3d2c90942f72d31faa689449bd0.jpg', 'Pop'], ['panel', 'assets/pages/img/af0d1799831d0417d338c0b162975a7b.jpg', 'assets/pages/img/95e0579188ba924ac89563eb21facef6.jpg', 'Darken']];
+  var he = function () { return document.documentElement.lang === "he"; };
+  var stage = document.getElementById("try-stage");
+  var before = document.getElementById("try-before"), after = document.getElementById("try-after");
+  var line = stage.querySelector(".line"), knob = stage.querySelector(".knob"), split = document.getElementById("try-split");
+  var amount = document.getElementById("try-amount"), out = document.getElementById("try-amt"), tag = document.getElementById("try-tag");
+  var cta = document.getElementById("try-cta");
+  var CTA = { presets: ["presets/", "Get MWP Presets", "לפריסטים"], panel: ["panel/", "Get MWP Panel", "לפאנל"] };
+  function setSplit(v) { after.style.clipPath = "inset(0 0 0 " + v + "%)"; line.style.left = v + "%"; knob.style.left = v + "%"; }
+  function setAmount(v) { after.style.opacity = v / 100; out.textContent = v + "%"; }
+  function pick(i) {
+    var l = L[i];
+    // preload, then swap both frames together so they never mismatch
+    var a = new Image(), b = new Image(), n = 0;
+    function done() { if (++n < 2) return; before.src = l[1]; after.src = l[2]; }
+    a.onload = b.onload = a.onerror = b.onerror = done; a.src = l[1]; b.src = l[2];
+    tag.textContent = "MWP · " + l[3];
+    document.querySelectorAll("#try .look[data-look]").forEach(function (o) { var on = +o.dataset.look === i; o.classList.toggle("on", on); o.setAttribute("aria-pressed", on); });
+    amount.value = 100; setAmount(100); split.value = 50; setSplit(50);
   }
-  range.addEventListener("input", function () { setPos(range.value); });
-  document.querySelectorAll(".tabs .tab").forEach(function (t) {
-    t.addEventListener("click", function () {
-      var p = P[+t.dataset.i];
-      before.src = p[0]; after.src = p[1];
-      document.getElementById("ba-group").textContent = p[2];
-      document.getElementById("ba-name").textContent = p[3];
-      document.getElementById("ba-amount").textContent = p[4];
-      document.getElementById("ba-after-tag").textContent = document.documentElement.lang === "he" ? (p[5].indexOf("PANEL") > -1 ? "סופי · MWP Panel" : "סופי · פריסט MWP") : p[5];
-      document.querySelectorAll(".tabs .tab").forEach(function (o) { o.classList.toggle("on", o === t); o.setAttribute("aria-pressed", o === t); });
-      range.value = 50; setPos(50);
-    });
-  });
+  function tool(t) {
+    document.querySelectorAll("#try .seg button").forEach(function (b) { var on = b.dataset.tool === t; b.classList.toggle("on", on); b.setAttribute("aria-pressed", on); });
+    document.querySelectorAll("#try [data-pane]").forEach(function (p) { p.hidden = p.dataset.pane !== t; });
+    cta.href = CTA[t][0]; cta.textContent = he() ? CTA[t][2] : CTA[t][1];
+    for (var i = 0; i < L.length; i++) if (L[i][0] === t) { pick(i); break; }
+  }
+  split.addEventListener("input", function () { setSplit(split.value); });
+  amount.addEventListener("input", function () { setAmount(amount.value); });
+  document.querySelectorAll("#try .seg button").forEach(function (b) { b.addEventListener("click", function () { tool(b.dataset.tool); }); });
+  document.querySelectorAll("#try .look[data-look]").forEach(function (b) { b.addEventListener("click", function () { pick(+b.dataset.look); }); });
+  var more = document.getElementById("try-more"), tmr;
+  document.querySelectorAll("#try [data-locked]").forEach(function (b) { b.addEventListener("click", function () {
+    more.classList.add("nudge"); clearTimeout(tmr); tmr = setTimeout(function () { more.classList.remove("nudge"); }, 1400);
+  }); });
 })();
 </script>
 <script type="module">

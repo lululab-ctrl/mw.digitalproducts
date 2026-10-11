@@ -15,6 +15,8 @@ ba_css = "\n".join(l for l in _top.split("\n") if re.match(r"\.(ba|recipe|rc|rf|
 ba_css += "\n@media (max-width:600px){.ba{aspect-ratio:4/5;border-radius:18px}.rc,.rf{padding:6px 12px;font-size:13px}}"
 
 IMG = "assets/pages/img/"
+import home_try
+TRY_HTML, TRY_JS, TRY_CSS = home_try.html(), home_try.js(), home_try.CSS
 CHECK = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F2A541" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>'
 ARROW = '<svg class="arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>'
 
@@ -22,6 +24,7 @@ home_css = """
 /* ---- home only ---- */
 .skip{position:absolute;inset-inline-start:16px;top:-60px;background:#FEFBF1;color:#0A0908;padding:10px 16px;border-radius:64px;font-weight:700;z-index:50}
 .skip:focus{top:12px}
+.nav .wrap{justify-content:flex-start}.nav .links{margin-inline:auto}.navr{margin-inline-start:auto}.nav .links + .navr{margin-inline-start:0}.navr + .lang-toggle{margin-inline-start:-6px}
 .lang-toggle{display:inline-flex;align-items:center;flex:none;height:34px;padding:3px;border-radius:64px;border:1px solid rgba(156,177,194,.35);direction:ltr}
 .lang-toggle span,.lang-toggle button{display:inline-flex;align-items:center;justify-content:center;min-width:38px;height:26px;padding:0 10px;border:0;border-radius:64px;background:none;font:600 12px/1 Montserrat,Heebo,sans-serif;letter-spacing:.06em;color:#9CB1C2;cursor:pointer}
 .lang-toggle button:hover{color:#FEFBF1}
@@ -119,6 +122,7 @@ html = f'''<!doctype html>
 {base_css}
 /* before / after (from the Presets page) */
 {ba_css}
+{TRY_CSS}
 {home_css}
 </style>
 </head>
@@ -129,7 +133,7 @@ html = f'''<!doctype html>
 <nav class="nav site-header" aria-label="Main">
 <div class="wrap container">
 <a class="brand" href="./" aria-label="MWP, home"><img src="{IMG}2dd3356528167ddf9a64c0c7301c8aa3.png" alt=""><span>MWP</span></a>
-<div class="links"><a href="#shop">Shop</a><a href="#ba">The edits</a><a href="#bundles">Bundles</a><a href="#faq">Questions</a></div>
+<div class="links"><a href="#shop">Shop</a><a href="#try">Try it</a><a href="#bundles">Bundles</a><a href="#faq">Questions</a></div>
 <div class="navr"><a class="nl hide-sm" href="support.html">Help</a></div>
 </div>
 </nav>
@@ -144,7 +148,7 @@ html = f'''<!doctype html>
 <p class="kick">MWP · by Matan Wild</p>
 <h1 class="h1">Editing tools <span class="b grad">from the field.</span></h1>
 <p class="lead" style="max-width: 540px">Lightroom presets, a Photoshop plugin and field guides from wildlife photographer Matan Wild. Instant download, secure checkout.</p>
-<div class="ctas"><a class="btn" href="#shop">Shop the collection</a><a class="ghost" href="#ba">See the edits</a></div>
+<div class="ctas"><a class="btn" href="#shop">Shop the collection</a><a class="ghost" href="#try">Try the tools</a></div>
 <p class="small">English and Hebrew · Mac and Windows · Download right after payment</p>
 </div>
 <div class="fly4" role="group" aria-label="The MWP collection">
@@ -180,30 +184,7 @@ html = f'''<!doctype html>
 </div>
 </section>
 
-<section class="sec alt" id="ba">
-<div class="wrap">
-<div class="head">
-<p class="kick">From RAW to final</p>
-<h2 class="h2">Your RAW file. <span class="b grad">In MWP light.</span></h2>
-<p class="lead">Pick an example and drag the handle: the RAW file on one side, the same photo finished with MWP on the other.</p>
-</div>
-<div class="tabs" role="group" aria-label="Choose an example" data-no-i18n>
-{"".join(f'<button type="button" class="tab{" on" if i == 0 else ""}" data-i="{i}" aria-pressed="{str(i == 0).lower()}">{p[0]}</button>' for i, p in enumerate(PAIRS))}
-</div>
-<div class="ba" id="ba-box">
-<img id="ba-before" src="{IMG}{PAIRS[0][1]}" alt="The RAW file as shot">
-<img id="ba-after" src="{IMG}{PAIRS[0][2]}" alt="The final edit, finished with MWP" style="clip-path: inset(0 0 0 50%)">
-<div class="line" style="left: 50%"></div>
-<div class="knob" style="left: 50%" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0A0908" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l-6 6 6 6"></path><path d="M15 6l6 6-6 6"></path></svg></div>
-<span class="tag" style="left: 22px">RAW</span>
-<span class="tag" id="ba-after-tag" style="right: 22px; color: #F2A541">FINAL · MWP PRESET</span>
-<input type="range" min="0" max="100" value="50" aria-label="Drag to compare the RAW file and the final edit">
-<div class="ph">PLACEHOLDER: the final frame here is Matan's finished edit. Replace with the same RAW edited only with the preset before launch.</div>
-</div>
-<div class="recipe" data-no-i18n><span class="rc" id="ba-group">{PAIRS[0][3]}</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#CDD7DD" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg><span class="rf" id="ba-name">{PAIRS[0][4]}</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#CDD7DD" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg><span id="ba-amount" style="font-weight: 800; font-size: 14px; padding: 0 8px">{PAIRS[0][5]}</span></div>
-<p class="small hint">Drag the handle to compare.</p>
-</div>
-</section>
+{TRY_HTML}
 
 <section class="sec" id="bundles">
 <div class="wrap">
@@ -256,32 +237,7 @@ html = f'''<!doctype html>
 </footer>
 </div>
 
-<script>
-// Before / after: tabs pick the example, the range input moves the divider.
-(function () {{
-  var P = {[[IMG + p[1], IMG + p[2], p[3], p[4], p[5], p[6]] for p in PAIRS]};
-  var box = document.getElementById("ba-box");
-  var before = document.getElementById("ba-before"), after = document.getElementById("ba-after");
-  var line = box.querySelector(".line"), knob = box.querySelector(".knob"), range = box.querySelector("input");
-  function setPos(v) {{
-    after.style.clipPath = "inset(0 0 0 " + v + "%)";
-    line.style.left = v + "%"; knob.style.left = v + "%";
-  }}
-  range.addEventListener("input", function () {{ setPos(range.value); }});
-  document.querySelectorAll(".tabs .tab").forEach(function (t) {{
-    t.addEventListener("click", function () {{
-      var p = P[+t.dataset.i];
-      before.src = p[0]; after.src = p[1];
-      document.getElementById("ba-group").textContent = p[2];
-      document.getElementById("ba-name").textContent = p[3];
-      document.getElementById("ba-amount").textContent = p[4];
-      document.getElementById("ba-after-tag").textContent = document.documentElement.lang === "he" ? (p[5].indexOf("PANEL") > -1 ? "סופי · MWP Panel" : "סופי · פריסט MWP") : p[5];
-      document.querySelectorAll(".tabs .tab").forEach(function (o) {{ o.classList.toggle("on", o === t); o.setAttribute("aria-pressed", o === t); }});
-      range.value = 50; setPos(50);
-    }});
-  }});
-}})();
-</script>
+{TRY_JS}
 <script type="module">
   import {{ initI18n }} from "./assets/js/i18n.js";
   import {{ initCart }} from "./assets/js/lib/cart.js";
