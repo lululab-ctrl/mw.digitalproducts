@@ -57,7 +57,6 @@ HEADER = f"""<body>
         <a href="presets/">Presets</a>
         <a href="panel/">Plugin</a>
         <a href="field-guides/">Guides &amp; PDFs</a>
-        <a href="shop.html?cat=bundle">Bundles</a>
       </div>
       <div class="nav__end">
       </div>

@@ -52,7 +52,10 @@ for path, lang in PAGES.items():
     # header: home-page brand (logo + MWP, links home), Help + icons + language toggle
     s = re.sub(r'<a class="brand" href="[^"]*"[^>]*><img src="[^"]+" alt="[^"]*"><span>[^<]*</span></a>',
                r'<a class="brand" href="../" aria-label="MWP, home"><img src="../assets/pages/img/2dd3356528167ddf9a64c0c7301c8aa3.png" alt=""><span>MWP</span></a>', s, count=1)
-    s = re.sub(r'<div class="navr">.*?</a></div>(?=\s*</div>\s*</nav>)', lambda m: navr(lang, (re.search(r'<a class="btn sm"[^>]*>.*?</a>', m.group(0)) or [''])[0]), s, count=1, flags=re.S)
+    # header: icons + language toggle only (no "Get ..." button: every page already has one in its buy section)
+    s = re.sub(r'<div class="navr">.*?</div>(?=\s*</div>\s*</nav>)', lambda m: navr(lang), s, count=1, flags=re.S)
+    # no Bundles link in the header menu
+    s = re.sub(r'(<div class="links">[^\n]*?)<a href="#bundles">[^<]*</a>', r'\1', s, count=1)
     for a, b in WORDS[lang]:
         s = s.replace(a, b)
     if 'id="mwp-fonts"' not in s:
