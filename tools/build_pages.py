@@ -399,3 +399,9 @@ page("404.html", "Page not found · MWP", "This page doesn't exist.",
     </div>
   </section>""", "static.js")
 print("pages written")
+
+
+# The not-found page is served at any address (e.g. /old/path/), so its links must resolve from the site root.
+_p = os.path.join(ROOT, "404.html")
+_h = open(_p).read().replace('<meta charset="utf-8">', '<meta charset="utf-8">\n  <base href="/">', 1)
+open(_p, "w").write(_h)

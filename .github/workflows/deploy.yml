@@ -40,7 +40,7 @@ jobs:
         run: |
           mkdir _site
           cp *.html robots.txt sitemap.xml .nojekyll _site/
-          cp -r assets admin _site/
+          cp -r assets admin presets panel field-guides _site/
 
       - uses: actions/configure-pages@v5
 
