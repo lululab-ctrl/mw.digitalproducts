@@ -4,17 +4,18 @@ canvas, so nothing has to be exported or uploaded. These are browser previews of
 the products make, not the actual preset or plugin output, and the page says so."""
 
 IMG = "assets/pages/img/"
+RAW = "3c14b23dbb00f051684ad60fb205ed10.jpg"   # Matan's RAW of the same frame, shown on the left
 BASE = "fbaf19aea2af10f26b2949ab31fff094.jpg"   # Matan's high-quality ibex photo from the Presets design, 1800 x 1125
 LOCK = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>'
 
 # Looks: e exposure (stops), t temperature, g tint, c contrast, s shadows, h highlights,
 # sat saturation, f fade, sc / hc split-tone colour for shadows / highlights.
 LOOKS = [
-    ("Golden Hour", dict(e=.05, t=.55, g=.04, c=.12, s=.1, h=.15, sat=.1, f=0, sc=[.015, .005, -.03], hc=[.05, .025, -.04])),
-    ("Cool Dusk", dict(e=-.1, t=-.4, g=0, c=.1, s=.05, h=.1, sat=.05, f=0, sc=[-.02, 0, .04], hc=[0, .01, .03])),
-    ("Matte Earth", dict(e=0, t=.2, g=.02, c=-.06, s=.15, h=.15, sat=-.2, f=.45, sc=[.02, .01, 0], hc=[.03, .02, 0])),
-    ("Deep Contrast", dict(e=-.05, t=.05, g=0, c=.35, s=-.1, h=.1, sat=.12, f=0, sc=[0, 0, .01], hc=[.015, .008, 0])),
-    ("Soft Light", dict(e=.15, t=.1, g=.01, c=-.08, s=.25, h=.3, sat=0, f=.1, sc=[0, 0, .015], hc=[.02, .015, .01])),
+    ("Golden Hour", dict(e=.03, t=.3, g=.02, c=.08, s=.05, h=.08, sat=.08, f=0, sc=[.01, .004, -.02], hc=[.03, .015, -.02])),
+    ("Cool Dusk", dict(e=0, t=-.18, g=0, c=.08, s=.04, h=.06, sat=.06, f=0, sc=[-.01, 0, .025], hc=[0, .006, .015])),
+    ("Matte Earth", dict(e=0, t=.12, g=.01, c=-.03, s=.08, h=.08, sat=-.1, f=.25, sc=[.012, .006, 0], hc=[.015, .01, 0])),
+    ("Deep Contrast", dict(e=-.03, t=.03, g=0, c=.2, s=-.04, h=.05, sat=.08, f=0, sc=[0, 0, .008], hc=[.01, .005, 0])),
+    ("Soft Light", dict(e=.08, t=.06, g=0, c=-.04, s=.15, h=.18, sat=.02, f=.05, sc=[0, 0, .01], hc=[.012, .01, .006])),
 ]
 # Panel's Edit tab (names from the Panel sales page). Open ones can be stacked; the rest are a teaser.
 EFFECTS = [("pop", "Subject · Pop"), ("bg", "Background · Darken"), ("sky", "Sky"), ("lights", "Lights"),
@@ -80,17 +81,18 @@ def html():
 <div class="head">
 <p class="kick">Try it yourself</p>
 <h2 class="h2">Get your hands <span class="b grad">on the tools.</span></h2>
-<p class="lead">One photo by Matan. Try a look, stack a few Panel effects, set the amount, then drag across the photo to compare with the original.</p>
+<p class="lead">One photo, straight from the camera. Try a look, stack a few Panel effects, set the amount, then drag across the photo to see where it started.</p>
 </div>
 <div class="try">
 <div class="tstage" id="try-stage">
-<img id="try-before" src="{IMG}{BASE}" alt="The original photo by Matan Wild">
+<img id="try-before" src="{IMG}{RAW}" alt="The RAW file as shot">
+<img id="try-base" src="{IMG}{BASE}" alt="" hidden>
 <canvas id="try-after" role="img" aria-label="The same photo with your edits" style="clip-path: inset(0 0 0 50%)"></canvas>
 <div class="line" style="left: 50%"></div>
 <div class="knob" style="left: 50%" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0A0908" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l-6 6 6 6"></path><path d="M15 6l6 6-6 6"></path></svg></div>
-<span class="lbl l">Original</span>
+<span class="lbl l">RAW</span>
 <span class="lbl r" id="try-tag" data-no-i18n>Your edit</span>
-<input type="range" id="try-split" min="0" max="100" value="50" aria-label="Drag to compare with the original">
+<input type="range" id="try-split" min="0" max="100" value="50" aria-label="Drag to compare with the RAW file">
 <p class="note">Live preview in your browser. The real presets and plugin go further, with masks, detail and colour work on every frame.</p>
 </div>
 <aside class="app" aria-label="Try the tools">
@@ -113,7 +115,7 @@ def html():
 <a class="go" id="try-cta" href="presets/">Get MWP Presets</a>
 </aside>
 </div>
-<p class="small try-hint">Drag across the photo to compare with the original.</p>
+<p class="small try-hint">Drag across the photo to compare with the RAW file.</p>
 </div>
 </section>"""
 
@@ -129,7 +131,7 @@ def js():
   var LOOKS = %(looks)s, NAMES = %(names)s, FX = %(fx)s;
   var HE_NAMES = {"Golden Hour": "שעת זהב", "Cool Dusk": "דמדומים קרים", "Matte Earth": "אדמה מט", "Deep Contrast": "ניגודיות עמוקה", "Soft Light": "אור רך"};
   var he = function () { return document.documentElement.lang === "he"; };
-  var stage = document.getElementById("try-stage"), before = document.getElementById("try-before");
+  var stage = document.getElementById("try-stage"), before = document.getElementById("try-before"), base = document.getElementById("try-base");
   var cv = document.getElementById("try-after"), ctx = cv.getContext("2d", { willReadFrequently: true });
   var line = stage.querySelector(".line"), knob = stage.querySelector(".knob"), split = document.getElementById("try-split");
   var amount = document.getElementById("try-amount"), out = document.getElementById("try-amt"), amtName = document.getElementById("try-amt-name");
@@ -141,7 +143,7 @@ def js():
 
   function layer(w, h) {
     var c = document.createElement("canvas"); c.width = w; c.height = h;
-    var x2 = c.getContext("2d", { willReadFrequently: true }); x2.drawImage(before, 0, 0, w, h);
+    var x2 = c.getContext("2d", { willReadFrequently: true }); x2.drawImage(base, 0, 0, w, h);
     var L = { W: w, H: h, c: c, x: x2, src: x2.getImageData(0, 0, w, h).data.slice(),
       subj: new Uint8Array(w * h), sky: new Uint8Array(w * h), vig: new Uint8Array(w * h) };
     // masks: subject (soft ellipse around the animals), sky (top of frame), vignette (edges)
@@ -157,7 +159,7 @@ def js():
   }
   function prepare() {
     // Full resolution so the photo stays as sharp as the original beside it; a smaller copy keeps sliders smooth.
-    var w = before.naturalWidth, h = before.naturalHeight;
+    var w = base.naturalWidth, h = base.naturalHeight;
     cv.width = w; cv.height = h;
     FULL = layer(w, h);
     FAST = layer(Math.round(w / 2), Math.round(h / 2));
@@ -256,7 +258,7 @@ def js():
 
   // Start with a look on, so the first thing people see is the photo changing.
   function start() { prepare(); state.look = 0; state.lookAmt = 100; state.cur = "look"; sync(); }
-  function boot() { if (before.complete && before.naturalWidth) start(); else before.addEventListener("load", start); }
+  function boot() { if (base.complete && base.naturalWidth) start(); else base.addEventListener("load", start); }
   // wait for the language to be set (i18n runs as a module, after this script)
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot); else boot();
 })();

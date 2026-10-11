@@ -485,17 +485,18 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 <div class="head">
 <p class="kick">Try it yourself</p>
 <h2 class="h2">Get your hands <span class="b grad">on the tools.</span></h2>
-<p class="lead">One photo by Matan. Try a look, stack a few Panel effects, set the amount, then drag across the photo to compare with the original.</p>
+<p class="lead">One photo, straight from the camera. Try a look, stack a few Panel effects, set the amount, then drag across the photo to see where it started.</p>
 </div>
 <div class="try">
 <div class="tstage" id="try-stage">
-<img id="try-before" src="assets/pages/img/fbaf19aea2af10f26b2949ab31fff094.jpg" alt="The original photo by Matan Wild">
+<img id="try-before" src="assets/pages/img/3c14b23dbb00f051684ad60fb205ed10.jpg" alt="The RAW file as shot">
+<img id="try-base" src="assets/pages/img/fbaf19aea2af10f26b2949ab31fff094.jpg" alt="" hidden>
 <canvas id="try-after" role="img" aria-label="The same photo with your edits" style="clip-path: inset(0 0 0 50%)"></canvas>
 <div class="line" style="left: 50%"></div>
 <div class="knob" style="left: 50%" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0A0908" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l-6 6 6 6"></path><path d="M15 6l6 6-6 6"></path></svg></div>
-<span class="lbl l">Original</span>
+<span class="lbl l">RAW</span>
 <span class="lbl r" id="try-tag" data-no-i18n>Your edit</span>
-<input type="range" id="try-split" min="0" max="100" value="50" aria-label="Drag to compare with the original">
+<input type="range" id="try-split" min="0" max="100" value="50" aria-label="Drag to compare with the RAW file">
 <p class="note">Live preview in your browser. The real presets and plugin go further, with masks, detail and colour work on every frame.</p>
 </div>
 <aside class="app" aria-label="Try the tools">
@@ -518,7 +519,7 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 <a class="go" id="try-cta" href="presets/">Get MWP Presets</a>
 </aside>
 </div>
-<p class="small try-hint">Drag across the photo to compare with the original.</p>
+<p class="small try-hint">Drag across the photo to compare with the RAW file.</p>
 </div>
 </section>
 
@@ -576,10 +577,10 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 <script>
 // Try it yourself: one photo, edited live on a canvas. A look (presets) plus stackable effects (Panel).
 (function () {
-  var LOOKS = [{"e": 0.05, "t": 0.55, "g": 0.04, "c": 0.12, "s": 0.1, "h": 0.15, "sat": 0.1, "f": 0, "sc": [0.015, 0.005, -0.03], "hc": [0.05, 0.025, -0.04]}, {"e": -0.1, "t": -0.4, "g": 0, "c": 0.1, "s": 0.05, "h": 0.1, "sat": 0.05, "f": 0, "sc": [-0.02, 0, 0.04], "hc": [0, 0.01, 0.03]}, {"e": 0, "t": 0.2, "g": 0.02, "c": -0.06, "s": 0.15, "h": 0.15, "sat": -0.2, "f": 0.45, "sc": [0.02, 0.01, 0], "hc": [0.03, 0.02, 0]}, {"e": -0.05, "t": 0.05, "g": 0, "c": 0.35, "s": -0.1, "h": 0.1, "sat": 0.12, "f": 0, "sc": [0, 0, 0.01], "hc": [0.015, 0.008, 0]}, {"e": 0.15, "t": 0.1, "g": 0.01, "c": -0.08, "s": 0.25, "h": 0.3, "sat": 0, "f": 0.1, "sc": [0, 0, 0.015], "hc": [0.02, 0.015, 0.01]}], NAMES = ["Golden Hour", "Cool Dusk", "Matte Earth", "Deep Contrast", "Soft Light"], FX = {"pop": "Subject \u00b7 Pop", "bg": "Background \u00b7 Darken", "sky": "Sky", "lights": "Lights", "darks": "Darks", "vig": "Vignette"};
+  var LOOKS = [{"e": 0.03, "t": 0.3, "g": 0.02, "c": 0.08, "s": 0.05, "h": 0.08, "sat": 0.08, "f": 0, "sc": [0.01, 0.004, -0.02], "hc": [0.03, 0.015, -0.02]}, {"e": 0, "t": -0.18, "g": 0, "c": 0.08, "s": 0.04, "h": 0.06, "sat": 0.06, "f": 0, "sc": [-0.01, 0, 0.025], "hc": [0, 0.006, 0.015]}, {"e": 0, "t": 0.12, "g": 0.01, "c": -0.03, "s": 0.08, "h": 0.08, "sat": -0.1, "f": 0.25, "sc": [0.012, 0.006, 0], "hc": [0.015, 0.01, 0]}, {"e": -0.03, "t": 0.03, "g": 0, "c": 0.2, "s": -0.04, "h": 0.05, "sat": 0.08, "f": 0, "sc": [0, 0, 0.008], "hc": [0.01, 0.005, 0]}, {"e": 0.08, "t": 0.06, "g": 0, "c": -0.04, "s": 0.15, "h": 0.18, "sat": 0.02, "f": 0.05, "sc": [0, 0, 0.01], "hc": [0.012, 0.01, 0.006]}], NAMES = ["Golden Hour", "Cool Dusk", "Matte Earth", "Deep Contrast", "Soft Light"], FX = {"pop": "Subject \u00b7 Pop", "bg": "Background \u00b7 Darken", "sky": "Sky", "lights": "Lights", "darks": "Darks", "vig": "Vignette"};
   var HE_NAMES = {"Golden Hour": "שעת זהב", "Cool Dusk": "דמדומים קרים", "Matte Earth": "אדמה מט", "Deep Contrast": "ניגודיות עמוקה", "Soft Light": "אור רך"};
   var he = function () { return document.documentElement.lang === "he"; };
-  var stage = document.getElementById("try-stage"), before = document.getElementById("try-before");
+  var stage = document.getElementById("try-stage"), before = document.getElementById("try-before"), base = document.getElementById("try-base");
   var cv = document.getElementById("try-after"), ctx = cv.getContext("2d", { willReadFrequently: true });
   var line = stage.querySelector(".line"), knob = stage.querySelector(".knob"), split = document.getElementById("try-split");
   var amount = document.getElementById("try-amount"), out = document.getElementById("try-amt"), amtName = document.getElementById("try-amt-name");
@@ -591,7 +592,7 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 
   function layer(w, h) {
     var c = document.createElement("canvas"); c.width = w; c.height = h;
-    var x2 = c.getContext("2d", { willReadFrequently: true }); x2.drawImage(before, 0, 0, w, h);
+    var x2 = c.getContext("2d", { willReadFrequently: true }); x2.drawImage(base, 0, 0, w, h);
     var L = { W: w, H: h, c: c, x: x2, src: x2.getImageData(0, 0, w, h).data.slice(),
       subj: new Uint8Array(w * h), sky: new Uint8Array(w * h), vig: new Uint8Array(w * h) };
     // masks: subject (soft ellipse around the animals), sky (top of frame), vignette (edges)
@@ -607,7 +608,7 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
   }
   function prepare() {
     // Full resolution so the photo stays as sharp as the original beside it; a smaller copy keeps sliders smooth.
-    var w = before.naturalWidth, h = before.naturalHeight;
+    var w = base.naturalWidth, h = base.naturalHeight;
     cv.width = w; cv.height = h;
     FULL = layer(w, h);
     FAST = layer(Math.round(w / 2), Math.round(h / 2));
@@ -706,7 +707,7 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 
   // Start with a look on, so the first thing people see is the photo changing.
   function start() { prepare(); state.look = 0; state.lookAmt = 100; state.cur = "look"; sync(); }
-  function boot() { if (before.complete && before.naturalWidth) start(); else before.addEventListener("load", start); }
+  function boot() { if (base.complete && base.naturalWidth) start(); else base.addEventListener("load", start); }
   // wait for the language to be set (i18n runs as a module, after this script)
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot); else boot();
 })();
