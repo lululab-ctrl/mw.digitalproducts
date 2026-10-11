@@ -3,7 +3,7 @@
 the comparison sliders. Page content and layout stay as Matan designed them. Safe to run again."""
 import re, sys, os
 sys.path.insert(0, os.path.dirname(__file__))
-from brand import gold
+from brand import gold, NAV_CSS
 
 PAGES = {
     "presets/index.html": "en", "presets/he.html": "he",
@@ -29,30 +29,11 @@ def navr(lang, btn=""):
 
 # Same header look as the home page. "html " prefix so it wins over the page styles the runtime moves into <head>.
 CSS = """<style id="mwp-unify">
-html .nav .wrap{justify-content:flex-start;height:72px}
-html .nav .links{margin-inline:auto}
-html .navr{display:flex;align-items:center;gap:10px;margin-inline-start:auto}
-html .navr .nav-icons{gap:2px;margin-inline-end:4px}
-html .nav .links + .navr{margin-inline-start:0}
-html .navr .btn.sm{white-space:nowrap}
 html .ba{direction:ltr}
-html .nav .links{gap:26px}
-html .nav .links a{white-space:nowrap;font-size:14px;font-weight:500;color:#CDD7DD;letter-spacing:.01em}
-html .nav .links a:hover{color:#FEFBF1}
-html .navr .btn.sm{min-height:40px;padding:0 18px;font-size:14px}
-@media (max-width:1280px){html .nav .links a{font-size:13px}html .nav .links{gap:18px}}
-@media (max-width:600px){html .navr .btn.sm{display:none}html .navr{gap:8px}}
-html .brand span{display:inline}
-html .navr a.nl{color:#CDD7DD;text-decoration:none;font-weight:600;font-size:15px}
-html .navr a.nl:hover{color:#FEFBF1}
-html .lang-toggle{display:inline-flex;align-items:center;flex:none;height:32px;padding:3px;border-radius:64px;border:1px solid rgba(156,177,194,.35);direction:ltr}
-html .lang-toggle span,html .lang-toggle a{display:inline-flex;align-items:center;justify-content:center;min-width:38px;height:26px;padding:0 10px;border-radius:64px;font:600 12px/1 Montserrat,Heebo,sans-serif;letter-spacing:.06em;color:#9CB1C2;text-decoration:none}
-html .lang-toggle a:hover{color:#FEFBF1}
-html .lang-toggle .on{background:#FEFBF1;color:#0A0908}
-@media (max-width:600px){html .nav .wrap{height:60px}html .navr a.nl.hide-sm{display:none}html .brand span{display:none}}
-</style>"""
+""" + NAV_CSS + """</style>"""
 
-SCRIPT = """<script type="module">
+SCRIPT = """<script src="../assets/js/lib/nav.js" defer></script>
+<script type="module">
 import { initCart } from "../assets/js/lib/cart.js";
 const go = () => initCart();
 document.readyState === "complete" ? go() : addEventListener("load", go);

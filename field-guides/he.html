@@ -5,27 +5,37 @@
 <title>מדריכי השטח של MWP</title>
 <script src="../assets/pages/dc-lite.js"></script>
 <style id="mwp-unify">
-html .nav .wrap{justify-content:flex-start;height:72px}
-html .nav .links{margin-inline:auto}
-html .navr{display:flex;align-items:center;gap:10px;margin-inline-start:auto}
-html .navr .nav-icons{gap:2px;margin-inline-end:4px}
-html .nav .links + .navr{margin-inline-start:0}
-html .navr .btn.sm{white-space:nowrap}
 html .ba{direction:ltr}
-html .nav .links{gap:26px}
-html .nav .links a{white-space:nowrap;font-size:14px;font-weight:500;color:#CDD7DD;letter-spacing:.01em}
-html .nav .links a:hover{color:#FEFBF1}
-html .navr .btn.sm{min-height:40px;padding:0 18px;font-size:14px}
-@media (max-width:1280px){html .nav .links a{font-size:13px}html .nav .links{gap:18px}}
-@media (max-width:600px){html .navr .btn.sm{display:none}html .navr{gap:8px}}
-html .brand span{display:inline}
-html .navr a.nl{color:#CDD7DD;text-decoration:none;font-weight:600;font-size:15px}
-html .navr a.nl:hover{color:#FEFBF1}
-html .lang-toggle{display:inline-flex;align-items:center;flex:none;height:32px;padding:3px;border-radius:64px;border:1px solid rgba(156,177,194,.35);direction:ltr}
-html .lang-toggle span,html .lang-toggle a{display:inline-flex;align-items:center;justify-content:center;min-width:38px;height:26px;padding:0 10px;border-radius:64px;font:600 12px/1 Montserrat,Heebo,sans-serif;letter-spacing:.06em;color:#9CB1C2;text-decoration:none}
-html .lang-toggle a:hover{color:#FEFBF1}
-html .lang-toggle .on{background:#FEFBF1;color:#0A0908}
-@media (max-width:600px){html .nav .wrap{height:60px}html .navr a.nl.hide-sm{display:none}html .brand span{display:none}}
+
+html .nav{position:sticky;top:0;z-index:40;background:rgba(10,9,8,0);border-bottom:1px solid rgba(254,251,241,0);backdrop-filter:none;-webkit-backdrop-filter:none;transition:background .35s ease,border-color .35s ease,backdrop-filter .35s ease}
+html.nav-scrolled .nav{background:rgba(10,9,8,.66);border-bottom-color:rgba(254,251,241,.08);backdrop-filter:saturate(160%) blur(18px);-webkit-backdrop-filter:saturate(160%) blur(18px)}
+html .nav .wrap{display:flex;align-items:center;justify-content:flex-start;gap:28px;height:80px;transition:height .35s ease}
+html.nav-scrolled .nav .wrap{height:64px}
+html .nav .brand{display:flex;align-items:center;gap:12px;color:#FEFBF1;text-decoration:none;direction:ltr;flex:none}
+html .nav .brand img{width:30px;height:30px;object-fit:contain;opacity:.95}
+html .nav .brand span{display:inline;font:700 12px/1 Montserrat,Heebo,sans-serif;letter-spacing:.34em}
+html .nav .links{display:flex;align-items:center;gap:34px;margin-inline:auto}
+html .nav .links a{position:relative;padding:8px 0;color:rgba(254,251,241,.66);text-decoration:none;white-space:nowrap;font:500 13px/1 Montserrat,Heebo,sans-serif;letter-spacing:.06em;transition:color .25s ease}
+html .nav .links a::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:linear-gradient(90deg,#E4AA7C,#F4AF56);transform:scaleX(0);transform-origin:center;transition:transform .35s cubic-bezier(.2,.7,.2,1)}
+html .nav .links a:hover,html .nav .links a.is-active{color:#FEFBF1}
+html .nav .links a:hover::after,html .nav .links a.is-active::after{transform:scaleX(1)}
+html .nav .navr{display:flex;align-items:center;gap:6px;margin-inline-start:0;flex:none}
+html .nav .navr .nl{display:none}
+html .nav .nav-icons{display:flex;align-items:center;gap:0}
+html .nav .nav-ico{width:40px;height:40px;color:rgba(254,251,241,.78);transition:color .2s ease,background .2s ease}
+html .nav .nav-ico:hover{color:#F4AF56;background:rgba(254,251,241,.05)}
+html .nav .nav-ico svg{width:20px;height:20px;stroke-width:1.6}
+html .nav .lang-toggle{display:inline-flex;align-items:center;gap:2px;height:28px;margin-inline-start:6px;padding:0 0 0 14px;border:0;border-left:1px solid rgba(254,251,241,.14);border-radius:0;background:none;direction:ltr}
+html .nav .lang-toggle span,html .nav .lang-toggle a,html .nav .lang-toggle button{display:inline-flex;align-items:center;justify-content:center;min-width:0;height:28px;padding:0 7px;border:0;border-radius:0;background:none;font:600 12px/1 Montserrat,Heebo,sans-serif;letter-spacing:.12em;color:rgba(254,251,241,.42);text-decoration:none;cursor:pointer;transition:color .2s ease}
+html[lang=he] .nav .lang-toggle{border-left:0;border-right:1px solid rgba(254,251,241,.14);padding:0 14px 0 0}
+html .nav .lang-toggle a:hover,html .nav .lang-toggle button:hover{color:#FEFBF1}
+html .nav .lang-toggle .on{color:#FEFBF1;background:none;cursor:default}
+html .nav .navr .btn.sm{display:inline-flex;align-items:center;min-height:38px;margin-inline-start:14px;padding:0 20px;border-radius:999px;background:linear-gradient(90deg,#E4AA7C,#F4AF56);color:#0A0908;font:700 13px/1 Montserrat,Heebo,sans-serif;letter-spacing:.02em;white-space:nowrap;box-shadow:0 6px 20px rgba(244,175,86,.18);transition:transform .25s ease,box-shadow .25s ease,filter .25s ease}
+html .nav .navr .btn.sm:hover{transform:translateY(-1px);filter:brightness(1.06);box-shadow:0 10px 28px rgba(244,175,86,.28)}
+@media (max-width:1280px){html .nav .links{gap:24px}html .nav .links a{font-size:12px}}
+html .nav .links + .navr{margin-inline-start:0}
+@media (max-width:1100px){html .nav .links{display:none}html .nav .navr,html .nav .links + .navr{margin-inline-start:auto}}
+@media (max-width:600px){html .nav .wrap{height:64px;gap:10px}html.nav-scrolled .nav .wrap{height:58px}html .nav .brand span{display:none}html .nav .navr .btn.sm{display:none}html .nav .nav-ico{width:38px;height:38px}html .nav .lang-toggle{padding-left:10px;margin-inline-start:2px}html[lang=he] .nav .lang-toggle{padding:0 10px 0 0}}
 </style>
 </head>
 <body>
@@ -563,6 +573,7 @@ class Component extends DCLogic {
   new MutationObserver(function(){setup()}).observe(document.documentElement,{childList:true,subtree:true});
 })();
 </script>
+<script src="../assets/js/lib/nav.js" defer></script>
 <script type="module">
 import { initCart } from "../assets/js/lib/cart.js";
 const go = () => initCart();

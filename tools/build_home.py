@@ -18,6 +18,8 @@ ba_css += "\n@media (max-width:600px){.ba{aspect-ratio:4/5;border-radius:18px}.r
 
 IMG = "assets/pages/img/"
 import home_try
+import sys as _s, os as _o; _s.path.insert(0, _o.path.dirname(__file__))
+from brand import NAV_CSS
 TRY_HTML, TRY_JS, TRY_CSS = home_try.html(), home_try.js(), home_try.CSS
 CHECK = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F2A541" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>'
 ARROW = '<svg class="arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>'
@@ -125,6 +127,7 @@ html = f'''<!doctype html>
 /* before / after (from the Presets page) */
 {ba_css}
 {TRY_CSS}
+{NAV_CSS}
 {home_css}
 </style>
 </head>
@@ -240,6 +243,7 @@ html = f'''<!doctype html>
 </div>
 
 {TRY_JS}
+<script src="assets/js/lib/nav.js" defer></script>
 <script type="module">
   import {{ initI18n }} from "./assets/js/i18n.js";
   import {{ initCart }} from "./assets/js/lib/cart.js";
