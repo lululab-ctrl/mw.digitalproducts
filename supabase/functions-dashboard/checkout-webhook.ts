@@ -73,6 +73,13 @@ export function safeEqual(a: string, b: string): boolean {
   return diff === 0;
 }
 
+/** Text that Make drops into monday JSON: no quotes, backslashes or line breaks. */
+export const plain = (v: unknown) => String(v ?? "").replace(/["\\\r\n]+/g, " ").trim();
+
+/** Escapes text for the HTML body of a monday update. */
+export const html = (v: unknown) =>
+  String(v ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\r?\n/g, "<br>");
+
 /**
  * Sends an event to a Make.com custom webhook. Never throws: Supabase is the
  * system of record, so a Make outage must not fail a sale or a support request.
@@ -204,9 +211,10 @@ async function handlePaid(
     order_number: String(a.order_number),
     order_date: (a.created_at ?? new Date().toISOString()).slice(0, 10),
     test_mode: testMode,
+    status_label: testMode ? "Test order" : "Paid",
     email,
-    name: a.user_name,
-    product: [product.name, product.name_emphasis].filter(Boolean).join(" "),
+    name: plain(a.user_name),
+    product: plain([product.name, product.name_emphasis].filter(Boolean).join(" ")),
     product_slug: product.slug,
     subtotal: a.subtotal / 100,
     discount: (a.discount_total ?? 0) / 100,
@@ -214,7 +222,7 @@ async function handlePaid(
     total: a.total / 100,
     currency: a.currency,
     receipt_url: a.urls?.receipt ?? null,
-    source: custom.source ?? null,
+    source: plain(custom.source),
     repeat_customer: (count ?? 1) > 1,
     downloads_url: `${Deno.env.get("SITE_URL")}/account.html?email=${encodeURIComponent(email)}`,
   });

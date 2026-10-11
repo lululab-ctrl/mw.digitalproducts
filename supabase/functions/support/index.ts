@@ -3,7 +3,7 @@
 // the monday.com item and sends the auto-reply. Public (no sign-in needed).
 // Abuse controls: honeypot, field limits, max 5 requests per email per hour.
 // ============================================================================
-import { admin, cors, EMAIL_RE, fail, json, notifyMake } from "../_shared/http.ts";
+import { admin, cors, EMAIL_RE, fail, html, json, notifyMake, plain } from "../_shared/http.ts";
 
 const CATEGORIES = new Set(["download", "install", "refund", "other"]);
 const clip = (v: unknown, n: number) => String(v ?? "").trim().slice(0, n);
@@ -54,8 +54,17 @@ Deno.serve(async (req) => {
     type: "support",
     ticket_id: saved.id,
     ...ticket,
+    subject: plain(ticket.subject),
     is_customer: !!customer,
     owned,
+    // Ready-made body for the monday update: who wrote, what they own, and the message.
+    message_html: [
+      `<p><b>From:</b> ${html(ticket.name)} &lt;${html(ticket.email)}&gt;<br>`,
+      `<b>Order number:</b> ${html(ticket.order_number ?? "not given")}<br>`,
+      `<b>Owns:</b> ${owned.length ? owned.map((o: { product?: string; revoked: boolean; downloads: number }) =>
+        `${html(o.product)}${o.revoked ? " (refunded)" : ""}, ${o.downloads} download${o.downloads === 1 ? "" : "s"}`).join("; ") : "nothing yet"}</p>`,
+      `<p>${html(ticket.message)}</p>`,
+    ].join(""),
     created_at: saved.created_at,
   });
 

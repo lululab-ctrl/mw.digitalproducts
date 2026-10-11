@@ -71,6 +71,13 @@ export function safeEqual(a: string, b: string): boolean {
   return diff === 0;
 }
 
+/** Text that Make drops into monday JSON: no quotes, backslashes or line breaks. */
+export const plain = (v: unknown) => String(v ?? "").replace(/["\\\r\n]+/g, " ").trim();
+
+/** Escapes text for the HTML body of a monday update. */
+export const html = (v: unknown) =>
+  String(v ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\r?\n/g, "<br>");
+
 /**
  * Sends an event to a Make.com custom webhook. Never throws: Supabase is the
  * system of record, so a Make outage must not fail a sale or a support request.

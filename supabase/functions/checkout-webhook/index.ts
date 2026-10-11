@@ -6,7 +6,7 @@
 // Idempotent: each event is recorded in webhook_events after it succeeds, and a
 // repeat delivery of the same event returns 200 without doing anything twice.
 // ============================================================================
-import { admin, hmacHex, notifyMake, safeEqual } from "../_shared/http.ts";
+import { admin, hmacHex, notifyMake, plain, safeEqual } from "../_shared/http.ts";
 
 const SECRET = Deno.env.get("CHECKOUT_WEBHOOK_SECRET") ?? "";
 
@@ -114,9 +114,10 @@ async function handlePaid(
     order_number: String(a.order_number),
     order_date: (a.created_at ?? new Date().toISOString()).slice(0, 10),
     test_mode: testMode,
+    status_label: testMode ? "Test order" : "Paid",
     email,
-    name: a.user_name,
-    product: [product.name, product.name_emphasis].filter(Boolean).join(" "),
+    name: plain(a.user_name),
+    product: plain([product.name, product.name_emphasis].filter(Boolean).join(" ")),
     product_slug: product.slug,
     subtotal: a.subtotal / 100,
     discount: (a.discount_total ?? 0) / 100,
@@ -124,7 +125,7 @@ async function handlePaid(
     total: a.total / 100,
     currency: a.currency,
     receipt_url: a.urls?.receipt ?? null,
-    source: custom.source ?? null,
+    source: plain(custom.source),
     repeat_customer: (count ?? 1) > 1,
     downloads_url: `${Deno.env.get("SITE_URL")}/account.html?email=${encodeURIComponent(email)}`,
   });
