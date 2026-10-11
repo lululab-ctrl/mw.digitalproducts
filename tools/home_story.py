@@ -11,17 +11,17 @@ CHAPTERS = [
          img="5275cc7bcd4fb7560d8f7163592e3122.jpg", alt="Mountains at dusk, photographed by Matan Wild",
          line="See the photo before you press the shutter.",
          points=["4 PDF guides, 137 lessons", "Composition, colour, light and planning", "English and Hebrew"],
-         cta="See the Field Guides"),
+         cta="See the Field Guides", box="0cf44582c4078749d18156eec10c90d3.jpg", gk="FIELD GUIDES · PDF", sub="4 guides · 229 pages"),
     dict(step="Edit", tag="Lightroom presets", name="Presets", href="presets/",
          img="8cb56471dbe5940badc7a93cad5c8bf1.jpg", alt="MWP Presets box",
          line="The look behind every MWP frame.",
          points=["50 Lightroom presets, 12 adaptive", "50 mobile files and 33 LUTs", "Install guide for every program"],
-         cta="See MWP Presets"),
+         cta="See MWP Presets", box="8cb56471dbe5940badc7a93cad5c8bf1.jpg", gk="LIGHTROOM PRESETS", sub="50 presets · 33 LUTs"),
     dict(step="Finish", tag="Photoshop plugin", name="Panel", href="panel/",
          img="866c1bdb5cf29c21c1a04f6fc87b03e9.jpg", alt="A tiger, photographed by Matan Wild",
          line="You were there. Now make the photo show it.",
          points=["8 one-click effects", "11 looks and 4 painted lights", "User manual and install guide"],
-         cta="See MWP Panel"),
+         cta="See MWP Panel", box="866c1bdb5cf29c21c1a04f6fc87b03e9.jpg", gk="PHOTOSHOP PLUGIN", sub="8 effects · 11 looks"),
 ]
 
 HERO = f"""<section class="st-hero" id="top">
@@ -61,15 +61,20 @@ STORY = f"""<section class="st-ch" id="shop" aria-label="The collection">
 </div>
 <div class="st-track">
 <div class="st-sticky">
-<div class="wrap st-grid">
+<div class="st-grid">
 <div class="st-media" aria-hidden="true">
 {"".join(f'<img class="st-mimg" data-i="{i}" src="{IMG}{c["img"]}" alt="" loading="lazy">' for i, c in enumerate(CHAPTERS))}
 <div class="st-vf st-vf-sm"><span></span><span></span><span></span><span></span></div>
 <div class="st-count"><span class="st-cur">01</span><span class="st-of">/ 03</span></div>
 </div>
+<div class="st-boxes" aria-hidden="true">{"".join(f'<div class="st-box" data-i="{i}"><div class="st-bf"><img src="{IMG}{c["box"]}" alt=""><div class="st-bl"><span class="st-bn">MW PHOTO TOURS</span><span class="st-bg">{c["gk"]}</span><b data-no-i18n>{c["name"]}</b><small>{c["sub"]}</small></div></div><div class="st-bs"><span>MWP · {c["name"].upper()}</span></div><div class="st-bsh"></div></div>' for i, c in enumerate(CHAPTERS))}</div>
+<div class="st-side">
+<div class="st-ambs" aria-hidden="true">{"".join(f'<img class="st-amb" data-i="{i}" src="{IMG}{c["img"]}" alt="">' for i, c in enumerate(CHAPTERS))}</div>
+<div class="st-ghosts" aria-hidden="true">{"".join(f'<span class="st-ghost" data-i="{i}">0{i + 1}</span>' for i, c in enumerate(CHAPTERS))}</div>
 <div class="st-texts">
 <div class="st-prog" aria-hidden="true">{"".join(f'<span data-i="{i}">{c["step"]}</span>' for i, c in enumerate(CHAPTERS))}</div>
 {"".join(_chapter_text(i, c) for i, c in enumerate(CHAPTERS))}
+</div>
 </div>
 </div>
 </div>
@@ -119,17 +124,41 @@ CSS = """
 .st-ch{position:relative;background:#0A0908}
 .st-ch-head{display:flex;flex-direction:column;gap:16px;align-items:center;text-align:center;max-width:720px;margin:0 auto;padding-top:clamp(96px,14vh,160px)}
 .st-track{position:relative;height:300vh}
-.st-sticky{position:sticky;top:0;height:100vh;display:flex;align-items:center;overflow:hidden}
-.st-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:clamp(40px,6vw,96px);align-items:center;width:100%}
-.st-media{position:relative;aspect-ratio:4/5;max-height:76vh;border-radius:6px;overflow:hidden;background:#141210}
+.st-sticky{position:sticky;top:0;height:100vh;overflow:hidden}
+.st-grid{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);height:100%;width:100%}
+.st-media{position:relative;height:100%;overflow:hidden;background:#141210}
+.st-media::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(90deg,rgba(10,9,8,0) 55%,rgba(10,9,8,.55) 85%,#0A0908 100%),linear-gradient(0deg,rgba(10,9,8,.55) 0%,rgba(10,9,8,0) 30%)}
+[dir=rtl] .st-media::after{background:linear-gradient(270deg,rgba(10,9,8,0) 55%,rgba(10,9,8,.55) 85%,#0A0908 100%),linear-gradient(0deg,rgba(10,9,8,.55) 0%,rgba(10,9,8,0) 30%)}
 .st-mimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;clip-path:inset(100% 0 0 0);will-change:clip-path,transform}
 .st-mimg:first-of-type{clip-path:inset(0 0 0 0)}
 
-.st-media .st-vf{inset:22px;z-index:2}
-.st-count{position:absolute;left:28px;bottom:24px;z-index:2;display:flex;align-items:baseline;gap:8px;color:#FEFBF1;direction:ltr}
+.st-media .st-vf{inset:104px 40px 40px 40px;z-index:2}
+.st-count{position:absolute;left:64px;bottom:60px;z-index:2;display:flex;align-items:baseline;gap:10px;color:#FEFBF1;direction:ltr}
+[dir=rtl] .st-count{left:auto;right:64px}
 .st-cur{font-size:56px;font-weight:500;letter-spacing:-.03em;line-height:1}
 .st-of{font-size:14px;color:rgba(254,251,241,.6);letter-spacing:.1em}
-.st-texts{position:relative;min-height:520px}
+.st-side{position:relative;display:flex;align-items:center;padding:96px clamp(40px,6vw,120px) 40px clamp(150px,13vw,220px);overflow:hidden}
+[dir=rtl] .st-side{padding:96px clamp(150px,13vw,220px) 40px clamp(40px,6vw,120px)}
+.st-ambs{position:absolute;inset:-10%;z-index:0;pointer-events:none}
+.st-amb{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:blur(70px) saturate(1.4);opacity:0;transform:scale(1.2)}
+.st-ghosts{position:absolute;right:-1vw;top:50%;transform:translateY(-58%);z-index:0;pointer-events:none;direction:ltr}
+[dir=rtl] .st-ghosts{right:auto;left:-1vw}
+.st-ghost{position:absolute;right:0;top:0;transform:translateY(-50%);font-size:min(46vh,30vw);line-height:1;font-weight:600;letter-spacing:-.06em;color:transparent;-webkit-text-stroke:1px rgba(254,251,241,.1);opacity:0}
+[dir=rtl] .st-ghost{right:auto;left:0}
+.st-texts{position:relative;z-index:1;width:100%;max-width:560px;min-height:520px}
+.st-boxes{position:absolute;left:50%;bottom:9vh;z-index:3;width:230px;height:300px;transform:translateX(-58%);pointer-events:none;perspective:1400px}
+[dir=rtl] .st-boxes{transform:translateX(-42%)}
+.st-box{position:absolute;inset:0;transform-style:preserve-3d;opacity:0;will-change:opacity,transform}
+.st-bf{position:absolute;inset:0;border-radius:3px;overflow:hidden;transform:rotateY(-24deg) rotateX(6deg);transform-origin:center;box-shadow:0 40px 80px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.08)}
+[dir=rtl] .st-bf{transform:rotateY(24deg) rotateX(6deg)}
+.st-bf img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.st-bl{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;gap:4px;padding:18px;background:linear-gradient(0deg,rgba(10,9,8,.95) 0%,rgba(10,9,8,0) 60%,rgba(10,9,8,.45) 100%);color:#FEFBF1}
+.st-bn{position:absolute;top:16px;left:18px;font-size:8px;font-weight:700;letter-spacing:.3em}
+.st-bg{font-size:9px;font-weight:700;letter-spacing:.22em;color:#F4AF56}
+.st-bl b{font-size:30px;line-height:1;font-weight:700;letter-spacing:-.02em}
+.st-bl small{font-size:10px;color:#CDD7DD}
+.st-bs{display:none}
+.st-bsh{position:absolute;left:10%;right:10%;bottom:-38px;height:26px;background:radial-gradient(closest-side,rgba(0,0,0,.8),rgba(0,0,0,0));filter:blur(6px)}
 .st-prog{display:flex;gap:22px;margin-bottom:40px}
 .st-prog span{position:relative;padding-bottom:10px;font-size:12px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:rgba(254,251,241,.38);transition:color .5s}
 .st-prog span::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:linear-gradient(90deg,#E4AA7C,#F4AF56);transform:scaleX(0);transform-origin:left;transition:transform .7s cubic-bezier(.2,.7,.2,1)}
@@ -165,7 +194,9 @@ CSS = """
   .st-track{height:auto}
   .st-sticky{position:static;height:auto;display:block;padding:40px 0 24px}
   .st-grid{display:block}
-  .st-media,.st-prog{display:none}
+  .st-media,.st-prog,.st-boxes,.st-ambs,.st-ghosts{display:none}
+  .st-side{padding:0 20px;display:block}
+  .st-texts{max-width:none}
   .st-texts{min-height:0;display:grid;gap:72px}
   .st-art{position:static;opacity:1!important;transform:none!important;pointer-events:auto}
   .st-name{white-space:normal}
@@ -192,6 +223,7 @@ JS = """<script>
   var track = document.querySelector(".st-track"); if (!track) return;
   var imgs = track.querySelectorAll(".st-mimg"), arts = track.querySelectorAll(".st-art"), prog = track.querySelectorAll(".st-prog span");
   var cur = track.querySelector(".st-cur"), n = arts.length;
+  var boxes = track.querySelectorAll(".st-box"), ghosts = track.querySelectorAll(".st-ghost"), ambs = track.querySelectorAll(".st-amb");
   var reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
   var target = 0, shown = 0, running = false, lastIdx = -1;
   var ss = function (a, b, x) { var t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
@@ -211,6 +243,9 @@ JS = """<script>
       var op = 1 - ss(0.18, 0.5, Math.abs(d));
       arts[i].style.opacity = op.toFixed(3);
       arts[i].style.transform = "translateY(" + (-d * 40).toFixed(1) + "px)";
+      if (boxes[i]) { boxes[i].style.opacity = op.toFixed(3); boxes[i].style.transform = "translateY(" + (-d * 70).toFixed(1) + "px) rotate(" + (d * -4).toFixed(2) + "deg)"; }
+      if (ghosts[i]) { ghosts[i].style.opacity = op.toFixed(3); ghosts[i].style.transform = "translateY(calc(-50% + " + (-d * 120).toFixed(1) + "px))"; }
+      if (ambs[i]) ambs[i].style.opacity = (op * 0.26).toFixed(3);
     }
     var k = Math.round(v);
     if (k !== lastIdx) {
