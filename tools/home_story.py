@@ -35,9 +35,6 @@ HERO = f"""<section class="st-hero" id="top">
 <p class="lead st-in" style="--i:3">Lightroom presets, a Photoshop plugin and field guides from wildlife photographer Matan Wild. Instant download, secure checkout.</p>
 <div class="ctas st-in" style="--i:4"><a class="btn" href="#shop">Shop the collection</a><a class="ghost" href="#try">Try the tools</a></div>
 </div>
-<div class="wrap st-hero-foot st-in" style="--i:5">
-<a class="st-scroll" href="#shop"><span class="st-scroll-line" aria-hidden="true"></span><span>Scroll</span></a>
-</div>
 </section>"""
 
 
@@ -105,7 +102,7 @@ CSS = home_devices.CSS + """
 .st-vf span:nth-child(2){top:0;right:0;border-top-width:1px;border-right-width:1px}
 .st-vf span:nth-child(3){bottom:0;left:0;border-bottom-width:1px;border-left-width:1px}
 .st-vf span:nth-child(4){bottom:0;right:0;border-bottom-width:1px;border-right-width:1px}
-.st-hero-in{position:relative;width:100%;padding-top:140px}
+.st-hero-in{position:relative;width:100%;padding-top:140px;padding-bottom:clamp(72px,12vh,140px)}
 .st-hero-in .lead{max-width:520px;margin-top:28px}
 .st-hero-in .ctas{margin-top:36px}
 .st-h1{margin:18px 0 0;font-size:clamp(52px,8.4vw,132px);line-height:.94;font-weight:400;letter-spacing:-.04em;color:#FEFBF1}
@@ -115,11 +112,6 @@ CSS = home_devices.CSS + """
 @keyframes strise{from{transform:translateY(105%)}to{transform:none}}
 .st-in{animation:stfade 1.1s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(var(--i) * .12s + .25s)}
 @keyframes stfade{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
-.st-hero-foot{position:relative;width:100%;display:flex;align-items:center;justify-content:space-between;gap:24px;padding-top:56px;padding-bottom:clamp(36px,6vh,64px)}
-.st-scroll{display:inline-flex;align-items:center;gap:14px;color:rgba(254,251,241,.7);text-decoration:none;font-size:12px;font-weight:600;letter-spacing:.24em;text-transform:uppercase}
-.st-scroll-line{position:relative;width:56px;height:1px;background:rgba(254,251,241,.25);overflow:hidden}
-.st-scroll-line::after{content:"";position:absolute;inset:0;background:#F4AF56;transform:translateX(-100%);animation:stline 2.4s cubic-bezier(.6,0,.2,1) infinite}
-@keyframes stline{0%{transform:translateX(-100%)}60%,100%{transform:translateX(100%)}}
 
 /* ---------- landing: pinned story ---------- */
 .st-ch{position:relative;background:#0A0908}
@@ -191,7 +183,6 @@ CSS = home_devices.CSS + """
   .st-art-img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:6px;margin-top:28px;order:-1}
   .st-art{display:flex;flex-direction:column}
   .st-art-img{order:-1;margin:0 0 26px}
-  .st-hero-foot .small{display:none}
 }
 @media (max-width:600px){
   .st-hero-in{padding-top:120px}
@@ -199,7 +190,7 @@ CSS = home_devices.CSS + """
   .st-hero-shade{background:linear-gradient(0deg,#0A0908 0%,rgba(10,9,8,.7) 55%,rgba(10,9,8,.35) 100%)}
 }
 @media (prefers-reduced-motion:reduce){
-  .st-hero-img,.st-l > span,.st-in,.st-scroll-line::after{animation:none}
+  .st-hero-img,.st-l > span,.st-in{animation:none}
   .st-mimg,.st-art,.st-prog span::after{transition:none}
 }
 """
