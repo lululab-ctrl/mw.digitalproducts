@@ -218,7 +218,8 @@ JS = """<script>
   function measure() {
     if (window.innerWidth <= 900) return null;
     var r = track.getBoundingClientRect(), total = r.height - window.innerHeight;
-    return Math.min(n - 1, Math.max(0, (-r.top / total) * n - 0.5));   // 0 … n-1, chapter centres
+    var p = Math.min(1, Math.max(0, -r.top / total));
+    return p * (n - 1 + 0.7) - 0.35;   // -0.35 … n-0.65: room before the first and after the last chapter
   }
   function paint(v) {
     for (var i = 0; i < n; i++) {
@@ -228,7 +229,8 @@ JS = """<script>
       imgs[i].style.clipPath = "inset(" + ((1 - reveal) * 100).toFixed(2) + "% 0 0 0)";
       imgs[i].style.transform = "scale(" + (1 + 0.08 * (1 - reveal) + 0.03 * ss(0, 1, d)).toFixed(4) + ")";
       // text: fade and drift; out upward, in from below
-      var op = 1 - ss(0.18, 0.5, Math.abs(d));
+      var dOp = (i === 0 && d < 0) || (i === n - 1 && d > 0) ? 0 : d;   // first and last chapter stay fully on at the ends
+      var op = 1 - ss(0.18, 0.5, Math.abs(dOp));
       arts[i].style.opacity = op.toFixed(3);
       arts[i].style.transform = "translateY(" + (-d * 40).toFixed(1) + "px)";
       if (ghosts[i]) { ghosts[i].style.opacity = op.toFixed(3); ghosts[i].style.transform = "translateY(calc(-50% + " + (-d * 120).toFixed(1) + "px))"; }
@@ -236,16 +238,38 @@ JS = """<script>
       if (devs[i]) {
         var dv = devs[i]; dv.style.opacity = op.toFixed(3);
         dv.style.transform = "translateY(" + (-d * 60).toFixed(1) + "px) scale(" + (0.94 + 0.06 * op).toFixed(4) + ")";
-        var w = ss(-0.36, 0.3, d);                      // the edit sweeps across while this chapter is on screen
+        var w = ss(-0.4, 0.34, d);                      // this chapter's own timeline, 0 → 1, tied to the scroll
+        var mouse = dv.querySelector(".st-mouse"), app = dv.querySelector(".st-app");
+        var rings = dv.querySelectorAll(".st-ring");
+        // Presets: click the preset, then drag the compare line. Panel: click Subject, then Pop, then drag.
+        var start = rings.length ? 0.42 : 0.26;
+        var wipe = Math.min(1, Math.max(0, (w - start) / (1 - start)));
         var wp = dv.querySelector(".st-wipe"), wl = dv.querySelector(".st-wline");
-        if (wp) wp.style.clipPath = "inset(0 " + ((1 - w) * 100).toFixed(2) + "% 0 0)";
-        if (wl) { wl.style.left = (w * 100).toFixed(2) + "%"; wl.style.opacity = (w > 0.01 && w < 0.99) ? "1" : "0"; }
-        dv.querySelectorAll(".st-bar i").forEach(function (b) { var to = parseFloat(b.style.getPropertyValue("--to")); b.style.setProperty("--at", (50 + (to - 50) * w).toFixed(1) + "%"); });
-        var rings = dv.querySelectorAll(".st-ring"); if (rings.length) { rings[0].classList.toggle("on", w > 0.05); rings[1].classList.toggle("on", w > 0.35); }
+        if (wp) wp.style.clipPath = "inset(0 " + ((1 - wipe) * 100).toFixed(2) + "% 0 0)";
+        if (wl) { wl.style.left = (wipe * 100).toFixed(2) + "%"; wl.style.opacity = (wipe > 0.01 && wipe < 0.99) ? "1" : "0"; }
+        dv.querySelectorAll(".st-bar i").forEach(function (b) { var to = parseFloat(b.style.getPropertyValue("--to")); b.style.setProperty("--at", (50 + (to - 50) * wipe).toFixed(1) + "%"); });
+        if (rings.length) { rings[0].classList.toggle("on", w > 0.2); rings[1].classList.toggle("on", w > 0.4); }
+        if (mouse && app && op > 0.02) {
+          var A = app.getBoundingClientRect();
+          var at = function (el, fx, fy) { var r = el.getBoundingClientRect(); return [(r.left + r.width * fx - A.left) / A.width * 100, (r.top + r.height * fy - A.top) / A.height * 100]; };
+          var canvas = dv.querySelector(".st-canvas"), C = canvas.getBoundingClientRect();
+          var lineAt = [((C.left + C.width * wipe) - A.left) / A.width * 100, ((C.top + C.height * 0.62) - A.top) / A.height * 100];
+          var keys = rings.length
+            ? [[0, [72, 86]], [0.2, at(rings[0], .5, .55)], [0.4, at(rings[1], .3, .55)], [0.47, at(canvas, 0, .62)], [1, at(canvas, 1, .62)]]
+            : [[0, [62, 88]], [0.26, at(dv.querySelector(".st-pane span.on"), .45, .55)], [0.33, at(canvas, 0, .62)], [1, at(canvas, 1, .62)]];
+          var pos = keys[keys.length - 1][1];
+          for (var q = 1; q < keys.length; q++) if (w <= keys[q][0]) { var a0 = keys[q - 1], a1 = keys[q], t = ss(0, 1, (w - a0[0]) / (a1[0] - a0[0] || 1)); pos = [a0[1][0] + (a1[1][0] - a0[1][0]) * t, a0[1][1] + (a1[1][1] - a0[1][1]) * t]; break; }
+          if (w > start) pos = lineAt;                    // holding the compare line while it sweeps
+          mouse.style.left = pos[0].toFixed(2) + "%"; mouse.style.top = pos[1].toFixed(2) + "%";
+          var clicks = rings.length ? [0.2, 0.4] : [0.26];
+          var near = clicks.some(function (c) { return Math.abs(w - c) < 0.018; });
+          mouse.classList.toggle("click", near); mouse.classList.toggle("press", near || (w > start && w < 0.99));
+          var hov = dv.querySelector(".st-pane span.on"); if (hov) hov.classList.toggle("hov", w > 0.18 && w < 0.3);
+        }
         dv.style.setProperty("--e", ss(-0.45, 0.2, d).toFixed(3));   // books fan out as the chapter arrives
       }
     }
-    var k = Math.round(v);
+    var k = Math.min(n - 1, Math.max(0, Math.round(v)));
     if (k !== lastIdx) {
       lastIdx = k;
       arts.forEach(function (a, i) { a.classList.toggle("on", i === k); a.setAttribute("aria-hidden", i === k ? "false" : "true"); });

@@ -37,7 +37,7 @@ def edit():
 <div class="st-pane"><b>PRESETS</b>{groups}</div>
 <div class="st-canvas"><img src="{IMG}try-raw-clean.jpg" alt=""><img class="st-wipe" src="{IMG}fbaf19aea2af10f26b2949ab31fff094.jpg" alt=""><i class="st-wline"></i><em class="st-chip l">MWP</em><em class="st-chip r">RAW</em></div>
 <div class="st-pane st-pane-r"><b>BASIC</b>{rows}</div>
-</div><i class="st-glare"></i></div>
+<i class="st-mouse"><svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path d="M5 3l14 8-6.2 1.6L9.6 19z" fill="#FEFBF1" stroke="#0A0908" stroke-width="1.4" stroke-linejoin="round"/></svg></i></div><i class="st-glare"></i></div>
 <div class="st-lap-base"></div>
 </div>
 <div class="st-floor"></div>
@@ -47,14 +47,15 @@ def edit():
 def finish():
     tools = "<i></i>" * 9
     return f"""<div class="st-dev st-dev-finish" data-i="2">
-<div class="st-mon">
-<div class="st-mon-scr"><div class="st-app st-ps">
+<div class="st-lap">
+<div class="st-lap-scr"><div class="st-app st-ps">
 <div class="st-tools">{tools}</div>
 <div class="st-canvas"><img src="{IMG}c339384fe0c6d91e7b1388d0fed7d1ae.jpg" alt=""><img class="st-wipe" src="{IMG}52e0c3d2c90942f72d31faa689449bd0.jpg" alt=""><i class="st-wline"></i><em class="st-chip l">SUBJECT · POP</em><em class="st-chip r">BEFORE</em></div>
 <div class="st-dock"><div class="st-dock-in"><img src="{IMG}0f68e9846bf802d72ca616b1da7a3b4c.png" alt=""><i class="st-ring st-ring-a"></i><i class="st-ring st-ring-b"></i></div></div>
-</div><i class="st-glare"></i></div>
-<div class="st-mon-neck"></div><div class="st-mon-foot"></div>
+<i class="st-mouse"><svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path d="M5 3l14 8-6.2 1.6L9.6 19z" fill="#FEFBF1" stroke="#0A0908" stroke-width="1.4" stroke-linejoin="round"/></svg></i></div><i class="st-glare"></i></div>
+<div class="st-lap-base"></div>
 </div>
+<div class="st-floor"></div>
 </div>"""
 
 
@@ -130,5 +131,12 @@ CSS = """
 .st-ring-a{left:3%;top:14.6%;width:23%;height:2.9%}
 .st-ring-b{left:3%;top:46.4%;width:45.5%;height:3.9%}
 .st-ring.on{opacity:1}
+.st-mouse{position:absolute;left:0;top:0;z-index:5;width:22px;height:22px;margin:-3px 0 0 -5px;pointer-events:none;filter:drop-shadow(0 3px 6px rgba(0,0,0,.55));will-change:left,top}
+.st-mouse svg{display:block}
+.st-mouse::after{content:"";position:absolute;left:3px;top:1px;width:26px;height:26px;margin:-13px 0 0 -13px;border-radius:50%;border:2px solid #F4AF56;opacity:0;transform:scale(.3)}
+.st-mouse.click::after{animation:stclick .7s cubic-bezier(.2,.7,.2,1)}
+@keyframes stclick{0%{opacity:.9;transform:scale(.3)}100%{opacity:0;transform:scale(1.6)}}
+.st-mouse.press svg{transform:scale(.86);transform-origin:20% 10%}
+.st-pane span.hov{background:rgba(254,251,241,.06)}
 @media (max-width:1200px){.st-app{font-size:8px}}
 """
