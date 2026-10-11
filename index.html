@@ -301,34 +301,40 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 .hint{text-align:center;margin-top:12px}
 @media (max-width:600px){.ba{aspect-ratio:4/5;border-radius:18px}.rc,.rf{padding:6px 12px;font-size:13px}}
 
-.cmps{display:flex;flex-direction:column;gap:clamp(96px,12vw,150px);margin-top:clamp(56px,7vw,88px)}
-.cmp-head{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:end;gap:20px 48px;margin-bottom:28px}
-.cmp-tag{display:flex;align-items:center;gap:14px;margin:0 0 10px;font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:#8C979F}
+.cmps{display:flex;flex-direction:column;gap:clamp(88px,11vw,140px);margin-top:clamp(56px,7vw,96px)}
+.cmp{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);align-items:center;gap:clamp(40px,6vw,88px)}
+.cmp.flip{grid-template-columns:minmax(0,1fr) minmax(0,1.45fr)}
+.cmp.flip .ba2{order:2}
+.cmp-text{max-width:420px}
+.cmp-tag{display:flex;align-items:center;gap:14px;margin:0 0 18px;font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:#8C979F}
 .cmp-tag .n{color:#F4AF56;font-variant-numeric:tabular-nums}
 .cmp-tag .n::after{content:"";display:inline-block;width:28px;height:1px;margin-inline-start:14px;vertical-align:middle;background:rgba(244,175,86,.5)}
-.cmp-name{margin:0;font-size:clamp(36px,4.4vw,60px);line-height:1;font-weight:400;letter-spacing:-.035em;color:#FEFBF1}
+.cmp-name{margin:0;font-size:clamp(34px,3.6vw,52px);line-height:1.02;font-weight:400;letter-spacing:-.035em;color:#FEFBF1}
 .cmp-name .grad{font-weight:700}
-.cmp-line{margin:0 0 6px;max-width:380px;font-size:16px;line-height:1.55;color:#AEB9C1;justify-self:start}
-.cmp-cta{display:inline-flex;align-items:center;gap:10px;margin-bottom:6px;padding:12px 4px;color:#FEFBF1;font-weight:700;font-size:15px;text-decoration:none;border-bottom:1px solid rgba(244,175,86,.5);transition:gap .3s,border-color .3s,color .3s}
+.cmp-line{margin:16px 0 0;font-size:17px;line-height:1.55;color:#CDD7DD}
+.cmp-pts{list-style:none;margin:28px 0 0;padding:0;border-top:1px solid rgba(254,251,241,.08)}
+.cmp-pts li{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid rgba(254,251,241,.08);font-size:15px;color:#AEB9C1}
+.cmp-pts li::before{content:"";flex:none;width:6px;height:6px;border-radius:50%;background:#F4AF56;box-shadow:0 0 0 4px rgba(244,175,86,.14)}
+.cmp-cta{display:inline-flex;align-items:center;gap:10px;margin-top:30px;padding:12px 4px;color:#FEFBF1;font-weight:700;font-size:15px;text-decoration:none;border-bottom:1px solid rgba(244,175,86,.5);transition:gap .3s,border-color .3s,color .3s}
 .cmp-cta:hover{gap:16px;color:#F4AF56;border-color:#F4AF56}
 [dir=rtl] .cmp-cta svg{transform:scaleX(-1)}
-.ba2{position:relative;aspect-ratio:16/9;border-radius:28px;overflow:hidden;background:#111;direction:ltr;touch-action:pan-y;box-shadow:0 80px 160px -60px rgba(0,0,0,.9),0 0 0 1px rgba(254,251,241,.07);--s:50%}
+.ba2{position:relative;aspect-ratio:16/10;border-radius:22px;overflow:hidden;background:#111;direction:ltr;touch-action:pan-y;box-shadow:0 60px 120px -50px rgba(0,0,0,.9),0 0 0 1px rgba(254,251,241,.07);--s:50%}
 .ba2 img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;transform:scale(1.04);transition:transform 1.6s cubic-bezier(.2,.7,.1,1)}
 .ba2.seen img{transform:none}
 .ba2 .aft{clip-path:inset(0 0 0 var(--s))}
 .ba2::after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;background:linear-gradient(0deg,rgba(10,9,8,.5),transparent 28%);box-shadow:inset 0 0 0 1px rgba(254,251,241,.05)}
 .ba2 .line{position:absolute;top:0;bottom:0;left:var(--s);width:2px;margin-left:-1px;background:#FEFBF1;box-shadow:0 0 24px rgba(254,251,241,.4);pointer-events:none;z-index:2}
-.ba2 .knob{position:absolute;top:50%;left:var(--s);width:52px;height:52px;margin:-26px 0 0 -26px;border-radius:50%;background:#FEFBF1;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 8px rgba(254,251,241,.14),0 14px 40px rgba(0,0,0,.5);pointer-events:none;z-index:2;transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+.ba2 .knob{position:absolute;top:50%;left:var(--s);width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;background:#FEFBF1;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 8px rgba(254,251,241,.14),0 14px 40px rgba(0,0,0,.5);pointer-events:none;z-index:2;transition:transform .35s cubic-bezier(.2,.8,.2,1)}
 .ba2:hover .knob{transform:scale(1.08)}
 .ba2 input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:ew-resize;margin:0;z-index:3}
 .ba2:has(input:focus-visible){outline:2px solid #F4AF56;outline-offset:4px}
-.ba2 .lbl{position:absolute;bottom:26px;z-index:2;display:inline-flex;align-items:center;gap:12px;font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:rgba(254,251,241,.92);text-shadow:0 1px 14px rgba(0,0,0,.6);pointer-events:none;white-space:nowrap;transition:opacity .3s}
+.ba2 .lbl{position:absolute;bottom:20px;z-index:2;display:inline-flex;align-items:center;gap:12px;font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(254,251,241,.92);text-shadow:0 1px 14px rgba(0,0,0,.6);pointer-events:none;white-space:nowrap;transition:opacity .3s}
 .ba2 .lbl::before{content:"";width:22px;height:1px;background:currentColor;opacity:.6}
-.ba2 .lbl.l{left:30px}.ba2 .lbl.r{right:30px;color:#F4AF56}
+.ba2 .lbl.l{left:22px}.ba2 .lbl.r{right:22px;color:#F4AF56}
 .ba2 .lbl.hide{opacity:0}
 html[lang=he] .cmp-tag,html[lang=he] .ba2 .lbl{letter-spacing:.04em}
-@media (max-width:900px){.cmp-head{grid-template-columns:minmax(0,1fr) auto}.cmp-line{grid-column:1/-1;grid-row:2;max-width:none;margin:0}}
-@media (max-width:600px){.cmp-head{grid-template-columns:minmax(0,1fr);gap:12px;margin-bottom:22px}.cmp-line{grid-row:auto}.cmp-cta{justify-self:start}.ba2{aspect-ratio:4/3;border-radius:20px}.ba2 .knob{width:44px;height:44px;margin:-22px 0 0 -22px}.ba2 .lbl{bottom:16px;font-size:10.5px}.ba2 .lbl.l{left:16px}.ba2 .lbl.r{right:16px}.ba2 .lbl::before{width:14px}}
+@media (max-width:960px){.cmp,.cmp.flip{grid-template-columns:minmax(0,1fr);gap:32px}.cmp.flip .ba2{order:0}.cmp-text{max-width:560px}}
+@media (max-width:600px){.ba2{aspect-ratio:4/3;border-radius:18px}.ba2 .knob{width:40px;height:40px;margin:-20px 0 0 -20px}.ba2 .lbl{bottom:14px;font-size:10px}.ba2 .lbl.l{left:14px}.ba2 .lbl.r{right:14px}.ba2 .lbl::before{width:12px}.cmp-line{font-size:16px}}
 @media (prefers-reduced-motion:reduce){.ba2 img{transform:none;transition:none}}
 
 
@@ -825,12 +831,6 @@ html[lang=he] body,html[lang=he] body *:not(svg):not(svg *),html body [lang=he],
 </div>
 <div class="cmps">
 <article class="cmp">
-<header class="cmp-head">
-<div><p class="cmp-tag"><span class="n">01</span><span>Lightroom presets</span></p>
-<h3 class="cmp-name" data-no-i18n>MWP <span class="grad">Presets</span></h3></div>
-<p class="cmp-line">The look behind every MWP frame.</p>
-<a class="cmp-cta" href="presets/"><span>See MWP Presets</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-</header>
 <div class="ba2">
 <img class="bef" src="assets/pages/img/try-raw-clean.jpg" alt="" loading="lazy" style="object-position: 50% 62%">
 <img class="aft" src="assets/pages/img/fbaf19aea2af10f26b2949ab31fff094.jpg" alt="Ibex on a rocky slope, photographed by Matan Wild" loading="lazy" style="object-position: 50% 62%">
@@ -840,13 +840,14 @@ html[lang=he] body,html[lang=he] body *:not(svg):not(svg *),html body [lang=he],
 <span class="lbl r">FINAL · MWP PRESET</span>
 <input type="range" min="0" max="100" value="50" step="0.1" aria-label="Drag to compare the RAW file with the final photo">
 </div>
-</article><article class="cmp">
-<header class="cmp-head">
-<div><p class="cmp-tag"><span class="n">02</span><span>Photoshop plugin</span></p>
-<h3 class="cmp-name" data-no-i18n>MWP <span class="grad">Panel</span></h3></div>
-<p class="cmp-line">You were there. Now make the photo show it.</p>
-<a class="cmp-cta" href="panel/"><span>See MWP Panel</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-</header>
+<div class="cmp-text">
+<p class="cmp-tag"><span class="n">01</span><span>Lightroom presets</span></p>
+<h3 class="cmp-name" data-no-i18n>MWP <span class="grad">Presets</span></h3>
+<p class="cmp-line">The look behind every MWP frame.</p>
+<ul class="cmp-pts"><li>50 Lightroom presets, 12 adaptive</li><li>50 mobile files and 33 LUTs</li><li>Install guide for every program</li></ul>
+<a class="cmp-cta" href="presets/"><span>See MWP Presets</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+</div>
+</article><article class="cmp flip">
 <div class="ba2">
 <img class="bef" src="assets/pages/img/c339384fe0c6d91e7b1388d0fed7d1ae.jpg" alt="" loading="lazy" style="object-position: 50% 70%">
 <img class="aft" src="assets/pages/img/52e0c3d2c90942f72d31faa689449bd0.jpg" alt="A herd beneath the mountains at sunset, photographed by Matan Wild" loading="lazy" style="object-position: 50% 70%">
@@ -855,6 +856,13 @@ html[lang=he] body,html[lang=he] body *:not(svg):not(svg *),html body [lang=he],
 <span class="lbl l">RAW</span>
 <span class="lbl r">FINAL · MWP PANEL</span>
 <input type="range" min="0" max="100" value="50" step="0.1" aria-label="Drag to compare the RAW file with the final photo">
+</div>
+<div class="cmp-text">
+<p class="cmp-tag"><span class="n">02</span><span>Photoshop plugin</span></p>
+<h3 class="cmp-name" data-no-i18n>MWP <span class="grad">Panel</span></h3>
+<p class="cmp-line">You were there. Now make the photo show it.</p>
+<ul class="cmp-pts"><li>8 one-click effects</li><li>11 looks and 4 painted lights</li><li>User manual and install guide</li></ul>
+<a class="cmp-cta" href="panel/"><span>See MWP Panel</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
 </div>
 </article>
 </div>
@@ -968,7 +976,7 @@ html[lang=he] body,html[lang=he] body *:not(svg):not(svg *),html body [lang=he],
   var io = new IntersectionObserver(function (es) { es.forEach(function (e) {
     if (!e.isIntersecting) return; e.target.classList.add("in"); io.unobserve(e.target);
   }); }, { threshold: .15, rootMargin: "0px 0px -8% 0px" });
-  var SEL = ".st-ch-head,.cmp-head,.ba2,#bundles .head,#faq .head,.plan,.trust > *,.faq details";
+  var SEL = ".st-ch-head,.cmp-text,.ba2,#bundles .head,#faq .head,.plan,.trust > *,.faq details";
   document.querySelectorAll(SEL).forEach(function (el) {
     el.classList.add("rv");
     var i = Array.prototype.indexOf.call(el.parentElement.children, el);
