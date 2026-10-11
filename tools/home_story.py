@@ -242,11 +242,7 @@ JS = """<script>
         if (wl) { wl.style.left = (w * 100).toFixed(2) + "%"; wl.style.opacity = (w > 0.01 && w < 0.99) ? "1" : "0"; }
         dv.querySelectorAll(".st-bar i").forEach(function (b) { var to = parseFloat(b.style.getPropertyValue("--to")); b.style.setProperty("--at", (50 + (to - 50) * w).toFixed(1) + "%"); });
         var rings = dv.querySelectorAll(".st-ring"); if (rings.length) { rings[0].classList.toggle("on", w > 0.05); rings[1].classList.toggle("on", w > 0.35); }
-        var pgs = dv.querySelectorAll(".st-pg"); if (pgs.length) {
-          var k = Math.min(pgs.length - 1, Math.floor(ss(-0.42, 0.36, d) * pgs.length));
-          pgs.forEach(function (pg, j) { pg.classList.toggle("on", j === k); });
-          dv.querySelectorAll(".st-tab-dots i").forEach(function (dot, j) { dot.classList.toggle("on", j === k); });
-        }
+        dv.style.setProperty("--e", ss(-0.45, 0.2, d).toFixed(3));   // books fan out as the chapter arrives
       }
     }
     var k = Math.round(v);
