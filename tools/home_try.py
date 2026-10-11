@@ -27,6 +27,7 @@ CSS = """
 .tstage img,.tstage canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
 .tstage .line{position:absolute;top:0;bottom:0;width:2px;background:#FEFBF1;transform:translateX(-1px);pointer-events:none}
 .tstage .knob{position:absolute;top:50%;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;background:#FEFBF1;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 30px rgba(0,0,0,.5);pointer-events:none}
+.tstage{direction:ltr}
 .tstage input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:ew-resize;margin:0}
 .tstage:has(input:focus-visible){outline:3px solid #F2A541;outline-offset:4px}
 .tstage .lbl{position:absolute;top:18px;padding:7px 12px;border-radius:30px;background:rgba(10,9,8,.72);backdrop-filter:blur(6px);font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;pointer-events:none;max-width:45%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
