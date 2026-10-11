@@ -3,7 +3,7 @@
 the comparison sliders. Page content and layout stay as Matan designed them. Safe to run again."""
 import re, sys, os
 sys.path.insert(0, os.path.dirname(__file__))
-from brand import gold, NAV_CSS, FONTS
+from brand import gold, NAV_CSS, FONTS, BUNDLE_CSS
 
 PAGES = {
     "presets/index.html": "en", "presets/he.html": "he",
@@ -30,7 +30,7 @@ def navr(lang, btn=""):
 # Same header look as the home page. "html " prefix so it wins over the page styles the runtime moves into <head>.
 CSS = """<style id="mwp-unify">
 html .ba{direction:ltr}
-""" + NAV_CSS + """</style>"""
+""" + NAV_CSS + BUNDLE_CSS + """</style>"""
 
 SCRIPT = """<script src="../assets/js/lib/nav.js" defer></script>
 <script type="module">
@@ -91,8 +91,8 @@ for path, lang in PAGES.items():
         s = s.replace("</body>", PRICE_JS + "\n</body>", 1)
     if 'id="mwp-fonts"' not in s:
         s = s.replace("</head>", FONTS + "\n</head>", 1)
-    if 'id="mwp-unify"' not in s:
-        s = s.replace("</head>", CSS + "\n</head>", 1)
+    s = re.sub(r'<style id="mwp-unify">.*?</style>\n?', '', s, flags=re.S)
+    s = s.replace("</head>", CSS + "\n</head>", 1)
     if "initCart" not in s:
         s = s.replace("</body>", SCRIPT + "\n</body>", 1)
     open(path, "w", encoding="utf-8").write(s)

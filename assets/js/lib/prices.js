@@ -19,9 +19,10 @@ function textFor(el) {
   const was = el.hasAttribute("data-was");
   if (he()) {
     const c = r ? (was ? r.compare_at_ils_cents : r.price_ils_cents) : null;
-    return fmt(c, "ILS");
+    return was && !c ? "" : fmt(c, "ILS");   // no "before" price set: show nothing
   }
   const c = r ? (was ? r.compare_at_cents : r.price_cents) : null;
+  if (was && !c) return "";
   return fmt(c, r?.currency || "USD");
 }
 
