@@ -77,13 +77,13 @@ export function safeEqual(a: string, b: string): boolean {
  * each Make scenario's first filter checks it.
  */
 export async function notifyMake(envName: string, payload: Record<string, unknown>): Promise<boolean> {
-  const url = Deno.env.get(envName);
-  if (!url) { console.warn(`${envName} not set; skipped Make.com notification`); return false; }
+  const url = Deno.env.get(envName) || Deno.env.get("MAKE_WEBHOOK_URL");
+  if (!url) { console.warn(`${envName} / MAKE_WEBHOOK_URL not set; skipped Make.com notification`); return false; }
   try {
     const res = await fetch(url, {
       method: "POST",
       headers: { "content-type": "application/json", "x-mwp-secret": Deno.env.get("MAKE_SHARED_SECRET") ?? "" },
-      body: JSON.stringify({ ...payload, secret: Deno.env.get("MAKE_SHARED_SECRET") ?? "", sent_at: new Date().toISOString() }),
+      body: JSON.stringify({ ...payload, sent_at: new Date().toISOString() }),
       signal: AbortSignal.timeout(8000),
     });
     if (!res.ok) console.error(`${envName} responded ${res.status}`);

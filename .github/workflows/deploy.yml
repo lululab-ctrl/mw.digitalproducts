@@ -96,10 +96,11 @@ jobs:
           MAKE_ORDER_WEBHOOK: ${{ secrets.MAKE_ORDER_WEBHOOK }}
           MAKE_SUPPORT_WEBHOOK: ${{ secrets.MAKE_SUPPORT_WEBHOOK }}
           MAKE_SUBSCRIBE_WEBHOOK: ${{ secrets.MAKE_SUBSCRIBE_WEBHOOK }}
+          MAKE_WEBHOOK_URL: ${{ secrets.MAKE_WEBHOOK_URL }}
         run: |
           args=()
           for name in SITE_URL DOWNLOAD_DAILY_LIMIT CHECKOUT_WEBHOOK_SECRET MAKE_SHARED_SECRET IP_HASH_SALT \
-                      MAKE_ORDER_WEBHOOK MAKE_SUPPORT_WEBHOOK MAKE_SUBSCRIBE_WEBHOOK; do
+                      MAKE_ORDER_WEBHOOK MAKE_SUPPORT_WEBHOOK MAKE_SUBSCRIBE_WEBHOOK MAKE_WEBHOOK_URL; do
             value="${!name}"
             if [ -n "$value" ]; then args+=("$name=$value"); else echo "::notice::$name not set yet"; fi
           done

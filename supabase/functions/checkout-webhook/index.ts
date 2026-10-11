@@ -11,14 +11,15 @@ import { admin, hmacHex, notifyMake, safeEqual } from "../_shared/http.ts";
 const SECRET = Deno.env.get("CHECKOUT_WEBHOOK_SECRET") ?? "";
 
 type LsOrder = {
-  meta: { event_name: string; custom_data?: Record<string, string> };
+  meta: { event_name: string; test_mode?: boolean; custom_data?: Record<string, string> };
   data: {
     id: string;
     attributes: {
       order_number: number; identifier: string; status: string;
       user_email: string; user_name: string; currency: string;
       subtotal: number; tax: number; total: number;
-      discount_total?: number; refunded?: boolean; refunded_at?: string | null;
+      discount_total?: number; refunded?: boolean; refunded_at?: string | null; refunded_amount?: number;
+      created_at?: string; urls?: { receipt?: string };
       first_order_item: { variant_id: number; product_name: string; variant_name: string; price: number };
     };
   };
@@ -50,9 +51,9 @@ Deno.serve(async (req) => {
   try {
     if (event === "order_created") {
       if (a.status !== "paid") return text(`ignored status ${a.status}`);
-      await handlePaid(db, orderId, a, body.meta.custom_data ?? {});
+      await handlePaid(db, orderId, a, body.meta.custom_data ?? {}, body.meta.test_mode === true);
     } else if (event === "order_refunded") {
-      await handleRefund(db, orderId, a.refunded !== false);
+      await handleRefund(db, orderId, a.refunded !== false, a, body.meta.test_mode === true);
     } else {
       return text(`ignored ${event}`);
     }
@@ -66,7 +67,7 @@ Deno.serve(async (req) => {
 });
 
 async function handlePaid(
-  db: ReturnType<typeof admin>, orderId: string, a: LsOrder["data"]["attributes"], custom: Record<string, string>,
+  db: ReturnType<typeof admin>, orderId: string, a: LsOrder["data"]["attributes"], custom: Record<string, string>, testMode: boolean,
 ) {
   const email = a.user_email.trim().toLowerCase();
 
@@ -109,13 +110,20 @@ async function handlePaid(
   await notifyMake("MAKE_ORDER_WEBHOOK", {
     type: "order",
     order_id: order.id,
+    checkout_order_id: orderId,
     order_number: String(a.order_number),
+    order_date: (a.created_at ?? new Date().toISOString()).slice(0, 10),
+    test_mode: testMode,
     email,
     name: a.user_name,
     product: [product.name, product.name_emphasis].filter(Boolean).join(" "),
     product_slug: product.slug,
+    subtotal: a.subtotal / 100,
+    discount: (a.discount_total ?? 0) / 100,
+    tax: a.tax / 100,
     total: a.total / 100,
     currency: a.currency,
+    receipt_url: a.urls?.receipt ?? null,
     source: custom.source ?? null,
     repeat_customer: (count ?? 1) > 1,
     downloads_url: `${Deno.env.get("SITE_URL")}/account.html?email=${encodeURIComponent(email)}`,
@@ -123,7 +131,9 @@ async function handlePaid(
 }
 
 // A full refund revokes access; a partial refund (a goodwill partial credit) keeps it.
-async function handleRefund(db: ReturnType<typeof admin>, orderId: string, full: boolean) {
+async function handleRefund(
+  db: ReturnType<typeof admin>, orderId: string, full: boolean, a: LsOrder["data"]["attributes"], testMode: boolean,
+) {
   const { data: order, error } = await db.from("orders")
     .update({ status: full ? "refunded" : "partially_refunded", refunded_at: new Date().toISOString() })
     .eq("checkout_order_id", orderId).select("id, order_number, customer_id").maybeSingle();
@@ -138,6 +148,8 @@ async function handleRefund(db: ReturnType<typeof admin>, orderId: string, full:
 
   const { data: customer } = await db.from("customers").select("email").eq("id", order.customer_id).single();
   await notifyMake("MAKE_ORDER_WEBHOOK", {
-    type: full ? "refund" : "partial_refund", order_id: order.id, order_number: order.order_number, email: customer?.email,
+    type: full ? "refund" : "partial_refund", order_id: order.id, checkout_order_id: orderId,
+    order_number: order.order_number, email: customer?.email, test_mode: testMode,
+    refunded_amount: (a.refunded_amount ?? (full ? a.total : 0)) / 100, currency: a.currency,
   });
 }

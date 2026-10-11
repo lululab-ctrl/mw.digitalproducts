@@ -65,17 +65,19 @@ export function safeEqual(a: string, b: string): boolean {
 /**
  * Sends an event to a Make.com custom webhook. Never throws: Supabase is the
  * system of record, so a Make outage must not fail a sale or a support request.
- * The shared secret travels in the body (`secret`) and the x-mwp-secret header;
- * each Make scenario's first filter checks it.
+ * One Make webhook (MAKE_WEBHOOK_URL) receives every event and routes on `type`;
+ * the per-event variables still work and take priority if set. The webhook URL
+ * is unguessable and kept as a secret; the shared secret also travels in the
+ * x-mwp-secret header for an optional extra check in Make.
  */
 export async function notifyMake(envName: string, payload: Record<string, unknown>): Promise<boolean> {
-  const url = Deno.env.get(envName);
-  if (!url) { console.warn(`${envName} not set; skipped Make.com notification`); return false; }
+  const url = Deno.env.get(envName) || Deno.env.get("MAKE_WEBHOOK_URL");
+  if (!url) { console.warn(`${envName} / MAKE_WEBHOOK_URL not set; skipped Make.com notification`); return false; }
   try {
     const res = await fetch(url, {
       method: "POST",
       headers: { "content-type": "application/json", "x-mwp-secret": Deno.env.get("MAKE_SHARED_SECRET") ?? "" },
-      body: JSON.stringify({ ...payload, secret: Deno.env.get("MAKE_SHARED_SECRET") ?? "", sent_at: new Date().toISOString() }),
+      body: JSON.stringify({ ...payload, sent_at: new Date().toISOString() }),
       signal: AbortSignal.timeout(8000),
     });
     if (!res.ok) console.error(`${envName} responded ${res.status}`);
