@@ -17,7 +17,7 @@ ba_css = "\n".join(l for l in _top.split("\n") if re.match(r"\.(ba|recipe|rc|rf|
 ba_css += "\n@media (max-width:600px){.ba{aspect-ratio:4/5;border-radius:18px}.rc,.rf{padding:6px 12px;font-size:13px}}"
 
 IMG = "assets/pages/img/"
-import home_try, home_fx
+import home_try, home_fx, home_story
 import sys as _s, os as _o; _s.path.insert(0, _o.path.dirname(__file__))
 from brand import NAV_CSS, FONTS
 TRY_HTML, TRY_JS, TRY_CSS = home_try.html(), home_try.js(), home_try.CSS
@@ -129,6 +129,7 @@ html = f'''<!doctype html>
 {TRY_CSS}
 {NAV_CSS}
 {home_fx.CSS}
+{home_story.CSS}
 {home_css}
 </style>
 {FONTS}
@@ -146,52 +147,9 @@ html = f'''<!doctype html>
 </nav>
 
 <main id="main">
-<section class="hero" id="top">
-<img class="hero-bg" src="{IMG}1a2e3ed3f44db1f671babb09a599b29f.jpg" alt="A male lion roaring, photographed by Matan Wild">
-<div class="hero-shade"></div>
-<div class="wrap" style="position: relative; width: 100%">
-<div class="hero-grid">
-<div class="hero-copy">
-<p class="kick">MWP · by Matan Wild</p>
-<h1 class="h1">Editing tools <span class="b grad">from the field.</span></h1>
-<p class="lead" style="max-width: 540px">Lightroom presets, a Photoshop plugin and field guides from wildlife photographer Matan Wild. Instant download, secure checkout.</p>
-<div class="ctas"><a class="btn" href="#shop">Shop the collection</a><a class="ghost" href="#try">Try the tools</a></div>
-<p class="small">English and Hebrew · Mac and Windows · Download right after payment</p>
-</div>
-<div class="fly4" role="group" aria-label="The MWP collection">
-{box("presets/", "8cb56471dbe5940badc7a93cad5c8bf1.jpg", "LIGHTROOM PRESETS", "Presets", "50 presets · 33 LUTs", 20, 0, -1.2)}
-{box("panel/", "866c1bdb5cf29c21c1a04f6fc87b03e9.jpg", "PHOTOSHOP PLUGIN", "Panel", "8 effects · 11 looks", 290, 90, -3.6)}
-{box("field-guides/", "0cf44582c4078749d18156eec10c90d3.jpg", "FIELD GUIDES · PDF", "Guides", "4 guides · 229 pages", 40, 330, -2.4)}
-</div>
-</div>
-</div>
-</section>
+{home_story.HERO}
 
-<section class="band" aria-label="In numbers">
-<div class="wrap stats">
-<div class="stat"><div class="n grad">50</div><div class="t">Lightroom presets</div></div>
-<div class="stat"><div class="n grad">33</div><div class="t">LUTs for video</div></div>
-<div class="stat"><div class="n grad">8</div><div class="t">One-click effects</div></div>
-<div class="stat"><div class="n grad">137</div><div class="t">Lessons</div></div>
-</div>
-</section>
-
-{home_fx.WALL}
-
-<section class="sec" id="shop">
-<div class="wrap">
-<div class="head">
-<p class="kick">The collection</p>
-<h2 class="h2">Shoot it, edit it, <span class="b grad">finish it.</span></h2>
-<p class="lead">Three products, one look. Each one works on its own, and together they take a photo from the field to the share.</p>
-</div>
-<div class="shop">
-{card("presets/", "8cb56471dbe5940badc7a93cad5c8bf1.jpg", "MWP Presets box", "Lightroom presets", "Presets", "The look behind every MWP frame.", ["50 Lightroom presets, 12 adaptive", "50 mobile files and 33 LUTs", "Install guide for every program"], "See MWP Presets")}
-{card("panel/", "866c1bdb5cf29c21c1a04f6fc87b03e9.jpg", "A tiger, photographed by Matan Wild", "Photoshop plugin", "Panel", "You were there. Now make the photo show it.", ["8 one-click effects", "11 looks and 4 painted lights", "User manual and install guide"], "See MWP Panel")}
-{card("field-guides/", "5275cc7bcd4fb7560d8f7163592e3122.jpg", "Mountains at dusk, photographed by Matan Wild", "PDF field guides", "Field Guides", "See the photo before you press the shutter.", ["4 PDF guides, 137 lessons", "Composition, colour, light and planning", "English and Hebrew"], "See the Field Guides")}
-</div>
-</div>
-</section>
+{home_story.STORY}
 
 {TRY_HTML}
 
@@ -235,6 +193,8 @@ html = f'''<!doctype html>
 </div>
 </div>
 </section>
+
+{home_story.CLOSE}
 </main>
 
 <footer style="padding: 40px 0; border-top: 1px solid rgba(156,177,194,.15)">
@@ -248,6 +208,7 @@ html = f'''<!doctype html>
 
 {TRY_JS}
 {home_fx.JS}
+{home_story.JS}
 <script src="assets/js/lib/nav.js" defer></script>
 <script type="module">
   import {{ initI18n }} from "./assets/js/i18n.js";

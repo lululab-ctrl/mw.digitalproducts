@@ -248,6 +248,12 @@ const HE = {
   "Browse all products": "לכל המוצרים",
   "Home": "דף הבית",
   // home: interactive shop
+  "Shoot": "צילום",
+  "Finish": "גימור",
+  "Scroll": "גללו",
+  "Shoot it. Edit it.": "מצלמים. עורכים.",
+  "Finish it.": "מסיימים.",
+  "/ 03": "/ 03",
   "Every photo by Matan Wild": "כל התמונות של מתן וויילד",
   "Photos by Matan Wild": "תמונות של מתן וויילד",
   "Matan's edit": "העריכה של מתן",
