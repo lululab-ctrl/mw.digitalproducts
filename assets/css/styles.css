@@ -362,7 +362,7 @@ main { flex: 1; }
 .lang-toggle { display: inline-flex; align-items: center; flex: none; height: 32px; padding: 3px; border-radius: var(--r-pill); border: 1px solid var(--c-line-strong); direction: ltr; }
 .lang-toggle span, .lang-toggle button { display: inline-flex; align-items: center; justify-content: center; min-width: 36px; height: 24px; padding: 0 10px; border: 0; border-radius: var(--r-pill); background: none; font: 600 12px/1 var(--f-sans); letter-spacing: .06em; color: var(--c-ink-2); cursor: pointer; }
 .lang-toggle button:hover { color: var(--c-ink); }
-.lang-toggle .on { background: var(--c-ink); color: var(--c-canvas); cursor: default; }
+.lang-toggle .on { display: none; } /* show only the language you can switch to */
 .lang-toggle [lang="he"] { font-family: "Heebo", var(--f-he); }
 [dir="rtl"] body { font-family: "Heebo", var(--f-he); }
 /* Hebrew has no capitals: drop the spaced-out label style */

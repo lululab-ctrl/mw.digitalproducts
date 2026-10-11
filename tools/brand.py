@@ -36,6 +36,10 @@ html .nav .nav-ico:hover{color:#F4AF56;background:rgba(254,251,241,.05)}
 html .nav .nav-ico svg{width:20px;height:20px;stroke-width:1.6}
 html .nav .lang-toggle{display:inline-flex;align-items:center;gap:2px;height:28px;margin-inline-start:6px;padding:0 0 0 14px;border:0;border-left:1px solid rgba(254,251,241,.14);border-radius:0;background:none;direction:ltr}
 html .nav .lang-toggle span,html .nav .lang-toggle a,html .nav .lang-toggle button{display:inline-flex;align-items:center;justify-content:center;min-width:0;height:28px;padding:0 7px;border:0;border-radius:0;background:none;font:600 12px/1 Montserrat,Heebo,sans-serif;letter-spacing:.12em;color:rgba(254,251,241,.42);text-decoration:none;cursor:pointer;transition:color .2s ease}
+/* show only the language you can switch to */
+html .lang-toggle .on{display:none !important}
+html .nav .lang-toggle a,html .nav .lang-toggle button{color:rgba(254,251,241,.82)}
+html .nav .lang-toggle a:hover,html .nav .lang-toggle button:hover{color:#F2A541}
 html[lang=he] .nav .lang-toggle{border-left:0;border-right:1px solid rgba(254,251,241,.14);padding:0 14px 0 0}
 html .nav .lang-toggle a:hover,html .nav .lang-toggle button:hover{color:#FEFBF1}
 html .nav .lang-toggle .on{color:#FEFBF1;background:none;cursor:default}
