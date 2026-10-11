@@ -24,7 +24,7 @@ EFFECTS = [("pop", "Subject · Pop"), ("bg", "Background · Darken"), ("sky", "S
 LOCKED = ["Eye", "Dodge & Burn"]
 
 CSS = """
-.try{display:grid;grid-template-columns:minmax(0,1fr) 340px;column-gap:24px;margin-top:56px;align-items:stretch}
+.try{display:grid;grid-template-columns:minmax(0,1fr) 320px;column-gap:24px;margin-top:56px;align-items:stretch}
 .tstage{position:relative;border-radius:22px;overflow:hidden;background:#111;min-width:0;box-shadow:0 50px 140px -30px rgba(0,0,0,.75),0 0 0 1px rgba(254,251,241,.08);touch-action:pan-y;direction:ltr}
 .tstage::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(10,9,8,.38),transparent 22%,transparent 80%,rgba(10,9,8,.25));border-radius:inherit;box-shadow:inset 0 0 0 1px rgba(254,251,241,.06)}
 .tstage::before{content:"";display:block;padding-top:62.5%}
@@ -89,8 +89,14 @@ CSS = """
 .reset:hover{color:#FEFBF1}
 .app .go{flex:1;display:flex;align-items:center;justify-content:center;min-height:48px;border-radius:30px;background:linear-gradient(90deg,#DA5A22,#F2A541);color:#0A0908;font-weight:800;text-decoration:none;box-shadow:0 10px 30px -8px rgba(242,165,65,.5);transition:transform .2s,box-shadow .2s}
 .app .go:hover{transform:translateY(-1px);box-shadow:0 16px 40px -10px rgba(242,165,65,.65)}
+@media (min-width:1181px){
+.app{padding:18px 20px;gap:10px}
+.seg button{padding-bottom:12px;gap:2px}
+.looks{gap:4px}.looks .look{padding:3px;padding-inline-end:12px;gap:12px;font-size:13.5px}.looks .th{width:40px;height:24px;border-radius:6px}
+.grp{margin-bottom:8px}.more{margin-top:8px}.amt{padding-top:12px}.app .go{min-height:44px}
+}
 @media (max-width:1180px){.try{grid-template-columns:minmax(0,1fr)}.app{order:2;margin-top:24px}}
-@media (max-width:600px){.tstage{border-radius:18px}.tstage::before{padding-top:125%}.app{padding:18px}.tcap{flex-direction:column;gap:8px}}
+@media (max-width:600px){.tstage{border-radius:18px}.tstage::before{padding-top:80%}.app{padding:18px}.tcap{flex-direction:column;gap:8px}}
 html[lang=he] .tstage .lbl,html[lang=he] .grp,html[lang=he] .seg button small{letter-spacing:.03em}
 .fxgrid .look span{min-width:0}
 @media (prefers-reduced-motion:reduce){.panes>[data-pane],.seg::after{transition:none}}

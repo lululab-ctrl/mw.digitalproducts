@@ -58,10 +58,14 @@ home_css = """
 [dir="rtl"] .kick,[dir="rtl"] .card .tg,[dir="rtl"] .stat .t{letter-spacing:normal}
 [dir="rtl"] .pg{font-family:Heebo,Montserrat,system-ui,sans-serif}
 
-.trust{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:32px}
-.trust div{display:flex;flex-direction:column;gap:8px}
-.trust strong{font-size:16px;font-weight:800}
-.trust span{font-size:15px;line-height:1.55;color:#CDD7DD}
+.trust{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;padding-top:72px;padding-bottom:72px}
+.trust > div{position:relative;display:flex;flex-direction:column;gap:10px;padding:8px 32px}
+.trust > div + div{border-inline-start:1px solid rgba(254,251,241,.09)}
+.trust > div:first-child{padding-inline-start:0}.trust > div:last-child{padding-inline-end:0}
+.trust .ti{display:flex;align-items:center;justify-content:center;width:52px;height:52px;margin-bottom:10px;border-radius:16px;color:#F2A541;background:linear-gradient(160deg,rgba(242,165,65,.16),rgba(242,165,65,.03));box-shadow:inset 0 0 0 1px rgba(242,165,65,.28),0 12px 30px -12px rgba(242,165,65,.45);transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s}
+.trust > div:hover .ti{transform:translateY(-3px);box-shadow:inset 0 0 0 1px rgba(242,165,65,.5),0 18px 40px -12px rgba(242,165,65,.6)}
+.trust strong{font-size:17px;font-weight:700;letter-spacing:-.01em;color:#FEFBF1}
+.trust > div > span:not(.ti){font-size:14.5px;line-height:1.6;color:#AEB9C1}
 
 .faq details{border-bottom:1px solid rgba(156,177,194,.2)}
 .faq summary{display:flex;justify-content:space-between;align-items:center;gap:24px;min-height:64px;padding:20px 0;font-weight:600;font-size:17px;cursor:pointer;list-style:none}
@@ -71,8 +75,8 @@ home_css = """
 .faq details[open] summary::after{content:"\\2212"}
 .faq details div{padding:0 0 26px;color:#CDD7DD;font-size:17px;line-height:1.7;max-width:680px}
 
-@media (max-width:1100px){.shop{grid-template-columns:minmax(0,1fr);max-width:560px;margin-inline:auto}.trust{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:600px){.trust{grid-template-columns:minmax(0,1fr)}.navr a.nl.hide-sm{display:none}.card .act{flex-direction:column}}
+@media (max-width:1100px){.shop{grid-template-columns:minmax(0,1fr);max-width:560px;margin-inline:auto}.trust{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:40px}.trust > div{padding:0 28px}.trust > div:nth-child(odd){padding-inline-start:0;border-inline-start:0}}
+@media (max-width:600px){.trust{grid-template-columns:minmax(0,1fr);padding-top:56px;padding-bottom:56px;row-gap:0}.trust > div,.trust > div:nth-child(odd){display:grid;grid-template-columns:52px 1fr;column-gap:16px;row-gap:4px;padding:20px 0;border:0;border-top:1px solid rgba(254,251,241,.08)}.trust > div:first-child{border-top:0}.trust .ti{grid-row:span 2;margin:0}.trust > div + div{border-inline-start:0}.navr a.nl.hide-sm{display:none}.card .act{flex-direction:column}}
 @media (prefers-reduced-motion:reduce){.card,.card .ph img{transition:none}}
 """
 
@@ -171,11 +175,11 @@ html = f'''<!doctype html>
 </section>
 
 <section class="band" aria-label="Why buy here">
-<div class="wrap trust" style="padding-top: 56px; padding-bottom: 56px">
-<div><strong>Instant download</strong><span>Your files are ready the moment you pay.</span></div>
-<div><strong>Secure checkout</strong><span>Card payment through Lemon Squeezy. We never see your card.</span></div>
-<div><strong>Free updates</strong><span>New versions land in your downloads at no cost.</span></div>
-<div><strong>Real support</strong><span>A person replies within one business day.</span></div>
+<div class="wrap trust">
+<div><span class="ti" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5v11"/><path d="M7.5 10.5 12 15l4.5-4.5"/><path d="M4.5 16.5v2A2 2 0 0 0 6.5 20.5h11a2 2 0 0 0 2-2v-2"/></svg></span><strong>Instant download</strong><span>Your files are ready the moment you pay.</span></div>
+<div><span class="ti" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 5 6v5.5c0 4.3 2.9 8.1 7 9.5 4.1-1.4 7-5.2 7-9.5V6l-7-3Z"/><path d="m9 12 2.2 2.2L15.5 10"/></svg></span><strong>Secure checkout</strong><span>Card payment through Lemon Squeezy. We never see your card.</span></div>
+<div><span class="ti" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 0 0-14.3-4.9L4 8"/><path d="M4 3.5V8h4.5"/><path d="M4 13a8 8 0 0 0 14.3 4.9L20 16"/><path d="M20 20.5V16h-4.5"/></svg></span><strong>Free updates</strong><span>New versions land in your downloads at no cost.</span></div>
+<div><span class="ti" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12.5a7.5 7.5 0 0 1-11.2 6.5L4 20l1.1-4.4A7.5 7.5 0 1 1 20 12.5Z"/><path d="M9 11h.01M12.5 11h.01M16 11h.01" stroke-width="2.4"/></svg></span><strong>Real support</strong><span>A person replies within one business day.</span></div>
 </div>
 </section>
 
