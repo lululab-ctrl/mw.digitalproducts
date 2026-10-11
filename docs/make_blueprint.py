@@ -149,13 +149,95 @@ subscribe_route = [
     ]),
 ]
 
+# ---------------------------------------------------------------- products (shop admin → monday)
+B_REP = 5105818461
+q_find_product = """query ($slug: String!) {
+  p: items_page_by_column_values(board_id: %d, limit: 1, columns: [{column_id: "text_mm80txve", column_values: [$slug]}]) { items { id group { id } column_values(ids: ["color_mm80c109"]) { text } } }
+}""" % B_PRD
+product_cv_common = (
+    '"color_mm80s3hp":{"label":"{{1.category_label}}"},'
+    '"numeric_mm80psz":"{{1.price}}","text_mm80txve":"{{1.slug}}","text_mm80962d":"{{1.variant_id}}",'
+    '"link_mm80eg76":{"url":"{{1.shop_url}}","text":"Shop page"},'
+    '"text_mm80f6jz":"{{1.version}}","numeric_mm80vj8n":"{{1.item_count}}"'
+)
+q_update_product = """mutation ($id: ID!, $cv: JSON!, $group: String!) {
+  c: change_multiple_column_values(board_id: %d, item_id: $id, column_values: $cv) { id }
+  g: move_item_to_group(item_id: $id, group_id: $group) { id }
+}""" % B_PRD
+P = "{{20.body.data.p.items[1]"
+R = "20.body.data.p.items[1]"
+product_route = [
+    gql(20, q_find_product, {"slug": "{{1.slug}}"}, "Find product",
+        f("Product", ("{{1.type}}", "text:equal", "product"))),
+    router(21, [
+        [gql(22, q_create % B_PRD, {"name": "{{1.name}}",
+                                    "group": '{{switch(1.status_label; "Live"; "group_mm80bp79"; "topics")}}',
+                                    "cv": '{' + product_cv_common + ',"color_mm80c109":{"label":"{{1.status_label}}"}}'},
+             "New product", f("Not on the board yet", (P + ".id}}", "notexist", None)))],
+        [gql(23, q_update_product, {
+            "id": P + ".id}}",
+            # Matan owns the Status; the shop only ever moves it to Live.
+            "cv": '{"name":"{{1.name}}",' + product_cv_common +
+                  ',"color_mm80c109":{"label":"{{switch(1.status_label; "Live"; "Live"; ' + R + '.column_values[1].text)}}"}}',
+            "group": '{{switch(1.status_label; "Live"; "group_mm80bp79"; ' + R + '.group.id)}}'},
+             "Update product", f("Already on the board", (P + ".id}}", "exist", None)))],
+    ]),
+]
+
+# ---------------------------------------------------------------- approvals (monday → shop)
+q_approvals = """query {
+  boards(ids: [%d]) { items_page(limit: 500) { items { name column_values(ids: ["text_mm80txve", "boolean_mm80an1f", "color_mm80c109"]) { id text } } } }
+}""" % B_PRD
+approvals_route = [
+    gql(30, q_approvals, {}, "Read approvals", f("Approvals request", ("{{1.type}}", "text:equal", "approvals_request"))),
+    {"id": 31, "module": "json:TransformToJSON", "version": 1, "parameters": {},
+     "mapper": {"object": "{{30.body.data}}"}, "metadata": {"designer": {"x": 0, "y": 0, "name": "Board as JSON"}}},
+    {"id": 32, "module": "http:MakeRequest", "version": 4, "parameters": {"authenticationType": "noAuth"},
+     "mapper": {"url": "{{1.callback_url}}", "method": "post", "contentType": "json", "inputMethod": "jsonString",
+                "jsonStringBodyContent": '{"job":"approvals_callback","nonce":"{{1.nonce}}","data":{{31.json}}}',
+                "parseResponse": True, "stopOnHttpError": True, "allowRedirects": True, "shareCookies": False,
+                "requestCompressedContent": True},
+     "metadata": {"designer": {"x": 0, "y": 0, "name": "Send approvals to the shop"}}},
+]
+
+# ---------------------------------------------------------------- weekly summary → Shop Reports
+report_cv = ('{"timerange_mm81dst2":{"from":"{{1.week_from}}","to":"{{1.week_to}}"},'
+             '"numeric_mm81hwhx":"{{1.orders}}","numeric_mm81p9jv":"{{1.gross}}","numeric_mm8117be":"{{1.refunded}}",'
+             '"numeric_mm81aqe3":"{{1.net}}","text_mm81n39e":"{{1.currency}}","numeric_mm813xj":"{{1.new_customers}}",'
+             '"numeric_mm812e2w":"{{1.open_tickets}}","text_mm81rfmv":"{{1.best_seller}}"}')
+q_report_update = """mutation ($id: ID!, $body: String!, $text: String!) {
+  u: create_update(item_id: $id, body: $body) { id }
+  n: create_notification(user_id: %d, target_id: $id, text: $text, target_type: Project) { text }
+}""" % MATAN
+weekly_route = [
+    gql(40, q_create % B_REP, {"name": "{{1.title}}", "group": "topics", "cv": report_cv}, "Add weekly report",
+        f("Weekly summary", ("{{1.type}}", "text:equal", "weekly_summary"))),
+    gql(41, q_report_update, {"id": "{{40.body.data.create_item.id}}", "body": "{{1.summary_html}}",
+                              "text": "Shop weekly summary: {{1.orders}} orders, net {{1.net}} {{1.currency}}."},
+        "Post summary and tell Matan"),
+]
+
+# ---------------------------------------------------------------- month close → Shop Payouts
+B_PAY = 5105799192
+q_month_orders = ('query { o: items_page_by_column_values(board_id: %d, limit: 500, columns: [{column_id: "text_mm806h06", '
+                  'column_values: [{{1.checkout_order_ids_gql}}]}]) { items { id } } }') % B_ORD
+payout_cv = ('{"color_mm809a4z":{"label":"Scheduled"},'
+             '"timerange_mm8096h7":{"from":"{{1.period_from}}","to":"{{1.period_to}}"},'
+             '"numeric_mm8013gm":"{{1.gross}}","numeric_mm8012hc":"{{1.refunds}}","text_mm80j987":"{{1.currency}}",'
+             '"board_relation_mm803geg":{"item_ids":[{{join(map(50.body.data.o.items; "id"); ",")}}]}}')
+payout_route = [
+    gql(50, q_month_orders, {}, "Find last month's orders", f("Month close", ("{{1.type}}", "text:equal", "payout"))),
+    gql(51, q_create % B_PAY, {"name": "{{1.title}}", "group": "topics", "cv": payout_cv}, "Add payout row"),
+]
+
 blueprint = {
-    "name": "MWP Shop · Events to monday (orders, refunds, support, sign-ups)",
+    "name": "MWP Shop · Events to monday (orders, products, support, reports)",
     "flow": [
         {"id": 1, "module": "gateway:CustomWebHook", "version": 1,
          "parameters": {"hook": HOOK, "maxResults": 1}, "mapper": {},
          "metadata": {"designer": {"x": 0, "y": 0}}},
-        router(2, [order_route, refund_route, support_route, subscribe_route]),
+        router(2, [order_route, refund_route, support_route, subscribe_route,
+                   product_route, approvals_route, weekly_route, payout_route]),
     ],
     "metadata": {"version": 1, "scenario": {"roundtrips": 1, "maxErrors": 3, "autoCommit": True, "sequential": True,
                                             "confidential": False, "dataloss": False, "dlq": True}},

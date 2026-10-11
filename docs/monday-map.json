@@ -136,6 +136,23 @@
         "due": "date_mm80e60p",
         "notes": "long_text_mm80kg8x"
       }
+    },
+    "reports": {
+      "id": 5105818461,
+      "groups": {
+        "weekly": "topics"
+      },
+      "columns": {
+        "week": "timerange_mm81dst2",
+        "paid_orders": "numeric_mm81hwhx",
+        "gross": "numeric_mm81p9jv",
+        "refunded": "numeric_mm8117be",
+        "net": "numeric_mm81aqe3",
+        "currency": "text_mm81n39e",
+        "new_customers": "numeric_mm813xj",
+        "open_tickets": "numeric_mm812e2w",
+        "best_seller": "text_mm81rfmv"
+      }
     }
   },
   "make": {

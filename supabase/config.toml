@@ -15,3 +15,6 @@ verify_jwt = false   # public form: honeypot + per-email rate limit
 
 [functions.subscribe]
 verify_jwt = false   # public form: validation + idempotent upsert
+
+[functions.scheduler]
+verify_jwt = false   # database calls carry the Vault key; Make call back carries a one-time nonce
