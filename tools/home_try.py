@@ -4,18 +4,20 @@ canvas, so nothing has to be exported or uploaded. These are browser previews of
 the products make, not the actual preset or plugin output, and the page says so."""
 
 IMG = "assets/pages/img/"
-RAW = "3c14b23dbb00f051684ad60fb205ed10.jpg"   # Matan's RAW of the same frame, shown on the left
+RAW = "try-raw-clean.jpg"   # Matan's RAW of this frame (3c14b23d…), lightly denoised once so brightening it stays clean
 BASE = "fbaf19aea2af10f26b2949ab31fff094.jpg"   # Matan's high-quality ibex photo from the Presets design, 1800 x 1125
 LOCK = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>'
 
 # Looks: e exposure (stops), t temperature, g tint, c contrast, s shadows, h highlights,
 # sat saturation, f fade, sc / hc split-tone colour for shadows / highlights.
 LOOKS = [
-    ("Golden Hour", dict(e=.03, t=.3, g=.02, c=.08, s=.05, h=.08, sat=.08, f=0, sc=[.01, .004, -.02], hc=[.03, .015, -.02])),
-    ("Cool Dusk", dict(e=0, t=-.18, g=0, c=.08, s=.04, h=.06, sat=.06, f=0, sc=[-.01, 0, .025], hc=[0, .006, .015])),
-    ("Matte Earth", dict(e=0, t=.12, g=.01, c=-.03, s=.08, h=.08, sat=-.1, f=.25, sc=[.012, .006, 0], hc=[.015, .01, 0])),
-    ("Deep Contrast", dict(e=-.03, t=.03, g=0, c=.2, s=-.04, h=.05, sat=.08, f=0, sc=[0, 0, .008], hc=[.01, .005, 0])),
-    ("Soft Light", dict(e=.08, t=.06, g=0, c=-.04, s=.15, h=.18, sat=.02, f=.05, sc=[0, 0, .01], hc=[.012, .01, .006])),
+    ("Matan's edit", dict(img=1)),   # the real finished frame from the Presets design, faded in by Amount
+    # The other looks are colour grades on top of Matan's finished frame, faded in from the RAW by Amount.
+    ("Golden Hour", dict(e=.05, t=.4, g=.02, c=.1, s=.06, h=.1, sat=.1, f=0, sc=[.012, .004, -.025], hc=[.04, .02, -.03])),
+    ("Cool Dusk", dict(e=0, t=-.25, g=0, c=.1, s=.05, h=.08, sat=.08, f=0, sc=[-.012, 0, .03], hc=[0, .008, .02])),
+    ("Matte Earth", dict(e=.02, t=.15, g=.01, c=-.04, s=.1, h=.1, sat=-.12, f=.3, sc=[.014, .007, 0], hc=[.018, .012, 0])),
+    ("Deep Contrast", dict(e=-.03, t=.04, g=0, c=.24, s=-.04, h=.06, sat=.1, f=0, sc=[0, 0, .01], hc=[.012, .006, 0])),
+    ("Soft Light", dict(e=.1, t=.08, g=0, c=-.05, s=.18, h=.22, sat=.03, f=.06, sc=[0, 0, .012], hc=[.015, .012, .008])),
 ]
 # Panel's Edit tab (names from the Panel sales page). Open ones can be stacked; the rest are a teaser.
 EFFECTS = [("pop", "Subject · Pop"), ("bg", "Background · Darken"), ("sky", "Sky"), ("lights", "Lights"),
@@ -26,6 +28,7 @@ CSS = """
 .try{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:24px;margin-top:48px;align-items:stretch}
 .tstage{position:relative;border-radius:24px;overflow:hidden;background:#111;aspect-ratio:16/10;box-shadow:0 40px 120px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.06);touch-action:pan-y}
 .tstage img,.tstage canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.tstage img[hidden]{display:none}
 .tstage .line{position:absolute;top:0;bottom:0;width:2px;background:#FEFBF1;transform:translateX(-1px);pointer-events:none}
 .tstage .knob{position:absolute;top:50%;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;background:#FEFBF1;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 30px rgba(0,0,0,.5);pointer-events:none}
 .tstage{direction:ltr}
@@ -129,7 +132,7 @@ def js():
 // Try it yourself: one photo, edited live on a canvas. A look (presets) plus stackable effects (Panel).
 (function () {
   var LOOKS = %(looks)s, NAMES = %(names)s, FX = %(fx)s;
-  var HE_NAMES = {"Golden Hour": "שעת זהב", "Cool Dusk": "דמדומים קרים", "Matte Earth": "אדמה מט", "Deep Contrast": "ניגודיות עמוקה", "Soft Light": "אור רך"};
+  var HE_NAMES = {"Matan's edit": "העריכה של מתן", "Golden Hour": "שעת זהב", "Cool Dusk": "דמדומים קרים", "Matte Earth": "אדמה מט", "Deep Contrast": "ניגודיות עמוקה", "Soft Light": "אור רך"};
   var he = function () { return document.documentElement.lang === "he"; };
   var stage = document.getElementById("try-stage"), before = document.getElementById("try-before"), base = document.getElementById("try-base");
   var cv = document.getElementById("try-after"), ctx = cv.getContext("2d", { willReadFrequently: true });
@@ -143,8 +146,10 @@ def js():
 
   function layer(w, h) {
     var c = document.createElement("canvas"); c.width = w; c.height = h;
-    var x2 = c.getContext("2d", { willReadFrequently: true }); x2.drawImage(base, 0, 0, w, h);
-    var L = { W: w, H: h, c: c, x: x2, src: x2.getImageData(0, 0, w, h).data.slice(),
+    var x2 = c.getContext("2d", { willReadFrequently: true });
+    x2.drawImage(base, 0, 0, w, h); var edit = x2.getImageData(0, 0, w, h).data.slice();
+    x2.drawImage(before, 0, 0, w, h);
+    var L = { W: w, H: h, c: c, x: x2, src: x2.getImageData(0, 0, w, h).data.slice(), edit: edit,
       subj: new Uint8Array(w * h), sky: new Uint8Array(w * h), vig: new Uint8Array(w * h) };
     // masks: subject (soft ellipse around the animals), sky (top of frame), vignette (edges)
     for (var y = 0; y < h; y++) for (var x = 0; x < w; x++) {
@@ -159,7 +164,7 @@ def js():
   }
   function prepare() {
     // Full resolution so the photo stays as sharp as the original beside it; a smaller copy keeps sliders smooth.
-    var w = base.naturalWidth, h = base.naturalHeight;
+    var w = before.naturalWidth, h = before.naturalHeight;
     cv.width = w; cv.height = h;
     FULL = layer(w, h);
     FAST = layer(Math.round(w / 2), Math.round(h / 2));
@@ -177,12 +182,16 @@ def js():
     var src = Lr.src, W = Lr.W, H = Lr.H, M = { subj: Lr.subj, sky: Lr.sky, vig: Lr.vig };
     var p = state.look >= 0 ? LOOKS[state.look] : null, a = state.lookAmt / 100;
     var f = state.fx, fp = (f.pop || 0) / 100, fb = (f.bg || 0) / 100, fs = (f.sky || 0) / 100, fl = (f.lights || 0) / 100, fd = (f.darks || 0) / 100, fv = (f.vig || 0) / 100;
-    var e = p ? Math.pow(2, p.e * a) : 1, t = p ? p.t * a : 0, g = p ? p.g * a : 0, c = p ? p.c * a : 0, s = p ? p.s * a : 0, h = p ? p.h * a : 0;
-    var sat = p ? p.sat * a : 0, fade = p ? p.f * a : 0, sc = p ? p.sc : [0, 0, 0], hc = p ? p.hc : [0, 0, 0];
+    var q = p && !p.img, e = q ? Math.pow(2, p.e) : 1, t = q ? p.t : 0, g = q ? p.g : 0, c = q ? p.c : 0, s = q ? p.s : 0, h = q ? p.h : 0;
+    var sat = q ? p.sat : 0, fade = q ? p.f : 0, sc = p && !p.img ? p.sc : [0, 0, 0], hc = p && !p.img ? p.hc : [0, 0, 0];
     var im = Lr.x.createImageData(W, H), o = im.data, n = W * H;
     for (var i = 0; i < n; i++) {
       var k = i * 4, r = src[k] / 255, gg = src[k + 1] / 255, b = src[k + 2] / 255, L;
-      if (p) {
+      if (p && p.img) {
+        r += (Lr.edit[k] / 255 - r) * a; gg += (Lr.edit[k + 1] / 255 - gg) * a; b += (Lr.edit[k + 2] / 255 - b) * a;
+      } else if (p) {
+        var r0 = r, g0 = gg, b0 = b;
+        r = Lr.edit[k] / 255; gg = Lr.edit[k + 1] / 255; b = Lr.edit[k + 2] / 255;
         r *= e; gg *= e; b *= e;
         r += t * 0.07; b -= t * 0.07; gg -= g * 0.04;
         L = 0.2126 * r + 0.7152 * gg + 0.0722 * b;
@@ -191,8 +200,9 @@ def js():
         r = (r - 0.45) * (1 + c) + 0.45; gg = (gg - 0.45) * (1 + c) + 0.45; b = (b - 0.45) * (1 + c) + 0.45;
         L = 0.2126 * r + 0.7152 * gg + 0.0722 * b;
         r = L + (r - L) * (1 + sat); gg = L + (gg - L) * (1 + sat); b = L + (b - L) * (1 + sat);
-        r += a * ((1 - L) * sc[0] + L * hc[0]); gg += a * ((1 - L) * sc[1] + L * hc[1]); b += a * ((1 - L) * sc[2] + L * hc[2]);
+        r += (1 - L) * sc[0] + L * hc[0]; gg += (1 - L) * sc[1] + L * hc[1]; b += (1 - L) * sc[2] + L * hc[2];
         var fd0 = fade * 0.1; r = r * (1 - fd0) + fd0; gg = gg * (1 - fd0) + fd0; b = b * (1 - fd0) + fd0;
+        r = r0 + (r - r0) * a; gg = g0 + (gg - g0) * a; b = b0 + (b - b0) * a;
       }
       L = 0.2126 * r + 0.7152 * gg + 0.0722 * b;
       if (fl) { var up = fl * (0.5 * L * L + 0.12 * L); r += up; gg += up; b += up; }
@@ -258,7 +268,11 @@ def js():
 
   // Start with a look on, so the first thing people see is the photo changing.
   function start() { prepare(); state.look = 0; state.lookAmt = 100; state.cur = "look"; sync(); }
-  function boot() { if (base.complete && base.naturalWidth) start(); else base.addEventListener("load", start); }
+  function boot() {
+    var ready = function (im) { return im.complete && im.naturalWidth; };
+    var go = function () { if (ready(base) && ready(before) && !FULL) start(); };
+    go(); base.addEventListener("load", go); before.addEventListener("load", go);
+  }
   // wait for the language to be set (i18n runs as a module, after this script)
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot); else boot();
 })();
