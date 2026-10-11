@@ -19,7 +19,7 @@ ba_css += "\n@media (max-width:600px){.ba{aspect-ratio:4/5;border-radius:18px}.r
 IMG = "assets/pages/img/"
 import home_try, home_fx
 import sys as _s, os as _o; _s.path.insert(0, _o.path.dirname(__file__))
-from brand import NAV_CSS
+from brand import NAV_CSS, FONTS
 TRY_HTML, TRY_JS, TRY_CSS = home_try.html(), home_try.js(), home_try.CSS
 CHECK = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F2A541" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>'
 ARROW = '<svg class="arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>'
@@ -131,6 +131,7 @@ html = f'''<!doctype html>
 {home_fx.CSS}
 {home_css}
 </style>
+{FONTS}
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>

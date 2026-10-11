@@ -3,7 +3,7 @@
 the comparison sliders. Page content and layout stay as Matan designed them. Safe to run again."""
 import re, sys, os
 sys.path.insert(0, os.path.dirname(__file__))
-from brand import gold, NAV_CSS
+from brand import gold, NAV_CSS, FONTS
 
 PAGES = {
     "presets/index.html": "en", "presets/he.html": "he",
@@ -55,6 +55,8 @@ for path, lang in PAGES.items():
     s = re.sub(r'<div class="navr">.*?</a></div>(?=\s*</div>\s*</nav>)', lambda m: navr(lang, (re.search(r'<a class="btn sm"[^>]*>.*?</a>', m.group(0)) or [''])[0]), s, count=1, flags=re.S)
     for a, b in WORDS[lang]:
         s = s.replace(a, b)
+    if 'id="mwp-fonts"' not in s:
+        s = s.replace("</head>", FONTS + "\n</head>", 1)
     if 'id="mwp-unify"' not in s:
         s = s.replace("</head>", CSS + "\n</head>", 1)
     if "initCart" not in s:

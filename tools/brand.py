@@ -46,3 +46,13 @@ html .nav .links + .navr{margin-inline-start:0}
 @media (max-width:1100px){html .nav .links{display:none}html .nav .navr,html .nav .links + .navr{margin-inline-start:auto}}
 @media (max-width:600px){html .nav .wrap{height:64px;gap:10px}html.nav-scrolled .nav .wrap{height:58px}html .nav .brand span{display:none}html .nav .navr .btn.sm{display:none}html .nav .nav-ico{width:38px;height:38px}html .nav .lang-toggle{padding-left:10px;margin-inline-start:2px}html[lang=he] .nav .lang-toggle{padding:0 10px 0 0}}
 """
+
+# One typeface per language across the whole site: Google Sans for English, Heebo for Hebrew.
+# The rule is broad on purpose (the sales-page designs set fonts inline), so it uses !important.
+FONT_LINK = ('<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
+             '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700&family=Heebo:wght@300..900&display=swap">')
+FONT_CSS = """<style id="mwp-fonts">
+html body,html body *:not(svg):not(svg *){font-family:"Google Sans","Heebo",system-ui,-apple-system,"Segoe UI",sans-serif!important}
+html[lang=he] body,html[lang=he] body *:not(svg):not(svg *),html body [lang=he],html body [lang=he] *{font-family:"Heebo","Google Sans",system-ui,sans-serif!important}
+</style>"""
+FONTS = FONT_LINK + "\n" + FONT_CSS

@@ -1,5 +1,7 @@
 """Generates the MWP's static pages with one shared head, header and footer."""
 import os, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from brand import FONTS
 ROOT = sys.argv[1]
 SITE = "https://shop.mw.photography"
 
@@ -33,6 +35,7 @@ def head(title, desc, path, extra=""):
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@200..800&display=swap">
   <link rel="stylesheet" href="assets/css/tokens.css">
   <link rel="stylesheet" href="assets/css/styles.css">{extra}
+{FONTS}
 </head>"""
 
 HEADER = f"""<body>
