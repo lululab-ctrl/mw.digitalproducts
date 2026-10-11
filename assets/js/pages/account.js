@@ -22,7 +22,7 @@ function libraryHTML(items) {
     <article class="library-item">
       ${p.cover_path ? `<img src="${esc(mediaUrl(p.cover_path, { width: 240 }))}" alt="" loading="lazy">` : `<span class="thumb" aria-hidden="true"></span>`}
       <div>
-        <h3 class="library-item__title">${esc(p.name)}${p.name_emphasis ? " " + esc(p.name_emphasis) : ""}</h3>
+        <h3 class="library-item__title" data-no-i18n>${esc(p.name)}${p.name_emphasis ? " " + esc(p.name_emphasis) : ""}</h3>
         <p class="meta">Version ${esc(p.version)}${countLabel(p) ? `, ${esc(countLabel(p))}` : ""}. Added ${shortDate(granted_at)}</p>
       </div>
       <button class="btn btn--sm" type="button" data-download="${esc(p.slug)}">Download .zip</button>

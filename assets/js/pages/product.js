@@ -118,7 +118,7 @@ async function load() {
           <div class="stack">
             <div class="row"><span class="product-card__cat">${esc(CATEGORIES[cat].one)}</span>${p.badge ? `<span class="tag">${esc(p.badge)}</span>` : ""}</div>
             <h1 class="h2">${titleHTML(p)}</h1>
-            ${p.tagline ? `<p class="lead">${esc(p.tagline)}</p>` : ""}
+            ${p.tagline ? `<p class="lead" data-no-i18n>${esc(p.tagline)}</p>` : ""}
           </div>
           <div class="buy-box__price"><span class="price">${priceHTML(p)}</span><span class="meta">${esc(p.currency)}, one-time payment</span></div>
           ${p.checkout_url
@@ -129,16 +129,16 @@ async function load() {
             <li>${ICONS.lock}Secure card checkout by Lemon Squeezy</li>
             <li>${ICONS.refresh}Free updates to this product</li>
           </ul>
-          ${p.includes.length ? `<ul class="checklist">${p.includes.map((i) => `<li>${esc(i)}</li>`).join("")}</ul>` : ""}
+          ${p.includes.length ? `<ul class="checklist" data-no-i18n>${p.includes.map((i) => `<li>${esc(i)}</li>`).join("")}</ul>` : ""}
           <dl class="spec">
             ${countLabel(p) ? `<dt>Contents</dt><dd>${esc(countLabel(p))}</dd>` : ""}
-            ${p.compatibility.length ? `<dt>Works with</dt><dd>${p.compatibility.map(esc).join(", ")}</dd>` : ""}
+            ${p.compatibility.length ? `<dt>Works with</dt><dd data-no-i18n>${p.compatibility.map(esc).join(", ")}</dd>` : ""}
             <dt>Version</dt><dd>${esc(p.version)}</dd>
             <dt>Licence</dt><dd>Personal and client work (<a class="link" href="legal.html#licence">details</a>)</dd>
           </dl>
         </aside>
       </div>
-      ${p.description ? `<section class="section prose" aria-labelledby="about-title"><h2 id="about-title" style="margin-top:0">About this product</h2>${paragraphs(p.description)}</section>` : ""}`;
+      ${p.description ? `<section class="section prose" aria-labelledby="about-title"><h2 id="about-title" style="margin-top:0">About this product</h2><div data-no-i18n>${paragraphs(p.description)}</div></section>` : ""}`;
 
     bindGallery(slides);
     if (p.checkout_url) {

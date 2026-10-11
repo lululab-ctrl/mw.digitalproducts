@@ -5,11 +5,13 @@
 import { CONFIG } from "../config.js";
 import { esc, mediaUrl, money } from "./api.js";
 import { CATEGORIES, ICONS, categoryOf, countLabel } from "./catalog.js";
+import { initI18n } from "../i18n.js";
 
 document.documentElement.classList.remove("no-js");
 
 // ---------------------------------------------------------------- header + nav
 export function initChrome() {
+  initI18n();
   const header = document.querySelector(".site-header");
   if (header && !header.classList.contains("site-header--solid")) {
     const onScroll = () => header.classList.toggle("is-solid", window.scrollY > 24);
@@ -125,13 +127,15 @@ export function initBeforeAfter(root = document) {
 
 // ---------------------------------------------------------------- product card
 export function titleHTML(p) {
-  return p.name_emphasis ? `${esc(p.name)} <strong>${esc(p.name_emphasis)}</strong>` : `<strong>${esc(p.name)}</strong>`;
+  return p.name_emphasis
+    ? `<span data-no-i18n>${esc(p.name)} <strong>${esc(p.name_emphasis)}</strong></span>`
+    : `<strong data-no-i18n>${esc(p.name)}</strong>`;
 }
 
 /** Designed tile shown in place of a product image until one is uploaded. */
 export function productArtHTML(p) {
   const cat = categoryOf(p);
-  return `<div class="art art--${cat}" aria-hidden="true">${ICONS[cat]}<span class="art__name">${esc(p.name)}${p.name_emphasis ? " " + esc(p.name_emphasis) : ""}</span></div>`;
+  return `<div class="art art--${cat}" aria-hidden="true">${ICONS[cat]}<span class="art__name" data-no-i18n>${esc(p.name)}${p.name_emphasis ? " " + esc(p.name_emphasis) : ""}</span></div>`;
 }
 
 export function priceHTML(p) {
@@ -144,19 +148,19 @@ export function productCardHTML(p) {
   const cat = categoryOf(p);
   const cover = p.cover_path ? mediaUrl(p.cover_path, { width: 900 }) : "";
   const hover = p.hover_path ? mediaUrl(p.hover_path, { width: 900 }) : "";
-  const details = [countLabel(p), p.tagline].filter(Boolean).map(esc).join(". ");
+  const count = countLabel(p);
   return `
     <a class="product-card" href="product.html?p=${encodeURIComponent(p.slug)}">
       <div class="product-card__media">
         ${cover ? `<img src="${esc(cover)}" alt="" loading="lazy" decoding="async">` : productArtHTML(p)}
         ${cover && hover ? `<img src="${esc(hover)}" alt="" loading="lazy" decoding="async">` : ""}
-        ${p.badge ? `<span class="product-card__badge"><span class="tag">${esc(p.badge)}</span></span>` : ""}
+        ${p.badge ? `<span class="product-card__badge"><span class="tag" data-no-i18n>${esc(p.badge)}</span></span>` : ""}
       </div>
       <div class="product-card__body">
         <span class="product-card__cat">${esc(CATEGORIES[cat].one)}</span>
         <h3 class="product-card__title">${titleHTML(p)}</h3>
         <span class="price">${priceHTML(p)}</span>
-        ${details ? `<p class="meta">${details}</p>` : ""}
+        ${count || p.tagline ? `<p class="meta">${count ? `<span>${esc(count)}</span>` : ""}${count && p.tagline ? ". " : ""}${p.tagline ? `<span data-no-i18n>${esc(p.tagline)}</span>` : ""}</p>` : ""}
       </div>
     </a>`;
 }

@@ -144,6 +144,8 @@
   }
 
   function mount() {
+    // Remember the language so the rest of the shop opens in it too.
+    try { localStorage.setItem("mwp_lang", document.documentElement.lang === "he" ? "he" : "en"); } catch (e) { /* private mode */ }
     const host = document.querySelector("x-dc");
     const script = document.querySelector('script[data-dc-script]');
     if (!host || !script) return;

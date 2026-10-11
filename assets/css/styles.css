@@ -307,7 +307,7 @@ main { flex: 1; }
 .input:focus, .select:focus, .textarea:focus { outline: none; border-color: var(--c-accent); box-shadow: 0 0 0 3px var(--c-accent-tint); }
 .input[aria-invalid="true"], .textarea[aria-invalid="true"] { border-color: var(--c-danger); }
 .field__error { font-size: var(--fs-xs); color: var(--c-danger); min-height: 1em; }
-.hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.hp { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; opacity: 0; pointer-events: none; }
 .inline-form { display: flex; gap: var(--s-2); max-width: 520px; }
 .check { display: flex; gap: var(--s-3); align-items: flex-start; font-size: var(--fs-sm); color: var(--c-ink-2); }
 .check input { margin-top: 4px; accent-color: var(--c-accent); }
@@ -358,6 +358,16 @@ main { flex: 1; }
 [dir="rtl"] .shelf__count { right: auto; left: var(--s-5); }
 
 /* ---------- Responsive ---------- */
+/* EN / עב switch (same pill as the sales pages) */
+.lang-toggle { display: inline-flex; align-items: center; flex: none; height: 32px; padding: 3px; border-radius: var(--r-pill); border: 1px solid var(--c-line-strong); direction: ltr; }
+.lang-toggle span, .lang-toggle button { display: inline-flex; align-items: center; justify-content: center; min-width: 36px; height: 24px; padding: 0 10px; border: 0; border-radius: var(--r-pill); background: none; font: 600 12px/1 var(--f-sans); letter-spacing: .06em; color: var(--c-ink-2); cursor: pointer; }
+.lang-toggle button:hover { color: var(--c-ink); }
+.lang-toggle .on { background: var(--c-ink); color: var(--c-canvas); cursor: default; }
+.lang-toggle [lang="he"] { font-family: "Heebo", var(--f-he); }
+[dir="rtl"] body { font-family: "Heebo", var(--f-he); }
+/* Hebrew has no capitals: drop the spaced-out label style */
+[dir="rtl"] body *:not(.lang-toggle):not(.lang-toggle *) { letter-spacing: normal; }
+
 @media (max-width: 1024px) {
   .shelf { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .trust { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -370,7 +380,8 @@ main { flex: 1; }
   .site-footer__top { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 760px) {
-  .nav-toggle { display: block; }
+  .nav-toggle { display: block; order: 3; margin-inline-start: 0; }
+  .lang-toggle { margin-inline-start: auto; }
   .nav {
     position: fixed; inset: var(--header-h) 0 auto 0; flex-direction: column; align-items: stretch; gap: 0;
     background: var(--c-canvas); border-bottom: 1px solid var(--c-line); padding: var(--s-2) var(--gutter) var(--s-5);
