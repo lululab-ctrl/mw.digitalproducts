@@ -4,6 +4,20 @@
 <meta charset="utf-8">
 <title>MWP Presets</title>
 <script src="../assets/pages/dc-lite.js"></script>
+<style id="mwp-unify">
+html .nav .wrap{justify-content:flex-start;height:72px}
+html .nav .links{margin-inline:auto}
+html .navr{display:flex;align-items:center;gap:14px;margin-inline-start:auto}
+html .nav .links + .navr{margin-inline-start:0}
+html .brand span{display:inline}
+html .navr a.nl{color:#CDD7DD;text-decoration:none;font-weight:600;font-size:15px}
+html .navr a.nl:hover{color:#FEFBF1}
+html .lang-toggle{display:inline-flex;align-items:center;flex:none;height:34px;padding:3px;border-radius:64px;border:1px solid rgba(156,177,194,.35);direction:ltr}
+html .lang-toggle span,html .lang-toggle a{display:inline-flex;align-items:center;justify-content:center;min-width:38px;height:26px;padding:0 10px;border-radius:64px;font:600 12px/1 Montserrat,Heebo,sans-serif;letter-spacing:.06em;color:#9CB1C2;text-decoration:none}
+html .lang-toggle a:hover{color:#FEFBF1}
+html .lang-toggle .on{background:#FEFBF1;color:#0A0908}
+@media (max-width:600px){html .nav .wrap{height:60px}html .navr a.nl.hide-sm{display:none}html .brand span{display:none}}
+</style>
 </head>
 <body>
 <x-dc>
@@ -12,10 +26,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;800;900&amp;display=swap" rel="stylesheet">
 <style>
 body{margin:0;background:#0A0908}
-a{color:#F2A541}a:hover{color:#FFD08A}
+a{color:#F4AF56}a:hover{color:#F8D29C}
 .pg{font-family:Montserrat,system-ui,sans-serif;color:#FEFBF1;background:#0A0908;overflow-x:clip;-webkit-font-smoothing:antialiased}
 .pg *{box-sizing:border-box}
-.pg :focus-visible{outline:3px solid #F2A541;outline-offset:3px;border-radius:12px}
+.pg :focus-visible{outline:3px solid #F4AF56;outline-offset:3px;border-radius:12px}
 .wrap{max-width:1140px;margin:0 auto;padding:0 40px}
 /* type scale (same as MWP Panel page) */
 .kick{font-size:12px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:#9CB1C2;margin:0}
@@ -23,14 +37,14 @@ a{color:#F2A541}a:hover{color:#FFD08A}
 .h2{font-size:clamp(30px,3.4vw,46px);line-height:1.12;font-weight:400;letter-spacing:-.025em;margin:0;text-wrap:balance}
 .h3{font-size:18px;line-height:1.3;font-weight:800;margin:0}
 .b{font-weight:900}
-.grad{background:linear-gradient(90deg,#C4471C 0%,#E8832F 45%,#FFD08A 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.grad{background:linear-gradient(90deg,#E4AA7C 0%,#F4AF56 55%,#F8D29C 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
 .lead{font-size:17px;line-height:1.65;color:#CDD7DD;margin:0}
 .body{font-size:15px;line-height:1.6;color:#CDD7DD;margin:0}
 .small{font-size:14px;line-height:1.5;color:#9CB1C2;margin:0}
 .head{display:flex;flex-direction:column;gap:16px;align-items:center;text-align:center;max-width:680px;margin:0 auto}
 /* buttons: one height, one radius */
 .btn,.ghost{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:50px;padding:0 26px;border-radius:64px;font:700 15px/1 Montserrat,sans-serif;text-decoration:none;white-space:nowrap;transition:filter .2s,border-color .2s,transform .2s}
-.btn{background:linear-gradient(90deg,#D9581F,#F2A541);color:#0A0908;box-shadow:0 8px 24px rgba(232,131,47,.22)}
+.btn{background:linear-gradient(90deg,#E4AA7C,#F4AF56);color:#0A0908;box-shadow:0 8px 24px rgba(244,175,86,.22)}
 .btn:hover{color:#0A0908;filter:brightness(1.08);transform:translateY(-1px)}
 .btn .pr{font-weight:600;opacity:.75}
 .ghost{border:1px solid rgba(254,251,241,.35);color:#FEFBF1;font-weight:600;background:rgba(10,9,8,.25)}
@@ -66,12 +80,12 @@ a{color:#F2A541}a:hover{color:#FFD08A}
 .front img{width:100%;height:100%;object-fit:cover;display:block}
 .front .lab{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:28px;background:linear-gradient(0deg,rgba(10,9,8,.92) 0%,rgba(10,9,8,0) 55%,rgba(10,9,8,.55) 100%)}
 .spine{width:76px;height:376px;background:linear-gradient(180deg,#023C4C,#0C2925);transform:rotateY(90deg) translateZ(252px);left:0;display:flex;align-items:center;justify-content:center}
-.spine span{writing-mode:vertical-rl;transform:rotate(180deg);font-weight:800;letter-spacing:.4em;font-size:13px;color:#F2A541}
+.spine span{writing-mode:vertical-rl;transform:rotate(180deg);font-weight:800;letter-spacing:.4em;font-size:13px;color:#F4AF56}
 .top{width:290px;height:76px;background:#0C2925;transform:rotateX(90deg) translateZ(38px)}
 .shadow{position:absolute;bottom:-10px;left:50%;margin-left:-150px;width:300px;height:40px;background:radial-gradient(closest-side,rgba(0,0,0,.75),rgba(0,0,0,0));filter:blur(6px)}
-.seal{width:54px;height:54px;border-radius:50%;border:1.5px solid rgba(242,165,65,.85);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:rgba(10,9,8,.25);box-shadow:inset 0 0 0 4px rgba(10,9,8,.15),inset 0 0 0 5px rgba(242,165,65,.35)}
-.seal .sn{font-size:20px;font-weight:800;line-height:1;color:#F2A541}
-.seal .sl{font-size:6.5px;font-weight:800;letter-spacing:.24em;color:#FFD08A}
+.seal{width:54px;height:54px;border-radius:50%;border:1.5px solid rgba(244,175,86,.85);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:rgba(10,9,8,.25);box-shadow:inset 0 0 0 4px rgba(10,9,8,.15),inset 0 0 0 5px rgba(244,175,86,.35)}
+.seal .sn{font-size:20px;font-weight:800;line-height:1;color:#F4AF56}
+.seal .sl{font-size:6.5px;font-weight:800;letter-spacing:.24em;color:#F8D29C}
 .chips{display:flex;flex-wrap:wrap;gap:10px}
 .chip{padding:10px 18px;border-radius:64px;border:1px solid rgba(156,177,194,.35);font-size:14px;font-weight:600;color:#CDD7DD;background:rgba(10,9,8,.4)}
 /* stats */
@@ -89,9 +103,9 @@ a{color:#F2A541}a:hover{color:#FFD08A}
 .ba .line{position:absolute;top:0;bottom:0;width:2px;background:#FEFBF1;transform:translateX(-1.5px);pointer-events:none}
 .ba .knob{position:absolute;top:50%;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;background:#FEFBF1;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 30px rgba(0,0,0,.5);pointer-events:none}
 .ba input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:ew-resize;margin:0}
-.ba:has(input:focus-visible){outline:3px solid #F2A541;outline-offset:4px}
+.ba:has(input:focus-visible){outline:3px solid #F4AF56;outline-offset:4px}
 .tag{position:absolute;top:18px;padding:6px 12px;border-radius:64px;background:rgba(10,9,8,.6);font-size:11px;font-weight:700;letter-spacing:.18em;pointer-events:none}
-.ph{position:absolute;bottom:16px;right:16px;max-width:360px;padding:7px 12px;border:1px dashed #F2A541;border-radius:10px;background:rgba(10,9,8,.8);color:#FFD08A;font-size:11px;font-weight:600;line-height:1.4;pointer-events:none}
+.ph{position:absolute;bottom:16px;right:16px;max-width:360px;padding:7px 12px;border:1px dashed #F4AF56;border-radius:10px;background:rgba(10,9,8,.8);color:#F8D29C;font-size:11px;font-weight:600;line-height:1.4;pointer-events:none}
 .recipe{display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap;margin-top:20px}
 .rc{padding:6px 14px;border-radius:30px;background:#CDD7DD;color:#0C2925;font-weight:700;font-size:13px}
 .rf{padding:6px 14px;border-radius:9px;border:1px solid #CDD7DD;background:#262626;font-weight:600;font-size:13px}
@@ -114,7 +128,7 @@ a{color:#F2A541}a:hover{color:#FFD08A}
 .stack{display:flex;flex-direction:column;gap:20px}
 .frame{position:relative;border-radius:24px;overflow:hidden;aspect-ratio:4/5;box-shadow:0 40px 100px rgba(0,0,0,.55)}
 .frame img{width:100%;height:100%;object-fit:cover}
-.mask{position:absolute;border:2px dashed #F2A541;border-radius:50%;background:rgba(232,131,47,.12)}
+.mask{position:absolute;border:2px dashed #F4AF56;border-radius:50%;background:rgba(244,175,86,.12)}
 .mchip{position:absolute;padding:6px 12px;border-radius:64px;background:#FEFBF1;color:#0A0908;font-size:11px;font-weight:700;letter-spacing:.14em}
 .thumbs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:8px}
 .thumbs img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:14px;display:block}
@@ -146,7 +160,7 @@ a{color:#F2A541}a:hover{color:#FFD08A}
 .hud span{padding:6px 12px;border-radius:64px;background:rgba(10,9,8,.6);font-size:11px;font-weight:700;letter-spacing:.18em;color:#9CB1C2;transition:all .3s}
 .hud span.on{background:#FEFBF1;color:#0A0908}
 .pbar{position:absolute;left:20px;right:20px;bottom:20px;height:4px;border-radius:6px;background:rgba(254,251,241,.2);overflow:hidden}
-.pfill{height:100%;background:linear-gradient(90deg,#D9581F,#FFD08A);transition:width .6s ease}
+.pfill{height:100%;background:linear-gradient(90deg,#E4AA7C,#F8D29C);transition:width .6s ease}
 .plabel{position:absolute;left:20px;bottom:36px;font-size:11px;font-weight:700;letter-spacing:.18em}
 .shot .ph{bottom:40px;right:16px}
 .panel{background:#2B2B2B;border-left:1px solid #111;padding:18px;display:flex;flex-direction:column;gap:12px}
@@ -157,10 +171,10 @@ a{color:#F2A541}a:hover{color:#FFD08A}
 .ptab.on{background:#3d3d3d;color:#FEFBF1}
 .pgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .pbtn{display:flex;align-items:center;gap:8px;min-height:38px;padding:0 12px;border-radius:8px;background:#353535;color:#e6e6e6;font:500 13px Montserrat,sans-serif;border:1px solid #404040;cursor:pointer;text-align:left;transition:border-color .2s,background .2s}
-.pbtn i{width:7px;height:7px;border-radius:50%;background:#E8832F;flex:none}
-.pbtn:hover{border-color:#F2A541;color:#FEFBF1}
-.pbtn.on{background:rgba(232,131,47,.22);border-color:#F2A541;color:#FEFBF1}
-.pbtn.on i{background:#FFD08A;box-shadow:0 0 10px #F2A541}
+.pbtn i{width:7px;height:7px;border-radius:50%;background:#F4AF56;flex:none}
+.pbtn:hover{border-color:#F4AF56;color:#FEFBF1}
+.pbtn.on{background:rgba(244,175,86,.22);border-color:#F4AF56;color:#FEFBF1}
+.pbtn.on i{background:#F8D29C;box-shadow:0 0 10px #F4AF56}
 .pnote{padding:12px 14px;border-radius:10px;background:#1f1f1f;color:#a8a8a8;font-size:13px;line-height:1.5}
 .layers{background:#1f1f1f;border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:6px}
 .lhead{display:flex;justify-content:space-between;font-size:11px;font-weight:800;letter-spacing:.2em;color:#8a8a8a;padding:0 2px 4px}
@@ -173,15 +187,15 @@ a{color:#F2A541}a:hover{color:#FFD08A}
 .step{display:flex;flex-direction:column;gap:10px;padding:24px 0 0;border-top:1px solid rgba(156,177,194,.22)}
 .alt .step{background:transparent}
 .step .k{font-size:40px;font-weight:900;line-height:1;letter-spacing:-.04em;margin-bottom:4px}
-.step .fk{font-size:12px;font-weight:800;letter-spacing:.22em;color:#F2A541}
+.step .fk{font-size:12px;font-weight:800;letter-spacing:.22em;color:#F4AF56}
 .inc{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:56px}
 .inc .i{display:flex;flex-direction:column;gap:6px;padding:26px 24px;border-radius:22px;background:rgba(254,251,241,.04);border:1px solid rgba(156,177,194,.18)}
 .inc .big{font-size:36px;font-weight:900;line-height:1;margin-bottom:6px}
 .apps{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin-top:36px}
 .plans{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:56px;align-items:stretch}
 .plan{position:relative;display:flex;flex-direction:column;gap:16px;padding:28px 24px;border-radius:20px;background:rgba(254,251,241,.04);border:1px solid rgba(156,177,194,.18)}
-.plan.hi{border-color:rgba(242,165,65,.7);background:rgba(232,131,47,.07)}
-.plan .tagx{position:absolute;top:-12px;left:24px;padding:4px 12px;border-radius:64px;background:#F2A541;color:#0A0908;font-size:11px;font-weight:800;letter-spacing:.06em}
+.plan.hi{border-color:rgba(244,175,86,.7);background:rgba(244,175,86,.07)}
+.plan .tagx{position:absolute;top:-12px;left:24px;padding:4px 12px;border-radius:64px;background:#F4AF56;color:#0A0908;font-size:11px;font-weight:800;letter-spacing:.06em}
 .plan .price{font-size:20px;font-weight:800;color:#FEFBF1}
 .plan ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;flex:1}
 .plan li{display:flex;gap:10px;align-items:flex-start;font-size:14px;line-height:1.5;color:#CDD7DD}
@@ -190,16 +204,16 @@ a{color:#F2A541}a:hover{color:#FFD08A}
 /* faq */
 .faq{max-width:760px;margin:40px auto 0;border-top:1px solid rgba(156,177,194,.2)}
 .q{width:100%;min-height:64px;display:flex;justify-content:space-between;align-items:center;gap:24px;padding:18px 0;background:none;border:0;border-bottom:1px solid rgba(156,177,194,.2);color:#FEFBF1;font:600 16px/1.45 Montserrat,sans-serif;text-align:left;cursor:pointer}
-.q:hover{color:#FFD08A}
-.q .pm{flex:none;width:28px;height:28px;border-radius:50%;border:1px solid rgba(242,165,65,.55);display:flex;align-items:center;justify-content:center;color:#F2A541;font-size:18px;font-weight:500;line-height:1}
+.q:hover{color:#F8D29C}
+.q .pm{flex:none;width:28px;height:28px;border-radius:50%;border:1px solid rgba(244,175,86,.55);display:flex;align-items:center;justify-content:center;color:#F4AF56;font-size:18px;font-weight:500;line-height:1}
 .ans{padding:4px 60px 24px 0;color:#CDD7DD;font-size:15px;line-height:1.65;border-bottom:1px solid rgba(156,177,194,.2)}
 .help{display:flex;justify-content:center;margin-top:48px}
 /* final */
 .final{position:relative;padding:140px 0;overflow:hidden}
 .final-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.45}
 .final-shade{position:absolute;inset:0;background:radial-gradient(ellipse at 30% 50%,rgba(10,9,8,.6),#0A0908 75%)}
-.family{display:flex;align-items:center;gap:14px;padding:12px 20px;border-radius:16px;border:1px solid rgba(242,165,65,.4);background:rgba(232,131,47,.08);text-decoration:none;color:#FEFBF1;text-align:left;transition:border-color .2s}
-.family:hover{color:#FEFBF1;border-color:#F2A541}
+.family{display:flex;align-items:center;gap:14px;padding:12px 20px;border-radius:16px;border:1px solid rgba(244,175,86,.4);background:rgba(244,175,86,.08);text-decoration:none;color:#FEFBF1;text-align:left;transition:border-color .2s}
+.family:hover{color:#FEFBF1;border-color:#F4AF56}
 @media (max-width:1100px){
 .links{display:none}
 .inc,.plans{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -263,9 +277,9 @@ a{color:#F2A541}a:hover{color:#FFD08A}
 
 <nav class="nav" aria-label="Main">
 <div class="wrap">
-<a class="brand" href="#top"><img src="../assets/pages/img/2dd3356528167ddf9a64c0c7301c8aa3.png" alt="MW Photo Tours"><span>MW PHOTO TOURS</span></a>
-<div class="links"><a href="#ba">Before and after</a><a href="#inside">What's inside</a><a href="#panel">With MWP Panel</a><a href="#bundles">Bundles</a><a href="#faq">Questions</a></div>
-<div class="navr"><div class="lang" role="group" aria-label="Language"><span class="on" aria-current="true">EN</span><a href="he.html" hreflang="he" lang="he">עב</a></div><a class="btn sm" href="#buy">Get MWP Presets</a></div>
+<a class="brand" href="../" aria-label="MWP, home"><img src="../assets/pages/img/2dd3356528167ddf9a64c0c7301c8aa3.png" alt=""><span>MWP</span></a>
+<div class="links"><a href="#ba">From RAW to final</a><a href="#inside">What's inside</a><a href="#panel">With MWP Panel</a><a href="#bundles">Bundles</a><a href="#faq">Questions</a></div>
+<div class="navr"><a class="nl hide-sm" href="../support.html">Help</a><div class="nav-icons"><a class="nav-ico" href="../account.html" aria-label="My downloads"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg><span class="tip">My downloads</span></a><button class="nav-ico" type="button" data-cart aria-label="Cart" aria-haspopup="dialog"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h2l2.2 11.2a1.5 1.5 0 0 0 1.5 1.2h8.8a1.5 1.5 0 0 0 1.5-1.1L21 8H6.2"/><circle cx="9.5" cy="20" r="1.3"/><circle cx="17.5" cy="20" r="1.3"/></svg><span class="count" hidden>0</span><span class="tip">Cart</span></button></div><div class="lang-toggle" role="group" aria-label="Language"><span class="on" aria-current="true">EN</span><a href="he.html" hreflang="he" lang="he">עב</a></div></div>
 </div>
 </nav>
 
@@ -280,9 +294,9 @@ a{color:#F2A541}a:hover{color:#FFD08A}
 <p class="lead" style="max-width: 560px">50 Lightroom presets built from the MWP edits of wildlife and landscapes. For Lightroom Classic, Lightroom, Lightroom Mobile and Camera Raw.</p>
 <div class="ctas">
 <a class="btn" href="#buy">Get MWP Presets <span class="pr">· [YOUR PRICE]</span></a>
-<a class="ghost" href="#ba">See before and after</a>
+<a class="ghost" href="#ba">Compare RAW and final</a>
 </div>
-<div class="meta"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F2A541" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg> 50 presets, 12 of them adaptive</span><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F2A541" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg> Desktop and mobile</span><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F2A541" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg> 33 LUTs for video</span></div>
+<div class="meta"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg> 50 presets, 12 of them adaptive</span><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg> Desktop and mobile</span><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg> 33 LUTs for video</span></div>
 </div>
 <div class="scene" aria-hidden="true">
 <div class="box">
@@ -293,7 +307,7 @@ a{color:#F2A541}a:hover{color:#FFD08A}
 <div class="lab">
 <div style="display: flex; justify-content: space-between; align-items: flex-start"><div style="font-weight: 800; letter-spacing: .32em; font-size: 11px">MW PHOTO TOURS</div><div class="seal"><span class="sn">50</span><span class="sl">PRESETS</span></div></div>
 <div>
-<div style="font-size: 13px; letter-spacing: .3em; font-weight: 600; color: #F2A541">LIGHTROOM PRESETS</div>
+<div style="font-size: 13px; letter-spacing: .3em; font-weight: 600; color: #F4AF56">LIGHTROOM PRESETS</div>
 <div style="font-size: 48px; font-weight: 900; line-height: .95; letter-spacing: -.03em; margin-top: 8px">MWP<br>Presets</div>
 <div style="margin-top: 12px; font-size: 13px; color: #CDD7DD">50 presets · 12 adaptive · 33 LUTs</div>
 </div>
@@ -318,7 +332,7 @@ a{color:#F2A541}a:hover{color:#FFD08A}
 <section class="sec" id="ba">
 <div class="wrap">
 <div class="head">
-<div class="kick">Before and after</div>
+<div class="kick">From RAW to final</div>
 <h2 class="h2">Your RAW file. <span class="b grad">In MWP light.</span></h2>
 <p class="lead">Each example shows the RAW file beside the same file with one preset, plus white balance and exposure.</p>
 </div>
@@ -334,8 +348,8 @@ a{color:#F2A541}a:hover{color:#FFD08A}
 <div class="knob" style="left: {{pos}}%" aria-hidden="true">
 <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0A0908" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l-6 6 6 6"></path><path d="M15 6l6 6-6 6"></path></svg>
 </div>
-<span class="tag" style="left: 22px">BEFORE</span>
-<span class="tag" style="right: 22px; color: #F2A541">AFTER · MWP PRESET</span>
+<span class="tag" style="left: 22px">RAW</span>
+<span class="tag" style="right: 22px; color: #F4AF56">FINAL · MWP PRESET</span>
 <input type="range" min="0" max="100" value="{{pos}}" onChange="{{onSlide}}" aria-label="Drag to compare before and after">
 <div class="ph">PLACEHOLDER: the "after" here is Matan's finished edit. Replace with the same RAW edited only with the preset before launch.</div>
 </div>
@@ -367,16 +381,16 @@ a{color:#F2A541}a:hover{color:#FFD08A}
 <img src="../assets/pages/img/e55ba13821bd5c715d0a939a1cb10893.jpg" alt="Red fox with the subject area marked">
 <div class="mask" style="left: 22%; top: 18%; width: 58%; height: 70%"></div>
 <span class="mchip" style="left: 8%; top: 10%">SUBJECT</span>
-<span class="mchip" style="right: 6%; bottom: 8%; background: #F2A541">BACKGROUND</span>
+<span class="mchip" style="right: 6%; bottom: 8%; background: #F4AF56">BACKGROUND</span>
 </div>
 <div class="stack">
 <div class="kick">12 adaptive presets</div>
 <h2 class="h2">Lightroom finds the animal. <span class="b grad">The preset lights it.</span></h2>
 <p class="lead">The adaptive presets use Lightroom's AI masks to find the subject, the sky or the background in each photo and treat each one on its own.</p>
 <ul class="checks">
-<li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F2A541" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>Subject: shadows and whites lifted on the animal</li>
-<li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F2A541" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>Sky: highlights held, deeper and calmer</li>
-<li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F2A541" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>Background: gently darker, so the animal stands out</li>
+<li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>Subject: shadows and whites lifted on the animal</li>
+<li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>Sky: highlights held, deeper and calmer</li>
+<li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>Background: gently darker, so the animal stands out</li>
 </ul>
 </div>
 </div>
@@ -447,7 +461,7 @@ a{color:#F2A541}a:hover{color:#FFD08A}
 <div class="layers">
 <div class="lhead"><span>LAYERS</span><span>{{undoText}}</span></div>
 <sc-for list="{{layers}}" as="l" hint-placeholder-count="2">
-<div class="lrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F2A541" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"></path><circle cx="12" cy="12" r="3"></circle></svg>{{l}}</div>
+<div class="lrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"></path><circle cx="12" cy="12" r="3"></circle></svg>{{l}}</div>
 </sc-for>
 <div class="lrow base"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9a9a9a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"></rect></svg>Original · locked</div>
 </div>
@@ -519,7 +533,7 @@ a{color:#F2A541}a:hover{color:#FFD08A}
 <h2 class="h2">Shoot with the guides. <span class="b grad">Finish with the tools.</span></h2>
 <p class="lead">MWP Field Guides teach what happens before the click: composition, colour, light and planning, in 4 PDF guides in English and Hebrew. The presets and the Panel carry it on into the edit, in the same look.</p>
 </div>
-<div class="plans"><div class="plan"><div><h3 class="h3">MWP Presets</h3><p class="small" style="margin-top: 6px">Edit in Lightroom</p></div><div class="price">[YOUR PRICE]</div><ul><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F2A541" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>50 Lightroom presets, 12 adaptive</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F2A541" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>50 mobile files and 33 LUTs</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F2A541" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>Install guide for every program</span></li></ul><a class="ghost sm" href="#buy">Get the presets</a></div><div class="plan"><div><h3 class="h3">Presets + Field Guides</h3><p class="small" style="margin-top: 6px">Shoot it, then edit it</p></div><div class="price">[BUNDLE PRICE]</div><ul><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F2A541" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>MWP Presets: 50 presets and 33 LUTs</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F2A541" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>MWP Field Guides: 4 PDF guides, 137 lessons</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F2A541" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>Composition, colour, light and planning</span></li></ul><a class="ghost sm" href="#buy">Get the bundle</a></div><div class="plan"><div><h3 class="h3">Presets + Panel</h3><p class="small" style="margin-top: 6px">Lightroom and Photoshop</p></div><div class="price">[BUNDLE PRICE]</div><ul><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F2A541" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>MWP Presets: 50 presets and 33 LUTs</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F2A541" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>MWP Panel: the Photoshop plugin</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F2A541" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>User manual and install guide</span></li></ul><a class="ghost sm" href="#buy">Get the bundle</a></div><div class="plan hi"><span class="tagx">EVERYTHING</span><div><h3 class="h3">The full set</h3><p class="small" style="margin-top: 6px">From the shot to the share</p></div><div class="price">[BUNDLE PRICE]</div><ul><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F2A541" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>MWP Presets: 50 presets and 33 LUTs</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F2A541" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>MWP Panel: the Photoshop plugin</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F2A541" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>MWP Field Guides: 4 PDF guides, 137 lessons</span></li></ul><a class="btn sm" href="#buy">Get the full set</a></div></div>
+<div class="plans"><div class="plan"><div><h3 class="h3">MWP Presets</h3><p class="small" style="margin-top: 6px">Edit in Lightroom</p></div><div class="price">[YOUR PRICE]</div><ul><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>50 Lightroom presets, 12 adaptive</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>50 mobile files and 33 LUTs</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>Install guide for every program</span></li></ul><a class="ghost sm" href="#buy">Get the presets</a></div><div class="plan"><div><h3 class="h3">Presets + Field Guides</h3><p class="small" style="margin-top: 6px">Shoot it, then edit it</p></div><div class="price">[BUNDLE PRICE]</div><ul><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>MWP Presets: 50 presets and 33 LUTs</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>MWP Field Guides: 4 PDF guides, 137 lessons</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>Composition, colour, light and planning</span></li></ul><a class="ghost sm" href="#buy">Get the bundle</a></div><div class="plan"><div><h3 class="h3">Presets + Panel</h3><p class="small" style="margin-top: 6px">Lightroom and Photoshop</p></div><div class="price">[BUNDLE PRICE]</div><ul><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>MWP Presets: 50 presets and 33 LUTs</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>MWP Panel: the Photoshop plugin</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>User manual and install guide</span></li></ul><a class="ghost sm" href="#buy">Get the bundle</a></div><div class="plan hi"><span class="tagx">EVERYTHING</span><div><h3 class="h3">The full set</h3><p class="small" style="margin-top: 6px">From the shot to the share</p></div><div class="price">[BUNDLE PRICE]</div><ul><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>MWP Presets: 50 presets and 33 LUTs</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>MWP Panel: the Photoshop plugin</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>MWP Field Guides: 4 PDF guides, 137 lessons</span></li></ul><a class="btn sm" href="#buy">Get the full set</a></div></div>
 <p class="small" style="text-align: center; margin-top: 28px">[Bundle prices and discounts: Matan to decide]</p>
 </div>
 </section>
@@ -635,6 +649,11 @@ class Component extends DCLogic {
     };
   }
 }
+</script>
+<script type="module">
+import { initCart } from "../assets/js/lib/cart.js";
+const go = () => initCart();
+document.readyState === "complete" ? go() : addEventListener("load", go);
 </script>
 </body>
 </html>

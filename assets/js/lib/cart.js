@@ -11,18 +11,20 @@ const SVG = {
 };
 
 const CSS = `
+.nav-icons,.cart-panel,.cart-panel button{font-family:Montserrat,"Google Sans Flex",Heebo,system-ui,sans-serif}
+[dir=rtl] .cart-panel,[dir=rtl] .cart-panel button,[dir=rtl] .nav-icons{font-family:Heebo,Montserrat,system-ui,sans-serif}
 .nav-icons{display:inline-flex;align-items:center;gap:4px;flex:none}
 .nav-ico{position:relative;display:inline-flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:50%;border:0;background:none;color:inherit;cursor:pointer;text-decoration:none;padding:0;-webkit-tap-highlight-color:transparent}
 .nav-ico:hover,.nav-ico.show-tip{background:rgba(254,251,241,.08)}
 .nav-ico:focus-visible{outline:2px solid #F4AF56;outline-offset:2px}
-.nav-ico .tip{position:absolute;top:calc(100% + 8px);left:50%;transform:translate(-50%,-4px);white-space:nowrap;padding:6px 10px;border-radius:8px;background:#FEFBF1;color:#0A0908;font:600 12px/1.2 inherit;font-family:inherit;opacity:0;pointer-events:none;transition:opacity .15s,transform .15s;z-index:5}
+.nav-ico .tip{position:absolute;top:calc(100% + 8px);left:50%;transform:translate(-50%,-4px);white-space:nowrap;padding:6px 10px;border-radius:8px;background:#FEFBF1;color:#0A0908;font-weight:600;font-size:12px;line-height:1.2;;opacity:0;pointer-events:none;transition:opacity .15s,transform .15s;z-index:5}
 .nav-ico.show-tip .tip{opacity:1;transform:translate(-50%,0)}
 @media (hover:hover){.nav-ico:hover .tip{opacity:1;transform:translate(-50%,0)}}
 .nav-ico:focus-visible .tip{opacity:1;transform:translate(-50%,0)}
-.nav-ico .count{position:absolute;top:4px;right:3px;min-width:17px;height:17px;padding:0 4px;border-radius:9px;background:#F4AF56;color:#0A0908;font:700 11px/17px inherit;font-family:inherit;text-align:center}
+.nav-ico .count{position:absolute;top:4px;right:3px;min-width:17px;height:17px;padding:0 4px;border-radius:9px;background:#F4AF56;color:#0A0908;font-weight:700;font-size:11px;line-height:17px;;text-align:center}
 .nav-ico .count[hidden]{display:none}
 .cart-scrim{position:fixed;inset:0;background:rgba(0,0,0,.55);opacity:0;pointer-events:none;transition:opacity .2s;z-index:90}
-.cart-panel{position:fixed;top:0;bottom:0;inset-inline-end:0;width:min(420px,100vw);background:#141210;color:#FEFBF1;border-inline-start:1px solid rgba(156,177,194,.18);display:flex;flex-direction:column;transform:translateX(100%);transition:transform .25s cubic-bezier(.16,1,.3,1);z-index:91;font-family:inherit}
+.cart-panel{position:fixed;top:0;bottom:0;inset-inline-end:0;width:min(420px,100vw);background:#141210;color:#FEFBF1;border-inline-start:1px solid rgba(156,177,194,.18);display:flex;flex-direction:column;transform:translateX(100%);transition:transform .25s cubic-bezier(.16,1,.3,1);z-index:91;}
 [dir=rtl] .cart-panel{transform:translateX(-100%)}
 .cart-open .cart-scrim{opacity:1;pointer-events:auto}
 .cart-open .cart-panel{transform:none}
@@ -34,15 +36,15 @@ const CSS = `
 .cart-empty{padding:48px 0;text-align:center;color:#CDD7DD}
 .cart-empty a{display:inline-block;margin-top:14px;color:#F4AF56;font-weight:700}
 .cart-row{display:grid;grid-template-columns:64px minmax(0,1fr) auto;gap:14px;align-items:center;padding:14px 0;border-bottom:1px solid rgba(156,177,194,.12)}
-.cart-row img,.cart-row .ph{width:64px;height:64px;border-radius:10px;object-fit:cover;background:#262626}
+.cart-row img,.cart-row .cart-ph{width:64px;height:64px;border-radius:10px;object-fit:cover;background:#262626}
 .cart-row .nm{font-weight:700;line-height:1.3}
 .cart-row .pr{font-size:14px;color:#CDD7DD;margin-top:2px}
 .cart-row .acts{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
-.cart-row button,.cart-row a.pay{border:0;background:none;color:#9CB1C2;font:600 13px inherit;font-family:inherit;cursor:pointer;padding:4px 0;text-decoration:underline;text-underline-offset:3px}
+.cart-row button,.cart-row a.pay{border:0;background:none;color:#9CB1C2;font-weight:600;font-size:13px;;cursor:pointer;padding:4px 0;text-decoration:underline;text-underline-offset:3px}
 .cart-row a.pay{color:#F4AF56}
 .cart-foot{padding:18px 22px 24px;border-top:1px solid rgba(156,177,194,.15);display:grid;gap:12px}
 .cart-total{display:flex;justify-content:space-between;font-weight:800;font-size:17px}
-.cart-go{display:flex;align-items:center;justify-content:center;min-height:50px;border-radius:30px;border:0;background:linear-gradient(90deg,#E4AA7C,#F4AF56);color:#0A0908;font:800 16px inherit;font-family:inherit;text-decoration:none;cursor:pointer}
+.cart-go{display:flex;align-items:center;justify-content:center;min-height:50px;border-radius:30px;border:0;background:linear-gradient(90deg,#E4AA7C,#F4AF56);color:#0A0908;font-weight:800;font-size:16px;;text-decoration:none;cursor:pointer}
 .cart-go[aria-disabled=true]{opacity:.45;pointer-events:none}
 .cart-note{margin:0;font-size:13px;color:#9CB1C2;text-align:center}
 @media (max-width:900px){.site-header .nav-icons{margin-inline-start:auto}.site-header .nav-icons + .lang-toggle{margin-inline-start:0}}
@@ -86,7 +88,7 @@ function render() {
   foot.hidden = false;
   const several = list.length > 1;
   body.innerHTML = list.map((i) => `<div class="cart-row">
-      ${i.image ? `<img src="${esc(i.image)}" alt="">` : `<span class="ph"></span>`}
+      ${i.image ? `<img src="${esc(i.image)}" alt="">` : `<span class="cart-ph"></span>`}
       <div><div class="nm" data-no-i18n>${esc(i.name)}</div><div class="pr">${money(i.price_cents, i.currency)}</div></div>
       <div class="acts">${several && i.checkout_url ? `<a class="pay" href="${esc(i.checkout_url)}">${T("Pay", "לתשלום")}</a>` : ""}<button type="button" data-remove="${esc(i.slug)}">${T("Remove", "הסרה")}</button></div>
     </div>`).join("");
@@ -138,24 +140,36 @@ function showTip(el) {
   el.__tip = setTimeout(() => el.classList.remove("show-tip"), 1600);
 }
 
+export function navIconsInner() {
+  return `<a class="nav-ico" href="${base()}account.html" aria-label="${T("My downloads", "ההורדות שלי")}">${SVG.dl}<span class="tip">${T("My downloads", "ההורדות שלי")}</span></a>
+    <button class="nav-ico" type="button" data-cart aria-label="${T("Cart", "עגלה")}" aria-haspopup="dialog">${SVG.cart}<span class="count" hidden>0</span><span class="tip">${T("Cart", "עגלה")}</span></button>`;
+}
+
 export function initCart() {
-  if (document.querySelector(".nav-icons")) return;
-  const host = document.querySelector(".site-header .container") || document.querySelector(".site-header");
-  if (!host) return;
+  if (document.querySelector(".cart-panel")) return;
+  // Pages can ship the icons in their own markup (the sales pages do); otherwise they are added to the header.
+  let wrap = document.querySelector(".nav-icons");
   const style = document.createElement("style");
   style.textContent = CSS;
   document.head.appendChild(style);
-
-  const wrap = document.createElement("div");
-  wrap.className = "nav-icons";
-  wrap.innerHTML = `
-    <a class="nav-ico" href="${base()}account.html" aria-label="${T("My downloads", "ההורדות שלי")}">${SVG.dl}<span class="tip">${T("My downloads", "ההורדות שלי")}</span></a>
-    <button class="nav-ico" type="button" data-cart aria-label="${T("Cart", "עגלה")}" aria-haspopup="dialog">${SVG.cart}<span class="count" hidden>0</span><span class="tip">${T("Cart", "עגלה")}</span></button>`;
-  wrap.setAttribute("data-no-i18n", "");
-  // Sit with the other right-hand links when the page has a group for them (home), else just before the language switch.
-  const group = host.querySelector(".navr");
-  if (group) group.appendChild(wrap);
-  else host.insertBefore(wrap, host.querySelector(".lang-toggle"));
+  if (!wrap) {
+    const host = document.querySelector(".site-header .container") || document.querySelector(".site-header");
+    if (!host) return;
+    wrap = document.createElement("div");
+    wrap.className = "nav-icons";
+    wrap.innerHTML = navIconsInner();
+    wrap.setAttribute("data-no-i18n", "");
+    // Sit with the other right-hand links when the page has a group for them (home), else just before the language switch.
+    const group = host.querySelector(".navr");
+    if (group) group.appendChild(wrap);
+    else host.insertBefore(wrap, host.querySelector(".lang-toggle"));
+  } else {
+    // Sales pages re-render their markup in place; put the cart count back if a re-render resets it.
+    new MutationObserver(() => {
+      const n = items().length, c = wrap.querySelector(".count");
+      if (c && (c.textContent !== String(n) || c.hidden !== !n)) { c.textContent = n; c.hidden = !n; }
+    }).observe(wrap, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ["hidden"] });
+  }
 
   document.body.insertAdjacentHTML("beforeend", `
     <div class="cart-scrim" data-close></div>
