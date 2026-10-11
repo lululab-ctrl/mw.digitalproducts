@@ -422,9 +422,9 @@ html .nav .links + .navr{margin-inline-start:0}
 .st-sticky{position:sticky;top:0;height:100vh;display:flex;align-items:center;overflow:hidden}
 .st-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:clamp(40px,6vw,96px);align-items:center;width:100%}
 .st-media{position:relative;aspect-ratio:4/5;max-height:76vh;border-radius:6px;overflow:hidden;background:#141210}
-.st-mimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;clip-path:inset(100% 0 0 0);transform:scale(1.08);transition:clip-path 1.1s cubic-bezier(.7,0,.2,1),transform 1.6s cubic-bezier(.2,.7,.2,1)}
-.st-mimg.on{clip-path:inset(0 0 0 0);transform:none}
-.st-mimg.past{clip-path:inset(0 0 0 0);transform:scale(1.02)}
+.st-mimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;clip-path:inset(100% 0 0 0);will-change:clip-path,transform}
+.st-mimg:first-of-type{clip-path:inset(0 0 0 0)}
+
 .st-media .st-vf{inset:22px;z-index:2}
 .st-count{position:absolute;left:28px;bottom:24px;z-index:2;display:flex;align-items:baseline;gap:8px;color:#FEFBF1;direction:ltr}
 .st-cur{font-size:56px;font-weight:500;letter-spacing:-.03em;line-height:1}
@@ -436,12 +436,13 @@ html .nav .links + .navr{margin-inline-start:0}
 [dir=rtl] .st-prog span::after{transform-origin:right}
 .st-prog span.on{color:#FEFBF1}
 .st-prog span.on::after,.st-prog span.done::after{transform:scaleX(1)}
-.st-art{position:absolute;inset:auto 0 auto 0;top:70px;opacity:0;transform:translateY(30px);pointer-events:none;transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1)}
-.st-art.on{opacity:1;transform:none;pointer-events:auto}
+.st-art{position:absolute;inset:auto 0 auto 0;top:70px;opacity:0;pointer-events:none;will-change:opacity,transform}
+.st-art.on{pointer-events:auto}
+.st-art:first-of-type{opacity:1}
 .st-step{display:flex;align-items:baseline;gap:14px;margin:0;color:#9CB1C2;font-size:13px;font-weight:600;letter-spacing:.22em;text-transform:uppercase}
 .st-num{color:#F4AF56}
 .st-tag{margin:18px 0 0;color:#9CB1C2;font-size:14px}
-.st-name{margin:10px 0 0;font-size:clamp(40px,4.6vw,68px);line-height:1;font-weight:400;letter-spacing:-.03em;color:#FEFBF1}
+.st-name{margin:10px 0 0;font-size:clamp(34px,3.7vw,58px);line-height:1;font-weight:400;letter-spacing:-.03em;color:#FEFBF1;white-space:nowrap}
 .st-name .grad{font-weight:600}
 .st-line{margin:22px 0 0;font-size:clamp(18px,1.5vw,22px);line-height:1.5;color:#CDD7DD;max-width:460px}
 .st-pts{list-style:none;margin:28px 0 0;padding:24px 0 0;border-top:1px solid rgba(254,251,241,.1);display:grid;gap:12px}
@@ -466,7 +467,8 @@ html .nav .links + .navr{margin-inline-start:0}
   .st-grid{display:block}
   .st-media,.st-prog{display:none}
   .st-texts{min-height:0;display:grid;gap:72px}
-  .st-art{position:static;opacity:1;transform:none;pointer-events:auto}
+  .st-art{position:static;opacity:1!important;transform:none!important;pointer-events:auto}
+  .st-name{white-space:normal}
   .st-art-img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:6px;margin-top:28px;order:-1}
   .st-art{display:flex;flex-direction:column}
   .st-art-img{order:-1;margin:0 0 26px}
@@ -884,25 +886,53 @@ html[lang=he] body,html[lang=he] body *:not(svg):not(svg *),html body [lang=he],
 })();
 </script>
 <script>
-// Pinned story: as you scroll through the track, the chapter in view changes (image, text, progress).
+// Pinned story, scroll-linked: the next photo wipes up and the text cross-fades in step with the scroll,
+// eased toward the scroll position every frame so it glides rather than jumps.
 (function () {
   var track = document.querySelector(".st-track"); if (!track) return;
   var imgs = track.querySelectorAll(".st-mimg"), arts = track.querySelectorAll(".st-art"), prog = track.querySelectorAll(".st-prog span");
-  var cur = track.querySelector(".st-cur"), n = arts.length, last = -1;
-  function set(k) {
-    if (k === last) return; last = k;
-    imgs.forEach(function (im, i) { im.classList.toggle("on", i === k); im.classList.toggle("past", i < k); });
-    arts.forEach(function (a, i) { a.classList.toggle("on", i === k); a.setAttribute("aria-hidden", i === k ? "false" : "true"); });
-    prog.forEach(function (p, i) { p.classList.toggle("on", i === k); p.classList.toggle("done", i < k); });
-    if (cur) cur.textContent = "0" + (k + 1);
+  var cur = track.querySelector(".st-cur"), n = arts.length;
+  var reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var target = 0, shown = 0, running = false, lastIdx = -1;
+  var ss = function (a, b, x) { var t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
+  function measure() {
+    if (window.innerWidth <= 900) return null;
+    var r = track.getBoundingClientRect(), total = r.height - window.innerHeight;
+    return Math.min(n - 1, Math.max(0, (-r.top / total) * n - 0.5));   // 0 … n-1, chapter centres
+  }
+  function paint(v) {
+    for (var i = 0; i < n; i++) {
+      var d = v - i;                                   // <0: upcoming, 0: on screen, >0: already passed
+      // photos: each one wipes up over the one before as the scroll reaches it
+      var reveal = i === 0 ? 1 : ss(-0.78, -0.22, d);
+      imgs[i].style.clipPath = "inset(" + ((1 - reveal) * 100).toFixed(2) + "% 0 0 0)";
+      imgs[i].style.transform = "scale(" + (1 + 0.08 * (1 - reveal) + 0.03 * ss(0, 1, d)).toFixed(4) + ")";
+      // text: fade and drift; out upward, in from below
+      var op = 1 - ss(0.18, 0.5, Math.abs(d));
+      arts[i].style.opacity = op.toFixed(3);
+      arts[i].style.transform = "translateY(" + (-d * 40).toFixed(1) + "px)";
+    }
+    var k = Math.round(v);
+    if (k !== lastIdx) {
+      lastIdx = k;
+      arts.forEach(function (a, i) { a.classList.toggle("on", i === k); a.setAttribute("aria-hidden", i === k ? "false" : "true"); });
+      prog.forEach(function (p, i) { p.classList.toggle("on", i === k); p.classList.toggle("done", i < k); });
+      if (cur) cur.textContent = "0" + (k + 1);
+    }
+  }
+  function loop() {
+    shown += (target - shown) * (reduce ? 1 : 0.12);
+    if (Math.abs(target - shown) < 0.0005) shown = target;
+    paint(shown);
+    if (shown !== target) requestAnimationFrame(loop); else running = false;
   }
   function onScroll() {
-    if (window.innerWidth <= 900) { arts.forEach(function (a) { a.removeAttribute("aria-hidden"); }); return; }
-    var r = track.getBoundingClientRect(), total = r.height - window.innerHeight;
-    var p = Math.min(0.999, Math.max(0, -r.top / total));
-    set(Math.floor(p * n));
+    var m = measure();
+    if (m === null) { arts.forEach(function (a) { a.removeAttribute("aria-hidden"); a.style.opacity = ""; a.style.transform = ""; }); imgs.forEach(function (im) { im.style.clipPath = ""; im.style.transform = ""; }); return; }
+    target = m;
+    if (!running) { running = true; requestAnimationFrame(loop); }
   }
-  set(0); onScroll();
+  shown = target = measure() || 0; if (measure() !== null) paint(shown);
   window.addEventListener("scroll", onScroll, { passive: true });
   window.addEventListener("resize", onScroll);
 })();
