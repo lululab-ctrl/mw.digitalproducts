@@ -38,7 +38,7 @@ JS = """<script>
   var io = new IntersectionObserver(function (es) { es.forEach(function (e) {
     if (!e.isIntersecting) return; e.target.classList.add("in"); io.unobserve(e.target);
   }); }, { threshold: .15, rootMargin: "0px 0px -8% 0px" });
-  var SEL = ".st-ch-head,.try,#bundles .head,#faq .head,.plan,.trust > *,.faq details";
+  var SEL = ".st-ch-head,.cmp-head,.ba2,#bundles .head,#faq .head,.plan,.trust > *,.faq details";
   document.querySelectorAll(SEL).forEach(function (el) {
     el.classList.add("rv");
     var i = Array.prototype.indexOf.call(el.parentElement.children, el);

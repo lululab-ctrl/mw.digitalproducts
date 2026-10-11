@@ -145,7 +145,7 @@ html = f'''<!doctype html>
 <nav class="nav site-header" aria-label="Main">
 <div class="wrap container">
 <a class="brand" href="./" aria-label="MWP, home"><img src="{IMG}2dd3356528167ddf9a64c0c7301c8aa3.png" alt=""><span>MWP</span></a>
-<div class="links"><a href="#shop">Shop</a><a href="#try">Try it</a><a href="#bundles">Bundles</a><a href="#faq">Questions</a></div>
+<div class="links"><a href="#shop">Shop</a><a href="#try">Compare</a><a href="#bundles">Bundles</a><a href="#faq">Questions</a></div>
 <div class="navr"></div>
 </div>
 </nav>

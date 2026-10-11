@@ -248,6 +248,15 @@ const HE = {
   "Browse all products": "לכל המוצרים",
   "Home": "דף הבית",
   // home: interactive shop
+  // home: RAW to final showcase (drafts for Matan)
+  "Compare": "השוואה",
+  "See the difference": "לראות את ההבדל",
+  "See what the tools": "ראו מה הכלים",
+  "do to a photo.": "עושים לתמונה.",
+  "Two of Matan's photos, straight from the camera and finished with the tools. Drag across each one to compare.": "שתי תמונות של מתן, ישר מהמצלמה ואחרי העבודה עם הכלים. גררו על כל אחת כדי להשוות.",
+  "Drag to compare the RAW file with the final photo": "גררו כדי להשוות בין קובץ ה-RAW לתמונה הסופית",
+  "Ibex on a rocky slope, photographed by Matan Wild": "יעלים במדרון סלעי, צילום: מתן וויילד",
+  "A herd beneath the mountains at sunset, photographed by Matan Wild": "עדר למרגלות ההרים בשקיעה, צילום: מתן וויילד",
   "SUBJECT · POP": "SUBJECT · POP",
   "Shoot": "צילום",
   "Finish": "גימור",

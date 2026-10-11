@@ -33,7 +33,7 @@ HERO = f"""<section class="st-hero" id="top">
 <p class="kick st-in" style="--i:0">MWP · by Matan Wild</p>
 <h1 class="st-h1"><span class="st-l"><span style="--i:1">Editing tools</span></span> <span class="st-l"><span class="grad" style="--i:2">from the field.</span></span></h1>
 <p class="lead st-in" style="--i:3">Lightroom presets, a Photoshop plugin and field guides from wildlife photographer Matan Wild. Instant download, secure checkout.</p>
-<div class="ctas st-in" style="--i:4"><a class="btn" href="#shop">Shop the collection</a><a class="ghost" href="#try">Try the tools</a></div>
+<div class="ctas st-in" style="--i:4"><a class="btn" href="#shop">Shop the collection</a><a class="ghost" href="#try">See the difference</a></div>
 </div>
 </section>"""
 
@@ -83,7 +83,7 @@ CLOSE = """<section class="st-close">
 <div class="wrap">
 <p class="kick">MWP · by Matan Wild</p>
 <h2 class="st-big"><span>Shoot it. Edit it.</span> <span class="grad">Finish it.</span></h2>
-<div class="ctas"><a class="btn" href="#shop">Shop the collection</a><a class="ghost" href="#try">Try the tools</a></div>
+<div class="ctas"><a class="btn" href="#shop">Shop the collection</a><a class="ghost" href="#try">See the difference</a></div>
 </div>
 </section>"""
 

@@ -1,319 +1,134 @@
-"""'Try it yourself' on the home page: one of Matan's photos, edited live in the browser.
-Visitors pick a look and switch on Panel-style effects; everything is drawn on the same photo with a
-canvas, so nothing has to be exported or uploaded. These are browser previews of the kinds of edits
-the products make, not the actual preset or plugin output, and the page says so."""
+"""'From RAW to final' on the home page: two of Matan's photos, one per editing product, each shown
+straight from the camera and finished. No panel and no container: just the photo, large, with a
+compare handle that sweeps once on its own when it comes into view and then follows the visitor.
+The pairs are the ones on Matan's sales pages (RAW / FINAL · MWP PRESET and FINAL · MWP PANEL)."""
 
 IMG = "assets/pages/img/"
-RAW = "try-raw-clean.jpg"   # Matan's RAW of this frame (3c14b23d…), lightly denoised once so brightening it stays clean
-BASE = "fbaf19aea2af10f26b2949ab31fff094.jpg"   # Matan's high-quality ibex photo from the Presets design, 1800 x 1125
-LOCK = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>'
+ARROW = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>'
 
-# Looks: e exposure (stops), t temperature, g tint, c contrast, s shadows, h highlights,
-# sat saturation, f fade, sc / hc split-tone colour for shadows / highlights.
-LOOKS = [
-    # The other looks are colour grades on top of Matan's finished frame, faded in from the RAW by Amount.
-    ("Golden Hour", dict(e=.05, t=.4, g=.02, c=.1, s=.06, h=.1, sat=.1, f=0, sc=[.012, .004, -.025], hc=[.04, .02, -.03])),
-    ("Cool Dusk", dict(e=0, t=-.25, g=0, c=.1, s=.05, h=.08, sat=.08, f=0, sc=[-.012, 0, .03], hc=[0, .008, .02])),
-    ("Matte Earth", dict(e=.02, t=.15, g=.01, c=-.04, s=.1, h=.1, sat=-.12, f=.3, sc=[.014, .007, 0], hc=[.018, .012, 0])),
-    ("Deep Contrast", dict(e=-.03, t=.04, g=0, c=.24, s=-.04, h=.06, sat=.1, f=0, sc=[0, 0, .01], hc=[.012, .006, 0])),
-    ("Soft Light", dict(e=.1, t=.08, g=0, c=-.05, s=.18, h=.22, sat=.03, f=.06, sc=[0, 0, .012], hc=[.015, .012, .008])),
+PAIRS = [
+    dict(n="01", tag="Lightroom presets", first="MWP", last="Presets", line="The look behind every MWP frame.",
+         cta="See MWP Presets", href="presets/", final="FINAL · MWP PRESET",
+         before="try-raw-clean.jpg", after="fbaf19aea2af10f26b2949ab31fff094.jpg", pos="50% 62%",
+         alt="Ibex on a rocky slope, photographed by Matan Wild"),
+    dict(n="02", tag="Photoshop plugin", first="MWP", last="Panel", line="You were there. Now make the photo show it.",
+         cta="See MWP Panel", href="panel/", final="FINAL · MWP PANEL",
+         before="c339384fe0c6d91e7b1388d0fed7d1ae.jpg", after="52e0c3d2c90942f72d31faa689449bd0.jpg", pos="50% 70%",
+         alt="A herd beneath the mountains at sunset, photographed by Matan Wild"),
 ]
-# Panel's Edit tab (names from the Panel sales page). Open ones can be stacked; the rest are a teaser.
-EFFECTS = [("pop", "Subject · Pop"), ("bg", "Background · Darken"), ("sky", "Sky"), ("lights", "Lights"),
-           ("darks", "Darks"), ("vig", "Vignette")]
-LOCKED = ["Eye", "Dodge & Burn"]
 
 CSS = """
-.try{position:relative;display:grid;grid-template-columns:minmax(0,1fr) 320px;grid-template-rows:auto 1fr;margin-top:56px;border-radius:24px;overflow:hidden;background:#0E0C0B;border:1px solid rgba(254,251,241,.09);box-shadow:0 70px 160px -50px rgba(0,0,0,.85),0 30px 60px -30px rgba(0,0,0,.5)}
-.try::before{content:"";position:absolute;top:0;left:12%;right:12%;height:1px;background:linear-gradient(90deg,transparent,rgba(242,165,65,.55),transparent);z-index:5;pointer-events:none}
-.tbar{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 16px 12px 12px;border-bottom:1px solid rgba(254,251,241,.07);background:linear-gradient(180deg,rgba(254,251,241,.035),rgba(254,251,241,.01))}
-.seg{position:relative;display:grid;grid-template-columns:1fr 1fr;padding:4px;border-radius:999px;background:rgba(0,0,0,.35);border:1px solid rgba(254,251,241,.08)}
-.seg::after{content:"";position:absolute;top:4px;bottom:4px;inset-inline-start:4px;width:calc(50% - 4px);border-radius:999px;background:linear-gradient(180deg,rgba(242,165,65,.24),rgba(242,165,65,.08));box-shadow:inset 0 0 0 1px rgba(242,165,65,.5),0 6px 20px -6px rgba(242,165,65,.45);transition:transform .45s cubic-bezier(.2,.8,.2,1)}
-.seg[data-on=panel]::after{transform:translateX(100%)}
-[dir=rtl] .seg[data-on=panel]::after{transform:translateX(-100%)}
-.seg button{position:relative;z-index:1;display:flex;align-items:baseline;justify-content:center;gap:8px;padding:9px 20px;border:0;background:none;color:#8C979F;font-family:inherit;font-weight:700;font-size:14px;line-height:1.2;cursor:pointer;white-space:nowrap;transition:color .25s}
-.seg button small{font-size:10.5px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;opacity:.7}
-.seg button:hover{color:#CDD7DD}
-.seg button.on{color:#FEFBF1}
-.reset{display:inline-flex;align-items:center;gap:8px;border:0;background:none;color:#8C979F;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;padding:8px 4px;transition:color .2s}
-.reset svg{transition:transform .5s cubic-bezier(.2,.8,.2,1)}
-.reset:hover{color:#FEFBF1}.reset:hover svg{transform:rotate(-180deg)}
-.tstage{position:relative;overflow:hidden;background:#111;min-width:0;touch-action:pan-y;direction:ltr}
-.tstage::before{content:"";display:block;padding-top:62.5%}
-.tstage::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(0deg,rgba(10,9,8,.55),transparent 26%)}
-.tstage img,.tstage canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
-.tstage img[hidden]{display:none}
-.tstage .line{position:absolute;top:0;bottom:0;width:2px;background:#FEFBF1;transform:translateX(-1px);box-shadow:0 0 0 1px rgba(0,0,0,.08),0 0 24px rgba(254,251,241,.35);pointer-events:none;z-index:2}
-.tstage .knob{position:absolute;top:50%;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;background:#FEFBF1;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 6px rgba(254,251,241,.16),0 12px 36px rgba(0,0,0,.55);pointer-events:none;z-index:2;transition:transform .3s cubic-bezier(.2,.8,.2,1)}
-.tstage:hover .knob{transform:scale(1.08)}
-.tstage input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:ew-resize;margin:0;z-index:3}
-.tstage:has(input:focus-visible){outline:2px solid #F2A541;outline-offset:-2px}
-.tstage .lbl{position:absolute;bottom:20px;z-index:2;display:inline-flex;align-items:center;gap:10px;font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:rgba(254,251,241,.92);text-shadow:0 1px 12px rgba(0,0,0,.6);pointer-events:none;max-width:44%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.tstage .lbl::before{content:"";flex:none;width:16px;height:1px;background:currentColor;opacity:.6}
-.tstage .lbl.l{left:22px}.tstage .lbl.r{right:22px;color:#F2A541}
-.app{display:flex;flex-direction:column;gap:14px;padding:20px;border-inline-start:1px solid rgba(254,251,241,.07);background:linear-gradient(180deg,rgba(254,251,241,.025),transparent 60%)}
-.panes{display:grid}
-.panes>[data-pane]{grid-area:1/1;align-self:start;transition:opacity .3s ease,transform .3s ease}
-.panes>.off{visibility:hidden;opacity:0;transform:translateY(6px);pointer-events:none}
-.grp{display:flex;align-items:center;gap:10px;margin:0 0 10px;font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#8C979F}
-.grp::after{content:"";flex:1;height:1px;background:rgba(254,251,241,.07)}
-.look{font-family:inherit;cursor:pointer;color:#FEFBF1;transition:border-color .2s,background .2s,box-shadow .2s,transform .2s}
-.looks{display:flex;flex-direction:column;gap:6px}
-.looks .look{position:relative;display:grid;grid-template-columns:56px 1fr auto;align-items:center;gap:14px;padding:5px;padding-inline-end:14px;border-radius:14px;border:1px solid rgba(254,251,241,.05);background:rgba(254,251,241,.02);font-weight:600;font-size:14px;line-height:1.2;text-align:start}
-.looks .th{width:56px;height:35px;border-radius:9px;display:block;background:#1b1916;box-shadow:0 0 0 1px rgba(254,251,241,.1),0 4px 12px rgba(0,0,0,.4)}
-.looks .look:hover{background:rgba(254,251,241,.05);border-color:rgba(254,251,241,.12)}
-.looks .look.on{border-color:rgba(242,165,65,.5);background:linear-gradient(90deg,rgba(242,165,65,.16),rgba(242,165,65,.03) 70%)}
-.looks .look.on .th{box-shadow:0 0 0 1.5px #F2A541,0 4px 14px rgba(242,165,65,.3)}
-.look .dot{flex:none;width:8px;height:8px;border-radius:50%;background:rgba(254,251,241,.16);transition:background .2s,box-shadow .2s}
-.look.on .dot{background:#F2A541;box-shadow:0 0 0 4px rgba(242,165,65,.18),0 0 12px rgba(242,165,65,.6)}
-.fxgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.fxgrid .look{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:42px;padding:0 14px;border-radius:12px;border:1px solid rgba(254,251,241,.08);background:rgba(254,251,241,.025);font-weight:600;font-size:13px;line-height:1.2;text-align:start}
-.fxgrid .look span{min-width:0}
-.fxgrid .look:hover{border-color:rgba(254,251,241,.25)}
-.fxgrid .look.on{border-color:rgba(242,165,65,.55);background:rgba(242,165,65,.1)}
-.look.cur{box-shadow:0 0 0 3px rgba(242,165,65,.14)}
-.fxgrid .look.locked{color:#5f6a72;border-style:dashed;background:none;cursor:not-allowed}
-.fxgrid .look.locked:hover{border-color:rgba(254,251,241,.08)}
-.more{margin:10px 0 0;font-size:12px;line-height:1.55;color:#7E8A93;transition:color .2s}
-.more.nudge{color:#F2A541}
-.amt{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;margin-top:auto;font-weight:600;font-size:13px;color:#CDD7DD;padding-top:14px;border-top:1px solid rgba(254,251,241,.07);transition:opacity .25s}
-.amt output{font-variant-numeric:tabular-nums;color:#F2A541;font-weight:700}
-.amt input{grid-column:1/-1;width:100%;height:22px;margin:0;cursor:pointer;background:none;-webkit-appearance:none;appearance:none;direction:ltr;--v:0%}
-.amt input::-webkit-slider-runnable-track{height:3px;border-radius:3px;background:linear-gradient(90deg,#DA5A22,#F2A541 var(--v),rgba(254,251,241,.12) var(--v))}
-.amt input::-moz-range-track{height:3px;border-radius:3px;background:rgba(254,251,241,.12)}
-.amt input::-moz-range-progress{height:3px;border-radius:3px;background:#F2A541}
-.amt input::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;margin-top:-6.5px;border-radius:50%;background:#FEFBF1;border:0;box-shadow:0 0 0 5px rgba(242,165,65,.2),0 2px 8px rgba(0,0,0,.5)}
-.amt input::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:#FEFBF1;border:0;box-shadow:0 0 0 5px rgba(242,165,65,.2),0 2px 8px rgba(0,0,0,.5)}
-.amt input:focus-visible{outline:2px solid #F2A541;outline-offset:4px;border-radius:4px}
-.amt.off{opacity:.35;pointer-events:none}
-.app .go{display:flex;align-items:center;justify-content:center;gap:10px;min-height:48px;border-radius:14px;background:linear-gradient(90deg,#DA5A22,#F2A541);color:#0A0908;font-weight:800;text-decoration:none;box-shadow:0 12px 30px -10px rgba(242,165,65,.55),inset 0 1px 0 rgba(255,255,255,.3);transition:transform .2s,box-shadow .2s}
-.app .go:hover{transform:translateY(-1px);box-shadow:0 18px 40px -12px rgba(242,165,65,.7),inset 0 1px 0 rgba(255,255,255,.3)}
-.tcap{display:flex;justify-content:space-between;align-items:baseline;gap:32px;margin:18px 6px 0;font-size:12.5px;line-height:1.5;color:#7E8A93}
-.tcap p{margin:0}
-.tcap .hint{flex:none;color:#CDD7DD;display:inline-flex;align-items:center;gap:8px}
-.tcap .hint::before{content:"";width:18px;height:1px;background:#F2A541}
-html[lang=he] .tstage .lbl,html[lang=he] .grp,html[lang=he] .seg button small{letter-spacing:.03em}
-@media (max-width:1180px){.try{grid-template-columns:minmax(0,1fr)}.app{border-inline-start:0;border-top:1px solid rgba(254,251,241,.07)}.amt{margin-top:4px}}
-@media (max-width:600px){.try{border-radius:20px}.tstage::before{padding-top:80%}.app{padding:18px}.tbar{padding:10px}.seg button{padding:9px 14px}.seg button small{display:none}.reset span{display:none}.tcap{flex-direction:column;gap:8px}.tstage .lbl{bottom:14px}.tstage .lbl.l{left:14px}.tstage .lbl.r{right:14px}}
-@media (prefers-reduced-motion:reduce){.panes>[data-pane],.seg::after,.reset svg{transition:none}}
+.cmps{display:flex;flex-direction:column;gap:clamp(96px,12vw,150px);margin-top:clamp(56px,7vw,88px)}
+.cmp-head{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:end;gap:20px 48px;margin-bottom:28px}
+.cmp-tag{display:flex;align-items:center;gap:14px;margin:0 0 10px;font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:#8C979F}
+.cmp-tag .n{color:#F2A541;font-variant-numeric:tabular-nums}
+.cmp-tag .n::after{content:"";display:inline-block;width:28px;height:1px;margin-inline-start:14px;vertical-align:middle;background:rgba(242,165,65,.5)}
+.cmp-name{margin:0;font-size:clamp(36px,4.4vw,60px);line-height:1;font-weight:400;letter-spacing:-.035em;color:#FEFBF1}
+.cmp-name .grad{font-weight:700}
+.cmp-line{margin:0 0 6px;max-width:380px;font-size:16px;line-height:1.55;color:#AEB9C1;justify-self:start}
+.cmp-cta{display:inline-flex;align-items:center;gap:10px;margin-bottom:6px;padding:12px 4px;color:#FEFBF1;font-weight:700;font-size:15px;text-decoration:none;border-bottom:1px solid rgba(242,165,65,.5);transition:gap .3s,border-color .3s,color .3s}
+.cmp-cta:hover{gap:16px;color:#F2A541;border-color:#F2A541}
+[dir=rtl] .cmp-cta svg{transform:scaleX(-1)}
+.ba2{position:relative;aspect-ratio:16/9;border-radius:28px;overflow:hidden;background:#111;direction:ltr;touch-action:pan-y;box-shadow:0 80px 160px -60px rgba(0,0,0,.9),0 0 0 1px rgba(254,251,241,.07);--s:50%}
+.ba2 img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;transform:scale(1.04);transition:transform 1.6s cubic-bezier(.2,.7,.1,1)}
+.ba2.seen img{transform:none}
+.ba2 .aft{clip-path:inset(0 0 0 var(--s))}
+.ba2::after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;background:linear-gradient(0deg,rgba(10,9,8,.5),transparent 28%);box-shadow:inset 0 0 0 1px rgba(254,251,241,.05)}
+.ba2 .line{position:absolute;top:0;bottom:0;left:var(--s);width:2px;margin-left:-1px;background:#FEFBF1;box-shadow:0 0 24px rgba(254,251,241,.4);pointer-events:none;z-index:2}
+.ba2 .knob{position:absolute;top:50%;left:var(--s);width:52px;height:52px;margin:-26px 0 0 -26px;border-radius:50%;background:#FEFBF1;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 8px rgba(254,251,241,.14),0 14px 40px rgba(0,0,0,.5);pointer-events:none;z-index:2;transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+.ba2:hover .knob{transform:scale(1.08)}
+.ba2 input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:ew-resize;margin:0;z-index:3}
+.ba2:has(input:focus-visible){outline:2px solid #F2A541;outline-offset:4px}
+.ba2 .lbl{position:absolute;bottom:26px;z-index:2;display:inline-flex;align-items:center;gap:12px;font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:rgba(254,251,241,.92);text-shadow:0 1px 14px rgba(0,0,0,.6);pointer-events:none;white-space:nowrap;transition:opacity .3s}
+.ba2 .lbl::before{content:"";width:22px;height:1px;background:currentColor;opacity:.6}
+.ba2 .lbl.l{left:30px}.ba2 .lbl.r{right:30px;color:#F2A541}
+.ba2 .lbl.hide{opacity:0}
+html[lang=he] .cmp-tag,html[lang=he] .ba2 .lbl{letter-spacing:.04em}
+@media (max-width:900px){.cmp-head{grid-template-columns:minmax(0,1fr) auto}.cmp-line{grid-column:1/-1;grid-row:2;max-width:none;margin:0}}
+@media (max-width:600px){.cmp-head{grid-template-columns:minmax(0,1fr);gap:12px;margin-bottom:22px}.cmp-line{grid-row:auto}.cmp-cta{justify-self:start}.ba2{aspect-ratio:4/3;border-radius:20px}.ba2 .knob{width:44px;height:44px;margin:-22px 0 0 -22px}.ba2 .lbl{bottom:16px;font-size:10.5px}.ba2 .lbl.l{left:16px}.ba2 .lbl.r{right:16px}.ba2 .lbl::before{width:14px}}
+@media (prefers-reduced-motion:reduce){.ba2 img{transform:none;transition:none}}
 """
 
 
+def _pair(p):
+    knob = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0A0908" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l-6 6 6 6"/><path d="M15 6l6 6-6 6"/></svg>'
+    return f"""<article class="cmp">
+<header class="cmp-head">
+<div><p class="cmp-tag"><span class="n">{p["n"]}</span><span>{p["tag"]}</span></p>
+<h3 class="cmp-name" data-no-i18n>{p["first"]} <span class="grad">{p["last"]}</span></h3></div>
+<p class="cmp-line">{p["line"]}</p>
+<a class="cmp-cta" href="{p["href"]}"><span>{p["cta"]}</span>{ARROW}</a>
+</header>
+<div class="ba2">
+<img class="bef" src="{IMG}{p["before"]}" alt="" loading="lazy" style="object-position: {p["pos"]}">
+<img class="aft" src="{IMG}{p["after"]}" alt="{p["alt"]}" loading="lazy" style="object-position: {p["pos"]}">
+<div class="line"></div>
+<div class="knob" aria-hidden="true">{knob}</div>
+<span class="lbl l">RAW</span>
+<span class="lbl r">{p["final"]}</span>
+<input type="range" min="0" max="100" value="50" step="0.1" aria-label="Drag to compare the RAW file with the final photo">
+</div>
+</article>"""
+
+
 def html():
-    looks = "".join(
-        f'<button type="button" class="look" data-look="{i}" aria-pressed="false"><canvas class="th" width="96" height="60" aria-hidden="true"></canvas><span>{name}</span><span class="dot" aria-hidden="true"></span></button>'
-        for i, (name, _) in enumerate(LOOKS))
-    fx = "".join(
-        f'<button type="button" class="look" data-fx="{key}" aria-pressed="false"><span data-no-i18n>{label}</span><span class="dot" aria-hidden="true"></span></button>'
-        for key, label in EFFECTS)
-    fx += "".join(
-        f'<button type="button" class="look locked" data-locked aria-disabled="true"><span data-no-i18n>{label}</span>{LOCK}</button>'
-        for label in LOCKED)
     return f"""<section class="sec alt" id="try">
 <div class="wrap">
 <div class="head">
-<p class="kick">Try it yourself</p>
-<h2 class="h2">Get your hands <span class="b grad">on the tools.</span></h2>
-<p class="lead">One photo, straight from the camera. Try a look, stack a few Panel effects, set the amount, then drag across the photo to see where it started.</p>
+<p class="kick">From RAW to final</p>
+<h2 class="h2">See what the tools <span class="b grad">do to a photo.</span></h2>
+<p class="lead">Two of Matan's photos, straight from the camera and finished with the tools. Drag across each one to compare.</p>
 </div>
-<div class="try">
-<div class="tbar">
-<div class="seg" data-on="presets" role="group" aria-label="Choose a tool">
-<button type="button" class="on" data-tool="presets" aria-pressed="true"><span data-no-i18n>MWP Presets</span><small>Lightroom</small></button>
-<button type="button" data-tool="panel" aria-pressed="false"><span data-no-i18n>MWP Panel</span><small>Photoshop</small></button>
+<div class="cmps">
+{"".join(_pair(p) for p in PAIRS)}
 </div>
-<button type="button" class="reset" id="try-reset"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg><span>Start again</span></button>
-</div>
-<div class="tstage" id="try-stage">
-<img id="try-before" src="{IMG}{RAW}" alt="The RAW file as shot">
-<img id="try-base" src="{IMG}{BASE}" alt="" hidden>
-<canvas id="try-after" role="img" aria-label="The same photo with your edits" style="clip-path: inset(0 0 0 50%)"></canvas>
-<div class="line" style="left: 50%"></div>
-<div class="knob" style="left: 50%" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0A0908" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l-6 6 6 6"></path><path d="M15 6l6 6-6 6"></path></svg></div>
-<span class="lbl l">RAW</span>
-<span class="lbl r" id="try-tag" data-no-i18n>Your edit</span>
-<input type="range" id="try-split" min="0" max="100" value="50" aria-label="Drag to compare with the RAW file">
-</div>
-<aside class="app" aria-label="Try the tools">
-<div class="panes">
-<div data-pane="presets">
-<p class="grp">Looks</p>
-<div class="looks">{looks}</div>
-<p class="more">The full pack: 50 Lightroom presets, 50 mobile files and 33 LUTs.</p>
-</div>
-<div data-pane="panel" class="off" aria-hidden="true">
-<p class="grp">Edit · tap to stack</p>
-<div class="fxgrid">{fx}</div>
-<p class="more" id="try-more">The full plugin has 8 one-click effects, 11 looks and 4 painted lights.</p>
-</div>
-</div>
-<div class="amt off"><label for="try-amount" id="try-amt-name" data-no-i18n>Amount</label><output id="try-amt" for="try-amount">0%</output><input type="range" id="try-amount" min="0" max="100" value="0"></div>
-<a class="go" id="try-cta" href="presets/">Get MWP Presets</a>
-</aside>
-</div>
-<div class="tcap"><p>Live preview in your browser. The real presets and plugin go further, with masks, detail and colour work on every frame.</p><p class="hint">Drag across the photo to compare with the RAW file.</p></div>
 </div>
 </section>"""
 
 
 def js():
-    import json
-    looks = json.dumps([p for _, p in LOOKS])
-    names = json.dumps([n for n, _ in LOOKS])
-    fx = json.dumps({k: l for k, l in EFFECTS})
     return """<script>
-// Try it yourself: one photo, edited live on a canvas. A look (presets) plus stackable effects (Panel).
+// From RAW to final: each photo sweeps once when it comes into view, then follows the pointer or a drag.
 (function () {
-  var LOOKS = %(looks)s, NAMES = %(names)s, FX = %(fx)s;
-  var HE_NAMES = {"Matan's edit": "העריכה של מתן", "Golden Hour": "שעת זהב", "Cool Dusk": "דמדומים קרים", "Matte Earth": "אדמה מט", "Deep Contrast": "ניגודיות עמוקה", "Soft Light": "אור רך"};
-  var he = function () { return document.documentElement.lang === "he"; };
-  var stage = document.getElementById("try-stage"), before = document.getElementById("try-before"), base = document.getElementById("try-base");
-  var cv = document.getElementById("try-after"), ctx = cv.getContext("2d", { willReadFrequently: true });
-  var line = stage.querySelector(".line"), knob = stage.querySelector(".knob"), split = document.getElementById("try-split");
-  var amount = document.getElementById("try-amount"), out = document.getElementById("try-amt"), amtName = document.getElementById("try-amt-name");
-  var amtBox = document.querySelector("#try .amt"), tag = document.getElementById("try-tag"), cta = document.getElementById("try-cta");
-  var CTA = { presets: ["presets/", "Get MWP Presets", "לפריסטים"], panel: ["panel/", "Get MWP Panel", "לפאנל"] };
-  var state = { look: -1, lookAmt: 100, fx: {}, cur: null };   // fx: key -> amount (0-100)
-  var FULL = null, FAST = null, idle = 0;
-  function setSplit(v) { cv.style.clipPath = "inset(0 0 0 " + v + "%%)"; line.style.left = v + "%%"; knob.style.left = v + "%%"; }   // full-resolution and quick preview buffers
-
-  function layer(w, h) {
-    var c = document.createElement("canvas"); c.width = w; c.height = h;
-    var x2 = c.getContext("2d", { willReadFrequently: true });
-    x2.drawImage(base, 0, 0, w, h); var edit = x2.getImageData(0, 0, w, h).data.slice();
-    x2.drawImage(before, 0, 0, w, h);
-    var L = { W: w, H: h, c: c, x: x2, src: x2.getImageData(0, 0, w, h).data.slice(), edit: edit,
-      subj: new Uint8Array(w * h), sky: new Uint8Array(w * h), vig: new Uint8Array(w * h) };
-    // masks: subject (soft ellipse around the animals), sky (top of frame), vignette (edges)
-    for (var y = 0; y < h; y++) for (var x = 0; x < w; x++) {
-      var i = y * w + x, nx = x / w, ny = y / h;
-      var dx = (nx - 0.48) / 0.5, dy = (ny - 0.6) / 0.3, d = Math.sqrt(dx * dx + dy * dy);
-      var q = Math.max(0, Math.min(1, (1.6 - d) / 1.2)); L.subj[i] = 255 * q * q * (3 - 2 * q);
-      L.sky[i] = 255 * Math.max(0, Math.min(1, (0.55 - ny) / 0.3));
-      var vx = nx - 0.5, vy = (ny - 0.5) * 0.8, v = Math.sqrt(vx * vx + vy * vy) / 0.64;
-      L.vig[i] = 255 * Math.max(0, Math.min(1, (v - 0.45) / 0.55));
+  var reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  document.querySelectorAll(".ba2").forEach(function (box) {
+    var input = box.querySelector("input"), l = box.querySelector(".lbl.l"), r = box.querySelector(".lbl.r");
+    var cur = 50, target = 50, raf = 0, touched = false;
+    function set(v) {
+      cur = v; box.style.setProperty("--s", v + "%");
+      l.classList.toggle("hide", v < 16); r.classList.toggle("hide", v > 84);
     }
-    return L;
-  }
-  function prepare() {
-    // Full resolution so the photo stays as sharp as the original beside it; a smaller copy keeps sliders smooth.
-    var w = before.naturalWidth, h = before.naturalHeight;
-    cv.width = w; cv.height = h;
-    FULL = layer(w, h);
-    FAST = layer(Math.round(w / 2), Math.round(h / 2));
-  }
-
-  var queued = false, wantFast = false;
-  function render(fast) {
-    wantFast = !!fast;
-    if (!queued) { queued = true; requestAnimationFrame(function () { queued = false; draw(wantFast ? FAST : FULL); }); }
-    clearTimeout(idle);
-    if (fast) idle = setTimeout(function () { render(false); }, 160);
-  }
-  function draw(Lr, opt) {
-    if (!Lr) return;
-    var S = opt || state;
-    var src = Lr.src, W = Lr.W, H = Lr.H, M = { subj: Lr.subj, sky: Lr.sky, vig: Lr.vig };
-    var p = S.look >= 0 ? LOOKS[S.look] : null, a = S.lookAmt / 100;
-    var f = S.fx, fp = (f.pop || 0) / 100, fb = (f.bg || 0) / 100, fs = (f.sky || 0) / 100, fl = (f.lights || 0) / 100, fd = (f.darks || 0) / 100, fv = (f.vig || 0) / 100;
-    var q = p && !p.img, e = q ? Math.pow(2, p.e) : 1, t = q ? p.t : 0, g = q ? p.g : 0, c = q ? p.c : 0, s = q ? p.s : 0, h = q ? p.h : 0;
-    var sat = q ? p.sat : 0, fade = q ? p.f : 0, sc = p && !p.img ? p.sc : [0, 0, 0], hc = p && !p.img ? p.hc : [0, 0, 0];
-    var im = Lr.x.createImageData(W, H), o = im.data, n = W * H;
-    for (var i = 0; i < n; i++) {
-      var k = i * 4, r = src[k] / 255, gg = src[k + 1] / 255, b = src[k + 2] / 255, L;
-      if (p && p.img) {
-        r += (Lr.edit[k] / 255 - r) * a; gg += (Lr.edit[k + 1] / 255 - gg) * a; b += (Lr.edit[k + 2] / 255 - b) * a;
-      } else if (p) {
-        var r0 = r, g0 = gg, b0 = b;
-        r = Lr.edit[k] / 255; gg = Lr.edit[k + 1] / 255; b = Lr.edit[k + 2] / 255;
-        r *= e; gg *= e; b *= e;
-        r += t * 0.07; b -= t * 0.07; gg -= g * 0.04;
-        L = 0.2126 * r + 0.7152 * gg + 0.0722 * b;
-        var lift = s * 0.32 * (1 - L) * (1 - L), roll = h * 0.3 * L * L;
-        r += lift - roll; gg += lift - roll; b += lift - roll;
-        r = (r - 0.45) * (1 + c) + 0.45; gg = (gg - 0.45) * (1 + c) + 0.45; b = (b - 0.45) * (1 + c) + 0.45;
-        L = 0.2126 * r + 0.7152 * gg + 0.0722 * b;
-        r = L + (r - L) * (1 + sat); gg = L + (gg - L) * (1 + sat); b = L + (b - L) * (1 + sat);
-        r += (1 - L) * sc[0] + L * hc[0]; gg += (1 - L) * sc[1] + L * hc[1]; b += (1 - L) * sc[2] + L * hc[2];
-        var fd0 = fade * 0.1; r = r * (1 - fd0) + fd0; gg = gg * (1 - fd0) + fd0; b = b * (1 - fd0) + fd0;
-        r = r0 + (r - r0) * a; gg = g0 + (gg - g0) * a; b = b0 + (b - b0) * a;
-      }
-      L = 0.2126 * r + 0.7152 * gg + 0.0722 * b;
-      if (fl) { var up = fl * (0.5 * L * L + 0.12 * L); r += up; gg += up; b += up; }
-      if (fd) { var dn = fd * 0.6 * (1 - L) * L; r -= dn; gg -= dn; b -= dn; }
-      if (fs) { var m = M.sky[i] / 255 * fs, Ls; r *= 1 - 0.3 * m; gg *= 1 - 0.2 * m; b *= 1 - 0.06 * m; Ls = 0.2126 * r + 0.7152 * gg + 0.0722 * b; r = Ls + (r - Ls) * (1 + 0.6 * m); gg = Ls + (gg - Ls) * (1 + 0.6 * m); b = Ls + (b - Ls) * (1 + 0.6 * m); }
-      if (fb) { var mb = 1 - 0.5 * (1 - M.subj[i] / 255) * fb; r *= mb; gg *= mb; b *= mb; }
-      if (fp) { var mp = M.subj[i] / 255 * fp, Lp = 0.2126 * r + 0.7152 * gg + 0.0722 * b;
-        r = Lp + (r - Lp) * (1 + 0.5 * mp); gg = Lp + (gg - Lp) * (1 + 0.5 * mp); b = Lp + (b - Lp) * (1 + 0.5 * mp);
-        r = (r - 0.45) * (1 + 0.3 * mp) + 0.45 + 0.1 * mp; gg = (gg - 0.45) * (1 + 0.3 * mp) + 0.45 + 0.1 * mp; b = (b - 0.45) * (1 + 0.3 * mp) + 0.45 + 0.1 * mp; }
-      if (fv) { var mv = 1 - 0.65 * (M.vig[i] / 255) * (M.vig[i] / 255) * fv; r *= mv; gg *= mv; b *= mv; }
-      o[k] = r * 255; o[k + 1] = gg * 255; o[k + 2] = b * 255; o[k + 3] = 255;
+    function ease() {   // glide toward the pointer instead of jumping
+      set(cur + (target - cur) * 0.14);
+      raf = Math.abs(target - cur) > 0.05 ? requestAnimationFrame(ease) : (set(target), 0);
     }
-    if (opt && opt.out) { Lr.x.putImageData(im, 0, 0); opt.out.getContext("2d").drawImage(Lr.c, 0, 0, opt.out.width, opt.out.height); }
-    else if (Lr === FULL) ctx.putImageData(im, 0, 0);
-    else { Lr.x.putImageData(im, 0, 0); ctx.imageSmoothingQuality = "high"; ctx.drawImage(Lr.c, 0, 0, cv.width, cv.height); }
-  }
-
-  function lookName(i) { return he() ? (HE_NAMES[NAMES[i]] || NAMES[i]) : NAMES[i]; }
-  function fxName(k) { return FX[k].split(" · ")[0]; }
-  function label() {
-    var parts = [];
-    if (state.look >= 0) parts.push(lookName(state.look));
-    Object.keys(state.fx).forEach(function (k) { parts.push(fxName(k)); });
-    tag.textContent = parts.length ? parts.join(" + ") : (he() ? "העריכה שלך" : "Your edit");
-  }
-  function sync() {
-    document.querySelectorAll("#try .look[data-look]").forEach(function (b) { var on = +b.dataset.look === state.look; b.classList.toggle("on", on); b.classList.toggle("cur", on && state.cur === "look"); b.setAttribute("aria-pressed", on); });
-    document.querySelectorAll("#try .look[data-fx]").forEach(function (b) { var k = b.dataset.fx, on = k in state.fx; b.classList.toggle("on", on); b.classList.toggle("cur", state.cur === k); b.setAttribute("aria-pressed", on); });
-    var v = state.cur === "look" ? state.lookAmt : (state.cur ? state.fx[state.cur] : 0);
-    amtBox.classList.toggle("off", !state.cur);
-    amount.value = v; amount.style.setProperty("--v", v + "%%"); out.textContent = v + "%%";
-    amtName.textContent = (he() ? "עוצמה" : "Amount") + (state.cur ? " · " + (state.cur === "look" ? lookName(state.look) : fxName(state.cur)) : "");
-    label(); render();
-  }
-  function tool(t) {
-    document.querySelectorAll("#try .seg button").forEach(function (b) { var on = b.dataset.tool === t; b.classList.toggle("on", on); b.setAttribute("aria-pressed", on); });
-    document.querySelector("#try .seg").dataset.on = t;
-    document.querySelectorAll("#try [data-pane]").forEach(function (p) { var off = p.dataset.pane !== t; p.classList.toggle("off", off); p.setAttribute("aria-hidden", off); });
-    cta.href = CTA[t][0]; cta.textContent = he() ? CTA[t][2] : CTA[t][1];
-  }
-
-  document.querySelectorAll("#try .look[data-look]").forEach(function (b) { b.addEventListener("click", function () {
-    var i = +b.dataset.look;
-    if (state.look === i) { state.look = -1; if (state.cur === "look") state.cur = null; } else { state.look = i; state.lookAmt = 100; state.cur = "look"; }
-    sync();
-  }); });
-  document.querySelectorAll("#try .look[data-fx]").forEach(function (b) { b.addEventListener("click", function () {
-    var k = b.dataset.fx;
-    if (k in state.fx && state.cur === k) { delete state.fx[k]; state.cur = null; }
-    else { if (!(k in state.fx)) state.fx[k] = 70; state.cur = k; }
-    sync();
-  }); });
-  amount.addEventListener("input", function () {
-    var v = +amount.value;
-    if (state.cur === "look") state.lookAmt = v; else if (state.cur) state.fx[state.cur] = v;
-    amount.style.setProperty("--v", v + "%%"); out.textContent = v + "%%"; render(true);
+    function go(v) { target = v; if (!raf) raf = requestAnimationFrame(ease); }
+    input.addEventListener("input", function () { touched = true; target = +input.value; set(target); });
+    box.addEventListener("pointermove", function (e) {
+      if (e.pointerType !== "mouse") return;
+      touched = true; var b = box.getBoundingClientRect();
+      var v = Math.max(0, Math.min(100, (e.clientX - b.left) / b.width * 100)); input.value = v; go(v);
+    });
+    function sweep() {   // 50 -> 82 -> 18 -> 50, smoothly, unless the visitor takes over
+      var keys = [[0, 50], [900, 82], [2100, 18], [3000, 50]], t0 = performance.now();
+      (function step(now) {
+        if (touched) return;
+        var t = now - t0, i = 1;
+        while (i < keys.length - 1 && t > keys[i][0]) i++;
+        var a = keys[i - 1], b = keys[i], k = Math.min(1, Math.max(0, (t - a[0]) / (b[0] - a[0])));
+        k = k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
+        set(a[1] + (b[1] - a[1]) * k); input.value = cur; target = cur;
+        if (t < keys[keys.length - 1][0]) requestAnimationFrame(step);
+      })(t0);
+    }
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        box.classList.add("seen"); io.disconnect();
+        if (!reduce) setTimeout(sweep, 500);
+      });
+    }, { threshold: 0.45 });
+    io.observe(box); set(50);
   });
-  document.getElementById("try-reset").addEventListener("click", function () { state.look = -1; state.fx = {}; state.cur = null; sync(); });
-  split.addEventListener("input", function () { setSplit(split.value); });
-  document.querySelectorAll("#try .seg button").forEach(function (b) { b.addEventListener("click", function () { tool(b.dataset.tool); }); });
-  var more = document.getElementById("try-more"), tmr;
-  document.querySelectorAll("#try [data-locked]").forEach(function (b) { b.addEventListener("click", function () {
-    more.classList.add("nudge"); clearTimeout(tmr); tmr = setTimeout(function () { more.classList.remove("nudge"); }, 1400);
-  }); });
-
-  // Start with a look on, so the first thing people see is the photo changing.
-  function thumbs() {
-    var T = layer(96, 60);
-    document.querySelectorAll("#try .look[data-look]").forEach(function (b) { draw(T, { look: +b.dataset.look, lookAmt: 100, fx: {}, out: b.querySelector(".th") }); });
-  }
-  function start() { prepare(); thumbs(); state.look = 0; state.lookAmt = 100; state.cur = "look"; sync(); }
-  function boot() {
-    var ready = function (im) { return im.complete && im.naturalWidth; };
-    var go = function () { if (ready(base) && ready(before) && !FULL) start(); };
-    go(); base.addEventListener("load", go); before.addEventListener("load", go);
-  }
-  // wait for the language to be set (i18n runs as a module, after this script)
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot); else boot();
 })();
-</script>""" % dict(looks=looks, names=names, fx=fx)
+</script>"""
