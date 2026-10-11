@@ -50,10 +50,10 @@ CSS = """
 .look.cur{box-shadow:0 0 0 2px rgba(242,165,65,.35)}
 .look .dot{flex:none;width:9px;height:9px;border-radius:50%;background:rgba(156,177,194,.35)}
 .look.on .dot{background:#F2A541;box-shadow:0 0 0 4px rgba(242,165,65,.2)}
-.fx{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.fx .look{min-height:36px;padding:3px 10px;font-size:13px}
-.fx .look.locked{color:#6f7a82;border-style:dashed;background:none;cursor:not-allowed}
-.fx .look.locked:hover{border-color:rgba(156,177,194,.22)}
+.fxgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.fxgrid .look{min-height:36px;padding:3px 10px;font-size:13px}
+.fxgrid .look.locked{color:#6f7a82;border-style:dashed;background:none;cursor:not-allowed}
+.fxgrid .look.locked:hover{border-color:rgba(156,177,194,.22)}
 .more{margin:8px 0 0;font-size:12px;line-height:1.5;color:#9CB1C2;transition:color .2s}
 .more.nudge{color:#F2A541}
 .amt{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;font-weight:700;font-size:14px}
@@ -110,7 +110,7 @@ def html():
 </div>
 <div data-pane="panel" hidden>
 <p class="grp">Edit · tap to stack</p>
-<div class="fx">{fx}</div>
+<div class="fxgrid">{fx}</div>
 <p class="more" id="try-more">The full plugin has 8 one-click effects, 11 looks and 4 painted lights.</p>
 </div>
 <div class="amt off"><label for="try-amount" id="try-amt-name" data-no-i18n>Amount</label><output id="try-amt" for="try-amount">0%</output><input type="range" id="try-amount" min="0" max="100" value="0"></div>

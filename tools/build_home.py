@@ -17,7 +17,7 @@ ba_css = "\n".join(l for l in _top.split("\n") if re.match(r"\.(ba|recipe|rc|rf|
 ba_css += "\n@media (max-width:600px){.ba{aspect-ratio:4/5;border-radius:18px}.rc,.rf{padding:6px 12px;font-size:13px}}"
 
 IMG = "assets/pages/img/"
-import home_try
+import home_try, home_fx
 import sys as _s, os as _o; _s.path.insert(0, _o.path.dirname(__file__))
 from brand import NAV_CSS
 TRY_HTML, TRY_JS, TRY_CSS = home_try.html(), home_try.js(), home_try.CSS
@@ -128,6 +128,7 @@ html = f'''<!doctype html>
 {ba_css}
 {TRY_CSS}
 {NAV_CSS}
+{home_fx.CSS}
 {home_css}
 </style>
 </head>
@@ -173,6 +174,8 @@ html = f'''<!doctype html>
 <div class="stat"><div class="n grad">137</div><div class="t">Lessons</div></div>
 </div>
 </section>
+
+{home_fx.WALL}
 
 <section class="sec" id="shop">
 <div class="wrap">
@@ -243,6 +246,7 @@ html = f'''<!doctype html>
 </div>
 
 {TRY_JS}
+{home_fx.JS}
 <script src="assets/js/lib/nav.js" defer></script>
 <script type="module">
   import {{ initI18n }} from "./assets/js/i18n.js";

@@ -327,10 +327,10 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 .look.cur{box-shadow:0 0 0 2px rgba(244,175,86,.35)}
 .look .dot{flex:none;width:9px;height:9px;border-radius:50%;background:rgba(156,177,194,.35)}
 .look.on .dot{background:#F4AF56;box-shadow:0 0 0 4px rgba(244,175,86,.2)}
-.fx{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.fx .look{min-height:36px;padding:3px 10px;font-size:13px}
-.fx .look.locked{color:#6f7a82;border-style:dashed;background:none;cursor:not-allowed}
-.fx .look.locked:hover{border-color:rgba(156,177,194,.22)}
+.fxgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.fxgrid .look{min-height:36px;padding:3px 10px;font-size:13px}
+.fxgrid .look.locked{color:#6f7a82;border-style:dashed;background:none;cursor:not-allowed}
+.fxgrid .look.locked:hover{border-color:rgba(156,177,194,.22)}
 .more{margin:8px 0 0;font-size:12px;line-height:1.5;color:#9CB1C2;transition:color .2s}
 .more.nudge{color:#F4AF56}
 .amt{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;font-weight:700;font-size:14px}
@@ -374,6 +374,25 @@ html .nav .navr .btn.sm:hover{transform:translateY(-1px);filter:brightness(1.06)
 html .nav .links + .navr{margin-inline-start:0}
 @media (max-width:1100px){html .nav .links{display:none}html .nav .navr,html .nav .links + .navr{margin-inline-start:auto}}
 @media (max-width:600px){html .nav .wrap{height:64px;gap:10px}html.nav-scrolled .nav .wrap{height:58px}html .nav .brand span{display:none}html .nav .navr .btn.sm{display:none}html .nav .nav-ico{width:38px;height:38px}html .nav .lang-toggle{padding-left:10px;margin-inline-start:2px}html[lang=he] .nav .lang-toggle{padding:0 10px 0 0}}
+
+
+.wallsec{padding:72px 0 8px;overflow:hidden;width:100%;min-width:0;max-width:100vw;contain:inline-size}
+.wallsec .mq{width:100%;min-width:0;overflow:hidden}
+.wall-kick{text-align:center}
+.wallsec .mq{margin-top:28px;mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.wallsec .mqt img{width:220px;transition:transform .5s cubic-bezier(.2,.7,.2,1),filter .5s}
+.wallsec .mqt img:hover{transform:scale(1.04);filter:saturate(1.1)}
+[dir=rtl] .wallsec .mq{direction:ltr}
+/* cursor spotlight on cards and plans */
+.card,.plan{position:relative;--mx:50%;--my:0%}
+.card::before,.plan::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .4s;background:radial-gradient(420px circle at var(--mx) var(--my),rgba(244,175,86,.12),transparent 45%);z-index:1}
+.card:hover::before,.plan:hover::before{opacity:1}
+.fx .card.rv.in:hover{transform:translateY(-6px)}
+/* hero depth */
+.hero-bg{transform:translate3d(0,var(--py,0px),0) scale(1.06);will-change:transform}
+.fly4{transform:perspective(1400px) rotateY(var(--ry,0deg)) rotateX(var(--rx,0deg));transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+@media (max-width:600px){.wallsec{padding-top:56px}.wallsec .mqt img{width:150px}}
+@media (prefers-reduced-motion:reduce){.hero-bg{transform:none}.fly4{transform:none}.card::before,.plan::before{display:none}}
 
 
 /* ---- home only ---- */
@@ -471,6 +490,11 @@ html .nav .links + .navr{margin-inline-start:0}
 </div>
 </section>
 
+<section class="wallsec" aria-label="Photos by Matan Wild">
+<p class="kick wall-kick">Every photo by Matan Wild</p>
+<div class="mq"><div class="mqt" aria-hidden="true"><img src="assets/pages/img/2c79f949f816ee693322cfce98f61afc.jpg" alt="" loading="lazy"><img src="assets/pages/img/9583692af9aca77b648b4e2ff3733f72.jpg" alt="" loading="lazy"><img src="assets/pages/img/aaa6b678f12b2bc6866e736281498d1c.jpg" alt="" loading="lazy"><img src="assets/pages/img/070e7608dbefe0693b217fc9c0a64234.jpg" alt="" loading="lazy"><img src="assets/pages/img/cff5b2d414538979bb1efe787e67de9f.jpg" alt="" loading="lazy"><img src="assets/pages/img/2c79f949f816ee693322cfce98f61afc.jpg" alt="" loading="lazy"><img src="assets/pages/img/9583692af9aca77b648b4e2ff3733f72.jpg" alt="" loading="lazy"><img src="assets/pages/img/aaa6b678f12b2bc6866e736281498d1c.jpg" alt="" loading="lazy"><img src="assets/pages/img/070e7608dbefe0693b217fc9c0a64234.jpg" alt="" loading="lazy"><img src="assets/pages/img/cff5b2d414538979bb1efe787e67de9f.jpg" alt="" loading="lazy"></div><div class="mqt rev" aria-hidden="true"><img src="assets/pages/img/32909dca904452841a5b6ea7a187f4aa.jpg" alt="" loading="lazy"><img src="assets/pages/img/b7cfa28802573f545067cc876c19f44e.jpg" alt="" loading="lazy"><img src="assets/pages/img/a7adf42375708a6165c1498e3e170f8e.jpg" alt="" loading="lazy"><img src="assets/pages/img/5578f8776625aac5bc0ebc1673fe549a.jpg" alt="" loading="lazy"><img src="assets/pages/img/3c19b4355bad5a4a5cf99bf0881b4e8b.jpg" alt="" loading="lazy"><img src="assets/pages/img/32909dca904452841a5b6ea7a187f4aa.jpg" alt="" loading="lazy"><img src="assets/pages/img/b7cfa28802573f545067cc876c19f44e.jpg" alt="" loading="lazy"><img src="assets/pages/img/a7adf42375708a6165c1498e3e170f8e.jpg" alt="" loading="lazy"><img src="assets/pages/img/5578f8776625aac5bc0ebc1673fe549a.jpg" alt="" loading="lazy"><img src="assets/pages/img/3c19b4355bad5a4a5cf99bf0881b4e8b.jpg" alt="" loading="lazy"></div></div>
+</section>
+
 <section class="sec" id="shop">
 <div class="wrap">
 <div class="head">
@@ -544,7 +568,7 @@ html .nav .links + .navr{margin-inline-start:0}
 </div>
 <div data-pane="panel" hidden>
 <p class="grp">Edit · tap to stack</p>
-<div class="fx"><button type="button" class="look" data-fx="pop" aria-pressed="false"><span data-no-i18n>Subject · Pop</span><span class="dot" aria-hidden="true"></span></button><button type="button" class="look" data-fx="bg" aria-pressed="false"><span data-no-i18n>Background · Darken</span><span class="dot" aria-hidden="true"></span></button><button type="button" class="look" data-fx="sky" aria-pressed="false"><span data-no-i18n>Sky</span><span class="dot" aria-hidden="true"></span></button><button type="button" class="look" data-fx="lights" aria-pressed="false"><span data-no-i18n>Lights</span><span class="dot" aria-hidden="true"></span></button><button type="button" class="look" data-fx="darks" aria-pressed="false"><span data-no-i18n>Darks</span><span class="dot" aria-hidden="true"></span></button><button type="button" class="look" data-fx="vig" aria-pressed="false"><span data-no-i18n>Vignette</span><span class="dot" aria-hidden="true"></span></button><button type="button" class="look locked" data-locked aria-disabled="true"><span data-no-i18n>Eye</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></button><button type="button" class="look locked" data-locked aria-disabled="true"><span data-no-i18n>Dodge & Burn</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></button></div>
+<div class="fxgrid"><button type="button" class="look" data-fx="pop" aria-pressed="false"><span data-no-i18n>Subject · Pop</span><span class="dot" aria-hidden="true"></span></button><button type="button" class="look" data-fx="bg" aria-pressed="false"><span data-no-i18n>Background · Darken</span><span class="dot" aria-hidden="true"></span></button><button type="button" class="look" data-fx="sky" aria-pressed="false"><span data-no-i18n>Sky</span><span class="dot" aria-hidden="true"></span></button><button type="button" class="look" data-fx="lights" aria-pressed="false"><span data-no-i18n>Lights</span><span class="dot" aria-hidden="true"></span></button><button type="button" class="look" data-fx="darks" aria-pressed="false"><span data-no-i18n>Darks</span><span class="dot" aria-hidden="true"></span></button><button type="button" class="look" data-fx="vig" aria-pressed="false"><span data-no-i18n>Vignette</span><span class="dot" aria-hidden="true"></span></button><button type="button" class="look locked" data-locked aria-disabled="true"><span data-no-i18n>Eye</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></button><button type="button" class="look locked" data-locked aria-disabled="true"><span data-no-i18n>Dodge & Burn</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></button></div>
 <p class="more" id="try-more">The full plugin has 8 one-click effects, 11 looks and 4 painted lights.</p>
 </div>
 <div class="amt off"><label for="try-amount" id="try-amt-name" data-no-i18n>Amount</label><output id="try-amt" for="try-amount">0%</output><input type="range" id="try-amount" min="0" max="100" value="0"></div>
@@ -754,6 +778,49 @@ html .nav .links + .navr{margin-inline-start:0}
   }
   // wait for the language to be set (i18n runs as a module, after this script)
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot); else boot();
+})();
+</script>
+<script>
+// Home motion, in the Field Guides style.
+(function () {
+  var reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var root = document.documentElement;
+  if (!("IntersectionObserver" in window) || reduce) { root.classList.add("nofx"); return; }
+  root.classList.add("fx");
+  function count(el) {
+    if (el.dataset.done) return; el.dataset.done = 1;
+    var to = parseInt(el.dataset.to || el.textContent, 10); if (isNaN(to)) return;
+    el.dataset.to = to; var t0 = null, dur = 1700;
+    function step(t) { if (!t0) t0 = t; var p = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - p, 4);
+      el.textContent = Math.round(to * e); if (p < 1) requestAnimationFrame(step); }
+    el.textContent = "0"; requestAnimationFrame(step);
+  }
+  var io = new IntersectionObserver(function (es) { es.forEach(function (e) {
+    if (!e.isIntersecting) return; var el = e.target; el.classList.add("in"); io.unobserve(el);
+    if (el.classList.contains("stat")) { var n = el.querySelector(".n"); setTimeout(function () { count(n); }, parseFloat(getComputedStyle(el).getPropertyValue("--d") || 0) * 1000); }
+  }); }, { threshold: .2, rootMargin: "0px 0px -8% 0px" });
+  document.querySelectorAll(".stat").forEach(function (s, i) { s.style.setProperty("--d", (i * 0.15) + "s"); io.observe(s); });
+  var SEL = ".hero-copy,.head,.card,.try,.wall-kick,.mq,.plan,.trust > *,.faq details,.foot-cta";
+  document.querySelectorAll(SEL).forEach(function (el) {
+    el.classList.add("rv");
+    if (/card|plan/.test(el.className) || el.parentElement.classList.contains("trust")) {
+      var i = Array.prototype.indexOf.call(el.parentElement.children, el); el.style.setProperty("--d", (i * 0.12) + "s");
+    }
+    io.observe(el);
+  });
+  // spotlight follows the cursor on cards and plans
+  document.addEventListener("pointermove", function (e) {
+    var t = e.target.closest && e.target.closest(".card,.plan"); if (!t) return;
+    var r = t.getBoundingClientRect(); t.style.setProperty("--mx", (e.clientX - r.left) + "px"); t.style.setProperty("--my", (e.clientY - r.top) + "px");
+  }, { passive: true });
+  // hero depth: background drifts on scroll, the product boxes lean toward the cursor
+  var hero = document.querySelector(".hero"), bg = document.querySelector(".hero-bg"), fly = document.querySelector(".fly4");
+  if (hero && bg) window.addEventListener("scroll", function () { var y = window.scrollY; if (y < 1200) bg.style.setProperty("--py", (y * 0.25) + "px"); }, { passive: true });
+  if (hero && fly && matchMedia("(hover:hover)").matches) {
+    hero.addEventListener("pointermove", function (e) { var r = hero.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
+      fly.style.setProperty("--ry", (x * 8) + "deg"); fly.style.setProperty("--rx", (-y * 6) + "deg"); });
+    hero.addEventListener("pointerleave", function () { fly.style.setProperty("--ry", "0deg"); fly.style.setProperty("--rx", "0deg"); });
+  }
 })();
 </script>
 <script src="assets/js/lib/nav.js" defer></script>

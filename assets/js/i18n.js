@@ -248,6 +248,8 @@ const HE = {
   "Browse all products": "לכל המוצרים",
   "Home": "דף הבית",
   // home: interactive shop
+  "Every photo by Matan Wild": "כל התמונות של מתן וויילד",
+  "Photos by Matan Wild": "תמונות של מתן וויילד",
   "Matan's edit": "העריכה של מתן",
   "One photo by Matan. Try a look, stack a few Panel effects, set the amount, then drag across the photo to compare with the original.": "תמונה אחת של מתן. נסו מראה, הוסיפו כמה אפקטים של הפאנל, כוונו את העוצמה, ואז גררו על התמונה כדי להשוות למקור.",
   "The original photo by Matan Wild": "התמונה המקורית של מתן וויילד",
