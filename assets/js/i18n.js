@@ -248,12 +248,6 @@ const HE = {
   "Browse all products": "לכל המוצרים",
   "Home": "דף הבית",
   // home: interactive shop
-  // home: RAW to final showcase (drafts for Matan)
-  "Compare": "השוואה",
-  "See the difference": "לראות את ההבדל",
-  "Drag to compare the RAW file with the final photo": "גררו כדי להשוות בין קובץ ה-RAW לתמונה הסופית",
-  "Ibex on a rocky slope, photographed by Matan Wild": "יעלים במדרון סלעי, צילום: מתן וויילד",
-  "A herd beneath the mountains at sunset, photographed by Matan Wild": "עדר למרגלות ההרים בשקיעה, צילום: מתן וויילד",
   "SUBJECT · POP": "SUBJECT · POP",
   "Shoot": "צילום",
   "Finish": "גימור",

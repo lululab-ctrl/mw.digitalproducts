@@ -17,10 +17,9 @@ ba_css = "\n".join(l for l in _top.split("\n") if re.match(r"\.(ba|recipe|rc|rf|
 ba_css += "\n@media (max-width:600px){.ba{aspect-ratio:4/5;border-radius:18px}.rc,.rf{padding:6px 12px;font-size:13px}}"
 
 IMG = "assets/pages/img/"
-import home_try, home_fx, home_story
+import home_fx, home_story
 import sys as _s, os as _o; _s.path.insert(0, _o.path.dirname(__file__))
 from brand import NAV_CSS, FONTS
-TRY_HTML, TRY_JS, TRY_CSS = home_try.html(), home_try.js(), home_try.CSS
 CHECK = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F2A541" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>'
 ARROW = '<svg class="arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>'
 
@@ -130,7 +129,6 @@ html = f'''<!doctype html>
 {base_css}
 /* before / after (from the Presets page) */
 {ba_css}
-{TRY_CSS}
 {NAV_CSS}
 {home_fx.CSS}
 {home_story.CSS}
@@ -145,7 +143,7 @@ html = f'''<!doctype html>
 <nav class="nav site-header" aria-label="Main">
 <div class="wrap container">
 <a class="brand" href="./" aria-label="MWP, home"><img src="{IMG}2dd3356528167ddf9a64c0c7301c8aa3.png" alt=""><span>MWP</span></a>
-<div class="links"><a href="#shop">Shop</a><a href="#try">Compare</a><a href="#bundles">Bundles</a><a href="#faq">Questions</a></div>
+<div class="links"><a href="#shop">Shop</a><a href="#bundles">Bundles</a><a href="#faq">Questions</a></div>
 <div class="navr"></div>
 </div>
 </nav>
@@ -155,7 +153,6 @@ html = f'''<!doctype html>
 
 {home_story.STORY}
 
-{TRY_HTML}
 
 <section class="sec" id="bundles">
 <div class="wrap">
@@ -209,7 +206,6 @@ html = f'''<!doctype html>
 </footer>
 </div>
 
-{TRY_JS}
 {home_fx.JS}
 {home_story.JS}
 <script src="assets/js/lib/nav.js" defer></script>
