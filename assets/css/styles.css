@@ -426,3 +426,9 @@ main { flex: 1; }
 .shelf__tile { --icon-fill: var(--c-surface); }
 .art--bundle { --icon-fill: #2B2216; }
 .shelf__tile.shelf__tile--feature { --icon-fill: var(--gold); }
+
+/* Phone header: logo, icons, language, menu button, all on one line */
+@media (max-width: 900px) {
+  .site-header .container { gap: 6px; }
+  .site-header .nav-toggle { order: 10; flex: none; margin-inline-start: 2px; }
+}

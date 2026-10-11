@@ -57,7 +57,6 @@ HEADER = f"""<body>
         <a href="shop.html?cat=bundle">Bundles</a>
       </div>
       <div class="nav__end">
-        <a href="support.html">Help</a>
       </div>
     </nav>
   </div>

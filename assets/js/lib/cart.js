@@ -7,6 +7,7 @@ const T = (en, hb) => (he() ? hb : en);
 const SVG = {
   cart: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h2l2.2 11.2a1.5 1.5 0 0 0 1.5 1.2h8.8a1.5 1.5 0 0 0 1.5-1.1L21 8H6.2"/><circle cx="9.5" cy="20" r="1.3"/><circle cx="17.5" cy="20" r="1.3"/></svg>',
   dl: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>',
+  help: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.6 9.3a2.5 2.5 0 0 1 4.8.9c0 1.7-2.4 2.2-2.4 3.6"/><circle cx="12" cy="17.2" r=".6" fill="currentColor"/></svg>',
   x: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>',
 };
 
@@ -141,7 +142,8 @@ function showTip(el) {
 }
 
 export function navIconsInner() {
-  return `<a class="nav-ico" href="${base()}account.html" aria-label="${T("My downloads", "ההורדות שלי")}">${SVG.dl}<span class="tip">${T("My downloads", "ההורדות שלי")}</span></a>
+  return `<a class="nav-ico" href="${base()}support.html" aria-label="${T("Help", "עזרה")}">${SVG.help}<span class="tip">${T("Help", "עזרה")}</span></a>
+    <a class="nav-ico" href="${base()}account.html" aria-label="${T("My downloads", "ההורדות שלי")}">${SVG.dl}<span class="tip">${T("My downloads", "ההורדות שלי")}</span></a>
     <button class="nav-ico" type="button" data-cart aria-label="${T("Cart", "עגלה")}" aria-haspopup="dialog">${SVG.cart}<span class="count" hidden>0</span><span class="tip">${T("Cart", "עגלה")}</span></button>`;
 }
 
