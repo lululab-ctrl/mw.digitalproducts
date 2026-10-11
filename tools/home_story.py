@@ -47,7 +47,7 @@ def _chapter_text(i, c):
 <h3 class="st-name" data-no-i18n>MWP <span class="grad">{c["name"]}</span></h3>
 <p class="st-line">{c["line"]}</p>
 <ul class="st-pts">{lis}</ul>
-<div class="st-acts"><a class="btn" href="{c["href"]}">{c["cta"]} {ARROW}</a><a class="ghost" href="{c["href"]}#buy"><span data-price="{c["slug"]}" data-no-i18n>$0.00</span></a></div>
+<div class="st-acts"><a class="btn" href="{c["href"]}">{c["cta"]} {ARROW}</a></div>
 <img class="st-art-img" src="{IMG}{c["img"]}" alt="{c["alt"]}" loading="lazy" style="object-position: {c["pos"]}">
 </article>"""
 
