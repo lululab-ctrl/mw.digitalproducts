@@ -36,7 +36,6 @@ HERO = f"""<section class="st-hero" id="top">
 </div>
 <div class="wrap st-hero-foot st-in" style="--i:5">
 <a class="st-scroll" href="#shop"><span class="st-scroll-line" aria-hidden="true"></span><span>Scroll</span></a>
-<p class="small">English and Hebrew · Mac and Windows · Download right after payment</p>
 </div>
 </section>"""
 
