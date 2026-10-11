@@ -8,17 +8,17 @@ CHECK = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4
 ARROW = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>'
 
 CHAPTERS = [
-    dict(step="Shoot", tag="PDF field guides", name="Field Guides", href="field-guides/",
+    dict(step="Shoot", tag="PDF field guides", name="Field Guides", slug="mwp-field-guides", href="field-guides/",
          img="5275cc7bcd4fb7560d8f7163592e3122.jpg", pos="56% 55%", alt="Mountains at dusk, photographed by Matan Wild",
          line="See the photo before you press the shutter.",
          points=["4 PDF guides, 137 lessons", "Composition, colour, light and planning", "English and Hebrew"],
          cta="See the Field Guides", box="0cf44582c4078749d18156eec10c90d3.jpg", gk="FIELD GUIDES · PDF", sub="4 guides · 229 pages"),
-    dict(step="Edit", tag="Lightroom presets", name="Presets", href="presets/",
+    dict(step="Edit", tag="Lightroom presets", name="Presets", slug="mwp-presets", href="presets/",
          img="8cb56471dbe5940badc7a93cad5c8bf1.jpg", pos="50% 12%", alt="MWP Presets box",
          line="The look behind every MWP frame.",
          points=["50 Lightroom presets, 12 adaptive", "50 mobile files and 33 LUTs", "Install guide for every program"],
          cta="See MWP Presets", box="8cb56471dbe5940badc7a93cad5c8bf1.jpg", gk="LIGHTROOM PRESETS", sub="50 presets · 33 LUTs"),
-    dict(step="Finish", tag="Photoshop plugin", name="Panel", href="panel/",
+    dict(step="Finish", tag="Photoshop plugin", name="Panel", slug="mwp-panel", href="panel/",
          img="866c1bdb5cf29c21c1a04f6fc87b03e9.jpg", pos="62% 38%", alt="A tiger, photographed by Matan Wild",
          line="You were there. Now make the photo show it.",
          points=["8 one-click effects", "11 looks and 4 painted lights", "User manual and install guide"],
@@ -47,7 +47,7 @@ def _chapter_text(i, c):
 <h3 class="st-name" data-no-i18n>MWP <span class="grad">{c["name"]}</span></h3>
 <p class="st-line">{c["line"]}</p>
 <ul class="st-pts">{lis}</ul>
-<div class="st-acts"><a class="btn" href="{c["href"]}">{c["cta"]} {ARROW}</a><a class="ghost" href="{c["href"]}#buy">$0.00</a></div>
+<div class="st-acts"><a class="btn" href="{c["href"]}">{c["cta"]} {ARROW}</a><a class="ghost" href="{c["href"]}#buy"><span data-price="{c["slug"]}" data-no-i18n>$0.00</span></a></div>
 <img class="st-art-img" src="{IMG}{c["img"]}" alt="{c["alt"]}" loading="lazy" style="object-position: {c["pos"]}">
 </article>"""
 

@@ -19,6 +19,11 @@ shop.mw.photography. A static site on GitHub Pages, with Supabase, Make.com and 
 - When you add or change English text on a page, add the matching Hebrew entry.
 - Mark product names `data-no-i18n` so they aren't translated.
 
+## Prices on the home and sales pages
+- Every price spot is `<span data-price="slug">` and shows the price set for that product in the admin (`assets/js/lib/prices.js`, reading the `page_prices` view). English shows the dollar price, Hebrew the shekel price. With no price set, it shows $0.00 / ₪0.00.
+- Product slugs: mwp-presets, mwp-panel, mwp-field-guides, presets-field-guides, presets-panel, field-guides-panel, full-set.
+- On the sales pages, `PRICE_SLOTS` in `tools/unify_pages.py` lists the price spots in page order. Update it if a redesign adds or moves a price.
+
 ## Cart and header icons
 - `assets/js/lib/cart.js` adds the cart and My downloads icons to the header and runs the cart.
 

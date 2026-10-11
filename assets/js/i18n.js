@@ -344,7 +344,6 @@ const HE = {
   "50 Lightroom presets, 12 adaptive": "50 פריסטים ללייטרום, 12 אדפטיביים",
   "50 mobile files and 33 LUTs": "50 קבצים לנייד ו-33 קובצי LUT",
   "Install guide for every program": "מדריך התקנה לכל תוכנה",
-  "$0.00": "₪0.00",
   "A tiger, photographed by Matan Wild": "טיגריס, צילום: מתן וויילד",
   "8 one-click effects": "8 אפקטים בקליק",
   "11 looks and 4 painted lights": "11 מראות ו-4 תאורות מצוירות",

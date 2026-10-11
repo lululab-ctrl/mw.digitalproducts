@@ -224,6 +224,8 @@ async function openEditor(id) {
       "checkout_url", "checkout_variant_id", "version", "sort_order"].forEach((k) => { f[k].value = data[k] ?? ""; });
     f.price.value = (data.price_cents / 100).toFixed(2);
     f.compare_at.value = data.compare_at_cents ? (data.compare_at_cents / 100).toFixed(2) : "";
+    f.price_ils.value = data.price_ils_cents != null ? (data.price_ils_cents / 100).toFixed(2) : "";
+    f.compare_at_ils.value = data.compare_at_ils_cents ? (data.compare_at_ils_cents / 100).toFixed(2) : "";
     f.includes.value = data.includes.join("\n");
     f.compatibility.value = data.compatibility.join("\n");
     f.is_active.checked = data.is_active;
@@ -249,6 +251,8 @@ pf.addEventListener("submit", async (e) => {
     description: f.description.value.trim() || null,
     price_cents: toCents(f.price.value),
     compare_at_cents: toCents(f.compare_at.value),
+    price_ils_cents: toCents(f.price_ils.value),
+    compare_at_ils_cents: toCents(f.compare_at_ils.value),
     currency: f.currency.value.trim().toUpperCase(),
     item_count: f.item_count.value ? Number(f.item_count.value) : null,
     category: f.category.value,

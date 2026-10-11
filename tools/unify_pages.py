@@ -49,12 +49,20 @@ WORDS = {
 # Matan's placeholder note under the bundle cards is not shown on the site.
 BUNDLE_NOTE = re.compile(r'<p[^>]*>\[(?:Bundle prices and discounts: (?:Matan to decide|for Matan to set)|מחירים והנחות לחבילות: לקביעת מתן)\]</p>\s*')
 
-# Placeholder prices shown as zero until real ones are set; dollars in English, shekels in Hebrew.
-PRICES = {
-    "en": ["[YOUR PRICE]", "[BUNDLE PRICE]", "[PRICE BEFORE DISCOUNT]"],
-    "he": ["[המחיר]", "[מחיר חבילה]", "[מחיר החבילה]", "[מחיר לפני הנחה]"],
+# Price spots, in page order, so each one shows the price set for that product in the admin
+# (assets/js/lib/prices.js). "~was" is the struck-out "before" price. If a redesign adds or moves a
+# price, update the list for that page.
+PRICE_SLOTS = {
+    "presets": ["mwp-presets", "presets-panel", "mwp-presets", "presets-field-guides", "presets-panel", "full-set", "mwp-presets", "full-set"],
+    "panel": ["mwp-panel", "mwp-panel", "presets-panel"],
+    "field-guides": ["mwp-field-guides", "mwp-field-guides", "full-set", "full-set~was", "mwp-field-guides", "presets-field-guides", "field-guides-panel", "mwp-field-guides"],
 }
+PLACEHOLDER = re.compile(r'\[(?:YOUR PRICE|BUNDLE PRICE|PRICE BEFORE DISCOUNT|המחיר|מחיר חבילה|מחיר החבילה|מחיר לפני הנחה)\]|<span data-price="[^"]*"(?: data-was)? data-no-i18n>[^<]*</span>')
 ZERO = {"en": "$0.00", "he": "₪0.00"}
+PRICE_JS = """<script type="module">
+import { initPrices } from "../assets/js/lib/prices.js";
+initPrices();
+</script>"""
 
 for path, lang in PAGES.items():
     s = open(path, encoding="utf-8").read()
@@ -69,8 +77,18 @@ for path, lang in PAGES.items():
     for a, b in WORDS[lang]:
         s = s.replace(a, b)
     s = BUNDLE_NOTE.sub("", s)
-    for a in PRICES[lang]:
-        s = s.replace(a, ZERO[lang])
+    slots = iter(PRICE_SLOTS[path.split("/")[0]])
+    def slot(m):
+        k = next(slots, None)
+        if k is None:
+            print("  warning: more price spots than PRICE_SLOTS lists in", path); return m.group(0)
+        slug, _, was = k.partition("~")
+        return f'<span data-price="{slug}"{" data-was" if was else ""} data-no-i18n>{ZERO[lang]}</span>'
+    s = PLACEHOLDER.sub(slot, s)
+    if next(slots, None) is not None:
+        print("  warning: fewer price spots than PRICE_SLOTS lists in", path)
+    if "initPrices" not in s:
+        s = s.replace("</body>", PRICE_JS + "\n</body>", 1)
     if 'id="mwp-fonts"' not in s:
         s = s.replace("</head>", FONTS + "\n</head>", 1)
     if 'id="mwp-unify"' not in s:
