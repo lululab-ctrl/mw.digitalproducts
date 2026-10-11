@@ -1,0 +1,293 @@
+"""Builds index.html (the home page) in the look of the MWP sales pages.
+
+The base styles are taken from the Field Guides page and the before/after
+styles from the Presets page, so the home matches them exactly.
+Run from the repository root:  python3 tools/build_home.py
+"""
+import re
+
+FG = open("field-guides/index.html", encoding="utf-8").read()
+PR = open("presets/index.html", encoding="utf-8").read()
+base_css = FG[FG.index("<style>") + 7:FG.index("</style>")]
+pr_css = PR[PR.index("<style>") + 7:PR.index("</style>")]
+_top = pr_css.split("@media (max-width:1100px)")[0]
+ba_css = "\n".join(l for l in _top.split("\n") if re.match(r"\.(ba|recipe|rc|rf|hint)[ .{:,]", l))
+ba_css += "\n@media (max-width:600px){.ba{aspect-ratio:4/5;border-radius:18px}.rc,.rf{padding:6px 12px;font-size:13px}}"
+
+IMG = "assets/pages/img/"
+CHECK = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F2A541" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>'
+ARROW = '<svg class="arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>'
+
+home_css = """
+/* ---- home only ---- */
+.skip{position:absolute;inset-inline-start:16px;top:-60px;background:#FEFBF1;color:#0A0908;padding:10px 16px;border-radius:64px;font-weight:700;z-index:50}
+.skip:focus{top:12px}
+.lang-toggle{display:inline-flex;align-items:center;flex:none;height:34px;padding:3px;border-radius:64px;border:1px solid rgba(156,177,194,.35);direction:ltr}
+.lang-toggle span,.lang-toggle button{display:inline-flex;align-items:center;justify-content:center;min-width:38px;height:26px;padding:0 10px;border:0;border-radius:64px;background:none;font:600 12px/1 Montserrat,Heebo,sans-serif;letter-spacing:.06em;color:#9CB1C2;cursor:pointer}
+.lang-toggle button:hover{color:#FEFBF1}
+.lang-toggle .on{background:#FEFBF1;color:#0A0908;cursor:default}
+.navr a.nl{color:#CDD7DD;text-decoration:none;font-weight:600;font-size:15px}
+.navr a.nl:hover{color:#FEFBF1}
+.fly4 a.pos{text-decoration:none;color:inherit}
+.fly4 a.pos:focus-visible{outline:3px solid #F2A541;outline-offset:8px}
+
+/* the collection: three cards, every row lines up */
+.shop{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;margin-top:64px}
+.card{display:grid;grid-row:span 6;grid-template-rows:subgrid;row-gap:0;border-radius:24px;overflow:hidden;background:#141210;border:1px solid rgba(156,177,194,.14);transition:transform .35s cubic-bezier(.16,1,.3,1),border-color .35s}
+.card:hover{transform:translateY(-6px);border-color:rgba(242,165,65,.45)}
+.card .ph{position:relative;display:block;aspect-ratio:4/3;overflow:hidden}
+.card .ph img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .8s cubic-bezier(.16,1,.3,1)}
+.card:hover .ph img{transform:scale(1.04)}
+.card .cb{display:contents}.shop .card>.cb>*{margin-left:28px;margin-right:28px}.card .tg{padding-top:28px}.card .nm,.card .ln{padding-top:12px}.card .act{margin-bottom:30px}.card ul{align-self:start}
+.card .tg{margin:0;font-size:13px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#9CB1C2}
+.card .nm{margin:0;font-size:30px;line-height:1.1;font-weight:800;letter-spacing:-.02em}
+.card .ln{margin:0;font-size:16px;line-height:1.6;color:#CDD7DD}
+.card ul{list-style:none;margin:6px 0 0;padding:16px 0 0;border-top:1px solid rgba(156,177,194,.15);display:flex;flex-direction:column;gap:9px}
+.card li{display:flex;gap:10px;align-items:flex-start;font-size:15px;line-height:1.45;color:#CDD7DD}
+.card li svg{flex:none;margin-top:3px}
+.card .act{display:flex;gap:10px;margin-top:12px}
+.card .act .btn,.card .act .ghost{flex:1;min-height:46px;padding:0 16px;font-size:15px}
+[dir="rtl"] .arrow{transform:scaleX(-1)}
+[dir="rtl"] .kick,[dir="rtl"] .card .tg,[dir="rtl"] .stat .t{letter-spacing:normal}
+[dir="rtl"] .pg{font-family:Heebo,Montserrat,system-ui,sans-serif}
+
+.trust{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:32px}
+.trust div{display:flex;flex-direction:column;gap:8px}
+.trust strong{font-size:16px;font-weight:800}
+.trust span{font-size:15px;line-height:1.55;color:#CDD7DD}
+
+.faq details{border-bottom:1px solid rgba(156,177,194,.2)}
+.faq summary{display:flex;justify-content:space-between;align-items:center;gap:24px;min-height:64px;padding:20px 0;font-weight:600;font-size:17px;cursor:pointer;list-style:none}
+.faq summary:hover{color:#FFD08A}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";flex:none;width:36px;height:36px;border-radius:50%;border:1.5px solid rgba(242,165,65,.6);display:flex;align-items:center;justify-content:center;color:#F2A541;font-size:18px;font-weight:500}
+.faq details[open] summary::after{content:"\\2212"}
+.faq details div{padding:0 0 26px;color:#CDD7DD;font-size:17px;line-height:1.7;max-width:680px}
+
+@media (max-width:1100px){.shop{grid-template-columns:minmax(0,1fr);max-width:560px;margin-inline:auto}.trust{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:600px){.trust{grid-template-columns:minmax(0,1fr)}.navr a.nl.hide-sm{display:none}.card .act{flex-direction:column}}
+@media (prefers-reduced-motion:reduce){.card,.card .ph img{transition:none}}
+"""
+
+def box(href, img, gk, ttl, sub, left, top, delay):
+    return f'''<a class="pos" href="{href}" style="left: {left}px; top: {top}px"><div class="box" style="animation-delay: {delay}s"><div class="face top"></div><div class="face spine"><span>{gk}</span></div><div class="face front"><img src="{IMG}{img}" alt=""><div class="lab"><div class="bn">MW PHOTO TOURS</div><div><div class="gk">{gk}</div><div class="ttl" data-no-i18n>{ttl}</div><div class="sub">{sub}</div></div></div></div></div><div class="shadow"></div></a>'''
+
+def card(href, img, alt, tag, name, line, points, cta):
+    lis = "".join(f"<li>{CHECK}<span>{p}</span></li>" for p in points)
+    return f'''<article class="card">
+<a class="ph" href="{href}" tabindex="-1" aria-hidden="true"><img src="{IMG}{img}" alt="{alt}" loading="lazy"></a>
+<div class="cb">
+<p class="tg">{tag}</p>
+<h3 class="nm" data-no-i18n>MWP <span class="grad">{name}</span></h3>
+<p class="ln">{line}</p>
+<ul>{lis}</ul>
+<div class="act"><a class="btn" href="{href}">{cta}</a><a class="ghost" href="{href}#buy">[YOUR PRICE]</a></div>
+</div>
+</article>'''
+
+def plan(title, sub, price, points, cta, href, hi=False):
+    lis = "".join(f"<li>{CHECK}<span>{p}</span></li>" for p in points)
+    tag = '<span class="tagx">EVERYTHING</span>' if hi else ""
+    btn = "btn sm" if hi else "ghost sm"
+    return f'<div class="plan{" hi" if hi else ""}">{tag}<div><h3 class="h3">{title}</h3><p class="small" style="margin-top: 6px">{sub}</p></div><div class="price">{price}</div><ul>{lis}</ul><a class="{btn}" href="{href}">{cta}</a></div>'
+
+PAIRS = [
+    ("Presets · Blue Hour", "3c14b23dbb00f051684ad60fb205ed10.jpg", "fbaf19aea2af10f26b2949ab31fff094.jpg", "Light and Scene", "Blue Hour", "100%", "AFTER · MWP PRESET"),
+    ("Presets · Macro Ground", "7c359a77f23f632596ebda32f1e9a72f.jpg", "84c2340ddf79f1f703f8c905e9b986be.jpg", "Light and Scene", "Macro Ground", "100%", "AFTER · MWP PRESET"),
+    ("Panel · Subject Pop", "c339384fe0c6d91e7b1388d0fed7d1ae.jpg", "52e0c3d2c90942f72d31faa689449bd0.jpg", "Subject", "Pop", "60%", "AFTER"),
+    ("Panel · Background Darken", "af0d1799831d0417d338c0b162975a7b.jpg", "95e0579188ba924ac89563eb21facef6.jpg", "Background", "Darken", "45%", "AFTER"),
+]
+
+html = f'''<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>MWP · Presets, guides and tools by Matan Wild</title>
+<meta name="description" content="Lightroom presets, a Photoshop plugin and editing guides from wildlife photographer Matan Wild. Instant download, secure checkout.">
+<meta name="theme-color" content="#0A0908">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="MWP">
+<meta property="og:title" content="MWP · Presets, guides and tools by Matan Wild">
+<meta property="og:description" content="Lightroom presets, a Photoshop plugin and editing guides from wildlife photographer Matan Wild. Instant download, secure checkout.">
+<link rel="canonical" href="https://shop.mw.photography/">
+<link rel="icon" href="{IMG}2dd3356528167ddf9a64c0c7301c8aa3.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&amp;family=Montserrat:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet">
+<style>
+{base_css}
+/* before / after (from the Presets page) */
+{ba_css}
+{home_css}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="pg">
+
+<nav class="nav site-header" aria-label="Main">
+<div class="wrap container">
+<a class="brand" href="./" aria-label="MWP, home"><img src="{IMG}2dd3356528167ddf9a64c0c7301c8aa3.png" alt=""><span>MWP</span></a>
+<div class="links"><a href="#shop">Shop</a><a href="#ba">Before and after</a><a href="#bundles">Bundles</a><a href="#faq">Questions</a></div>
+<div class="navr"><a class="nl hide-sm" href="support.html">Help</a><a class="nl" href="account.html">My downloads</a></div>
+</div>
+</nav>
+
+<main id="main">
+<section class="hero" id="top">
+<img class="hero-bg" src="{IMG}1a2e3ed3f44db1f671babb09a599b29f.jpg" alt="A male lion roaring, photographed by Matan Wild">
+<div class="hero-shade"></div>
+<div class="wrap" style="position: relative; width: 100%">
+<div class="hero-grid">
+<div class="hero-copy">
+<p class="kick">MWP · by Matan Wild</p>
+<h1 class="h1">Editing tools <span class="b grad">from the field.</span></h1>
+<p class="lead" style="max-width: 540px">Lightroom presets, a Photoshop plugin and field guides from wildlife photographer Matan Wild. Instant download, secure checkout.</p>
+<div class="ctas"><a class="btn" href="#shop">Shop the collection</a><a class="ghost" href="#ba">See before and after</a></div>
+<p class="small">English and Hebrew · Mac and Windows · Download right after payment</p>
+</div>
+<div class="fly4" role="group" aria-label="The MWP collection">
+{box("presets/", "8cb56471dbe5940badc7a93cad5c8bf1.jpg", "LIGHTROOM PRESETS", "Presets", "50 presets · 33 LUTs", 20, 0, -1.2)}
+{box("panel/", "866c1bdb5cf29c21c1a04f6fc87b03e9.jpg", "PHOTOSHOP PLUGIN", "Panel", "8 effects · 11 looks", 290, 90, -3.6)}
+{box("field-guides/", "0cf44582c4078749d18156eec10c90d3.jpg", "FIELD GUIDES · PDF", "Guides", "4 guides · 229 pages", 40, 330, -2.4)}
+</div>
+</div>
+</div>
+</section>
+
+<section class="band" aria-label="In numbers">
+<div class="wrap stats">
+<div class="stat"><div class="n grad">50</div><div class="t">Lightroom presets</div></div>
+<div class="stat"><div class="n grad">33</div><div class="t">LUTs for video</div></div>
+<div class="stat"><div class="n grad">8</div><div class="t">One-click effects</div></div>
+<div class="stat"><div class="n grad">137</div><div class="t">Lessons</div></div>
+</div>
+</section>
+
+<section class="sec" id="shop">
+<div class="wrap">
+<div class="head">
+<p class="kick">The collection</p>
+<h2 class="h2">Shoot it, edit it, <span class="b grad">finish it.</span></h2>
+<p class="lead">Three products, one look. Each one works on its own, and together they take a photo from the field to the share.</p>
+</div>
+<div class="shop">
+{card("presets/", "8cb56471dbe5940badc7a93cad5c8bf1.jpg", "MWP Presets box", "Lightroom presets", "Presets", "The look behind every MWP frame.", ["50 Lightroom presets, 12 adaptive", "50 mobile files and 33 LUTs", "Install guide for every program"], "See MWP Presets")}
+{card("panel/", "866c1bdb5cf29c21c1a04f6fc87b03e9.jpg", "A tiger, photographed by Matan Wild", "Photoshop plugin", "Panel", "You were there. Now make the photo show it.", ["8 one-click effects", "11 looks and 4 painted lights", "User manual and install guide"], "See MWP Panel")}
+{card("field-guides/", "5275cc7bcd4fb7560d8f7163592e3122.jpg", "Mountains at dusk, photographed by Matan Wild", "PDF field guides", "Field Guides", "See the photo before you press the shutter.", ["4 PDF guides, 137 lessons", "Composition, colour, light and planning", "English and Hebrew"], "See the Field Guides")}
+</div>
+</div>
+</section>
+
+<section class="sec alt" id="ba">
+<div class="wrap">
+<div class="head">
+<p class="kick">Before and after</p>
+<h2 class="h2">Your RAW file. <span class="b grad">In MWP light.</span></h2>
+<p class="lead">Pick an example and drag the handle: the RAW file on one side, the same photo finished with MWP on the other.</p>
+</div>
+<div class="tabs" role="group" aria-label="Choose an example" data-no-i18n>
+{"".join(f'<button type="button" class="tab{" on" if i == 0 else ""}" data-i="{i}" aria-pressed="{str(i == 0).lower()}">{p[0]}</button>' for i, p in enumerate(PAIRS))}
+</div>
+<div class="ba" id="ba-box">
+<img id="ba-before" src="{IMG}{PAIRS[0][1]}" alt="Before: the RAW file as shot">
+<img id="ba-after" src="{IMG}{PAIRS[0][2]}" alt="After: finished with MWP" style="clip-path: inset(0 0 0 50%)">
+<div class="line" style="left: 50%"></div>
+<div class="knob" style="left: 50%" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0A0908" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l-6 6 6 6"></path><path d="M15 6l6 6-6 6"></path></svg></div>
+<span class="tag" style="left: 22px">BEFORE</span>
+<span class="tag" id="ba-after-tag" style="right: 22px; color: #F2A541">AFTER · MWP PRESET</span>
+<input type="range" min="0" max="100" value="50" aria-label="Drag to compare before and after">
+<div class="ph">PLACEHOLDER: the "after" here is Matan's finished edit. Replace with the same RAW edited only with the preset before launch.</div>
+</div>
+<div class="recipe" data-no-i18n><span class="rc" id="ba-group">{PAIRS[0][3]}</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#CDD7DD" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg><span class="rf" id="ba-name">{PAIRS[0][4]}</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#CDD7DD" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg><span id="ba-amount" style="font-weight: 800; font-size: 14px; padding: 0 8px">{PAIRS[0][5]}</span></div>
+<p class="small hint">Drag the handle to compare.</p>
+</div>
+</section>
+
+<section class="sec" id="bundles">
+<div class="wrap">
+<div class="head">
+<p class="kick">Bundles</p>
+<h2 class="h2">Shoot with the guides. <span class="b grad">Finish with the tools.</span></h2>
+<p class="lead">MWP Field Guides teach what happens before the click: composition, colour, light and planning, in 4 PDF guides in English and Hebrew. The presets and the Panel carry it on into the edit, in the same look.</p>
+</div>
+<div class="plans">
+{plan("MWP Presets", "Edit in Lightroom", "[YOUR PRICE]", ["50 Lightroom presets, 12 adaptive", "50 mobile files and 33 LUTs", "Install guide for every program"], "Get the presets", "presets/#buy")}
+{plan("Presets + Field Guides", "Shoot it, then edit it", "[BUNDLE PRICE]", ["MWP Presets: 50 presets and 33 LUTs", "MWP Field Guides: 4 PDF guides, 137 lessons", "Composition, colour, light and planning"], "Get the bundle", "field-guides/#bundles")}
+{plan("Presets + Panel", "Lightroom and Photoshop", "[BUNDLE PRICE]", ["MWP Presets: 50 presets and 33 LUTs", "MWP Panel: the Photoshop plugin", "User manual and install guide"], "Get the bundle", "panel/#buy")}
+{plan("The full set", "From the shot to the share", "[BUNDLE PRICE]", ["MWP Presets: 50 presets and 33 LUTs", "MWP Panel: the Photoshop plugin", "MWP Field Guides: 4 PDF guides, 137 lessons"], "Get the full set", "presets/#bundles", hi=True)}
+</div>
+<p class="small" style="text-align: center; margin-top: 28px">[Bundle prices and discounts: Matan to decide]</p>
+</div>
+</section>
+
+<section class="band" aria-label="Why buy here">
+<div class="wrap trust" style="padding-top: 56px; padding-bottom: 56px">
+<div><strong>Instant download</strong><span>Your files are ready the moment you pay.</span></div>
+<div><strong>Secure checkout</strong><span>Card payment through Lemon Squeezy. We never see your card.</span></div>
+<div><strong>Free updates</strong><span>New versions land in your downloads at no cost.</span></div>
+<div><strong>Real support</strong><span>A person replies within one business day.</span></div>
+</div>
+</section>
+
+<section class="sec" id="faq">
+<div class="wrap">
+<div class="head">
+<p class="kick">Before you buy</p>
+<h2 class="h2">Questions</h2>
+</div>
+<div class="faq">
+<details><summary>How do I get my files after paying?</summary><div>You get an email straight away. Open <a href="account.html">My downloads</a>, enter the email you paid with, and click the sign-in link we send. Everything you bought is there.</div></details>
+<details><summary>Can I download again later?</summary><div>Yes. Sign in to My downloads any time, including for future updates to products you own.</div></details>
+<details><summary>Do I need an account?</summary><div>No password to create. Your purchases are tied to your email, and you sign in with a one-time link.</div></details>
+<details><summary>What if something doesn't work for me?</summary><div>Write to <a href="support.html">support</a> and we'll help. Our <a href="legal.html#refunds">refund policy</a> has the details.</div></details>
+</div>
+</div>
+</section>
+</main>
+
+<footer style="padding: 40px 0; border-top: 1px solid rgba(156,177,194,.15)">
+<div class="wrap" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px 32px; color: #9CB1C2; font-size: 13px">
+<div style="font-weight: 800; letter-spacing: .3em; color: #FEFBF1">MW PHOTO TOURS</div>
+<div style="display: flex; flex-wrap: wrap; gap: 20px"><a style="color: #9CB1C2" href="shop.html">All products</a><a style="color: #9CB1C2" href="account.html">My downloads</a><a style="color: #9CB1C2" href="support.html">Contact support</a><a style="color: #9CB1C2" href="legal.html#refunds">Refunds</a><a style="color: #9CB1C2" href="legal.html#terms">Terms</a><a style="color: #9CB1C2" href="legal.html#privacy">Privacy</a></div>
+<div>All photos: Matan Wild · contact@matanwildphotography.com</div>
+</div>
+</footer>
+</div>
+
+<script>
+// Before / after: tabs pick the example, the range input moves the divider.
+(function () {{
+  var P = {[[IMG + p[1], IMG + p[2], p[3], p[4], p[5], p[6]] for p in PAIRS]};
+  var box = document.getElementById("ba-box");
+  var before = document.getElementById("ba-before"), after = document.getElementById("ba-after");
+  var line = box.querySelector(".line"), knob = box.querySelector(".knob"), range = box.querySelector("input");
+  function setPos(v) {{
+    after.style.clipPath = "inset(0 0 0 " + v + "%)";
+    line.style.left = v + "%"; knob.style.left = v + "%";
+  }}
+  range.addEventListener("input", function () {{ setPos(range.value); }});
+  document.querySelectorAll(".tabs .tab").forEach(function (t) {{
+    t.addEventListener("click", function () {{
+      var p = P[+t.dataset.i];
+      before.src = p[0]; after.src = p[1];
+      document.getElementById("ba-group").textContent = p[2];
+      document.getElementById("ba-name").textContent = p[3];
+      document.getElementById("ba-amount").textContent = p[4];
+      document.getElementById("ba-after-tag").textContent = document.documentElement.lang === "he" ? (p[5] === "AFTER" ? "אחרי" : "אחרי · פריסט MWP") : p[5];
+      document.querySelectorAll(".tabs .tab").forEach(function (o) {{ o.classList.toggle("on", o === t); o.setAttribute("aria-pressed", o === t); }});
+      range.value = 50; setPos(50);
+    }});
+  }});
+}})();
+</script>
+<script type="module">
+  import {{ initI18n }} from "./assets/js/i18n.js";
+  initI18n();
+</script>
+</body>
+</html>
+'''
+open("index.html", "w", encoding="utf-8").write(html)
+print("index.html written", len(html))
