@@ -1,49 +1,49 @@
-"""'Try it yourself' playground for the home page: a small, honest taste of MWP Presets and MWP Panel, all on one photo.
-Every look shown is a real before/after pair from Matan's sales pages. The Amount slider fades
-between the RAW file and the finished frame; the handle on the photo compares with the RAW file."""
+"""'Try it yourself' on the home page: one RAW photo, edited live in the browser.
+Visitors pick a look and switch on Panel-style effects; everything is drawn on the same photo with a
+canvas, so nothing has to be exported or uploaded. These are browser previews of the kinds of edits
+the products make, not the actual preset or plugin output, and the page says so."""
 
 IMG = "assets/pages/img/"
+BASE = "3c14b23dbb00f051684ad60fb205ed10.jpg"   # Matan's RAW (ibex at blue hour), 1800 x 1125
 LOCK = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>'
 
-# One photo for everything, so visitors see each look change the same frame.
-# BASE is the RAW export; each look is the same RAW exported with that preset or effect only.
-# None = waiting for Matan's export of that look on this photo (shown as a placeholder slot).
-BASE = "3c14b23dbb00f051684ad60fb205ed10.jpg"
+# Looks: e exposure (stops), t temperature, g tint, c contrast, s shadows, h highlights,
+# sat saturation, f fade, sc / hc split-tone colour for shadows / highlights.
 LOOKS = [
-    ("presets", "Blue Hour", "fbaf19aea2af10f26b2949ab31fff094.jpg"),
-    ("presets", "[Preset 2]", None),
-    ("presets", "[Preset 3]", None),
-    ("presets", "[Preset 4]", None),
-    ("panel", "Subject · Pop", None),
-    ("panel", "Background · Darken", None),
-    ("panel", "Sky", None),
+    ("Golden Hour", dict(e=1.05, t=.32, g=.03, c=.1, s=.3, h=.25, sat=.02, f=0, sc=[.01, 0, -.02], hc=[.035, .018, -.03])),
+    ("Cool Dusk", dict(e=1.15, t=-.18, g=0, c=.08, s=.35, h=.15, sat=.08, f=0, sc=[-.01, 0, .03], hc=[.0, .01, .02])),
+    ("Matte Earth", dict(e=1.0, t=.18, g=.02, c=.02, s=.35, h=.2, sat=-.12, f=.35, sc=[.015, .008, 0], hc=[.02, .012, 0])),
+    ("Deep Contrast", dict(e=1.1, t=.06, g=0, c=.32, s=.25, h=.2, sat=.12, f=0, sc=[0, 0, .01], hc=[.015, .008, 0])),
+    ("Soft Light", dict(e=1.0, t=.1, g=.01, c=.06, s=.45, h=.35, sat=.06, f=0, sc=[0, 0, .015], hc=[.02, .015, .01])),
 ]
-# The Panel's Edit tab, as listed in the Presets sales page. Tools without an export stay locked.
-PANEL_EDIT = ["Subject · Pop", "Eye", "Sky", "Background · Darken", "Lights", "Darks", "Dodge & Burn", "Vignette"]
+# Panel's Edit tab (names from the Panel sales page). Open ones can be stacked; the rest are a teaser.
+EFFECTS = [("pop", "Subject · Pop"), ("bg", "Background · Darken"), ("sky", "Sky"), ("lights", "Lights"),
+           ("darks", "Darks"), ("vig", "Vignette")]
+LOCKED = ["Eye", "Dodge & Burn"]
 
 CSS = """
 .try{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:24px;margin-top:48px;align-items:stretch}
 .tstage{position:relative;border-radius:24px;overflow:hidden;background:#111;aspect-ratio:16/10;box-shadow:0 40px 120px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.06);touch-action:pan-y}
-.tstage img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
-.tstage #try-after{transition:opacity .25s}
+.tstage img,.tstage canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
 .tstage .line{position:absolute;top:0;bottom:0;width:2px;background:#FEFBF1;transform:translateX(-1px);pointer-events:none}
 .tstage .knob{position:absolute;top:50%;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;background:#FEFBF1;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 30px rgba(0,0,0,.5);pointer-events:none}
 .tstage input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:ew-resize;margin:0}
 .tstage:has(input:focus-visible){outline:3px solid #F2A541;outline-offset:4px}
-.tstage .lbl{position:absolute;top:18px;padding:7px 12px;border-radius:30px;background:rgba(10,9,8,.72);backdrop-filter:blur(6px);font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;pointer-events:none}
+.tstage .lbl{position:absolute;top:18px;padding:7px 12px;border-radius:30px;background:rgba(10,9,8,.72);backdrop-filter:blur(6px);font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;pointer-events:none;max-width:45%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tstage .lbl.l{left:18px;color:#FEFBF1}.tstage .lbl.r{right:18px;color:#F2A541}
-.tstage .note{position:absolute;left:18px;right:18px;bottom:16px;font-size:12px;line-height:1.4;color:#CDD7DD;background:rgba(10,9,8,.7);padding:8px 12px;border-radius:10px;pointer-events:none}
+.tstage .note{position:absolute;left:18px;right:18px;bottom:16px;margin:0;font-size:12px;line-height:1.4;color:#CDD7DD;background:rgba(10,9,8,.7);padding:8px 12px;border-radius:10px;pointer-events:none}
 .app{display:flex;flex-direction:column;gap:18px;padding:22px;border-radius:24px;background:#141210;border:1px solid rgba(156,177,194,.16)}
 .seg{display:grid;grid-template-columns:1fr 1fr;padding:4px;border-radius:14px;background:#0A0908;border:1px solid rgba(156,177,194,.16)}
-.seg button{min-height:56px;padding:0 4px;text-align:center;border:0;border-radius:10px;background:none;color:#9CB1C2;font:700 14px/1.2 inherit;font-family:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.seg button{min-height:56px;padding:0 4px;text-align:center;border:0;border-radius:10px;background:none;color:#9CB1C2;font-weight:700;font-size:14px;line-height:1.2;font-family:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
 .seg button small{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;opacity:.8}
 .seg button.on{background:#FEFBF1;color:#0A0908}
 .grp{margin:0 0 10px;font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#9CB1C2}
 .looks{display:grid;gap:8px}
-.look{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:46px;padding:0 16px;border-radius:12px;border:1px solid rgba(156,177,194,.22);background:#1b1916;color:#FEFBF1;font:600 15px inherit;font-family:inherit;cursor:pointer;text-align:start}
+.look{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:44px;padding:0 14px;border-radius:12px;border:1px solid rgba(156,177,194,.22);background:#1b1916;color:#FEFBF1;font-weight:600;font-size:15px;font-family:inherit;cursor:pointer;text-align:start}
 .look:hover{border-color:#FEFBF1}
 .look.on{border-color:#F2A541;background:rgba(242,165,65,.1)}
-.look .dot{width:9px;height:9px;border-radius:50%;background:rgba(156,177,194,.35)}
+.look.cur{box-shadow:0 0 0 2px rgba(242,165,65,.35)}
+.look .dot{flex:none;width:9px;height:9px;border-radius:50%;background:rgba(156,177,194,.35)}
 .look.on .dot{background:#F2A541;box-shadow:0 0 0 4px rgba(242,165,65,.2)}
 .fx{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .fx .look{min-height:44px;padding:0 12px;font-size:14px}
@@ -54,51 +54,43 @@ CSS = """
 .amt{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;font-weight:700;font-size:14px}
 .amt output{font-variant-numeric:tabular-nums;color:#F2A541}
 .amt input{grid-column:1/-1;width:100%;accent-color:#F2A541;height:28px;margin:0;cursor:pointer}
+.amt.off{opacity:.4;pointer-events:none}
+.reset{justify-self:start;align-self:flex-start;border:0;background:none;color:#9CB1C2;font-family:inherit;font-size:13px;font-weight:600;text-decoration:underline;text-underline-offset:3px;cursor:pointer;padding:0}
 .app .go{margin-top:auto;display:flex;align-items:center;justify-content:center;min-height:50px;border-radius:30px;background:linear-gradient(90deg,#DA5A22,#F2A541);color:#0A0908;font-weight:800;text-decoration:none}
 .try-hint{text-align:center;margin-top:16px}
-.tstage .wait{position:absolute;inset:0;display:none;align-items:center;justify-content:center;padding:24px;text-align:center;font-weight:700;color:#FEFBF1;background:rgba(10,9,8,.55);pointer-events:none}
-.tstage.waiting .wait{display:flex}
-.look.soon{border-style:dashed}
-.amt.off{opacity:.4;pointer-events:none}
-@media (min-width:981px){.tstage{aspect-ratio:auto;width:100%;height:100%;min-height:520px}}
+@media (min-width:981px){.tstage{aspect-ratio:auto;width:100%;height:100%;min-height:560px}}
 @media (max-width:980px){.try{grid-template-columns:minmax(0,1fr)}}
 @media (max-width:600px){.tstage{aspect-ratio:4/5;border-radius:18px}.app{padding:18px}}
 """
 
 
-def _btn(i, name, file, on=False):
-    cls = "look" + (" on" if on else "") + ("" if file else " soon")
-    return f'<button type="button" class="{cls}" data-look="{i}" aria-pressed="{"true" if on else "false"}"><span data-no-i18n>{name}</span><span class="dot" aria-hidden="true"></span></button>'
-
-
 def html():
-    looks = "".join(_btn(i, n, f, i == 0) for i, (t, n, f) in enumerate(LOOKS) if t == "presets")
-    fx = []
-    for label in PANEL_EDIT:
-        idx = next((i for i, l in enumerate(LOOKS) if l[0] == "panel" and l[1] == label), None)
-        if idx is None:
-            fx.append(f'<button type="button" class="look locked" data-locked aria-disabled="true"><span data-no-i18n>{label}</span>{LOCK}</button>')
-        else:
-            fx.append(_btn(idx, label, LOOKS[idx][2]))
-    first = LOOKS[0]
+    looks = "".join(
+        f'<button type="button" class="look" data-look="{i}" aria-pressed="false"><span>{name}</span><span class="dot" aria-hidden="true"></span></button>'
+        for i, (name, _) in enumerate(LOOKS))
+    fx = "".join(
+        f'<button type="button" class="look" data-fx="{key}" aria-pressed="false"><span data-no-i18n>{label}</span><span class="dot" aria-hidden="true"></span></button>'
+        for key, label in EFFECTS)
+    fx += "".join(
+        f'<button type="button" class="look locked" data-locked aria-disabled="true"><span data-no-i18n>{label}</span>{LOCK}</button>'
+        for label in LOCKED)
     return f"""<section class="sec alt" id="try">
 <div class="wrap">
 <div class="head">
 <p class="kick">Try it yourself</p>
 <h2 class="h2">Get your hands <span class="b grad">on the tools.</span></h2>
-<p class="lead">One photo, straight from the camera. Try a preset or a Panel effect on it, set the amount, then drag across the photo to see where it started.</p>
+<p class="lead">One photo, straight from the camera. Try a look, stack a few Panel effects, set the amount, then drag across the photo to see where it started.</p>
 </div>
 <div class="try">
 <div class="tstage" id="try-stage">
 <img id="try-before" src="{IMG}{BASE}" alt="The RAW file as shot">
-<img id="try-after" src="{IMG}{first[2]}" alt="The same photo with the selected MWP look" style="clip-path: inset(0 0 0 50%)">
+<canvas id="try-after" role="img" aria-label="The same photo with your edits" style="clip-path: inset(0 0 0 50%)"></canvas>
 <div class="line" style="left: 50%"></div>
 <div class="knob" style="left: 50%" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0A0908" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l-6 6 6 6"></path><path d="M15 6l6 6-6 6"></path></svg></div>
 <span class="lbl l">RAW</span>
-<span class="lbl r" id="try-tag" data-no-i18n>MWP · {first[1]}</span>
+<span class="lbl r" id="try-tag" data-no-i18n>Your edit</span>
 <input type="range" id="try-split" min="0" max="100" value="50" aria-label="Drag to compare with the RAW file">
-<p class="wait">PLACEHOLDER: this look needs Matan's export of the same photo.</p>
-<p class="note">PLACEHOLDER: Blue Hour here is Matan's finished edit. Replace with the same RAW edited only with the preset before launch.</p>
+<p class="note">Live preview in your browser. The real presets and plugin go further, with masks, detail and colour work on every frame.</p>
 </div>
 <aside class="app" aria-label="Try the tools">
 <div class="seg" role="group" aria-label="Choose a tool">
@@ -106,16 +98,17 @@ def html():
 <button type="button" data-tool="panel" aria-pressed="false"><small>Photoshop</small><span data-no-i18n>MWP Panel</span></button>
 </div>
 <div data-pane="presets">
-<p class="grp">Presets</p>
+<p class="grp">Looks</p>
 <div class="looks">{looks}</div>
 <p class="more">The full pack: 50 Lightroom presets, 50 mobile files and 33 LUTs.</p>
 </div>
 <div data-pane="panel" hidden>
-<p class="grp">Edit</p>
-<div class="fx">{"".join(fx)}</div>
-<p class="more" id="try-more">A few effects are open to try. The full plugin has 8 one-click effects, 11 looks and 4 painted lights.</p>
+<p class="grp">Edit · tap to stack</p>
+<div class="fx">{fx}</div>
+<p class="more" id="try-more">The full plugin has 8 one-click effects, 11 looks and 4 painted lights.</p>
 </div>
-<div class="amt"><label for="try-amount">Amount</label><output id="try-amt" for="try-amount">100%</output><input type="range" id="try-amount" min="0" max="100" value="100"></div>
+<div class="amt off"><label for="try-amount" id="try-amt-name" data-no-i18n>Amount</label><output id="try-amt" for="try-amount">0%</output><input type="range" id="try-amount" min="0" max="100" value="0"></div>
+<button type="button" class="reset" id="try-reset">Start again</button>
 <a class="go" id="try-cta" href="presets/">Get MWP Presets</a>
 </aside>
 </div>
@@ -125,42 +118,132 @@ def html():
 
 
 def js():
-    data = [[t, n, (IMG + f) if f else ""] for (t, n, f) in LOOKS]
+    import json
+    looks = json.dumps([p for _, p in LOOKS])
+    names = json.dumps([n for n, _ in LOOKS])
+    fx = json.dumps({k: l for k, l in EFFECTS})
     return """<script>
-// Try it yourself: one photo; each preset or Panel effect swaps in that look on the same frame.
+// Try it yourself: one photo, edited live on a canvas. A look (presets) plus stackable effects (Panel).
 (function () {
-  var L = %s;
+  var LOOKS = %(looks)s, NAMES = %(names)s, FX = %(fx)s;
+  var HE_NAMES = {"Golden Hour": "שעת זהב", "Cool Dusk": "דמדומים קרים", "Matte Earth": "אדמה מט", "Deep Contrast": "ניגודיות עמוקה", "Soft Light": "אור רך"};
   var he = function () { return document.documentElement.lang === "he"; };
-  var stage = document.getElementById("try-stage");
-  var after = document.getElementById("try-after");
+  var stage = document.getElementById("try-stage"), before = document.getElementById("try-before");
+  var cv = document.getElementById("try-after"), ctx = cv.getContext("2d", { willReadFrequently: true });
   var line = stage.querySelector(".line"), knob = stage.querySelector(".knob"), split = document.getElementById("try-split");
-  var amount = document.getElementById("try-amount"), out = document.getElementById("try-amt"), tag = document.getElementById("try-tag");
-  var amt = document.querySelector("#try .amt"), cta = document.getElementById("try-cta");
+  var amount = document.getElementById("try-amount"), out = document.getElementById("try-amt"), amtName = document.getElementById("try-amt-name");
+  var amtBox = document.querySelector("#try .amt"), tag = document.getElementById("try-tag"), cta = document.getElementById("try-cta");
   var CTA = { presets: ["presets/", "Get MWP Presets", "לפריסטים"], panel: ["panel/", "Get MWP Panel", "לפאנל"] };
-  function setSplit(v) { after.style.clipPath = "inset(0 0 0 " + v + "%%)"; line.style.left = v + "%%"; knob.style.left = v + "%%"; }
-  function setAmount(v) { after.style.opacity = v / 100; out.textContent = v + "%%"; }
-  function pick(i) {
-    var l = L[i], ready = !!l[2];
-    stage.classList.toggle("waiting", !ready); amt.classList.toggle("off", !ready);
-    after.style.display = ready ? "" : "none";
-    if (ready) { var im = new Image(); im.onload = function () { after.src = l[2]; }; im.src = l[2]; }
-    tag.textContent = "MWP · " + l[1];
-    document.querySelectorAll("#try .look[data-look]").forEach(function (o) { var on = +o.dataset.look === i; o.classList.toggle("on", on); o.setAttribute("aria-pressed", on); });
-    amount.value = 100; setAmount(100);
+  var state = { look: -1, lookAmt: 100, fx: {}, cur: null };   // fx: key -> amount (0-100)
+  var src = null, W = 0, H = 0, M = null;
+
+  function setSplit(v) { cv.style.clipPath = "inset(0 0 0 " + v + "%%)"; line.style.left = v + "%%"; knob.style.left = v + "%%"; }
+
+  function prepare() {
+    var scale = Math.min(1, 1200 / before.naturalWidth);
+    W = cv.width = Math.round(before.naturalWidth * scale); H = cv.height = Math.round(before.naturalHeight * scale);
+    ctx.drawImage(before, 0, 0, W, H);
+    src = ctx.getImageData(0, 0, W, H).data.slice();
+    // masks: subject (soft ellipse around the animals), sky (top of frame), vignette (edges)
+    M = { subj: new Float32Array(W * H), sky: new Float32Array(W * H), vig: new Float32Array(W * H) };
+    for (var y = 0; y < H; y++) for (var x = 0; x < W; x++) {
+      var i = y * W + x, nx = x / W, ny = y / H;
+      var dx = (nx - 0.48) / 0.5, dy = (ny - 0.6) / 0.3, d = Math.sqrt(dx * dx + dy * dy);
+      M.subj[i] = Math.max(0, Math.min(1, 1.25 - d));
+      M.sky[i] = Math.max(0, Math.min(1, (0.55 - ny) / 0.3));
+      var vx = nx - 0.5, vy = (ny - 0.5) * 0.8, v = Math.sqrt(vx * vx + vy * vy) / 0.64;
+      M.vig[i] = Math.max(0, Math.min(1, (v - 0.45) / 0.55));
+    }
+  }
+
+  var queued = false;
+  function render() { if (!queued) { queued = true; requestAnimationFrame(draw); } }
+  function draw() {
+    queued = false; if (!src) return;
+    var p = state.look >= 0 ? LOOKS[state.look] : null, a = state.lookAmt / 100;
+    var f = state.fx, fp = (f.pop || 0) / 100, fb = (f.bg || 0) / 100, fs = (f.sky || 0) / 100, fl = (f.lights || 0) / 100, fd = (f.darks || 0) / 100, fv = (f.vig || 0) / 100;
+    var e = p ? Math.pow(2, p.e * a) : 1, t = p ? p.t * a : 0, g = p ? p.g * a : 0, c = p ? p.c * a : 0, s = p ? p.s * a : 0, h = p ? p.h * a : 0;
+    var sat = p ? p.sat * a : 0, fade = p ? p.f * a : 0, sc = p ? p.sc : [0, 0, 0], hc = p ? p.hc : [0, 0, 0];
+    var im = ctx.createImageData(W, H), o = im.data, n = W * H;
+    for (var i = 0; i < n; i++) {
+      var k = i * 4, r = src[k] / 255, gg = src[k + 1] / 255, b = src[k + 2] / 255, L;
+      if (p) {
+        r *= e; gg *= e; b *= e;
+        r += t * 0.07; b -= t * 0.07; gg -= g * 0.04;
+        L = 0.2126 * r + 0.7152 * gg + 0.0722 * b;
+        var lift = s * 0.32 * (1 - L) * (1 - L), roll = h * 0.3 * L * L;
+        r += lift - roll; gg += lift - roll; b += lift - roll;
+        r = (r - 0.38) * (1 + c) + 0.38; gg = (gg - 0.38) * (1 + c) + 0.38; b = (b - 0.38) * (1 + c) + 0.38;
+        L = 0.2126 * r + 0.7152 * gg + 0.0722 * b;
+        r = L + (r - L) * (1 + sat); gg = L + (gg - L) * (1 + sat); b = L + (b - L) * (1 + sat);
+        r += a * ((1 - L) * sc[0] + L * hc[0]); gg += a * ((1 - L) * sc[1] + L * hc[1]); b += a * ((1 - L) * sc[2] + L * hc[2]);
+        var fd0 = fade * 0.1; r = r * (1 - fd0) + fd0; gg = gg * (1 - fd0) + fd0; b = b * (1 - fd0) + fd0;
+      }
+      L = 0.2126 * r + 0.7152 * gg + 0.0722 * b;
+      if (fl) { var up = fl * (0.5 * L * L + 0.12 * L); r += up; gg += up; b += up; }
+      if (fd) { var dn = fd * 0.6 * (1 - L) * L; r -= dn; gg -= dn; b -= dn; }
+      if (fs) { var m = M.sky[i] * fs, Ls; r *= 1 - 0.3 * m; gg *= 1 - 0.2 * m; b *= 1 - 0.06 * m; Ls = 0.2126 * r + 0.7152 * gg + 0.0722 * b; r = Ls + (r - Ls) * (1 + 0.6 * m); gg = Ls + (gg - Ls) * (1 + 0.6 * m); b = Ls + (b - Ls) * (1 + 0.6 * m); }
+      if (fb) { var mb = 1 - 0.5 * (1 - M.subj[i]) * fb; r *= mb; gg *= mb; b *= mb; }
+      if (fp) { var mp = M.subj[i] * fp, Lp = 0.2126 * r + 0.7152 * gg + 0.0722 * b;
+        r = Lp + (r - Lp) * (1 + 0.5 * mp); gg = Lp + (gg - Lp) * (1 + 0.5 * mp); b = Lp + (b - Lp) * (1 + 0.5 * mp);
+        r = (r - 0.45) * (1 + 0.3 * mp) + 0.45 + 0.1 * mp; gg = (gg - 0.45) * (1 + 0.3 * mp) + 0.45 + 0.1 * mp; b = (b - 0.45) * (1 + 0.3 * mp) + 0.45 + 0.1 * mp; }
+      if (fv) { var mv = 1 - 0.65 * M.vig[i] * M.vig[i] * fv; r *= mv; gg *= mv; b *= mv; }
+      o[k] = r * 255; o[k + 1] = gg * 255; o[k + 2] = b * 255; o[k + 3] = 255;
+    }
+    ctx.putImageData(im, 0, 0);
+  }
+
+  function lookName(i) { return he() ? (HE_NAMES[NAMES[i]] || NAMES[i]) : NAMES[i]; }
+  function fxName(k) { return FX[k].split(" · ")[0]; }
+  function label() {
+    var parts = [];
+    if (state.look >= 0) parts.push(lookName(state.look));
+    Object.keys(state.fx).forEach(function (k) { parts.push(fxName(k)); });
+    tag.textContent = parts.length ? parts.join(" + ") : (he() ? "העריכה שלך" : "Your edit");
+  }
+  function sync() {
+    document.querySelectorAll("#try .look[data-look]").forEach(function (b) { var on = +b.dataset.look === state.look; b.classList.toggle("on", on); b.classList.toggle("cur", on && state.cur === "look"); b.setAttribute("aria-pressed", on); });
+    document.querySelectorAll("#try .look[data-fx]").forEach(function (b) { var k = b.dataset.fx, on = k in state.fx; b.classList.toggle("on", on); b.classList.toggle("cur", state.cur === k); b.setAttribute("aria-pressed", on); });
+    var v = state.cur === "look" ? state.lookAmt : (state.cur ? state.fx[state.cur] : 0);
+    amtBox.classList.toggle("off", !state.cur);
+    amount.value = v; out.textContent = v + "%%";
+    amtName.textContent = (he() ? "עוצמה" : "Amount") + (state.cur ? " · " + (state.cur === "look" ? lookName(state.look) : fxName(state.cur)) : "");
+    label(); render();
   }
   function tool(t) {
     document.querySelectorAll("#try .seg button").forEach(function (b) { var on = b.dataset.tool === t; b.classList.toggle("on", on); b.setAttribute("aria-pressed", on); });
     document.querySelectorAll("#try [data-pane]").forEach(function (p) { p.hidden = p.dataset.pane !== t; });
     cta.href = CTA[t][0]; cta.textContent = he() ? CTA[t][2] : CTA[t][1];
-    for (var i = 0; i < L.length; i++) if (L[i][0] === t) { pick(i); break; }
   }
+
+  document.querySelectorAll("#try .look[data-look]").forEach(function (b) { b.addEventListener("click", function () {
+    var i = +b.dataset.look;
+    if (state.look === i) { state.look = -1; if (state.cur === "look") state.cur = null; } else { state.look = i; state.lookAmt = 100; state.cur = "look"; }
+    sync();
+  }); });
+  document.querySelectorAll("#try .look[data-fx]").forEach(function (b) { b.addEventListener("click", function () {
+    var k = b.dataset.fx;
+    if (k in state.fx && state.cur === k) { delete state.fx[k]; state.cur = null; }
+    else { if (!(k in state.fx)) state.fx[k] = 70; state.cur = k; }
+    sync();
+  }); });
+  amount.addEventListener("input", function () {
+    var v = +amount.value;
+    if (state.cur === "look") state.lookAmt = v; else if (state.cur) state.fx[state.cur] = v;
+    out.textContent = v + "%%"; render();
+  });
+  document.getElementById("try-reset").addEventListener("click", function () { state.look = -1; state.fx = {}; state.cur = null; sync(); });
   split.addEventListener("input", function () { setSplit(split.value); });
-  amount.addEventListener("input", function () { setAmount(amount.value); });
   document.querySelectorAll("#try .seg button").forEach(function (b) { b.addEventListener("click", function () { tool(b.dataset.tool); }); });
-  document.querySelectorAll("#try .look[data-look]").forEach(function (b) { b.addEventListener("click", function () { pick(+b.dataset.look); }); });
   var more = document.getElementById("try-more"), tmr;
   document.querySelectorAll("#try [data-locked]").forEach(function (b) { b.addEventListener("click", function () {
     more.classList.add("nudge"); clearTimeout(tmr); tmr = setTimeout(function () { more.classList.remove("nudge"); }, 1400);
   }); });
+
+  // Start with a look on, so the first thing people see is the photo changing.
+  function start() { prepare(); state.look = 0; state.lookAmt = 100; state.cur = "look"; sync(); }
+  function boot() { if (before.complete && before.naturalWidth) start(); else before.addEventListener("load", start); }
+  // wait for the language to be set (i18n runs as a module, after this script)
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot); else boot();
 })();
-</script>""" % data
+</script>""" % dict(looks=looks, names=names, fx=fx)

@@ -8,8 +8,10 @@ import re
 
 FG = open("field-guides/index.html", encoding="utf-8").read()
 PR = open("presets/index.html", encoding="utf-8").read()
-base_css = FG[FG.index("<style>") + 7:FG.index("</style>")]
-pr_css = PR[PR.index("<style>") + 7:PR.index("</style>")]
+_i = FG.index("<style>") + 7
+base_css = FG[_i:FG.index("</style>", _i)]
+_j = PR.index("<style>") + 7
+pr_css = PR[_j:PR.index("</style>", _j)]
 _top = pr_css.split("@media (max-width:1100px)")[0]
 ba_css = "\n".join(l for l in _top.split("\n") if re.match(r"\.(ba|recipe|rc|rf|hint)[ .{:,]", l))
 ba_css += "\n@media (max-width:600px){.ba{aspect-ratio:4/5;border-radius:18px}.rc,.rf{padding:6px 12px;font-size:13px}}"
