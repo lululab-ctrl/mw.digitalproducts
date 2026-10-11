@@ -1117,6 +1117,16 @@ html[lang=he] body,html[lang=he] body *:not(svg):not(svg *),html body [lang=he],
     var p = Math.min(1, Math.max(0, -r.top / total));
     return p * (n - 1 + 0.7) - 0.35;   // -0.35 … n-0.65: room before the first and after the last chapter
   }
+  function follow(m) {
+    if (m.__run) return; m.__run = true;
+    (function step() {
+      var k = reduce ? 1 : 0.12;
+      m.__x += (m.__tx - m.__x) * k; m.__y += (m.__ty - m.__y) * k;
+      if (Math.abs(m.__tx - m.__x) < 0.02 && Math.abs(m.__ty - m.__y) < 0.02) { m.__x = m.__tx; m.__y = m.__ty; }
+      m.style.left = m.__x.toFixed(3) + "%"; m.style.top = m.__y.toFixed(3) + "%";
+      if (m.__x !== m.__tx || m.__y !== m.__ty) requestAnimationFrame(step); else m.__run = false;
+    })();
+  }
   function paint(v) {
     for (var i = 0; i < n; i++) {
       var d = v - i;                                   // <0: upcoming, 0: on screen, >0: already passed
@@ -1144,24 +1154,30 @@ html[lang=he] body,html[lang=he] body *:not(svg):not(svg *),html body [lang=he],
         if (wp) wp.style.clipPath = "inset(0 " + ((1 - wipe) * 100).toFixed(2) + "% 0 0)";
         if (wl) { wl.style.left = (wipe * 100).toFixed(2) + "%"; wl.style.opacity = (wipe > 0.01 && wipe < 0.99) ? "1" : "0"; }
         dv.querySelectorAll(".lr-track i").forEach(function (b, j) { var to = [56, 46, 62, 58, 30, 70, 54, 56, 62, 56, 53, 58, 55][j] || 55; b.style.setProperty("--at", (50 + (to - 50) * wipe).toFixed(1) + "%"); });
-        var nl = dv.querySelector(".st-newlayer"); if (nl) nl.classList.toggle("on", w > 0.4);
-        if (rings.length) { rings[0].classList.toggle("on", w > 0.2); rings[1].classList.toggle("on", w > 0.4); }
+        var nl = dv.querySelector(".st-newlayer"); if (nl) nl.classList.toggle("on", w > 0.32);
+        if (rings.length) { rings[0].classList.toggle("on", w > 0.18); rings[1].classList.toggle("on", w > 0.32); }
         if (mouse && app && op > 0.02) {
           var A = app.getBoundingClientRect();
           var at = function (el, fx, fy) { var r = el.getBoundingClientRect(); return [(r.left + r.width * fx - A.left) / A.width * 100, (r.top + r.height * fy - A.top) / A.height * 100]; };
-          var canvas = dv.querySelector(".st-canvas"), C = canvas.getBoundingClientRect();
-          var lineAt = [((C.left + C.width * wipe) - A.left) / A.width * 100, ((C.top + C.height * 0.62) - A.top) / A.height * 100];
+          var canvas = dv.querySelector(".st-canvas");
+          // one continuous path: rest → click target(s) → grab the compare line → drag it across
           var keys = rings.length
-            ? [[0, [72, 86]], [0.2, at(rings[0], .5, .55)], [0.4, at(rings[1], .3, .55)], [0.47, at(canvas, 0, .62)], [1, at(canvas, 1, .62)]]
-            : [[0, [62, 88]], [0.26, at(dv.querySelector(".lr-folder.on"), .45, .55)], [0.33, at(canvas, 0, .62)], [1, at(canvas, 1, .62)]];
+            ? [[0, [70, 84]], [0.18, at(rings[0], .5, .55)], [0.32, at(rings[1], .3, .55)], [start, at(canvas, 0, .62)], [1, at(canvas, 1, .62)]]
+            : [[0, [60, 86]], [0.18, at(dv.querySelector(".lr-folder.on"), .45, .55)], [start, at(canvas, 0, .62)], [1, at(canvas, 1, .62)]];
           var pos = keys[keys.length - 1][1];
-          for (var q = 1; q < keys.length; q++) if (w <= keys[q][0]) { var a0 = keys[q - 1], a1 = keys[q], t = ss(0, 1, (w - a0[0]) / (a1[0] - a0[0] || 1)); pos = [a0[1][0] + (a1[1][0] - a0[1][0]) * t, a0[1][1] + (a1[1][1] - a0[1][1]) * t]; break; }
-          if (w > start) pos = lineAt;                    // holding the compare line while it sweeps
-          mouse.style.left = pos[0].toFixed(2) + "%"; mouse.style.top = pos[1].toFixed(2) + "%";
-          var clicks = rings.length ? [0.2, 0.4] : [0.26];
-          var near = clicks.some(function (c) { return Math.abs(w - c) < 0.018; });
-          mouse.classList.toggle("click", near); mouse.classList.toggle("press", near || (w > start && w < 0.99));
-          
+          for (var q = 1; q < keys.length; q++) if (w <= keys[q][0]) {
+            var a0 = keys[q - 1], a1 = keys[q], u = Math.min(1, Math.max(0, (w - a0[0]) / (a1[0] - a0[0] || 1)));
+            var drag = a0[0] >= start, t = drag ? u : u * u * (3 - 2 * u);
+            var arc = drag ? 0 : Math.sin(Math.PI * t) * -5;          // a gentle arc, like a hand moving a mouse
+            pos = [a0[1][0] + (a1[1][0] - a0[1][0]) * t, a0[1][1] + (a1[1][1] - a0[1][1]) * t + arc];
+            break;
+          }
+          mouse.__tx = pos[0]; mouse.__ty = pos[1];
+          if (mouse.__x == null) { mouse.__x = pos[0]; mouse.__y = pos[1]; }
+          follow(mouse);
+          var clicks = rings.length ? [0.18, 0.32] : [0.18];
+          var near = clicks.some(function (c) { return Math.abs(w - c) < 0.02; });
+          mouse.classList.toggle("click", near); mouse.classList.toggle("press", near || (w > start && w < 0.995));
         }
         dv.style.setProperty("--e", ss(-0.45, 0.2, d).toFixed(3));   // books fan out as the chapter arrives
       }
