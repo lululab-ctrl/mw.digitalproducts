@@ -248,6 +248,7 @@ const HE = {
   "Browse all products": "לכל המוצרים",
   "Home": "דף הבית",
   // home: interactive shop
+  "SUBJECT · POP": "SUBJECT · POP",
   "Shoot": "צילום",
   "Finish": "גימור",
   "Scroll": "גללו",

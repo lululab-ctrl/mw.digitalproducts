@@ -3,6 +3,7 @@
 All wording comes from the existing home copy (drafts for Matan); facts are the ones on the sales pages."""
 
 IMG = "assets/pages/img/"
+import home_devices
 CHECK = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>'
 ARROW = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>'
 
@@ -64,6 +65,7 @@ STORY = f"""<section class="st-ch" id="shop" aria-label="The collection">
 <div class="st-grid">
 <div class="st-media" aria-hidden="true">
 {"".join(f'<img class="st-mimg" data-i="{i}" src="{IMG}{c["img"]}" alt="" loading="lazy" style="object-position: {c["pos"]}">' for i, c in enumerate(CHAPTERS))}
+{home_devices.HTML}
 <div class="st-vf st-vf-sm"><span></span><span></span><span></span><span></span></div>
 <div class="st-count"><span class="st-cur">01</span><span class="st-of">/ 03</span></div>
 </div>
@@ -88,7 +90,7 @@ CLOSE = """<section class="st-close">
 </div>
 </section>"""
 
-CSS = """
+CSS = home_devices.CSS + """
 /* ---------- landing: cinematic hero ---------- */
 .st-hero{position:relative;min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden;background:#0A0908;isolation:isolate}
 .st-hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:62% 35%;z-index:-2;animation:stkb 24s cubic-bezier(.2,.6,.2,1) both;transform-origin:65% 40%}
@@ -209,7 +211,7 @@ JS = """<script>
   var track = document.querySelector(".st-track"); if (!track) return;
   var imgs = track.querySelectorAll(".st-mimg"), arts = track.querySelectorAll(".st-art"), prog = track.querySelectorAll(".st-prog span");
   var cur = track.querySelector(".st-cur"), n = arts.length;
-  var ghosts = track.querySelectorAll(".st-ghost"), ambs = track.querySelectorAll(".st-amb");
+  var ghosts = track.querySelectorAll(".st-ghost"), ambs = track.querySelectorAll(".st-amb"), devs = track.querySelectorAll(".st-dev");
   var reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
   var target = 0, shown = 0, running = false, lastIdx = -1;
   var ss = function (a, b, x) { var t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
@@ -231,6 +233,21 @@ JS = """<script>
       arts[i].style.transform = "translateY(" + (-d * 40).toFixed(1) + "px)";
       if (ghosts[i]) { ghosts[i].style.opacity = op.toFixed(3); ghosts[i].style.transform = "translateY(calc(-50% + " + (-d * 120).toFixed(1) + "px))"; }
       if (ambs[i]) ambs[i].style.opacity = (op * 0.26).toFixed(3);
+      if (devs[i]) {
+        var dv = devs[i]; dv.style.opacity = op.toFixed(3);
+        dv.style.transform = "translateY(" + (-d * 60).toFixed(1) + "px) scale(" + (0.94 + 0.06 * op).toFixed(4) + ")";
+        var w = ss(-0.36, 0.3, d);                      // the edit sweeps across while this chapter is on screen
+        var wp = dv.querySelector(".st-wipe"), wl = dv.querySelector(".st-wline");
+        if (wp) wp.style.clipPath = "inset(0 " + ((1 - w) * 100).toFixed(2) + "% 0 0)";
+        if (wl) { wl.style.left = (w * 100).toFixed(2) + "%"; wl.style.opacity = (w > 0.01 && w < 0.99) ? "1" : "0"; }
+        dv.querySelectorAll(".st-bar i").forEach(function (b) { var to = parseFloat(b.style.getPropertyValue("--to")); b.style.setProperty("--at", (50 + (to - 50) * w).toFixed(1) + "%"); });
+        var rings = dv.querySelectorAll(".st-ring"); if (rings.length) { rings[0].classList.toggle("on", w > 0.05); rings[1].classList.toggle("on", w > 0.35); }
+        var pgs = dv.querySelectorAll(".st-pg"); if (pgs.length) {
+          var k = Math.min(pgs.length - 1, Math.floor(ss(-0.42, 0.36, d) * pgs.length));
+          pgs.forEach(function (pg, j) { pg.classList.toggle("on", j === k); });
+          dv.querySelectorAll(".st-tab-dots i").forEach(function (dot, j) { dot.classList.toggle("on", j === k); });
+        }
+      }
     }
     var k = Math.round(v);
     if (k !== lastIdx) {
