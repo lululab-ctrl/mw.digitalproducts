@@ -49,6 +49,13 @@ WORDS = {
 # Matan's placeholder note under the bundle cards is not shown on the site.
 BUNDLE_NOTE = re.compile(r'<p[^>]*>\[(?:Bundle prices and discounts: (?:Matan to decide|for Matan to set)|מחירים והנחות לחבילות: לקביעת מתן)\]</p>\s*')
 
+# Placeholder prices shown as zero until real ones are set; dollars in English, shekels in Hebrew.
+PRICES = {
+    "en": ["[YOUR PRICE]", "[BUNDLE PRICE]", "[PRICE BEFORE DISCOUNT]"],
+    "he": ["[המחיר]", "[מחיר חבילה]", "[מחיר החבילה]", "[מחיר לפני הנחה]"],
+}
+ZERO = {"en": "$0.00", "he": "₪0.00"}
+
 for path, lang in PAGES.items():
     s = open(path, encoding="utf-8").read()
     s = gold(s)
@@ -62,6 +69,8 @@ for path, lang in PAGES.items():
     for a, b in WORDS[lang]:
         s = s.replace(a, b)
     s = BUNDLE_NOTE.sub("", s)
+    for a in PRICES[lang]:
+        s = s.replace(a, ZERO[lang])
     if 'id="mwp-fonts"' not in s:
         s = s.replace("</head>", FONTS + "\n</head>", 1)
     if 'id="mwp-unify"' not in s:

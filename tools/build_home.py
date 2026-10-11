@@ -91,7 +91,7 @@ def card(href, img, alt, tag, name, line, points, cta):
 <h3 class="nm" data-no-i18n>MWP <span class="grad">{name}</span></h3>
 <p class="ln">{line}</p>
 <ul>{lis}</ul>
-<div class="act"><a class="btn" href="{href}">{cta}</a><a class="ghost" href="{href}#buy">[YOUR PRICE]</a></div>
+<div class="act"><a class="btn" href="{href}">{cta}</a><a class="ghost" href="{href}#buy">$0.00</a></div>
 </div>
 </article>'''
 
@@ -162,10 +162,10 @@ html = f'''<!doctype html>
 <p class="lead">MWP Field Guides teach what happens before the click: composition, colour, light and planning, in 4 PDF guides in English and Hebrew. The presets and the Panel carry it on into the edit, in the same look.</p>
 </div>
 <div class="plans">
-{plan("MWP Presets", "Edit in Lightroom", "[YOUR PRICE]", ["50 Lightroom presets, 12 adaptive", "50 mobile files and 33 LUTs", "Install guide for every program"], "Get the presets", "presets/#buy")}
-{plan("Presets + Field Guides", "Shoot it, then edit it", "[BUNDLE PRICE]", ["MWP Presets: 50 presets and 33 LUTs", "MWP Field Guides: 4 PDF guides, 137 lessons", "Composition, colour, light and planning"], "Get the bundle", "field-guides/#bundles")}
-{plan("Presets + Panel", "Lightroom and Photoshop", "[BUNDLE PRICE]", ["MWP Presets: 50 presets and 33 LUTs", "MWP Panel: the Photoshop plugin", "User manual and install guide"], "Get the bundle", "panel/#buy")}
-{plan("The full set", "From the shot to the share", "[BUNDLE PRICE]", ["MWP Presets: 50 presets and 33 LUTs", "MWP Panel: the Photoshop plugin", "MWP Field Guides: 4 PDF guides, 137 lessons"], "Get the full set", "presets/#bundles", hi=True)}
+{plan("MWP Presets", "Edit in Lightroom", "$0.00", ["50 Lightroom presets, 12 adaptive", "50 mobile files and 33 LUTs", "Install guide for every program"], "Get the presets", "presets/#buy")}
+{plan("Presets + Field Guides", "Shoot it, then edit it", "$0.00", ["MWP Presets: 50 presets and 33 LUTs", "MWP Field Guides: 4 PDF guides, 137 lessons", "Composition, colour, light and planning"], "Get the bundle", "field-guides/#bundles")}
+{plan("Presets + Panel", "Lightroom and Photoshop", "$0.00", ["MWP Presets: 50 presets and 33 LUTs", "MWP Panel: the Photoshop plugin", "User manual and install guide"], "Get the bundle", "panel/#buy")}
+{plan("The full set", "From the shot to the share", "$0.00", ["MWP Presets: 50 presets and 33 LUTs", "MWP Panel: the Photoshop plugin", "MWP Field Guides: 4 PDF guides, 137 lessons"], "Get the full set", "presets/#bundles", hi=True)}
 </div>
 </div>
 </section>
