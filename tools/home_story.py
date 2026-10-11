@@ -117,7 +117,7 @@ CSS = home_devices.CSS + """
 .st-ch{position:relative;background:#0A0908}
 .st-ch-head{display:flex;flex-direction:column;gap:16px;align-items:center;text-align:center;max-width:720px;margin:0 auto;padding-top:clamp(96px,14vh,160px);padding-bottom:clamp(56px,8vh,88px)}
 .st-ch-head .lead{text-wrap:balance}
-.st-track{position:relative;height:300vh}
+.st-track{position:relative;height:500vh}
 .st-sticky{position:sticky;top:0;height:100vh;overflow:hidden}
 .st-grid{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);height:100%;width:100%}
 .st-media{position:relative;height:100%;overflow:hidden;background:#141210}
@@ -287,7 +287,7 @@ JS = """<script>
     }
   }
   function loop() {
-    shown += (target - shown) * (reduce ? 1 : 0.12);
+    shown += (target - shown) * (reduce ? 1 : 0.07);
     if (Math.abs(target - shown) < 0.0005) shown = target;
     paint(shown);
     if (shown !== target) requestAnimationFrame(loop); else running = false;
