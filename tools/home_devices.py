@@ -28,16 +28,43 @@ def shoot():
     return f'<div class="st-dev st-dev-shoot" data-i="0"><div class="bk-row">{books}</div><div class="st-floor"></div></div>'
 
 
+MOUSE = '<i class="st-mouse"><svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path d="M5 3l14 8-6.2 1.6L9.6 19z" fill="#FEFBF1" stroke="#0A0908" stroke-width="1.4" stroke-linejoin="round"/></svg></i>'
+FILM = ["3c14b23dbb00f051684ad60fb205ed10", "7c359a77f23f632596ebda32f1e9a72f", "9a95f4aafdcef50170f5aa90a3945504",
+        "8726daeb4a1c2551c37d43692b07fa4a", "c339384fe0c6d91e7b1388d0fed7d1ae", "af0d1799831d0417d338c0b162975a7b"]
+HISTO = ('<svg class="lr-histo" viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true">'
+         '<path d="M0 40 L0 36 C10 34 14 22 22 20 C30 18 34 30 42 26 C50 22 56 8 64 10 C72 12 76 28 84 30 C90 32 95 36 100 37 L100 40Z" fill="rgba(120,140,255,.35)"/>'
+         '<path d="M0 40 L0 37 C12 35 18 26 26 25 C36 24 40 32 50 28 C60 24 64 14 72 16 C80 18 86 32 100 36 L100 40Z" fill="rgba(255,120,110,.3)"/>'
+         '<path d="M0 40 L0 38 C10 36 20 30 30 29 C40 28 46 20 56 18 C66 16 72 24 82 28 C90 31 96 35 100 38 L100 40Z" fill="rgba(120,230,140,.25)"/></svg>')
+
+
+def _sl(name, cls=""):
+    return f'<div class="lr-sl {cls}"><span>{name}</span><div class="lr-track"><i></i></div></div>'
+
+
 def edit():
-    groups = "".join(f'<span class="{"on" if k == 1 else ""}">{g}</span>' for k, g in enumerate(PRESET_GROUPS))
-    rows = "".join(f'<div class="st-sl"><span>{n}</span><div class="st-bar"><i style="--to:{v}%"></i></div></div>' for n, v in SLIDERS)
+    folders = "".join(f'<div class="lr-folder{" on" if k == 1 else ""}"><i class="lr-tri"></i><span>{g}</span></div>' for k, g in enumerate(PRESET_GROUPS))
+    film = "".join(f'<img src="{IMG}{f}.jpg" alt=""{" class=on" if k == 0 else ""}>' for k, f in enumerate(FILM))
+    tone = "".join(_sl(n) for n in ["Exposure", "Contrast", "Highlights", "Shadows", "Whites", "Blacks"])
+    presence = "".join(_sl(n) for n in ["Texture", "Clarity", "Dehaze", "Vibrance", "Saturation"])
     return f"""<div class="st-dev st-dev-edit" data-i="1">
 <div class="st-lap">
-<div class="st-lap-scr"><div class="st-app st-lr">
-<div class="st-pane"><b>PRESETS</b>{groups}</div>
-<div class="st-canvas"><img src="{IMG}try-raw-clean.jpg" alt=""><img class="st-wipe" src="{IMG}fbaf19aea2af10f26b2949ab31fff094.jpg" alt=""><i class="st-wline"></i><em class="st-chip l">MWP</em><em class="st-chip r">RAW</em></div>
-<div class="st-pane st-pane-r"><b>BASIC</b>{rows}</div>
-<i class="st-mouse"><svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path d="M5 3l14 8-6.2 1.6L9.6 19z" fill="#FEFBF1" stroke="#0A0908" stroke-width="1.4" stroke-linejoin="round"/></svg></i></div><i class="st-glare"></i></div>
+<div class="st-lap-scr"><div class="st-app lrc">
+<div class="lr-top"><span class="lr-id">MW PHOTO TOURS</span><nav><span>Library</span><b>Develop</b><span>Map</span><span>Book</span><span>Slideshow</span><span>Print</span><span>Web</span></nav></div>
+<div class="lr-left">
+<div class="lr-head">Navigator</div><img class="lr-nav" src="{IMG}try-raw-clean.jpg" alt="">
+<div class="lr-head">Presets</div>{folders}
+</div>
+<div class="st-canvas lr-canvas"><img src="{IMG}try-raw-clean.jpg" alt=""><img class="st-wipe" src="{IMG}fbaf19aea2af10f26b2949ab31fff094.jpg" alt=""><i class="st-wline"></i><em class="st-chip l">After</em><em class="st-chip r">Before</em></div>
+<div class="lr-right">
+<div class="lr-histo-box">{HISTO}</div>
+<div class="lr-head">Basic</div>
+<div class="lr-row"><span>Treatment</span><em>Color</em><em class="off">Black &amp; White</em></div>
+{_sl("Temp", "temp")}{_sl("Tint", "tint")}
+<div class="lr-sub">Tone</div>{tone}
+<div class="lr-sub">Presence</div>{presence}
+</div>
+<div class="lr-film">{film}</div>
+{MOUSE}</div><i class="st-glare"></i></div>
 <div class="st-lap-base"></div>
 </div>
 <div class="st-floor"></div>
@@ -45,21 +72,30 @@ def edit():
 
 
 def finish():
-    tools = "<i></i>" * 9
+    tools = "<i></i>" * 14
     return f"""<div class="st-dev st-dev-finish" data-i="2">
 <div class="st-lap">
-<div class="st-lap-scr"><div class="st-app st-ps">
-<div class="st-tools">{tools}</div>
-<div class="st-canvas"><img src="{IMG}c339384fe0c6d91e7b1388d0fed7d1ae.jpg" alt=""><img class="st-wipe" src="{IMG}52e0c3d2c90942f72d31faa689449bd0.jpg" alt=""><i class="st-wline"></i><em class="st-chip l">SUBJECT · POP</em><em class="st-chip r">BEFORE</em></div>
+<div class="st-lap-scr"><div class="st-app psc">
+<div class="ps-menu"><span>File</span><span>Edit</span><span>Image</span><span>Layer</span><span>Select</span><span>Filter</span><span>View</span><span>Plugins</span><span>Window</span></div>
+<div class="ps-opts"><i></i><i></i><i></i><span></span></div>
+<div class="ps-tools">{tools}</div>
+<div class="ps-doc"><div class="ps-tab">photo.psd @ 33%</div><div class="st-canvas ps-canvas"><img src="{IMG}c339384fe0c6d91e7b1388d0fed7d1ae.jpg" alt=""><img class="st-wipe" src="{IMG}52e0c3d2c90942f72d31faa689449bd0.jpg" alt=""><i class="st-wline"></i></div></div>
+<div class="ps-right">
 <div class="st-dock"><div class="st-dock-in"><img src="{IMG}0f68e9846bf802d72ca616b1da7a3b4c.png" alt=""><i class="st-ring st-ring-a"></i><i class="st-ring st-ring-b"></i></div></div>
-<i class="st-mouse"><svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path d="M5 3l14 8-6.2 1.6L9.6 19z" fill="#FEFBF1" stroke="#0A0908" stroke-width="1.4" stroke-linejoin="round"/></svg></i></div><i class="st-glare"></i></div>
+<div class="ps-layers"><div class="ps-lh"><b>Layers</b><span>Channels</span><span>Paths</span></div>
+<div class="ps-layer grp"><i class="ps-eye"></i><i class="ps-fold"></i><span>MWP</span></div>
+<div class="ps-layer sub st-newlayer"><i class="ps-eye"></i><i class="ps-thumb"></i><span>Subject · Pop</span></div>
+<div class="ps-layer"><i class="ps-eye"></i><img src="{IMG}c339384fe0c6d91e7b1388d0fed7d1ae.jpg" alt=""><span>Background</span><i class="ps-lock"></i></div>
+</div>
+</div>
+{MOUSE}</div><i class="st-glare"></i></div>
 <div class="st-lap-base"></div>
 </div>
 <div class="st-floor"></div>
 </div>"""
 
 
-HTML = '<div class="st-devs" aria-hidden="true">' + shoot() + edit() + finish() + "</div>"
+HTML = '<div class="st-devs" aria-hidden="true" data-no-i18n>' + shoot() + edit() + finish() + "</div>"
 
 CSS = """
 /* ---------- landing: product scenes ---------- */
@@ -138,5 +174,60 @@ CSS = """
 @keyframes stclick{0%{opacity:.9;transform:scale(.3)}100%{opacity:0;transform:scale(1.6)}}
 .st-mouse.press svg{transform:scale(.86);transform-origin:20% 10%}
 .st-pane span.hov{background:rgba(254,251,241,.06)}
-@media (max-width:1200px){.st-app{font-size:8px}}
+/* Lightroom-style develop screen */
+.lrc{grid-template-columns:19% 1fr 25%;grid-template-rows:7% 1fr 12%;background:#1a1a1a;font-size:7px;color:#b4b4b4}
+.lr-top{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;padding:0 3%;background:#141414;border-bottom:1px solid #0a0a0a}
+.lr-id{font-size:6px;font-weight:700;letter-spacing:.24em;color:#8a8a8a}
+.lr-top nav{display:flex;gap:9px;font-size:7px;color:#6c6c6c}
+.lr-top nav b{color:#e8e8e8;font-weight:600}
+.lr-left,.lr-right{display:flex;flex-direction:column;gap:4px;padding:6px 7px;background:#262626;overflow:hidden}
+.lr-left{border-right:1px solid #111}.lr-right{border-left:1px solid #111}
+.lr-head{margin-top:3px;padding:2px 0 3px;border-bottom:1px solid #1b1b1b;font-size:7px;font-weight:600;color:#d0d0d0;text-align:right}
+.lr-left .lr-head{text-align:left}
+.lr-nav{width:100%;aspect-ratio:16/10;object-fit:cover;border:1px solid #111}
+.lr-folder{display:flex;align-items:center;gap:4px;padding:2px 3px;border-radius:2px;white-space:nowrap;overflow:hidden}
+.lr-tri{width:0;height:0;border-left:3px solid #8a8a8a;border-top:2.5px solid transparent;border-bottom:2.5px solid transparent;flex:none}
+.lr-folder.on{background:#3d3d3d;color:#f0f0f0}
+.lr-folder.on .lr-tri{border-left-color:#F4AF56}
+.lr-folder.hov{background:#333}
+.lr-histo-box{height:13%;min-height:24px;background:#1c1c1c;border:1px solid #111}
+.lr-histo{display:block;width:100%;height:100%}
+.lr-row{display:flex;align-items:center;gap:4px;font-size:6.5px}
+.lr-row span{flex:1}.lr-row em{font-style:normal;color:#e8e8e8}.lr-row em.off{color:#666}
+.lr-sub{margin-top:2px;font-size:6.5px;color:#8a8a8a;text-align:right}
+.lr-sl{display:grid;grid-template-columns:42% 1fr;align-items:center;gap:4px;font-size:6.5px}
+.lr-sl span{text-align:right}
+.lr-track{position:relative;height:2px;background:#4a4a4a}
+.lr-sl.temp .lr-track{background:linear-gradient(90deg,#4a6fb5,#d8c25a)}
+.lr-sl.tint .lr-track{background:linear-gradient(90deg,#4fa35a,#b2549e)}
+.lr-track i{position:absolute;top:50%;left:var(--at,50%);width:0;height:0;margin:-1px 0 0 -3px;border-left:3px solid transparent;border-right:3px solid transparent;border-bottom:5px solid #cfcfcf}
+.lr-canvas{background:#111}
+.lr-film{grid-column:1/-1;display:flex;gap:4px;align-items:center;padding:4px 6px;background:#141414;border-top:1px solid #0a0a0a;overflow:hidden}
+.lr-film img{height:82%;aspect-ratio:3/2;object-fit:cover;opacity:.55;border:1px solid transparent}
+.lr-film img.on{opacity:1;border-color:#cfcfcf}
+/* Photoshop-style screen */
+.psc{grid-template-columns:4.5% 1fr 30%;grid-template-rows:5% 6% 1fr;background:#2d2d2d;font-size:7px;color:#c8c8c8}
+.ps-menu{grid-column:1/-1;display:flex;gap:9px;align-items:center;padding:0 2%;background:#1f1f1f;color:#bdbdbd;font-size:6.5px}
+.ps-opts{grid-column:1/-1;display:flex;gap:6px;align-items:center;padding:0 2%;background:#343434;border-bottom:1px solid #1d1d1d}
+.ps-opts i{width:12px;height:8px;border-radius:2px;background:#4b4b4b}.ps-opts span{width:60px;height:6px;border-radius:2px;background:#444}
+.ps-tools{display:flex;flex-direction:column;align-items:center;gap:5px;padding-top:6px;background:#383838;border-right:1px solid #1d1d1d}
+.ps-tools i{width:9px;height:9px;border-radius:2px;background:#5a5a5a}
+.ps-tools i:nth-child(4){background:#8a8a8a}
+.ps-doc{display:flex;flex-direction:column;background:#232323;min-width:0}
+.ps-tab{flex:none;padding:3px 8px;font-size:6.5px;color:#d0d0d0;background:#3a3a3a;align-self:flex-start;border-radius:0 0 3px 0}
+.ps-canvas{flex:1;margin:6%;box-shadow:0 4px 18px rgba(0,0,0,.5)}
+.ps-right{display:grid;grid-template-rows:1fr auto;min-height:0;border-left:1px solid #1d1d1d}
+.ps-right .st-dock{border-left:0}
+.ps-layers{background:#323232;border-top:1px solid #1d1d1d;padding:3px 0 4px}
+.ps-lh{display:flex;gap:8px;padding:2px 6px 4px;font-size:6.5px;color:#888}.ps-lh b{color:#e8e8e8;font-weight:600}
+.ps-layer{display:flex;align-items:center;gap:4px;padding:3px 6px;font-size:6.5px;border-top:1px solid #2a2a2a}
+.ps-layer img,.ps-thumb{width:16px;height:11px;object-fit:cover;border:1px solid #222;background:repeating-conic-gradient(#555 0 25%,#777 0 50%) 0 0/6px 6px}
+.ps-eye{width:7px;height:4px;border-radius:50%;border:1px solid #aaa}
+.ps-fold{width:9px;height:6px;border-radius:1px;background:#8d8d8d}
+.ps-lock{width:5px;height:6px;margin-left:auto;border-radius:1px;background:#aaa}
+.ps-layer.sub{padding-left:16px}
+.ps-layer.grp span{color:#F4AF56;font-weight:600}
+.st-newlayer{opacity:0;max-height:0;padding-top:0;padding-bottom:0;overflow:hidden;transition:opacity .4s,max-height .4s,padding .4s}
+.st-newlayer.on{opacity:1;max-height:20px;padding-top:3px;padding-bottom:3px;background:#3d4a5a}
+@media (max-width:1200px){.st-app{font-size:8px}.lrc,.psc{font-size:6px}}
 """

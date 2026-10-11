@@ -247,7 +247,8 @@ JS = """<script>
         var wp = dv.querySelector(".st-wipe"), wl = dv.querySelector(".st-wline");
         if (wp) wp.style.clipPath = "inset(0 " + ((1 - wipe) * 100).toFixed(2) + "% 0 0)";
         if (wl) { wl.style.left = (wipe * 100).toFixed(2) + "%"; wl.style.opacity = (wipe > 0.01 && wipe < 0.99) ? "1" : "0"; }
-        dv.querySelectorAll(".st-bar i").forEach(function (b) { var to = parseFloat(b.style.getPropertyValue("--to")); b.style.setProperty("--at", (50 + (to - 50) * wipe).toFixed(1) + "%"); });
+        dv.querySelectorAll(".lr-track i").forEach(function (b, j) { var to = [56, 46, 62, 58, 30, 70, 54, 56, 62, 56, 53, 58, 55][j] || 55; b.style.setProperty("--at", (50 + (to - 50) * wipe).toFixed(1) + "%"); });
+        var nl = dv.querySelector(".st-newlayer"); if (nl) nl.classList.toggle("on", w > 0.4);
         if (rings.length) { rings[0].classList.toggle("on", w > 0.2); rings[1].classList.toggle("on", w > 0.4); }
         if (mouse && app && op > 0.02) {
           var A = app.getBoundingClientRect();
@@ -256,7 +257,7 @@ JS = """<script>
           var lineAt = [((C.left + C.width * wipe) - A.left) / A.width * 100, ((C.top + C.height * 0.62) - A.top) / A.height * 100];
           var keys = rings.length
             ? [[0, [72, 86]], [0.2, at(rings[0], .5, .55)], [0.4, at(rings[1], .3, .55)], [0.47, at(canvas, 0, .62)], [1, at(canvas, 1, .62)]]
-            : [[0, [62, 88]], [0.26, at(dv.querySelector(".st-pane span.on"), .45, .55)], [0.33, at(canvas, 0, .62)], [1, at(canvas, 1, .62)]];
+            : [[0, [62, 88]], [0.26, at(dv.querySelector(".lr-folder.on"), .45, .55)], [0.33, at(canvas, 0, .62)], [1, at(canvas, 1, .62)]];
           var pos = keys[keys.length - 1][1];
           for (var q = 1; q < keys.length; q++) if (w <= keys[q][0]) { var a0 = keys[q - 1], a1 = keys[q], t = ss(0, 1, (w - a0[0]) / (a1[0] - a0[0] || 1)); pos = [a0[1][0] + (a1[1][0] - a0[1][0]) * t, a0[1][1] + (a1[1][1] - a0[1][1]) * t]; break; }
           if (w > start) pos = lineAt;                    // holding the compare line while it sweeps
@@ -264,7 +265,7 @@ JS = """<script>
           var clicks = rings.length ? [0.2, 0.4] : [0.26];
           var near = clicks.some(function (c) { return Math.abs(w - c) < 0.018; });
           mouse.classList.toggle("click", near); mouse.classList.toggle("press", near || (w > start && w < 0.99));
-          var hov = dv.querySelector(".st-pane span.on"); if (hov) hov.classList.toggle("hov", w > 0.18 && w < 0.3);
+          
         }
         dv.style.setProperty("--e", ss(-0.45, 0.2, d).toFixed(3));   // books fan out as the chapter arrives
       }
