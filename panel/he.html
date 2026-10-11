@@ -240,6 +240,26 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 .btn,.ghost,.out,.tab,.more button,.q{font-family:"Ploni ML v2 AAA",Heebo,Montserrat,sans-serif}
 .links a{font-size:15px}
 @media (max-width:600px){.ans{padding-left:0}.plan .lbl{right:24px}}
+
+/* rolling numbers */
+.odo{display:inline-flex;direction:ltr;height:1em;line-height:1;overflow:hidden;clip-path:inset(0);vertical-align:top}
+.odo .d{display:flex;flex-direction:column;transform:translateY(calc(var(--d) * -1em))}
+.odo .d i{display:block;height:1em;font-style:normal;background:linear-gradient(90deg,#E4AA7C 0%,#F4AF56 55%,#F8D29C 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.stat .odo .d+.d{margin-left:-.05em}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+@keyframes roll{0%{transform:translateY(0)}78%{transform:translateY(calc(var(--d) * -1em - .2em))}100%{transform:translateY(calc(var(--d) * -1em))}}
+.fx .stat .odo .d{transform:translateY(0)}
+.fx .stat.in .odo .d{animation:roll 1.8s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(var(--dl,0s) + var(--di,0s))}
+@media (prefers-reduced-motion:reduce){.fx .stat .odo .d{animation:none!important;transform:translateY(calc(var(--d) * -1em))}}
+
+/* ---- light accents from mw.photography ---- */
+.pg{position:relative}
+.pg::after{content:"";position:absolute;inset:0;z-index:60;pointer-events:none;opacity:.035;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 0 0 0 0 1'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E")}
+.kick .n{color:rgba(244,244,244,.45);margin-inline-end:12px;font-variant-numeric:tabular-nums}
+.bigmark{margin:clamp(48px,8vh,96px) 0 0;padding:0;font-family:Montserrat,sans-serif;font-weight:900;font-size:clamp(90px,24vw,400px);line-height:.86;letter-spacing:.02em;text-align:center;white-space:nowrap;color:transparent;background-position:30% 34.6%;background-size:230% auto;-webkit-background-clip:text;background-clip:text;direction:ltr}
+.fx .rv{opacity:0;transform:translateY(28px);transition:opacity 1s cubic-bezier(.16,1,.3,1),transform 1.1s cubic-bezier(.16,1,.3,1);transition-delay:var(--rd,0s)}
+.fx .rv.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.fx .rv{opacity:1;transform:none;transition:none}}
 </style>
 </helmet>
 <div class="pg">
@@ -291,17 +311,17 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 
 <section class="band">
 <div class="wrap stats">
-<div class="stat"><div class="n grad">8</div><div class="t">אפקטים בלחיצה</div></div>
-<div class="stat"><div class="n grad">11</div><div class="t">לוקים</div></div>
-<div class="stat"><div class="n grad">4</div><div class="t">תאורות מצוירות</div></div>
-<div class="stat"><div class="n grad">1</div><div class="t"><span class="en">Ctrl+Z</span> אחד מבטל כל כפתור</div></div>
+<div class="stat"><div class="n"><span class="odo" aria-hidden="true"><span class="d" style="--d:8"><i>0</i><i>1</i><i>2</i><i>3</i><i>4</i><i>5</i><i>6</i><i>7</i><i>8</i><i>9</i></span></span><span class="sr">8</span></div><div class="t">אפקטים בלחיצה</div></div>
+<div class="stat"><div class="n"><span class="odo" aria-hidden="true"><span class="d" style="--d:1"><i>0</i><i>1</i><i>2</i><i>3</i><i>4</i><i>5</i><i>6</i><i>7</i><i>8</i><i>9</i></span><span class="d" style="--d:1"><i>0</i><i>1</i><i>2</i><i>3</i><i>4</i><i>5</i><i>6</i><i>7</i><i>8</i><i>9</i></span></span><span class="sr">11</span></div><div class="t">לוקים</div></div>
+<div class="stat"><div class="n"><span class="odo" aria-hidden="true"><span class="d" style="--d:4"><i>0</i><i>1</i><i>2</i><i>3</i><i>4</i><i>5</i><i>6</i><i>7</i><i>8</i><i>9</i></span></span><span class="sr">4</span></div><div class="t">תאורות מצוירות</div></div>
+<div class="stat"><div class="n"><span class="odo" aria-hidden="true"><span class="d" style="--d:1"><i>0</i><i>1</i><i>2</i><i>3</i><i>4</i><i>5</i><i>6</i><i>7</i><i>8</i><i>9</i></span></span><span class="sr">1</span></div><div class="t"><span class="en">Ctrl+Z</span> אחד מבטל כל כפתור</div></div>
 </div>
 </section>
 
 <section class="sec" id="ba">
 <div class="wrap">
 <div class="head">
-<div class="kick">מ-RAW לתמונה הסופית</div>
+<div class="kick"><span class="n">01</span>מ-RAW לתמונה הסופית</div>
 <h2 class="h2">החיה בהירה יותר. <span class="b grad">השמיים רגועים יותר.</span></h2>
 <p class="lead">בוחרים את הנושא או את השמיים, ואז אפקט. הפאנל בונה את המסכה ושם את העריכה בשכבה נפרדת.</p>
 </div>
@@ -330,7 +350,7 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 <section class="sec tight" id="inside">
 <div class="wrap">
 <div class="head">
-<div class="kick">מה יש בפנים</div>
+<div class="kick"><span class="n">02</span>מה יש בפנים</div>
 <h2 class="h2">ארבע לשוניות, <span class="b grad">לפי סדר העריכה.</span></h2>
 </div>
 <div class="cols">
@@ -350,7 +370,7 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 <span class="mchip en" style="left: 8%; top: 10%">SUBJECT</span>
 </div>
 <div class="stack">
-<div class="kick">נושא, שמיים, רקע</div>
+<div class="kick"><span class="n">03</span>נושא, שמיים, רקע</div>
 <h2 class="h2">פוטושופ מוצא את החיה. <span class="b grad">אתם מחליטים מה יקרה לה.</span></h2>
 <p class="lead"><span class="en">Subject</span>, <span class="en">Sky</span> ו-<span class="en">Background</span> משתמשים ב-AI של פוטושופ עצמו. לחיצה ארוכה על כפתור מראה את האזור באדום, לפני שעורכים.</p>
 </div>
@@ -360,7 +380,7 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 <section class="sec" style="background: linear-gradient(180deg,#0A0908,#0C2925); padding-bottom: 40px">
 <div class="wrap">
 <div class="head">
-<div class="kick">בתוך פוטושופ</div>
+<div class="kick"><span class="n">04</span>בתוך פוטושופ</div>
 <h2 class="h2">פאנל אחד, <span class="b grad">ליד השכבות שלכם.</span></h2>
 <p class="lead">טיפ על כל כפתור ומדריך מלא בפנים. פוטושופ 2023 ומעלה, Mac ו-Windows.</p>
 </div>
@@ -382,7 +402,7 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 <section class="sec">
 <div class="wrap">
 <div class="head">
-<div class="kick">בנוי להיות בטוח</div>
+<div class="kick"><span class="n">05</span>בנוי להיות בטוח</div>
 <h2 class="h2">המקור שלכם <span class="b grad">נשאר שלם.</span></h2>
 </div>
 <div class="g3">
@@ -396,7 +416,7 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 <section class="sec alt">
 <div class="wrap split">
 <div class="stack">
-<div class="kick">מאיפה זה בא</div>
+<div class="kick"><span class="n">06</span>מאיפה זה בא</div>
 <h2 class="h2">השאלות <span class="b grad">מהערבים שלנו במחנה.</span></h2>
 <p class="lead">במסעות שלנו, בסוף היום, חוזרות אותן שאלות עריכה: איך להבליט את החיה, איך להרגיע את השמיים, איך לשמור על צבעים אמיתיים. MWP Panel מכניס את התשובות שלנו לפוטושופ, פשוט מספיק לעריכה ראשונה.</p>
 <div class="thumbs">
@@ -412,7 +432,7 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 <section class="sec" id="how">
 <div class="wrap">
 <div class="head">
-<div class="kick">שלושה צעדים</div>
+<div class="kick"><span class="n">07</span>שלושה צעדים</div>
 <h2 class="h2">איך זה <span class="b grad">עובד.</span></h2>
 </div>
 <div class="g3">
@@ -426,7 +446,7 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 <section class="sec tight">
 <div class="wrap">
 <div class="head">
-<div class="kick">מה מקבלים</div>
+<div class="kick"><span class="n">08</span>מה מקבלים</div>
 <h2 class="h2">מה יש <span class="b grad">בהורדה.</span></h2>
 </div>
 <div class="inc">
@@ -441,9 +461,9 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 
 <section class="sec alt" id="faq">
 <div class="wrap">
-<div class="head"><div class="kick">לפני שקונים</div><h2 class="h2">שאלות</h2></div>
+<div class="head"><div class="kick"><span class="n">09</span>לפני שקונים</div><h2 class="h2">שאלות</h2></div>
 <div class="faq">
-<sc-for list="{{faqs}}" as="f" hint-placeholder-count="8">
+<sc-for list="{{faqs}}" as="f" hint-placeholder-count="6">
 <div>
 <button type="button" class="q" onClick="{{f.toggle}}" aria-expanded="{{f.exp}}"><span>{{f.q}}</span><span class="pm" aria-hidden="true">{{f.sign}}</span></button>
 <sc-if value="{{f.open}}" hint-placeholder-val="{{false}}"><div class="ans">{{f.a}}</div></sc-if>
@@ -458,6 +478,7 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 <img class="final-bg" src="../assets/pages/img/d48f96a951ec30737515c3dafe85e8d2.jpg" alt="">
 <div class="final-shade"></div>
 <div class="wrap" style="position: relative; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 28px">
+<div class="kick"><span class="n">10</span>להורדה</div>
 <h2 class="h1" style="max-width: 900px"><span class="en" style="font-weight: 400">MWP Panel</span> <span class="b grad">לפוטושופ.</span></h2>
 <p class="lead" style="max-width: 620px">הפלאגין עם שני מדריכי ה-PDF. או יחד עם MWP Presets, לפוטושופ וללייטרום באותו לוק.</p>
 <div class="plans">
@@ -487,10 +508,12 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 </div>
 </section>
 
+<p class="bigmark" aria-hidden="true" style="background-image: url(../assets/pages/img/866c1bdb5cf29c21c1a04f6fc87b03e9.jpg)">MWP</p>
 <footer style="padding: 40px 0; border-top: 1px solid rgba(156,177,194,.15)">
 <div class="wrap" style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; color: #9CB1C2; font-size: 13px">
 <div style="font-weight: 800; letter-spacing: .3em; color: #FEFBF1">MW PHOTO TOURS</div>
 <div>כל הצילומים: Matan Wild · <span class="en">contact@matanwildphotography.com</span></div>
+<div style="flex-basis: 100%">© 2026 <span class="en">MWP · Matan Wild</span>. כל הזכויות שמורות.</div>
 </div>
 </footer>
 
@@ -502,6 +525,34 @@ class Component extends DCLogic {
     super(props);
     this.state = { i: 0, pos: 50, open: 0, all: false };
   }
+
+  componentDidMount() {
+    try {
+      if (typeof IntersectionObserver === 'undefined') return;
+      const root = document.querySelector('.pg');
+      if (!root) return;
+
+      const rsel = '.sec .h2,.final .h2,.head .lead,.cols .card,.g3 .step,.inc .i,.plans .plan,.bigmark';
+      const revs = Array.from(root.querySelectorAll(rsel));
+      revs.forEach((el) => {
+        el.classList.add('rv');
+        const sibs = Array.from(el.parentElement ? el.parentElement.children : []).filter((c) => c.matches(rsel));
+        el.style.setProperty('--rd', (Math.min(Math.max(0, sibs.indexOf(el)), 5) * 0.1) + 's');
+      });
+      const stats = Array.from(root.querySelectorAll('.stat'));
+      stats.forEach((el, i) => {
+        el.style.setProperty('--dl', (i * 0.15) + 's');
+        el.querySelectorAll('.odo .d').forEach((d, k) => d.style.setProperty('--di', (k * 0.15) + 's'));
+      });
+      this._io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); this._io.unobserve(e.target); } });
+      }, { threshold: 0.2 });
+      stats.forEach((el) => this._io.observe(el));
+      revs.forEach((el) => this._io.observe(el));
+      root.classList.add('fx');
+    } catch (err) {}
+  }
+  componentWillUnmount() { if (this._io) this._io.disconnect(); }
   renderVals() {
     const P = [
       { label: 'Subject · Pop', target: 'Subject', effect: 'Pop', amount: '60%', before: '../assets/pages/img/c339384fe0c6d91e7b1388d0fed7d1ae.jpg', after: '../assets/pages/img/52e0c3d2c90942f72d31faa689449bd0.jpg' },
@@ -510,31 +561,18 @@ class Component extends DCLogic {
     const F = [
       { q: "צריך לדעת שכבות ומסכות?", a: "לא. בוחרים מה לערוך ואפקט, והפאנל בונה בשבילכם את השכבות והמסכות. מדריך של 21 עמודים ומדריך בתוך הפאנל מסבירים כל כפתור מההתחלה." },
       { q: "איזה פוטושופ צריך?", a: "פוטושופ 2023 (גרסה 24.2) ומעלה, על Mac או Windows, במנוי Creative Cloud. הפאנל לא עובד בלייטרום, באייפד או בטלפון." },
-      { q: "מה יש בהורדה?", a: "קובץ הפלאגין, המדריך למשתמש (PDF, ‏21 עמודים) ומדריך ההתקנה (PDF). אפשר לקרוא על המסך או להדפיס." },
-      { q: "איך מתקינים?", a: "לחיצה כפולה על קובץ ה-ccx, ו-Creative Cloud מתקין אותו. אחר כך פותחים את פוטושופ, ובתפריט Plugins בוחרים MWP - Panel. מדריך ההתקנה מכסה את הבעיות הנפוצות ואת הפתרונות שלהן." },
-      { q: "זה יכול להרוס לי את התמונה?", a: "לא. כל כפתור מוסיף שכבה משלו, שכבת המקור נעולה, והייצוא תמיד נשמר כקובץ חדש." },
-      { q: "איך מבטלים?", a: "‏Ctrl+Z אחד (במק Cmd+Z) מבטל כפתור שלם. Reset MWP מסיר את כל השכבות שהפאנל הוסיף ומשאיר את התמונה המקורית כמו שהייתה." },
-      { q: "אפשר לחזור ולשנות עריכה אחר כך?", a: "כן. שומרים את התמונה כ-PSD וכל השכבות נשארות. לכל אפקט יש עוצמה משלו, ושכבות Camera Raw ו-Denoise נפתחות שוב בלחיצה כפולה." },
-      { q: "זה עובד עם קובצי RAW?", a: "כן. קובץ RAW נפתח קודם ב-Camera Raw. לוחצים Open והתמונה מגיעה לפוטושופ, מוכנה לפאנל. קובצי JPEG נפתחים ישירות." },
-      { q: "מה פוטושופ צריך כדי למצוא את החיה או את השמיים?", a: "את Select Subject ו-Select Sky של פוטושופ עצמו. אם הם לא עובדים, הפתרון הוא הגדרה אחת בהעדפות של פוטושופ, ועמוד העזרה של הפאנל מראה בדיוק איפה היא." },
-      { q: "ומה אם פוטושופ בוחר משהו לא נכון?", a: "עם Paint in ו-Paint out מוסיפים או מוחקים את האפקט במכחול, בדיוק איפה שהאזור האוטומטי פספס. אפשר גם לבחור צבע עם Pick ולערוך רק אותו." },
-      { q: "אפשר לערוך סדרה שלמה באותה צורה?", a: "כן. פותחים את שאר התמונות, חוזרים לתמונה הערוכה ולוחצים Apply תחת More photos. הנושא, השמיים והרקע מזוהים מחדש בכל תמונה." },
-      { q: "אפשר לשמור לוק משלי?", a: "כן. כותבים שם תחת Save my look, והלוק מופיע ב-My looks, מוכן לכל תמונה." },
-      { q: "מה קורה בלשונית Export?", a: "שני שלבים. קודם סימן המים, ואחר כך עותק בגודל שמתאים ליעד. כל ייצוא הוא קובץ JPEG חדש באיכות מלאה, בשם של התמונה שלכם, ואתם בוחרים את התיקייה." },
-      { q: "אילו גדלי ייצוא יש?", a: "Instagram מכניס את התמונה לגבולות של 1080 × 1350 פיקסלים. Web קובע את הצלע הארוכה ל-2048 פיקסלים. Print שומר על הגודל המלא ועל פרופיל הצבע שלכם. Instagram ו-Web מומרים ל-sRGB ומחודדים למסך, ו-Print מקבל חידוד להדפסה." },
-      { q: "למה Instagram ו-Web מומרים ל-sRGB?", a: "טלפונים ודפדפנים מציגים צבעי sRGB כמו שערכתם אותם. תמונה שנשמרת בפרופיל רחב יותר עלולה להיראות דהויה, או עם צבעים מוזזים, ברגע שהיא עולה לרשת." },
-      { q: "איך מכינים תמונה לפיד, לסטוריז או להדפסה?", a: "קודם חותכים, בלשונית Prepare: ‏4:5 לפיד באינסטגרם, ‏9:16 לסטוריז ולרילס, ‏1:1 לריבוע, ‏3:2 לפריים הקלאסי של המצלמה, או Free. החיתוך מתמרכז על החיה ושומר את הפיקסלים שנחתכו, כך שאפשר לשנות אותו אחר כך." },
-      { q: "באיזה ייצוא להשתמש לסטוריז ולרילס?", a: "חותכים ל-9:16 ומייצאים ב-Web. הוא שומר יותר פיקסלים לפריים גבוה מאשר ייצוא Instagram, שבנוי לפיד ב-4:5." },
-      { q: "אפשר להוסיף סימן מים משלי?", a: "כן. החתימה או הלוגו שלכם כקובץ PNG עם רקע שקוף, או טקסט. בוחרים אחד מתשעה מיקומים, וקובעים גודל, שקיפות, שוליים וצבע (מקורי, לבן או שחור). Show on photo מציג אותו על התמונה לפני הייצוא, והוא נשמר לפעם הבאה." },
-      { q: "זה משתמש בקרדיטים הגנרטיביים שלי באדובי?", a: "רק Expand ו-Generative Fill, ורק כשלוחצים Generate בפוטושופ. כל שאר הפאנל לא משתמש בקרדיטים." },
-      { q: "אפשר להשתמש בזה לתחרויות צילום?", a: "רוב הפאנל משנה אור וצבע בתמונה שצילמתם. Expand ו-Generative Fill מוסיפים פיקסלים, ותחרויות רבות לא מתירות אותם, אז כדאי לבדוק את התקנון לפני שמשתמשים בשניים האלה." },
-      { q: "הקבצים יגדלו?", a: "כן. כל אפקט מוסיף שכבה, אז PSD עם שכבות גדול יותר מהמקור. הייצוא משוטח לגודל רגיל." },
-      { q: "על אילו תמונות זה עובד?", a: "תמונות RGB ב-8 או 16 ביט. אם תמונה היא CMYK או 32 ביט, הפאנל יגיד לכם באיזה תפריט להמיר אותה." },
+      { q: "מה יש בהורדה?", a: "הפלאגין, המדריך למשתמש (PDF, ‏21 עמודים) ומדריך ההתקנה (PDF). להתקנה לוחצים פעמיים על קובץ הפלאגין, ו-Creative Cloud עושה את השאר. אחר כך פותחים אותו בפוטושופ, בתפריט Plugins." },
+      { q: "זה יכול להרוס לי את התמונה?", a: "לא. כל כפתור מוסיף שכבה משלו ושכבת המקור נעולה. ‏Ctrl+Z אחד (במק Cmd+Z) מבטל כפתור שלם, Reset MWP מסיר את כל מה שהפאנל הוסיף, והייצוא תמיד נשמר כקובץ חדש." },
+      { q: "אפשר לשנות עריכה אחר כך?", a: "כן. שומרים את התמונה כ-PSD וכל השכבות נשארות. כל אפקט שומר את העוצמה שלו, ושכבות Camera Raw ו-Denoise נפתחות שוב בלחיצה כפולה." },
+      { q: "על אילו תמונות זה עובד?", a: "קובצי RAW (נפתחים קודם ב-Camera Raw, ואז לוחצים Open) וקובצי JPEG, ב-RGB של 8 או 16 ביט. אם תמונה היא CMYK או 32 ביט, הפאנל יגיד באיזה תפריט להמיר אותה." },
+      { q: "ומה אם פוטושופ בוחר אזור לא נכון?", a: "מוסיפים או מוחקים את האפקט במכחול עם Paint in ו-Paint out, או בוחרים צבע עם Pick ועורכים רק אותו. אם Select Subject או Select Sky מפסיקים לעבוד, הגדרה אחת בפוטושופ מתקנת את זה, ועמוד העזרה של הפאנל מראה איפה." },
+      { q: "אפשר לערוך סדרה שלמה באותה צורה?", a: "כן. פותחים את שאר התמונות, חוזרים לתמונה הערוכה ולוחצים Apply תחת More photos. הנושא, השמיים והרקע מזוהים מחדש בכל תמונה. אפשר גם לשמור את העריכה כלוק תחת Save my look." },
+      { q: "מה אפשר לייצא?", a: "Instagram (עד 1080 × 1350 פיקסלים), Web (צלע ארוכה 2048 פיקסלים) ו-Print (גודל מלא, פרופיל הצבע נשמר), כל אחד מחודד ליעד ונשמר כקובץ JPEG חדש. לפני הייצוא מוסיפים סימן מים משלכם, לוגו או טקסט. לסטוריז ולרילס חותכים ל-9:16 ומייצאים ב-Web." },
+      { q: "זה משתמש בקרדיטים הגנרטיביים שלי באדובי?", a: "רק Expand ו-Generative Fill, ורק כשלוחצים Generate בפוטושופ. השניים האלה מוסיפים פיקסלים, אז כדאי לבדוק את התקנון לפני שמשתמשים בהם בתחרות צילום. כל השאר לא משתמש בקרדיטים." },
       { q: "עדכונים כלולים?", a: "[מתן יחליט: מדיניות עדכונים.]" },
-      { q: "על כמה מחשבים אפשר להתקין?", a: "[מתן יחליט: מספר מחשבים לרישיון.]" },
-      { q: "מה מותר לעשות עם הפלאגין, ומה מדיניות ההחזרים?", a: "[תשובה לפי תנאי הרישיון וההחזרים, אחרי אישור מתן.]" },
-      { q: "יש משהו למי שעובד בלייטרום?", a: "כן: MWP Presets, ‏50 פריסטים ללייטרום באותו לוק, ל-Lightroom Classic, ל-Lightroom, ל-Lightroom Mobile ול-Camera Raw. אפשר לקנות אותם לבד או בחבילה עם MWP Panel." },
-      { q: "אפשר לקנות את הפאנל והפריסטים יחד?", a: "כן. בחבילה יש את MWP Panel עם שני מדריכי ה-PDF, ואת MWP Presets. כך העריכות בפוטושופ ובלייטרום חולקות לוק אחד. [מחיר החבילה: מתן יחליט.]" }
+      { q: "רישיון, מחשבים והחזרים?", a: "[תשובה לפי תנאי הרישיון וההחזרים, אחרי אישור מתן: למה מותר להשתמש בפלאגין, על כמה מחשבים, ומדיניות ההחזרים.]" },
+      { q: "אפשר לקנות אותו יחד עם MWP Presets?", a: "כן. בחבילה יש את MWP Panel עם שני מדריכי ה-PDF, ואת MWP Presets: ‏50 פריסטים ללייטרום באותו לוק, ל-Lightroom Classic, ל-Lightroom, ל-Lightroom Mobile ול-Camera Raw. הפריסטים נמכרים גם לבד." },
+      { q: "ומה אם נתקעים?", a: "מדריך ההתקנה מכסה בעיות נפוצות ואת הפתרונות שלהן, ולכל כפתור בפאנל יש טיפ ועמוד עזרה. [מתן לאשר: כתובת תמיכה לקונים.]" }
     ];
     const s = this.state;
     return {
@@ -545,7 +583,7 @@ class Component extends DCLogic {
       showAll: () => this.setState({ all: true }),
       pos: s.pos,
       onSlide: (e) => this.setState({ pos: Number(e.target.value) }),
-      faqs: F.slice(0, s.all ? F.length : 8).map((f, k) => ({ ...f, open: k === s.open, exp: k === s.open ? 'true' : 'false', sign: k === s.open ? '−' : '+', toggle: () => this.setState({ open: k === s.open ? -1 : k }) }))
+      faqs: F.slice(0, s.all ? F.length : 6).map((f, k) => ({ ...f, open: k === s.open, exp: k === s.open ? 'true' : 'false', sign: k === s.open ? '−' : '+', toggle: () => this.setState({ open: k === s.open ? -1 : k }) }))
     };
   }
 }

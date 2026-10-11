@@ -196,6 +196,98 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 .final .btn.lg{width:100%;font-size:17px;padding:0 20px}
 }
 
+/* v16: motion */
+@media (max-width:900px){.fly4{height:740px;margin-bottom:-148px}}
+@media (max-width:600px){.fly4{height:auto;margin:0}}
+.fx .rv{opacity:0;transform:translateY(28px);transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1);transition-delay:var(--d,0s)}
+.fx .rv.in{opacity:1;transform:none}
+.stat .n{font-variant-numeric:tabular-nums}
+.stat{position:relative}
+.stat::after{content:"";display:block;height:1px;margin-top:18px;width:0;background:linear-gradient(90deg,#E4AA7C,#F8D29C);transition:width 1.4s cubic-bezier(.2,.7,.2,1) .2s}
+[dir=rtl] .stat::after{margin-right:0;margin-left:auto;background:linear-gradient(270deg,#E4AA7C,#F8D29C)}
+.stat.in::after,.nofx .stat::after{width:48px}
+.btn{position:relative;overflow:hidden;transition:transform .25s,box-shadow .25s}
+.btn::before{content:"";position:absolute;top:0;bottom:0;width:60%;left:-80%;background:linear-gradient(100deg,rgba(255,255,255,0),rgba(255,255,255,.45),rgba(255,255,255,0));transform:skewX(-20deg);animation:shine 5.5s ease-in-out 1.5s infinite}
+@keyframes shine{0%{left:-80%}22%,100%{left:130%}}
+.btn:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(244,175,86,.38)}
+.card{transition:transform .5s cubic-bezier(.2,.7,.2,1),box-shadow .5s}
+.card:hover{transform:translateY(-6px);box-shadow:0 30px 70px rgba(0,0,0,.55)}
+@media (prefers-reduced-motion:reduce){.fx .rv{opacity:1;transform:none;transition:none}.btn::before{animation:none;display:none}.card:hover,.btn:hover{transform:none}.stat::after{transition:none;width:48px}}
+
+/* v17: bottom with bang */
+.stepi{display:flex;flex-direction:column;border:1px solid rgba(156,177,194,.15);background:#0C2925;border-radius:24px;overflow:hidden;transition:transform .5s cubic-bezier(.2,.7,.2,1),border-color .5s}
+.stepi:hover{transform:translateY(-6px);border-color:rgba(244,175,86,.45)}
+.stepi .si{position:relative;aspect-ratio:16/10;overflow:hidden}
+.stepi .si img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .8s}
+.stepi:hover .si img{transform:scale(1.05)}
+.stepi .si::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(18,17,16,.95),rgba(18,17,16,0) 55%)}
+.stepi .sn{position:absolute;z-index:1;bottom:14px;inset-inline-start:24px;font-family:Montserrat,Heebo,sans-serif;font-size:56px;font-weight:900;line-height:1;letter-spacing:-.05em;background:linear-gradient(90deg,#E4AA7C,#F4AF56,#F8D29C);-webkit-background-clip:text;background-clip:text;color:transparent}
+.stepi .sb{display:flex;flex-direction:column;gap:10px;padding:22px 24px 28px}
+.gal{padding:140px 0 120px;background:#0A0908;overflow:hidden}
+.mq{display:flex;flex-direction:column;gap:16px;margin-top:56px}
+.mqt{display:flex;gap:16px;width:max-content;animation:mq 60s linear infinite}
+.mqt.rev{animation-direction:reverse;animation-duration:70s}
+.mqt img{width:260px;aspect-ratio:4/5;object-fit:cover;border-radius:18px;display:block;filter:saturate(.95)}
+.mq:hover .mqt{animation-play-state:paused}
+@keyframes mq{from{transform:translateX(0)}to{transform:translateX(calc(-50% - 8px))}}
+.mbx{position:relative;width:150px;height:194px;transform-style:preserve-3d;transform:rotateY(28deg) rotateX(8deg)}
+[dir=ltr] .mbx,.pg[dir=ltr] .mbx{transform:rotateY(-28deg) rotateX(8deg)}
+.mf{position:absolute;backface-visibility:hidden}
+.mf.front{width:150px;height:194px;transform:translateZ(20px);overflow:hidden;border-radius:4px;box-shadow:0 0 0 1px rgba(255,255,255,.08),0 30px 60px rgba(0,0,0,.6)}
+.mf.front img{width:100%;height:100%;object-fit:cover;display:block}
+.mf.spine{width:40px;height:194px;left:0;background:linear-gradient(180deg,#023C4C,#0C2925);transform:rotateY(-90deg) translateZ(20px);display:flex;align-items:center;justify-content:center}
+.mf.spine span{writing-mode:vertical-rl;font:700 7px Montserrat,sans-serif;letter-spacing:.3em;color:#F4AF56;direction:ltr}
+.mf.top{width:150px;height:40px;background:#0C2925;transform:rotateX(90deg) translateZ(20px)}
+.ml{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:12px;background:linear-gradient(0deg,rgba(10,9,8,.94) 0%,rgba(10,9,8,0) 58%,rgba(10,9,8,.5) 100%);color:#F4F4F4;direction:ltr;text-align:left}
+.ml .mk{font:700 6px Montserrat,sans-serif;letter-spacing:.3em}
+.ml .mg{font:600 7px Montserrat,sans-serif;letter-spacing:.24em;color:#F4AF56}
+.ml .mt{font:900 19px/1 Heebo,Montserrat,sans-serif;margin-top:4px}
+.ml .ms{font-size:9px;color:#CDD7DD;margin-top:4px}
+.allin{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:48px;align-items:center;margin-top:64px;padding:56px;border:1.5px solid rgba(244,175,86,.7);border-radius:24px;background:radial-gradient(ellipse at 20% 50%,rgba(244,175,86,.14),rgba(10,9,8,0) 60%),#0A0908;overflow:hidden}
+.av{position:relative;height:380px;perspective:1400px}
+.av .mbx{position:absolute;width:150px}
+.av .mbx{transform-origin:center}
+.av .b0{left:50%;top:40px;margin-left:-75px;z-index:3}
+.av .b1{left:12%;top:120px;z-index:2}
+.av .b2{right:12%;top:120px;z-index:2}
+.av .b0{animation:fl 7s ease-in-out infinite}.av .b1{animation:fl 7s ease-in-out -2.3s infinite}.av .b2{animation:fl 7s ease-in-out -4.6s infinite}
+@keyframes fl{0%,100%{translate:0 0}50%{translate:0 -12px}}
+.aglow{position:absolute;left:10%;right:10%;bottom:10px;height:40px;background:radial-gradient(closest-side,rgba(0,0,0,.8),rgba(0,0,0,0));filter:blur(8px)}
+.ac{display:flex;flex-direction:column;gap:18px;align-items:flex-start}
+.ac ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.ac li{display:flex;gap:10px;align-items:flex-start;font-size:16px;line-height:1.5;color:rgba(244,244,244,.82)}
+.ac li svg{flex:none;margin-top:4px}
+.tagx2{padding:6px 14px;border-radius:64px;background:linear-gradient(90deg,#E4AA7C,#F4AF56);color:#0A0908;font-size:12px;font-weight:700;letter-spacing:.06em}
+.aprice{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.aprice .now{font-size:34px;font-weight:800;color:#F4F4F4}
+.aprice .was{font-size:16px;color:rgba(244,244,244,.5);text-decoration:line-through}
+.plans.p3{grid-template-columns:repeat(3,minmax(0,1fr));margin-top:24px}
+.plan .pv{height:190px;display:flex;justify-content:center;align-items:center;perspective:1200px;margin:-6px 0 4px;background:radial-gradient(ellipse at 50% 60%,rgba(244,175,86,.1),rgba(0,0,0,0) 65%)}
+.mbx.sm{transform:scale(.72) rotateY(28deg) rotateX(8deg);margin:0 -34px}
+.pg[dir=ltr] .mbx.sm{transform:scale(.72) rotateY(-28deg) rotateX(8deg)}
+.mbx.sm.s1{translate:0 14px}
+.fgrid{position:relative;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:48px;align-items:center}
+.fcopy{display:flex;flex-direction:column;gap:24px;align-items:flex-start}
+.frow{display:flex;flex-wrap:wrap;gap:12px}
+.fan{position:relative;height:500px}
+.fan .fc{position:absolute;top:50%;left:50%;width:300px;margin:-94px 0 0 -150px;aspect-ratio:16/10;border-radius:12px;overflow:hidden;box-shadow:0 30px 70px rgba(0,0,0,.65),0 0 0 1px rgba(255,255,255,.1);transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+.fan .fc img{width:100%;height:100%;object-fit:cover;display:block}
+.fan .c0{transform:translate(-170px,-100px) rotate(-7deg)}.fan .c1{transform:translate(-60px,-34px) rotate(-3deg)}.fan .c2{transform:translate(50px,34px) rotate(1deg)}.fan .c3{transform:translate(160px,100px) rotate(4deg)}
+.fan:hover .c0{transform:translate(-200px,-124px) rotate(-9deg)}.fan:hover .c3{transform:translate(190px,124px) rotate(6deg)}
+.final-bg{opacity:.6}
+@media (max-width:1100px){.allin{grid-template-columns:minmax(0,1fr);padding:40px 28px}.av{height:320px}.plans.p3{grid-template-columns:minmax(0,1fr)}.fgrid{grid-template-columns:minmax(0,1fr)}.fan{height:340px}}
+@media (max-width:900px){.g3{grid-template-columns:minmax(0,1fr)}.mqt img{width:180px}.gal{padding:100px 0 90px}}
+@media (max-width:600px){.av{height:260px;transform:scale(.8);transform-origin:top center;margin-bottom:-50px}.av .b1{left:0}.av .b2{right:0}.fan{height:280px;transform:scale(.7);transform-origin:center}.allin{padding:32px 20px}.final .frow .btn,.final .frow .ghost{width:100%}}
+@media (prefers-reduced-motion:reduce){.mqt,.av .mbx{animation:none}}
+.stepi .sn{-webkit-text-fill-color:transparent}
+.tagx2{color:#0A0908;font-weight:800}
+.allin{background:radial-gradient(ellipse at 20% 50%,rgba(244,175,86,.16),rgba(10,9,8,0) 60%),#0A0908}
+.plan .pv{background:radial-gradient(ellipse at 50% 60%,rgba(244,175,86,.12),rgba(0,0,0,0) 65%)}
+/* v19: final polish */
+@media (max-width:1100px){.fan{order:-1;height:330px}}
+@media (max-width:600px){.fan{height:200px;transform:scale(.48);margin:-10px 0 -10px}.allin .av{margin-bottom:-70px}.fcopy{align-items:stretch}.final .meta{justify-content:flex-start}}
+.faq .q{min-height:64px}
+
 /* before / after (from the Presets page) */
 .ba{position:relative;width:100%;aspect-ratio:16/10;border-radius:24px;overflow:hidden;box-shadow:0 40px 120px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.06);background:#111;touch-action:pan-y}
 .ba img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
@@ -493,36 +585,47 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
   var amtBox = document.querySelector("#try .amt"), tag = document.getElementById("try-tag"), cta = document.getElementById("try-cta");
   var CTA = { presets: ["presets/", "Get MWP Presets", "לפריסטים"], panel: ["panel/", "Get MWP Panel", "לפאנל"] };
   var state = { look: -1, lookAmt: 100, fx: {}, cur: null };   // fx: key -> amount (0-100)
-  var src = null, W = 0, H = 0, M = null;
+  var FULL = null, FAST = null, idle = 0;   // full-resolution and quick preview buffers
 
-  function setSplit(v) { cv.style.clipPath = "inset(0 0 0 " + v + "%)"; line.style.left = v + "%"; knob.style.left = v + "%"; }
-
-  function prepare() {
-    var scale = Math.min(1, 1200 / before.naturalWidth);
-    W = cv.width = Math.round(before.naturalWidth * scale); H = cv.height = Math.round(before.naturalHeight * scale);
-    ctx.drawImage(before, 0, 0, W, H);
-    src = ctx.getImageData(0, 0, W, H).data.slice();
+  function layer(w, h) {
+    var c = document.createElement("canvas"); c.width = w; c.height = h;
+    var x2 = c.getContext("2d", { willReadFrequently: true }); x2.drawImage(before, 0, 0, w, h);
+    var L = { W: w, H: h, c: c, x: x2, src: x2.getImageData(0, 0, w, h).data.slice(),
+      subj: new Uint8Array(w * h), sky: new Uint8Array(w * h), vig: new Uint8Array(w * h) };
     // masks: subject (soft ellipse around the animals), sky (top of frame), vignette (edges)
-    M = { subj: new Float32Array(W * H), sky: new Float32Array(W * H), vig: new Float32Array(W * H) };
-    for (var y = 0; y < H; y++) for (var x = 0; x < W; x++) {
-      var i = y * W + x, nx = x / W, ny = y / H;
+    for (var y = 0; y < h; y++) for (var x = 0; x < w; x++) {
+      var i = y * w + x, nx = x / w, ny = y / h;
       var dx = (nx - 0.48) / 0.5, dy = (ny - 0.6) / 0.3, d = Math.sqrt(dx * dx + dy * dy);
-      M.subj[i] = Math.max(0, Math.min(1, 1.25 - d));
-      M.sky[i] = Math.max(0, Math.min(1, (0.55 - ny) / 0.3));
+      L.subj[i] = 255 * Math.max(0, Math.min(1, 1.25 - d));
+      L.sky[i] = 255 * Math.max(0, Math.min(1, (0.55 - ny) / 0.3));
       var vx = nx - 0.5, vy = (ny - 0.5) * 0.8, v = Math.sqrt(vx * vx + vy * vy) / 0.64;
-      M.vig[i] = Math.max(0, Math.min(1, (v - 0.45) / 0.55));
+      L.vig[i] = 255 * Math.max(0, Math.min(1, (v - 0.45) / 0.55));
     }
+    return L;
+  }
+  function prepare() {
+    // Full resolution so the photo stays as sharp as the RAW beside it; a smaller copy keeps sliders smooth.
+    var w = before.naturalWidth, h = before.naturalHeight;
+    cv.width = w; cv.height = h;
+    FULL = layer(w, h);
+    FAST = layer(Math.round(w / 2), Math.round(h / 2));
   }
 
-  var queued = false;
-  function render() { if (!queued) { queued = true; requestAnimationFrame(draw); } }
-  function draw() {
-    queued = false; if (!src) return;
+  var queued = false, wantFast = false;
+  function render(fast) {
+    wantFast = !!fast;
+    if (!queued) { queued = true; requestAnimationFrame(function () { queued = false; draw(wantFast ? FAST : FULL); }); }
+    clearTimeout(idle);
+    if (fast) idle = setTimeout(function () { render(false); }, 160);
+  }
+  function draw(Lr) {
+    if (!Lr) return;
+    var src = Lr.src, W = Lr.W, H = Lr.H, M = { subj: Lr.subj, sky: Lr.sky, vig: Lr.vig };
     var p = state.look >= 0 ? LOOKS[state.look] : null, a = state.lookAmt / 100;
     var f = state.fx, fp = (f.pop || 0) / 100, fb = (f.bg || 0) / 100, fs = (f.sky || 0) / 100, fl = (f.lights || 0) / 100, fd = (f.darks || 0) / 100, fv = (f.vig || 0) / 100;
     var e = p ? Math.pow(2, p.e * a) : 1, t = p ? p.t * a : 0, g = p ? p.g * a : 0, c = p ? p.c * a : 0, s = p ? p.s * a : 0, h = p ? p.h * a : 0;
     var sat = p ? p.sat * a : 0, fade = p ? p.f * a : 0, sc = p ? p.sc : [0, 0, 0], hc = p ? p.hc : [0, 0, 0];
-    var im = ctx.createImageData(W, H), o = im.data, n = W * H;
+    var im = Lr.x.createImageData(W, H), o = im.data, n = W * H;
     for (var i = 0; i < n; i++) {
       var k = i * 4, r = src[k] / 255, gg = src[k + 1] / 255, b = src[k + 2] / 255, L;
       if (p) {
@@ -540,15 +643,16 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
       L = 0.2126 * r + 0.7152 * gg + 0.0722 * b;
       if (fl) { var up = fl * (0.5 * L * L + 0.12 * L); r += up; gg += up; b += up; }
       if (fd) { var dn = fd * 0.6 * (1 - L) * L; r -= dn; gg -= dn; b -= dn; }
-      if (fs) { var m = M.sky[i] * fs, Ls; r *= 1 - 0.3 * m; gg *= 1 - 0.2 * m; b *= 1 - 0.06 * m; Ls = 0.2126 * r + 0.7152 * gg + 0.0722 * b; r = Ls + (r - Ls) * (1 + 0.6 * m); gg = Ls + (gg - Ls) * (1 + 0.6 * m); b = Ls + (b - Ls) * (1 + 0.6 * m); }
-      if (fb) { var mb = 1 - 0.5 * (1 - M.subj[i]) * fb; r *= mb; gg *= mb; b *= mb; }
-      if (fp) { var mp = M.subj[i] * fp, Lp = 0.2126 * r + 0.7152 * gg + 0.0722 * b;
+      if (fs) { var m = M.sky[i] / 255 * fs, Ls; r *= 1 - 0.3 * m; gg *= 1 - 0.2 * m; b *= 1 - 0.06 * m; Ls = 0.2126 * r + 0.7152 * gg + 0.0722 * b; r = Ls + (r - Ls) * (1 + 0.6 * m); gg = Ls + (gg - Ls) * (1 + 0.6 * m); b = Ls + (b - Ls) * (1 + 0.6 * m); }
+      if (fb) { var mb = 1 - 0.5 * (1 - M.subj[i] / 255) * fb; r *= mb; gg *= mb; b *= mb; }
+      if (fp) { var mp = M.subj[i] / 255 * fp, Lp = 0.2126 * r + 0.7152 * gg + 0.0722 * b;
         r = Lp + (r - Lp) * (1 + 0.5 * mp); gg = Lp + (gg - Lp) * (1 + 0.5 * mp); b = Lp + (b - Lp) * (1 + 0.5 * mp);
         r = (r - 0.45) * (1 + 0.3 * mp) + 0.45 + 0.1 * mp; gg = (gg - 0.45) * (1 + 0.3 * mp) + 0.45 + 0.1 * mp; b = (b - 0.45) * (1 + 0.3 * mp) + 0.45 + 0.1 * mp; }
-      if (fv) { var mv = 1 - 0.65 * M.vig[i] * M.vig[i] * fv; r *= mv; gg *= mv; b *= mv; }
+      if (fv) { var mv = 1 - 0.65 * (M.vig[i] / 255) * (M.vig[i] / 255) * fv; r *= mv; gg *= mv; b *= mv; }
       o[k] = r * 255; o[k + 1] = gg * 255; o[k + 2] = b * 255; o[k + 3] = 255;
     }
-    ctx.putImageData(im, 0, 0);
+    if (Lr === FULL) ctx.putImageData(im, 0, 0);
+    else { Lr.x.putImageData(im, 0, 0); ctx.imageSmoothingQuality = "high"; ctx.drawImage(Lr.c, 0, 0, cv.width, cv.height); }
   }
 
   function lookName(i) { return he() ? (HE_NAMES[NAMES[i]] || NAMES[i]) : NAMES[i]; }
@@ -588,7 +692,7 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
   amount.addEventListener("input", function () {
     var v = +amount.value;
     if (state.cur === "look") state.lookAmt = v; else if (state.cur) state.fx[state.cur] = v;
-    out.textContent = v + "%"; render();
+    out.textContent = v + "%"; render(true);
   });
   document.getElementById("try-reset").addEventListener("click", function () { state.look = -1; state.fx = {}; state.cur = null; sync(); });
   split.addEventListener("input", function () { setSplit(split.value); });

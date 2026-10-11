@@ -135,36 +135,47 @@ def js():
   var amtBox = document.querySelector("#try .amt"), tag = document.getElementById("try-tag"), cta = document.getElementById("try-cta");
   var CTA = { presets: ["presets/", "Get MWP Presets", "לפריסטים"], panel: ["panel/", "Get MWP Panel", "לפאנל"] };
   var state = { look: -1, lookAmt: 100, fx: {}, cur: null };   // fx: key -> amount (0-100)
-  var src = null, W = 0, H = 0, M = null;
+  var FULL = null, FAST = null, idle = 0;   // full-resolution and quick preview buffers
 
-  function setSplit(v) { cv.style.clipPath = "inset(0 0 0 " + v + "%%)"; line.style.left = v + "%%"; knob.style.left = v + "%%"; }
-
-  function prepare() {
-    var scale = Math.min(1, 1200 / before.naturalWidth);
-    W = cv.width = Math.round(before.naturalWidth * scale); H = cv.height = Math.round(before.naturalHeight * scale);
-    ctx.drawImage(before, 0, 0, W, H);
-    src = ctx.getImageData(0, 0, W, H).data.slice();
+  function layer(w, h) {
+    var c = document.createElement("canvas"); c.width = w; c.height = h;
+    var x2 = c.getContext("2d", { willReadFrequently: true }); x2.drawImage(before, 0, 0, w, h);
+    var L = { W: w, H: h, c: c, x: x2, src: x2.getImageData(0, 0, w, h).data.slice(),
+      subj: new Uint8Array(w * h), sky: new Uint8Array(w * h), vig: new Uint8Array(w * h) };
     // masks: subject (soft ellipse around the animals), sky (top of frame), vignette (edges)
-    M = { subj: new Float32Array(W * H), sky: new Float32Array(W * H), vig: new Float32Array(W * H) };
-    for (var y = 0; y < H; y++) for (var x = 0; x < W; x++) {
-      var i = y * W + x, nx = x / W, ny = y / H;
+    for (var y = 0; y < h; y++) for (var x = 0; x < w; x++) {
+      var i = y * w + x, nx = x / w, ny = y / h;
       var dx = (nx - 0.48) / 0.5, dy = (ny - 0.6) / 0.3, d = Math.sqrt(dx * dx + dy * dy);
-      M.subj[i] = Math.max(0, Math.min(1, 1.25 - d));
-      M.sky[i] = Math.max(0, Math.min(1, (0.55 - ny) / 0.3));
+      L.subj[i] = 255 * Math.max(0, Math.min(1, 1.25 - d));
+      L.sky[i] = 255 * Math.max(0, Math.min(1, (0.55 - ny) / 0.3));
       var vx = nx - 0.5, vy = (ny - 0.5) * 0.8, v = Math.sqrt(vx * vx + vy * vy) / 0.64;
-      M.vig[i] = Math.max(0, Math.min(1, (v - 0.45) / 0.55));
+      L.vig[i] = 255 * Math.max(0, Math.min(1, (v - 0.45) / 0.55));
     }
+    return L;
+  }
+  function prepare() {
+    // Full resolution so the photo stays as sharp as the RAW beside it; a smaller copy keeps sliders smooth.
+    var w = before.naturalWidth, h = before.naturalHeight;
+    cv.width = w; cv.height = h;
+    FULL = layer(w, h);
+    FAST = layer(Math.round(w / 2), Math.round(h / 2));
   }
 
-  var queued = false;
-  function render() { if (!queued) { queued = true; requestAnimationFrame(draw); } }
-  function draw() {
-    queued = false; if (!src) return;
+  var queued = false, wantFast = false;
+  function render(fast) {
+    wantFast = !!fast;
+    if (!queued) { queued = true; requestAnimationFrame(function () { queued = false; draw(wantFast ? FAST : FULL); }); }
+    clearTimeout(idle);
+    if (fast) idle = setTimeout(function () { render(false); }, 160);
+  }
+  function draw(Lr) {
+    if (!Lr) return;
+    var src = Lr.src, W = Lr.W, H = Lr.H, M = { subj: Lr.subj, sky: Lr.sky, vig: Lr.vig };
     var p = state.look >= 0 ? LOOKS[state.look] : null, a = state.lookAmt / 100;
     var f = state.fx, fp = (f.pop || 0) / 100, fb = (f.bg || 0) / 100, fs = (f.sky || 0) / 100, fl = (f.lights || 0) / 100, fd = (f.darks || 0) / 100, fv = (f.vig || 0) / 100;
     var e = p ? Math.pow(2, p.e * a) : 1, t = p ? p.t * a : 0, g = p ? p.g * a : 0, c = p ? p.c * a : 0, s = p ? p.s * a : 0, h = p ? p.h * a : 0;
     var sat = p ? p.sat * a : 0, fade = p ? p.f * a : 0, sc = p ? p.sc : [0, 0, 0], hc = p ? p.hc : [0, 0, 0];
-    var im = ctx.createImageData(W, H), o = im.data, n = W * H;
+    var im = Lr.x.createImageData(W, H), o = im.data, n = W * H;
     for (var i = 0; i < n; i++) {
       var k = i * 4, r = src[k] / 255, gg = src[k + 1] / 255, b = src[k + 2] / 255, L;
       if (p) {
@@ -182,15 +193,16 @@ def js():
       L = 0.2126 * r + 0.7152 * gg + 0.0722 * b;
       if (fl) { var up = fl * (0.5 * L * L + 0.12 * L); r += up; gg += up; b += up; }
       if (fd) { var dn = fd * 0.6 * (1 - L) * L; r -= dn; gg -= dn; b -= dn; }
-      if (fs) { var m = M.sky[i] * fs, Ls; r *= 1 - 0.3 * m; gg *= 1 - 0.2 * m; b *= 1 - 0.06 * m; Ls = 0.2126 * r + 0.7152 * gg + 0.0722 * b; r = Ls + (r - Ls) * (1 + 0.6 * m); gg = Ls + (gg - Ls) * (1 + 0.6 * m); b = Ls + (b - Ls) * (1 + 0.6 * m); }
-      if (fb) { var mb = 1 - 0.5 * (1 - M.subj[i]) * fb; r *= mb; gg *= mb; b *= mb; }
-      if (fp) { var mp = M.subj[i] * fp, Lp = 0.2126 * r + 0.7152 * gg + 0.0722 * b;
+      if (fs) { var m = M.sky[i] / 255 * fs, Ls; r *= 1 - 0.3 * m; gg *= 1 - 0.2 * m; b *= 1 - 0.06 * m; Ls = 0.2126 * r + 0.7152 * gg + 0.0722 * b; r = Ls + (r - Ls) * (1 + 0.6 * m); gg = Ls + (gg - Ls) * (1 + 0.6 * m); b = Ls + (b - Ls) * (1 + 0.6 * m); }
+      if (fb) { var mb = 1 - 0.5 * (1 - M.subj[i] / 255) * fb; r *= mb; gg *= mb; b *= mb; }
+      if (fp) { var mp = M.subj[i] / 255 * fp, Lp = 0.2126 * r + 0.7152 * gg + 0.0722 * b;
         r = Lp + (r - Lp) * (1 + 0.5 * mp); gg = Lp + (gg - Lp) * (1 + 0.5 * mp); b = Lp + (b - Lp) * (1 + 0.5 * mp);
         r = (r - 0.45) * (1 + 0.3 * mp) + 0.45 + 0.1 * mp; gg = (gg - 0.45) * (1 + 0.3 * mp) + 0.45 + 0.1 * mp; b = (b - 0.45) * (1 + 0.3 * mp) + 0.45 + 0.1 * mp; }
-      if (fv) { var mv = 1 - 0.65 * M.vig[i] * M.vig[i] * fv; r *= mv; gg *= mv; b *= mv; }
+      if (fv) { var mv = 1 - 0.65 * (M.vig[i] / 255) * (M.vig[i] / 255) * fv; r *= mv; gg *= mv; b *= mv; }
       o[k] = r * 255; o[k + 1] = gg * 255; o[k + 2] = b * 255; o[k + 3] = 255;
     }
-    ctx.putImageData(im, 0, 0);
+    if (Lr === FULL) ctx.putImageData(im, 0, 0);
+    else { Lr.x.putImageData(im, 0, 0); ctx.imageSmoothingQuality = "high"; ctx.drawImage(Lr.c, 0, 0, cv.width, cv.height); }
   }
 
   function lookName(i) { return he() ? (HE_NAMES[NAMES[i]] || NAMES[i]) : NAMES[i]; }
@@ -230,7 +242,7 @@ def js():
   amount.addEventListener("input", function () {
     var v = +amount.value;
     if (state.cur === "look") state.lookAmt = v; else if (state.cur) state.fx[state.cur] = v;
-    out.textContent = v + "%%"; render();
+    out.textContent = v + "%%"; render(true);
   });
   document.getElementById("try-reset").addEventListener("click", function () { state.look = -1; state.fx = {}; state.cur = null; sync(); });
   split.addEventListener("input", function () { setSplit(split.value); });

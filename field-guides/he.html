@@ -23,7 +23,7 @@ html .lang-toggle .on{background:#FEFBF1;color:#0A0908}
 <x-dc>
 <helmet>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&amp;family=Montserrat:wght@600;700;800;900&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@100..900&amp;family=Montserrat:wght@600;700;800;900&amp;display=swap" rel="stylesheet">
 <style>
 body{margin:0;background:#0A0908}
 a{color:#F4AF56}a:hover{color:#F8D29C}
@@ -203,6 +203,98 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 .step{padding:28px 24px}.step .k{font-size:56px}
 .final .btn.lg{width:100%;font-size:17px;padding:0 20px}
 }
+
+/* v16: motion */
+@media (max-width:900px){.fly4{height:740px;margin-bottom:-148px}}
+@media (max-width:600px){.fly4{height:auto;margin:0}}
+.fx .rv{opacity:0;transform:translateY(28px);transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1);transition-delay:var(--d,0s)}
+.fx .rv.in{opacity:1;transform:none}
+.stat .n{font-variant-numeric:tabular-nums}
+.stat{position:relative}
+.stat::after{content:"";display:block;height:1px;margin-top:18px;width:0;background:linear-gradient(90deg,#E4AA7C,#F8D29C);transition:width 1.4s cubic-bezier(.2,.7,.2,1) .2s}
+[dir=rtl] .stat::after{margin-right:0;margin-left:auto;background:linear-gradient(270deg,#E4AA7C,#F8D29C)}
+.stat.in::after,.nofx .stat::after{width:48px}
+.btn{position:relative;overflow:hidden;transition:transform .25s,box-shadow .25s}
+.btn::before{content:"";position:absolute;top:0;bottom:0;width:60%;left:-80%;background:linear-gradient(100deg,rgba(255,255,255,0),rgba(255,255,255,.45),rgba(255,255,255,0));transform:skewX(-20deg);animation:shine 5.5s ease-in-out 1.5s infinite}
+@keyframes shine{0%{left:-80%}22%,100%{left:130%}}
+.btn:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(244,175,86,.38)}
+.card{transition:transform .5s cubic-bezier(.2,.7,.2,1),box-shadow .5s}
+.card:hover{transform:translateY(-6px);box-shadow:0 30px 70px rgba(0,0,0,.55)}
+@media (prefers-reduced-motion:reduce){.fx .rv{opacity:1;transform:none;transition:none}.btn::before{animation:none;display:none}.card:hover,.btn:hover{transform:none}.stat::after{transition:none;width:48px}}
+
+/* v17: bottom with bang */
+.stepi{display:flex;flex-direction:column;border:1px solid rgba(156,177,194,.15);background:#0C2925;border-radius:24px;overflow:hidden;transition:transform .5s cubic-bezier(.2,.7,.2,1),border-color .5s}
+.stepi:hover{transform:translateY(-6px);border-color:rgba(244,175,86,.45)}
+.stepi .si{position:relative;aspect-ratio:16/10;overflow:hidden}
+.stepi .si img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .8s}
+.stepi:hover .si img{transform:scale(1.05)}
+.stepi .si::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(18,17,16,.95),rgba(18,17,16,0) 55%)}
+.stepi .sn{position:absolute;z-index:1;bottom:14px;inset-inline-start:24px;font-family:Montserrat,Heebo,sans-serif;font-size:56px;font-weight:900;line-height:1;letter-spacing:-.05em;background:linear-gradient(90deg,#E4AA7C,#F4AF56,#F8D29C);-webkit-background-clip:text;background-clip:text;color:transparent}
+.stepi .sb{display:flex;flex-direction:column;gap:10px;padding:22px 24px 28px}
+.gal{padding:140px 0 120px;background:#0A0908;overflow:hidden}
+.mq{display:flex;flex-direction:column;gap:16px;margin-top:56px}
+.mqt{display:flex;gap:16px;width:max-content;animation:mq 60s linear infinite}
+.mqt.rev{animation-direction:reverse;animation-duration:70s}
+.mqt img{width:260px;aspect-ratio:4/5;object-fit:cover;border-radius:18px;display:block;filter:saturate(.95)}
+.mq:hover .mqt{animation-play-state:paused}
+@keyframes mq{from{transform:translateX(0)}to{transform:translateX(calc(-50% - 8px))}}
+.mbx{position:relative;width:150px;height:194px;transform-style:preserve-3d;transform:rotateY(28deg) rotateX(8deg)}
+[dir=ltr] .mbx,.pg[dir=ltr] .mbx{transform:rotateY(-28deg) rotateX(8deg)}
+.mf{position:absolute;backface-visibility:hidden}
+.mf.front{width:150px;height:194px;transform:translateZ(20px);overflow:hidden;border-radius:4px;box-shadow:0 0 0 1px rgba(255,255,255,.08),0 30px 60px rgba(0,0,0,.6)}
+.mf.front img{width:100%;height:100%;object-fit:cover;display:block}
+.mf.spine{width:40px;height:194px;left:0;background:linear-gradient(180deg,#023C4C,#0C2925);transform:rotateY(-90deg) translateZ(20px);display:flex;align-items:center;justify-content:center}
+.mf.spine span{writing-mode:vertical-rl;font:700 7px Montserrat,sans-serif;letter-spacing:.3em;color:#F4AF56;direction:ltr}
+.mf.top{width:150px;height:40px;background:#0C2925;transform:rotateX(90deg) translateZ(20px)}
+.ml{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:12px;background:linear-gradient(0deg,rgba(10,9,8,.94) 0%,rgba(10,9,8,0) 58%,rgba(10,9,8,.5) 100%);color:#F4F4F4;direction:ltr;text-align:left}
+.ml .mk{font:700 6px Montserrat,sans-serif;letter-spacing:.3em}
+.ml .mg{font:600 7px Montserrat,sans-serif;letter-spacing:.24em;color:#F4AF56}
+.ml .mt{font:900 19px/1 Heebo,Montserrat,sans-serif;margin-top:4px}
+.ml .ms{font-size:9px;color:#CDD7DD;margin-top:4px}
+.allin{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:48px;align-items:center;margin-top:64px;padding:56px;border:1.5px solid rgba(244,175,86,.7);border-radius:24px;background:radial-gradient(ellipse at 20% 50%,rgba(244,175,86,.14),rgba(10,9,8,0) 60%),#0A0908;overflow:hidden}
+.av{position:relative;height:380px;perspective:1400px}
+.av .mbx{position:absolute;width:150px}
+.av .mbx{transform-origin:center}
+.av .b0{left:50%;top:40px;margin-left:-75px;z-index:3}
+.av .b1{left:12%;top:120px;z-index:2}
+.av .b2{right:12%;top:120px;z-index:2}
+.av .b0{animation:fl 7s ease-in-out infinite}.av .b1{animation:fl 7s ease-in-out -2.3s infinite}.av .b2{animation:fl 7s ease-in-out -4.6s infinite}
+@keyframes fl{0%,100%{translate:0 0}50%{translate:0 -12px}}
+.aglow{position:absolute;left:10%;right:10%;bottom:10px;height:40px;background:radial-gradient(closest-side,rgba(0,0,0,.8),rgba(0,0,0,0));filter:blur(8px)}
+.ac{display:flex;flex-direction:column;gap:18px;align-items:flex-start}
+.ac ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.ac li{display:flex;gap:10px;align-items:flex-start;font-size:16px;line-height:1.5;color:rgba(244,244,244,.82)}
+.ac li svg{flex:none;margin-top:4px}
+.tagx2{padding:6px 14px;border-radius:64px;background:linear-gradient(90deg,#E4AA7C,#F4AF56);color:#0A0908;font-size:12px;font-weight:700;letter-spacing:.06em}
+.aprice{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.aprice .now{font-size:34px;font-weight:800;color:#F4F4F4}
+.aprice .was{font-size:16px;color:rgba(244,244,244,.5);text-decoration:line-through}
+.plans.p3{grid-template-columns:repeat(3,minmax(0,1fr));margin-top:24px}
+.plan .pv{height:190px;display:flex;justify-content:center;align-items:center;perspective:1200px;margin:-6px 0 4px;background:radial-gradient(ellipse at 50% 60%,rgba(244,175,86,.1),rgba(0,0,0,0) 65%)}
+.mbx.sm{transform:scale(.72) rotateY(28deg) rotateX(8deg);margin:0 -34px}
+.pg[dir=ltr] .mbx.sm{transform:scale(.72) rotateY(-28deg) rotateX(8deg)}
+.mbx.sm.s1{translate:0 14px}
+.fgrid{position:relative;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:48px;align-items:center}
+.fcopy{display:flex;flex-direction:column;gap:24px;align-items:flex-start}
+.frow{display:flex;flex-wrap:wrap;gap:12px}
+.fan{position:relative;height:500px}
+.fan .fc{position:absolute;top:50%;left:50%;width:300px;margin:-94px 0 0 -150px;aspect-ratio:16/10;border-radius:12px;overflow:hidden;box-shadow:0 30px 70px rgba(0,0,0,.65),0 0 0 1px rgba(255,255,255,.1);transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+.fan .fc img{width:100%;height:100%;object-fit:cover;display:block}
+.fan .c0{transform:translate(-170px,-100px) rotate(-7deg)}.fan .c1{transform:translate(-60px,-34px) rotate(-3deg)}.fan .c2{transform:translate(50px,34px) rotate(1deg)}.fan .c3{transform:translate(160px,100px) rotate(4deg)}
+.fan:hover .c0{transform:translate(-200px,-124px) rotate(-9deg)}.fan:hover .c3{transform:translate(190px,124px) rotate(6deg)}
+.final-bg{opacity:.6}
+@media (max-width:1100px){.allin{grid-template-columns:minmax(0,1fr);padding:40px 28px}.av{height:320px}.plans.p3{grid-template-columns:minmax(0,1fr)}.fgrid{grid-template-columns:minmax(0,1fr)}.fan{height:340px}}
+@media (max-width:900px){.g3{grid-template-columns:minmax(0,1fr)}.mqt img{width:180px}.gal{padding:100px 0 90px}}
+@media (max-width:600px){.av{height:260px;transform:scale(.8);transform-origin:top center;margin-bottom:-50px}.av .b1{left:0}.av .b2{right:0}.fan{height:280px;transform:scale(.7);transform-origin:center}.allin{padding:32px 20px}.final .frow .btn,.final .frow .ghost{width:100%}}
+@media (prefers-reduced-motion:reduce){.mqt,.av .mbx{animation:none}}
+.stepi .sn{-webkit-text-fill-color:transparent}
+.tagx2{color:#0A0908;font-weight:800}
+.allin{background:radial-gradient(ellipse at 20% 50%,rgba(244,175,86,.16),rgba(10,9,8,0) 60%),#0A0908}
+.plan .pv{background:radial-gradient(ellipse at 50% 60%,rgba(244,175,86,.12),rgba(0,0,0,0) 65%)}
+/* v19: final polish */
+@media (max-width:1100px){.fan{order:-1;height:330px}}
+@media (max-width:600px){.fan{height:200px;transform:scale(.48);margin:-10px 0 -10px}.allin .av{margin-bottom:-70px}.fcopy{align-items:stretch}.final .meta{justify-content:flex-start}}
+.faq .q{min-height:64px}
 </style>
 </helmet>
 <div class="pg" dir="rtl">
@@ -225,10 +317,10 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 <h1 class="h1" style="font-size: clamp(38px,4.6vw,66px)">לראות את התמונה<br><span class="b grad">לפני שלוחצים.</span></h1>
 <p class="lead" style="max-width: 560px">4 מדריכים דיגיטליים עם 137 שיעורים קצרים: קומפוזיציה, צבע, אור ותכנון. כל שיעור הוא צילום אמיתי מהשטח, עם שרטוט שמראה בדיוק למה הוא עובד.</p>
 <div class="ctas">
-<a class="btn" href="#buy">לרכישת הסט</a>
+<a class="btn" href="#buy">לרכישת הסט <span class="pr">· [המחיר]</span></a>
 <a class="ghost" href="#inside">הציצו פנימה</a>
 </div>
-<p class="small">229 עמודים · עברית ואנגלית · PDF לכל מכשיר</p>
+<div class="meta"><span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg> 137 שיעורים</span><span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg> עברית ואנגלית</span><span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg> PDF לכל מכשיר</span></div>
 </div>
 <div class="fly4" role="img" aria-label="ארבעת מדריכי השטח: קומפוזיציה, צבע, אור ותכנון">
 <div class="pos" style="left: 280px; top: 0px"><div class="box" style="animation-delay: -1.2s"><div class="face top"></div><div class="face spine"><span>MWP FIELD GUIDE · 01</span></div><div class="face front"><img src="../assets/pages/img/0cf44582c4078749d18156eec10c90d3.jpg" alt=""><div class="lab"><div class="bn">MW PHOTO TOURS</div><div><div class="gk">מדריך שטח · 01</div><div class="ttl">קומפוזיציה</div><div class="sub">39 שיעורים · 53 עמודים</div></div></div></div></div><div class="shadow"></div></div>
@@ -277,10 +369,10 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 <h2 class="h2">4 מדריכים. <span class="b grad">4 מיומנויות שכל צלם טבע צריך.</span></h2>
 </div>
 <div class="cols">
-<div class="card"><img src="../assets/pages/img/0cf44582c4078749d18156eec10c90d3.jpg" alt="לביאה בעשב זהוב"><div class="ov"><div class="num grad">01</div><h3 class="h3">קומפוזיציה</h3><p class="body">איפה למקם, מה להשאיר בחוץ ואיך להוביל את העין. 39 שיעורים.</p></div></div>
-<div class="card"><img src="../assets/pages/img/6451989d401407918cc62b9e928904b5.jpg" alt="יעל בשמי דמדומים"><div class="ov"><div class="num grad">02</div><h3 class="h3">צבע</h3><p class="body">הרמוניה, טמפרטורה, רוויה ואיזון לבן. 36 שיעורים ו-10 עמודי תיאוריה.</p></div></div>
-<div class="card"><img src="../assets/pages/img/54dd53b469a5eab9df357713be291d8b.jpg" alt="צבוע באור אחורי"><div class="ov"><div class="num grad">03</div><h3 class="h3">אור</h3><p class="body">כיוון, איכות, שעה וחשיפה. 25 שיעורים ו-8 כלי אור.</p></div></div>
-<div class="card"><img src="../assets/pages/img/bceecca6cbf264e845c21ae79c98103f.jpg" alt="צלם מול הרים מושלגים"><div class="ov"><div class="num grad">04</div><h3 class="h3">תכנון</h3><p class="body">עונות, שמיים, אפליקציות, שטח וציוד. 37 שיעורים ו-13 כלי תכנון.</p></div></div>
+<div class="card"><img src="../assets/pages/img/d5f6d2a7c84cc3346ef45e4922528351.jpg" alt="פומה מביטה למצלמה"><div class="ov"><div class="num grad">01</div><h3 class="h3">קומפוזיציה</h3><p class="body">איפה למקם, מה להשאיר בחוץ ואיך להוביל את העין. 39 שיעורים.</p></div></div>
+<div class="card"><img src="../assets/pages/img/6d84bcea4206fe4c622103d7d3aea920.jpg" alt="תוכי ים בין פרחים צהובים"><div class="ov"><div class="num grad">02</div><h3 class="h3">צבע</h3><p class="body">הרמוניה, טמפרטורה, רוויה ואיזון לבן. 36 שיעורים ו-10 עמודי תיאוריה.</p></div></div>
+<div class="card"><img src="../assets/pages/img/ce73f34a054f9959d99fd850c1df9ce5.jpg" alt="שונר באור צד"><div class="ov"><div class="num grad">03</div><h3 class="h3">אור</h3><p class="body">כיוון, איכות, שעה וחשיפה. 25 שיעורים ו-8 כלי אור.</p></div></div>
+<div class="card"><img src="../assets/pages/img/2f9794f404a12b19c251a68288a8f543.jpg" alt="שועל צעיר מביט במצלמה"><div class="ov"><div class="num grad">04</div><h3 class="h3">תכנון</h3><p class="body">עונות, שמיים, אפליקציות, שטח וציוד. 37 שיעורים ו-13 כלי תכנון.</p></div></div>
 </div>
 </div>
 </section>
@@ -293,7 +385,7 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 <p class="lead">בכל עמוד: צילום אמיתי, שרטוט שמראה מה קורה בו, והסבר של משפט או שניים שקל לזכור בשטח. ובסוף כל שיעור, "שוברים את הכלל": מתי כדאי ללכת נגד הכלל, ואיך.</p>
 </div>
 <div class="frame">
-<img src="../assets/pages/img/3432cdcf5ae77b93c3e4f982218b07cf.jpg" alt="עמוד חוק השלישים מתוך מדריך הקומפוזיציה">
+<img src="../assets/pages/img/6a58bfaef578ead1b5e3a95d1a303169.jpg" alt="עמוד מקום למבט מתוך מדריך הקומפוזיציה">
 <span class="mchip" style="right: 4%; top: 6%">רעיון אחד</span>
 <span class="mchip" style="left: 6%; top: 42%; background: #F4AF56">שרטוט על התמונה</span>
 <span class="mchip" style="right: 30%; bottom: 8%">צילום אמיתי</span>
@@ -301,7 +393,7 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 </div>
 </section>
 
-<section class="sec" style="background: linear-gradient(180deg,#0A0908,#0C2925); padding-bottom: 40px">
+<section class="sec" style="background: linear-gradient(180deg,#0A0908,#121110); padding-bottom: 40px">
 <div class="wrap">
 <div class="head">
 <p class="kick">בכל מסך</p>
@@ -309,7 +401,7 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 <p class="lead">קובצי PDF שנפתחים בכל מכשיר. לומדים בבית על מסך גדול, ופותחים את דף הסיכום בטלפון רגע לפני הזריחה.</p>
 </div>
 <div class="devs" aria-hidden="true">
-<div class="tablet"><img src="../assets/pages/img/23dcc6341e32c13f0c4273c8a8bf52a6.jpg" alt=""></div>
+<div class="tablet"><img src="../assets/pages/img/74624b3dcffdd95bdb0fcfaedd24bc11.jpg" alt=""></div>
 </div>
 </div>
 </section>
@@ -320,33 +412,30 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 <div class="stack">
 <p class="kick">מי מלמד אתכם</p>
 <h2 class="h2">צלם טבע <span class="b grad">שחי בשטח.</span></h2>
-<p class="lead">מתן וויילד: הרפתקן, צלם טבע וחיות בר, מדריך מסעות צילום בארץ ובעולם, והמייסד של <span class="en">MW Photo Tours</span>. כל צילום במדריכים הוא שלו, וכל רעיון נבדק מול חיה אמיתית, אור אמיתי ושטח אמיתי.</p>
+<p class="lead">מתן וויילד הוא צלם טבע וחיות בר, מדריך מסעות צילום בארץ ובעולם והמייסד של <span class="en">MW Photo Tours</span>. במדריכים הוא מלמד את מה שהוא עושה בשטח: איך מוצאים את התמונה, מתי מחכים, ואיפה עומדים כשהאור מגיע.</p>
 </div>
 </div>
 </section>
 
 <section class="sec" id="how">
 <div class="wrap">
-<div class="head">
-<p class="kick">שלושה צעדים</p>
-<h2 class="h2">קוראים, מתרגלים, <span class="b grad">יוצאים לצלם.</span></h2>
+<div class="head"><p class="kick">שלושה צעדים</p><h2 class="h2">קוראים, מתרגלים, <span class="b grad">יוצאים לצלם.</span></h2></div>
+<div class="g3"><div class="stepi"><div class="si"><img src="../assets/pages/img/9456cbfac944f70285ce24d60d9a5758.jpg" alt="עמוד אור אחורי מתוך מדריך האור"><span class="sn">01</span></div><div class="sb"><h3 class="h3">קוראים שיעור</h3><p class="body">עמוד אחד, רעיון אחד. אפשר להתחיל מכל מדריך ומכל עמוד.</p></div></div><div class="stepi"><div class="si"><img src="../assets/pages/img/86253563c4d779452e3b3e9e455f8934.jpg" alt="צ׳קליסט בודקים את הפריים"><span class="sn">02</span></div><div class="sb"><h3 class="h3">מתרגלים</h3><p class="body">בכל מדריך יש תרגילים, צ׳קליסט ודף סיכום שלוקחים לשטח.</p></div></div><div class="stepi"><div class="si"><img src="../assets/pages/img/d73281c03ad164f682154de3f3210259.jpg" alt="צלם שוכב על הקרח ומצלם"><span class="sn">03</span></div><div class="sb"><h3 class="h3">יוצאים לצלם</h3><p class="body">מגיעים לסצנה עם תוכנית, ויודעים מה לחפש בעינית.</p></div></div></div>
 </div>
-<div class="g3">
-<div class="step"><div class="k grad">01</div><h3 class="h3">קוראים שיעור</h3><p class="body">עמוד אחד, רעיון אחד. אפשר להתחיל מכל מדריך ומכל עמוד.</p></div>
-<div class="step"><div class="k grad">02</div><h3 class="h3">מתרגלים</h3><p class="body">בכל מדריך יש תרגילים, צ׳קליסט ודף סיכום שלוקחים לשטח.</p></div>
-<div class="step"><div class="k grad">03</div><h3 class="h3">יוצאים לצלם</h3><p class="body">מגיעים לסצנה עם תוכנית, ויודעים מה לחפש בעינית.</p></div>
-</div>
-</div>
+</section>
+
+<section class="gal" aria-label="מהשטח">
+<div class="wrap"><div class="head"><p class="kick">מתוך המדריכים</p><h2 class="h2">137 שיעורים. <span class="b grad">כולם מהשטח.</span></h2><p class="lead">כל שיעור בנוי סביב צילום אמיתי של מתן, עם שרטוט שמראה בדיוק למה הוא עובד.</p><a class="btn" href="#buy" style="margin-top: 8px">לרכישת הסט <span class="pr">· [המחיר]</span></a></div></div>
+<div class="mq" dir="ltr" aria-hidden="true"><div class="mqt"><img src="../assets/pages/img/2c79f949f816ee693322cfce98f61afc.jpg" alt=""><img src="../assets/pages/img/9583692af9aca77b648b4e2ff3733f72.jpg" alt=""><img src="../assets/pages/img/aaa6b678f12b2bc6866e736281498d1c.jpg" alt=""><img src="../assets/pages/img/070e7608dbefe0693b217fc9c0a64234.jpg" alt=""><img src="../assets/pages/img/cff5b2d414538979bb1efe787e67de9f.jpg" alt=""><img src="../assets/pages/img/2c79f949f816ee693322cfce98f61afc.jpg" alt=""><img src="../assets/pages/img/9583692af9aca77b648b4e2ff3733f72.jpg" alt=""><img src="../assets/pages/img/aaa6b678f12b2bc6866e736281498d1c.jpg" alt=""><img src="../assets/pages/img/070e7608dbefe0693b217fc9c0a64234.jpg" alt=""><img src="../assets/pages/img/cff5b2d414538979bb1efe787e67de9f.jpg" alt=""></div><div class="mqt rev"><img src="../assets/pages/img/32909dca904452841a5b6ea7a187f4aa.jpg" alt=""><img src="../assets/pages/img/b7cfa28802573f545067cc876c19f44e.jpg" alt=""><img src="../assets/pages/img/a7adf42375708a6165c1498e3e170f8e.jpg" alt=""><img src="../assets/pages/img/5578f8776625aac5bc0ebc1673fe549a.jpg" alt=""><img src="../assets/pages/img/3c19b4355bad5a4a5cf99bf0881b4e8b.jpg" alt=""><img src="../assets/pages/img/32909dca904452841a5b6ea7a187f4aa.jpg" alt=""><img src="../assets/pages/img/b7cfa28802573f545067cc876c19f44e.jpg" alt=""><img src="../assets/pages/img/a7adf42375708a6165c1498e3e170f8e.jpg" alt=""><img src="../assets/pages/img/5578f8776625aac5bc0ebc1673fe549a.jpg" alt=""><img src="../assets/pages/img/3c19b4355bad5a4a5cf99bf0881b4e8b.jpg" alt=""></div></div>
 </section>
 
 <section class="sec alt" id="bundles">
 <div class="wrap">
-<div class="head">
-<p class="kick">חבילות</p>
-<h2 class="h2">מצלמים עם המדריכים. <span class="b grad">עורכים עם הכלים.</span></h2>
-<p class="lead">המדריכים מלמדים מה קורה לפני הקליק. הפריסטים והפאנל ממשיכים מאותה נקודה אל העריכה, באותו מראה.</p>
-</div>
-<div class="plans"><div class="plan"><div><h3 class="h3">מדריכי השטח</h3><p class="small" style="margin-top: 6px">לומדים לצלם: לפני הקליק</p></div><div class="price">[המחיר]</div><ul><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>4 מדריכי שטח, עברית ואנגלית</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>137 שיעורים, 229 עמודים</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>דפי סיכום, תרגילים וצ׳קליסט</span></li></ul><a class="ghost" href="#buy">לרכישת הסט</a></div><div class="plan"><div><h3 class="h3">מדריכים + פריסטים</h3><p class="small" style="margin-top: 6px">לומדים לצלם, ועורכים בלייטרום</p></div><div class="price">[מחיר חבילה]</div><ul><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>4 מדריכי שטח, עברית ואנגלית</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span><span class="en">MWP Presets</span>: 50 פריסטים ללייטרום</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>33 קובצי LUT לפוטושופ ולווידאו</span></li></ul><a class="ghost" href="#buy">לחבילה</a></div><div class="plan"><div><h3 class="h3">מדריכים + פאנל</h3><p class="small" style="margin-top: 6px">לומדים לצלם, ועורכים בפוטושופ</p></div><div class="price">[מחיר חבילה]</div><ul><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>4 מדריכי שטח, עברית ואנגלית</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span><span class="en">MWP Panel</span>: פלאגין לפוטושופ</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>מדריך משתמש ומדריך התקנה</span></li></ul><a class="ghost" href="#buy">לחבילה</a></div><div class="plan hi"><span class="tagx">כל המוצרים</span><div><h3 class="h3">הכל</h3><p class="small" style="margin-top: 6px">צילום ועריכה, מההתחלה עד הסוף</p></div><div class="price">[מחיר חבילה]</div><ul><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>4 מדריכי שטח, עברית ואנגלית</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span><span class="en">MWP Presets</span>: 50 פריסטים ו-33 קובצי LUT</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span><span class="en">MWP Panel</span>: פלאגין לפוטושופ</span></li></ul><a class="btn" href="#buy">לחבילה המלאה</a></div></div>
+<div class="head"><p class="kick">חבילות</p><h2 class="h2">מצלמים עם המדריכים. <span class="b grad">עורכים עם הכלים.</span></h2><p class="lead">המדריכים מלמדים מה קורה לפני הקליק. הפריסטים והפאנל ממשיכים מאותה נקודה אל העריכה, באותו מראה.</p></div>
+<div class="allin"><div class="av"><div class="mbx b0"><div class="mf top"></div><div class="mf spine"><span>MWP FIELD GUIDES</span></div><div class="mf front"><img src="../assets/pages/img/0cf44582c4078749d18156eec10c90d3.jpg" alt=""><div class="ml"><div class="mk">MW PHOTO TOURS</div><div><div class="mg">FIELD GUIDES</div><div class="mt">מדריכי שטח</div><div class="ms">4 מדריכים</div></div></div></div></div><div class="mbx b1"><div class="mf top"></div><div class="mf spine"><span>MWP PRESETS · 50</span></div><div class="mf front"><img src="../assets/pages/img/c88e041b857fb964607aaec43ad1753d.jpg" alt=""><div class="ml"><div class="mk">MW PHOTO TOURS</div><div><div class="mg">LIGHTROOM PRESETS</div><div class="mt">MWP Presets</div><div class="ms">50 פריסטים</div></div></div></div></div><div class="mbx b2"><div class="mf top"></div><div class="mf spine"><span>MWP PANEL</span></div><div class="mf front"><img src="../assets/pages/img/8f730b9bb76b93ca707cae719a309479.jpg" alt=""><div class="ml"><div class="mk">MW PHOTO TOURS</div><div><div class="mg">PHOTOSHOP PLUGIN</div><div class="mt">MWP Panel</div><div class="ms">פלאגין</div></div></div></div></div><div class="aglow"></div></div>
+<div class="ac"><span class="tagx2">החבילה המלאה</span><h3 class="h2" style="font-size: clamp(30px,3vw,44px)">הכל: <span class="b grad">מדריכים, פריסטים ופאנל.</span></h3><p class="lead" style="font-size: 17px">צילום ועריכה, מההתחלה עד הסוף. שלושת המוצרים של <span class="en">MWP</span> בחבילה אחת.</p><ul><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>4 מדריכי שטח, עברית ואנגלית: 137 שיעורים</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span><span class="en">MWP Presets</span>: 50 פריסטים ללייטרום ו-33 קובצי LUT</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span><span class="en">MWP Panel</span>: פלאגין לעריכה בפוטושופ</span></li></ul>
+<div class="aprice"><span class="now">[מחיר חבילה]</span><span class="was">[מחיר לפני הנחה]</span></div><a class="btn lg" href="#buy">לחבילה המלאה</a></div></div>
+<div class="plans p3"><div class="plan"><div class="pv"><div class="mbx sm s0"><div class="mf top"></div><div class="mf spine"><span>MWP FIELD GUIDES</span></div><div class="mf front"><img src="../assets/pages/img/0cf44582c4078749d18156eec10c90d3.jpg" alt=""><div class="ml"><div class="mk">MW PHOTO TOURS</div><div><div class="mg">FIELD GUIDES</div><div class="mt">מדריכי שטח</div><div class="ms">4 מדריכים</div></div></div></div></div></div><div><h3 class="h3">מדריכי השטח</h3><p class="small" style="margin-top: 6px">לומדים לצלם: לפני הקליק</p></div><div class="price">[המחיר]</div><ul><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>4 מדריכי שטח, עברית ואנגלית</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>137 שיעורים, 229 עמודים</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>דפי סיכום, תרגילים וצ׳קליסט</span></li></ul><a class="ghost" href="#buy">לרכישת הסט</a></div><div class="plan"><div class="pv"><div class="mbx sm s0"><div class="mf top"></div><div class="mf spine"><span>MWP FIELD GUIDES</span></div><div class="mf front"><img src="../assets/pages/img/0cf44582c4078749d18156eec10c90d3.jpg" alt=""><div class="ml"><div class="mk">MW PHOTO TOURS</div><div><div class="mg">FIELD GUIDES</div><div class="mt">מדריכי שטח</div><div class="ms">4 מדריכים</div></div></div></div></div><div class="mbx sm s1"><div class="mf top"></div><div class="mf spine"><span>MWP PRESETS · 50</span></div><div class="mf front"><img src="../assets/pages/img/c88e041b857fb964607aaec43ad1753d.jpg" alt=""><div class="ml"><div class="mk">MW PHOTO TOURS</div><div><div class="mg">LIGHTROOM PRESETS</div><div class="mt">MWP Presets</div><div class="ms">50 פריסטים</div></div></div></div></div></div><div><h3 class="h3">מדריכים + פריסטים</h3><p class="small" style="margin-top: 6px">לומדים לצלם, ועורכים בלייטרום</p></div><div class="price">[מחיר חבילה]</div><ul><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>4 מדריכי שטח, עברית ואנגלית</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span><span class="en">MWP Presets</span>: 50 פריסטים ללייטרום</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>33 קובצי LUT לפוטושופ ולווידאו</span></li></ul><a class="ghost" href="#buy">לחבילה</a></div><div class="plan"><div class="pv"><div class="mbx sm s0"><div class="mf top"></div><div class="mf spine"><span>MWP FIELD GUIDES</span></div><div class="mf front"><img src="../assets/pages/img/0cf44582c4078749d18156eec10c90d3.jpg" alt=""><div class="ml"><div class="mk">MW PHOTO TOURS</div><div><div class="mg">FIELD GUIDES</div><div class="mt">מדריכי שטח</div><div class="ms">4 מדריכים</div></div></div></div></div><div class="mbx sm s1"><div class="mf top"></div><div class="mf spine"><span>MWP PANEL</span></div><div class="mf front"><img src="../assets/pages/img/8f730b9bb76b93ca707cae719a309479.jpg" alt=""><div class="ml"><div class="mk">MW PHOTO TOURS</div><div><div class="mg">PHOTOSHOP PLUGIN</div><div class="mt">MWP Panel</div><div class="ms">פלאגין</div></div></div></div></div></div><div><h3 class="h3">מדריכים + פאנל</h3><p class="small" style="margin-top: 6px">לומדים לצלם, ועורכים בפוטושופ</p></div><div class="price">[מחיר חבילה]</div><ul><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>4 מדריכי שטח, עברית ואנגלית</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span><span class="en">MWP Panel</span>: פלאגין לפוטושופ</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>מדריך משתמש ומדריך התקנה</span></li></ul><a class="ghost" href="#buy">לחבילה</a></div></div>
 <p class="small" style="text-align: center; margin-top: 32px">[מחירים והנחות לחבילות: לקביעת מתן]</p>
 </div>
 </section>
@@ -355,7 +444,7 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 <div class="wrap">
 <div class="head"><p class="kick">לפני שקונים</p><h2 class="h2">שאלות נפוצות</h2></div>
 <div class="faq">
-<sc-for list="{{faqs}}" as="f" hint-placeholder-count="14">
+<sc-for list="{{faqs}}" as="f" hint-placeholder-count="7">
 <div>
 <button type="button" class="q" onClick="{{f.toggle}}" aria-expanded="{{f.exp}}"><span>{{f.q}}</span><span class="pm" aria-hidden="true">{{f.sign}}</span></button>
 <sc-if value="{{f.open}}" hint-placeholder-val="{{false}}"><div class="ans">{{f.a}}</div></sc-if>
@@ -368,12 +457,16 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 <section class="final" id="buy">
 <img class="final-bg" src="../assets/pages/img/577731691481ab4da5b46bed78b01de6.jpg" alt="">
 <div class="final-shade"></div>
-<div class="wrap" style="position: relative; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 28px">
+<div class="wrap fgrid">
+<div class="fcopy">
 <p class="kick">מדריכי השטח של <span class="en">MWP</span></p>
-<h2 class="h1" style="max-width: 1040px">מוכנים לצלם <span class="b grad">אחרת?</span></h2>
-<p class="lead" style="max-width: 620px">4 מדריכים, 137 שיעורים ו-229 עמודים של קומפוזיציה, צבע, אור ותכנון. בעברית ובאנגלית, בסט אחד.</p>
-<a class="btn lg" href="#buy">לרכישת הסט המלא <span class="pr">· [המחיר]</span></a>
+<h2 class="h1">מוכנים לצלם <span class="b grad">אחרת?</span></h2>
+<p class="lead">4 מדריכים, 137 שיעורים ו-229 עמודים של קומפוזיציה, צבע, אור ותכנון. בעברית ובאנגלית, בסט אחד.</p>
+<div class="frow"><a class="btn lg" href="#buy">לרכישת הסט המלא <span class="pr">· [המחיר]</span></a><a class="ghost" href="#bundles">לכל החבילות</a></div>
+<div class="meta"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg> 137 שיעורים</span><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg> עברית ואנגלית</span><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg> PDF לכל מכשיר</span></div>
 <p class="small">[תנאי שימוש והחזרים: ממתין לאישור מתן]</p>
+</div>
+<div class="fan" aria-hidden="true"><div class="fc c0"><img src="../assets/pages/img/a0db328cd742e41a17f8f030afcb4b66.jpg" alt=""></div><div class="fc c1"><img src="../assets/pages/img/03e562f57e3cf7837549a01e47dc9eda.jpg" alt=""></div><div class="fc c2"><img src="../assets/pages/img/b158e457a857231abf4b19b1857a3ab4.jpg" alt=""></div><div class="fc c3"><img src="../assets/pages/img/8095e725e81c8290b973c8f207b36eb4.jpg" alt=""></div></div>
 </div>
 </section>
 
@@ -381,12 +474,13 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 <div class="wrap" style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; color: #9CB1C2; font-size: 14px">
 <div class="en" style="font-weight: 800; letter-spacing: .3em; color: #FEFBF1">MW PHOTO TOURS</div>
 <div>כל הצילומים: <span class="en">Matan Wild</span> · <span class="en">contact@matanwildphotography.com</span></div>
+<div style="flex-basis: 100%">© 2026 <span class="en">MW Photo Tours</span>. כל הזכויות שמורות.</div>
 </div>
 </footer>
 
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":9600}}'>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":11400}}'>
 class Component extends DCLogic {
   constructor(props) {
     super(props);
@@ -395,7 +489,7 @@ class Component extends DCLogic {
   renderVals() {
     const G = [
       { label: 'קומפוזיציה', pages: [
-        { src: '../assets/pages/img/3432cdcf5ae77b93c3e4f982218b07cf.jpg', alt: 'עמוד חוק השלישים' },
+        { src: '../assets/pages/img/94febd64544724bcc1b51a4f32895809.jpg', alt: 'עמוד רקע נקי' },
         { src: '../assets/pages/img/124b00826782f9428a615c0c5adc3b7c.jpg', alt: 'עמוד מספרים אי־זוגיים' } ] },
       { label: 'צבע', pages: [
         { src: '../assets/pages/img/b09224d1ba803dad29bd99bc776001a0.jpg', alt: 'עמוד קודם איזון לבן' },
@@ -405,23 +499,16 @@ class Component extends DCLogic {
         { src: '../assets/pages/img/6f85637cf54ca22337d7a28258f00e50.jpg', alt: 'כלי: מאיפה מגיע האור' } ] },
       { label: 'תכנון', pages: [
         { src: '../assets/pages/img/89baa81a1deb528214b046f04b768b31.jpg', alt: 'עמוד הולכים אחרי האוכל' },
-        { src: '../assets/pages/img/23dcc6341e32c13f0c4273c8a8bf52a6.jpg', alt: 'עמוד אור מתוך הסערה' } ] }
+        { src: '../assets/pages/img/43021d4a1d07925b635ad6312c6cca23.jpg', alt: 'עמוד צופים בהתנהגות' } ] }
     ];
     const F = [
-      { q: 'זה ספר מודפס?', a: 'לא. אלה קובצי PDF דיגיטליים, ארבעה בעברית וארבעה באנגלית. פותחים אותם בכל מחשב, טאבלט או טלפון שיש בו קורא PDF.' },
-      { q: 'למי זה מתאים?', a: 'לכל מי שמצלם טבע, חיות בר ונוף ורוצה להבין למה תמונה אחת עובדת ואחרת לא. המדריכים מלמדים איך לראות ולתכנן, לא איזה ציוד לקנות.' },
-      { q: 'זה מתאים למתחילים?', a: 'כן. השיעורים מתחילים מהיסודות, וכל שיעור מסתיים ב״שוברים את הכלל״ בשביל מי שכבר מצלם ורוצה ללכת רחוק יותר.' },
-      { q: 'צריך מצלמה מסוימת או ציוד מקצועי?', a: 'לא. המדריכים עוסקים בקומפוזיציה, צבע, אור ותכנון, ולא תלויים במצלמה או בעדשה מסוימת.' },
-      { q: 'באיזו שפה?', a: 'בשתיהן. בסט יש את ארבעת המדריכים בעברית ואת אותם ארבעה באנגלית.' },
-      { q: 'מה יש בכל מדריך?', a: 'שיעורים של עמוד אחד עם צילום, שרטוט והסבר קצר, ובנוסף כלים ודיאגרמות, תוכן עניינים, דף סיכום, תרגילים וצ׳קליסט.' },
-      { q: 'מאיפה מתחילים?', a: 'מכל מקום. כל שיעור עומד בפני עצמו, אז אפשר להתחיל מהמדריך שהכי מעניין אתכם.' },
+      { q: 'מה בדיוק מקבלים?', a: '8 קובצי PDF דיגיטליים: ארבעת המדריכים בעברית ואותם ארבעה באנגלית. בכל מדריך שיעורים של עמוד אחד עם צילום, שרטוט והסבר קצר, ובנוסף כלים ודיאגרמות, דף סיכום, תרגילים וצ׳קליסט. נפתחים בכל מחשב, טאבלט או טלפון.' },
+      { q: 'זה מתאים גם למתחילים?', a: 'כן. השיעורים מתחילים מהיסודות, וכל שיעור נגמר ב״שוברים את הכלל״ בשביל מי שכבר מצלם ורוצה ללכת רחוק יותר. אפשר להתחיל מכל מדריך ומכל עמוד.' },
+      { q: 'צריך מצלמה או ציוד מסוים?', a: 'לא. המדריכים מלמדים לראות ולתכנן: קומפוזיציה, צבע, אור ותכנון. הם לא תלויים במצלמה או בעדשה מסוימת.' },
+      { q: 'מה ההבדל בין המדריכים, הפריסטים והפאנל?', a: 'המדריכים מלמדים לצלם: מה לחפש לפני הקליק. MWP Presets הם 50 פריסטים ללייטרום ועוד 33 קובצי LUT. MWP Panel הוא פלאגין לפוטושופ שהופך את העריכה לכמה כפתורים פשוטים (Photoshop 2023 ומעלה, מק או ווינדוס). אפשר לקנות כל אחד לבד או בחבילה.' },
       { q: 'אפשר לקנות מדריך אחד?', a: '[לבחירת מתן: סט בלבד, או גם מדריך בודד ובאיזה מחיר.]' },
-      { q: 'מה ההבדל בין המדריכים, הפריסטים והפאנל?', a: 'המדריכים מלמדים לצלם: מה לחפש לפני הקליק. MWP Presets ו-MWP Panel הם כלים לעריכה אחרי הצילום: הפריסטים ללייטרום, והפאנל לפוטושופ.' },
-      { q: 'מה זה MWP Presets?', a: '50 פריסטים ללייטרום שנבנו מהעריכות של מתן בקטלוג שלו, ועוד 33 קובצי LUT לפוטושופ ולווידאו. עובדים ב-Lightroom Classic, ב-Lightroom, ב-Lightroom Mobile וב-Camera Raw.' },
-      { q: 'מה זה MWP Panel?', a: 'פלאגין לפוטושופ שמכניס את העריכה שלנו לכפתורים פשוטים: בוחרים מה לערוך, בוחרים אפקט וקובעים עוצמה. התמונה המקורית לא משתנה. דורש Photoshop 2023 (24.2) ומעלה, במק או בווינדוס.' },
-      { q: 'יש חבילות?', a: 'כן. אפשר לקנות את המדריכים לבד, יחד עם הפריסטים, יחד עם הפאנל, או את כל השלושה. החבילות מופיעות למעלה בעמוד. [מחירים: לקביעת מתן.]' },
       { q: 'איך מקבלים את הקבצים?', a: '[לפי החנות שנבחר: קישור הורדה במייל או בעמוד התודה.]' },
-      { q: 'מה מותר לעשות עם הקבצים, ומה מדיניות ההחזרים?', a: '[תשובה מתוך תנאי השימוש וההחזרים, אחרי אישור מתן.]' }
+      { q: 'מה מדיניות ההחזרים והשימוש בקבצים?', a: '[תשובה מתוך תנאי השימוש וההחזרים, אחרי אישור מתן.]' }
     ];
     const s = this.state;
     const g = G[s.g];
@@ -433,6 +520,39 @@ class Component extends DCLogic {
     };
   }
 }
+</script>
+<script>
+(function(){
+  var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(!('IntersectionObserver' in window)||reduce){document.documentElement.classList.add('nofx');return;}
+  document.documentElement.classList.add('fx');
+  function count(el){
+    if(el.dataset.done)return; el.dataset.done=1;
+    var to=parseInt(el.dataset.to||el.textContent,10); if(isNaN(to))return;
+    el.dataset.to=to; var t0=null, dur=1700;
+    function step(t){ if(!t0)t0=t; var p=Math.min(1,(t-t0)/dur); var e=1-Math.pow(1-p,4);
+      el.textContent=Math.round(to*e); if(p<1)requestAnimationFrame(step); }
+    el.textContent='0'; requestAnimationFrame(step);
+  }
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){
+    if(!e.isIntersecting)return; var el=e.target; el.classList.add('in'); io.unobserve(el);
+    if(el.classList.contains('stat')){var n=el.querySelector('.n'); setTimeout(function(){count(n)}, parseFloat(getComputedStyle(el).getPropertyValue('--d')||0)*1000);}
+  })},{threshold:.25,rootMargin:'0px 0px -8% 0px'});
+  var SEL='.head,.hero-copy,.card,.stepi,.plan,.allin,.faq,.frame,.split .stack,.viewer,.tabs,.fcopy,.fan';
+  function setup(){
+    var stats=document.querySelectorAll('.stat'); if(!stats.length)return false;
+    stats.forEach(function(s,i){ if(s.dataset.fx)return; s.dataset.fx=1; s.style.setProperty('--d',(i*0.15)+'s'); io.observe(s); });
+    document.querySelectorAll(SEL).forEach(function(el){
+      if(el.dataset.fx)return; el.dataset.fx=1; el.classList.add('rv');
+      var sib=el.parentElement?Array.prototype.indexOf.call(el.parentElement.children,el):0;
+      if(/card|stepi|plan/.test(el.className))el.style.setProperty('--d',(sib*0.12)+'s');
+      io.observe(el);
+    });
+    return true;
+  }
+  var tries=0;(function poll(){ if(!setup()&&tries++<60)setTimeout(poll,150); })();
+  new MutationObserver(function(){setup()}).observe(document.documentElement,{childList:true,subtree:true});
+})();
 </script>
 <script type="module">
 import { initCart } from "../assets/js/lib/cart.js";

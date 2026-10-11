@@ -106,6 +106,7 @@
   }
   function bindTree(el) {
     if (el.nodeType !== 1) return;
+    if (el.__dcCls == null) el.__dcCls = Array.from(el.classList);
     listen(el);
     if ("value" in el && el.hasAttribute("value") && el.value !== el.getAttribute("value")) el.value = el.getAttribute("value");
     for (const c of el.children) bindTree(c);
@@ -126,8 +127,15 @@
       }
       if (have.nodeType === 3) { if (have.nodeValue !== want.nodeValue) have.nodeValue = want.nodeValue; continue; }
       if (have.nodeType !== 1) continue;
-      for (const at of Array.from(have.attributes)) if (!want.hasAttribute(at.name)) have.removeAttribute(at.name);
+      // Keep what page scripts add at runtime (reveal classes, CSS variables), so a re-render doesn't undo it.
+      const extraCls = have.__dcCls == null ? [] : Array.from(have.classList).filter((c) => !have.__dcCls.includes(c));
+      const extraVars = [];
+      for (let k = 0; k < have.style.length; k++) { const p = have.style[k]; if (p.startsWith("--")) extraVars.push([p, have.style.getPropertyValue(p)]); }
+      for (const at of Array.from(have.attributes)) if (!want.hasAttribute(at.name) && !(at.name === "class" && extraCls.length) && !(at.name === "style" && extraVars.length)) have.removeAttribute(at.name);
       for (const at of want.attributes) if (have.getAttribute(at.name) !== at.value) have.setAttribute(at.name, at.value);
+      have.__dcCls = (want.getAttribute("class") || "").split(/\s+/).filter(Boolean);
+      extraCls.forEach((c) => have.classList.add(c));
+      extraVars.forEach(([p, v]) => { if (!have.style.getPropertyValue(p)) have.style.setProperty(p, v); });
       if ("value" in have && want.hasAttribute("value") && have.value !== want.getAttribute("value") && document.activeElement !== have) {
         have.value = want.getAttribute("value");
       }
@@ -189,6 +197,17 @@
     if (location.hash) { const t = document.getElementById(location.hash.slice(1)); if (t) t.scrollIntoView(); }
   }
 
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", mount);
-  else mount();
+  // Mount as soon as the page markup and its script have been parsed, before any later page scripts run,
+  // so those scripts (reveal effects, counters) work on the rendered page rather than the raw template.
+  let mounted = false;
+  const tryMount = () => {
+    if (mounted) return true;
+    if (!document.querySelector("x-dc") || !document.querySelector("script[data-dc-script]")) return false;
+    mounted = true; mount(); return true;
+  };
+  if (!tryMount()) {
+    const mo = new MutationObserver(() => { if (tryMount()) mo.disconnect(); });
+    mo.observe(document.documentElement, { childList: true, subtree: true });
+    document.addEventListener("DOMContentLoaded", () => { tryMount(); mo.disconnect(); });
+  }
 })();

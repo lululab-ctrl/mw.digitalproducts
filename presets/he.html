@@ -50,12 +50,17 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 .btn{background:linear-gradient(90deg,#E4AA7C,#F4AF56);color:#0A0908;box-shadow:0 8px 24px rgba(244,175,86,.22)}
 .btn:hover{color:#0A0908;filter:brightness(1.08);transform:translateY(-1px)}
 .btn .pr{font-weight:600;opacity:.75}
-.ghost{border:1px solid rgba(254,251,241,.35);color:#FEFBF1;font-weight:600;background:rgba(10,9,8,.25)}
+.ghost{border:1px solid rgba(156,177,194,.3);color:#FEFBF1;font-weight:600;background:rgba(10,9,8,.25)}
 .ghost:hover{color:#FEFBF1;border-color:#FEFBF1}
 .btn.sm,.ghost.sm{min-height:40px;padding:0 18px;font-size:14px}
 .btn.lg{min-height:56px;padding:0 32px;font-size:16px}
+.lang{display:inline-flex;align-items:center;gap:2px;padding:3px;border-radius:64px;border:1px solid rgba(156,177,194,.35)}
+.lang a,.lang span{min-width:38px;min-height:32px;padding:0 10px;border-radius:64px;display:inline-flex;align-items:center;justify-content:center;font:600 13px Montserrat,Heebo,sans-serif;text-decoration:none;color:#CDD7DD}
+.lang a:hover{color:#FEFBF1}
+.lang .cur{background:#FEFBF1;color:#0A0908}
+.navr{display:flex;align-items:center;gap:12px}
 /* sticky nav */
-.nav{position:sticky;top:0;z-index:20;background:rgba(10,9,8,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(156,177,194,.12)}
+.nav{position:sticky;top:0;z-index:20;background:rgba(10,9,8,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(156,177,194,.14)}
 .nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px;gap:24px}
 .brand{display:flex;align-items:center;gap:12px;font-weight:700;letter-spacing:.26em;font-size:12px;color:#FEFBF1;text-decoration:none}
 .brand:hover{color:#FEFBF1}
@@ -90,9 +95,9 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 .seal .sn{font-size:20px;font-weight:800;line-height:1;color:#F4AF56}
 .seal .sl{font-size:6.5px;font-weight:800;letter-spacing:.24em;color:#F8D29C}
 .chips{display:flex;flex-wrap:wrap;gap:10px}
-.chip{padding:10px 18px;border-radius:64px;border:1px solid rgba(156,177,194,.35);font-size:14px;font-weight:600;color:#CDD7DD;background:rgba(10,9,8,.4)}
+.chip{padding:10px 18px;border-radius:64px;border:1px solid rgba(156,177,194,.3);font-size:14px;font-weight:600;color:#CDD7DD;background:rgba(10,9,8,.4)}
 /* stats */
-.band{border-top:1px solid rgba(156,177,194,.15);border-bottom:1px solid rgba(156,177,194,.15);background:#0C2925}
+.band{border-top:1px solid rgba(254,251,241,.15);border-bottom:1px solid rgba(254,251,241,.15);background:#0C2925}
 .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:32px;padding:40px 40px}
 .stat .n{font-size:clamp(38px,4vw,56px);font-weight:900;line-height:1;letter-spacing:-.04em}
 .stat .t{margin-top:10px;font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#9CB1C2;line-height:1.4}
@@ -114,7 +119,7 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 .rf{padding:6px 14px;border-radius:9px;border:1px solid #CDD7DD;background:#262626;font-weight:600;font-size:13px}
 .hint{text-align:center;margin-top:12px}
 .tabs{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:40px 0 24px}
-.tab{min-height:40px;padding:0 18px;border-radius:64px;border:1px solid rgba(156,177,194,.3);background:transparent;color:#CDD7DD;font:500 15px Heebo,Montserrat,sans-serif;cursor:pointer;transition:border-color .2s}
+.tab{min-height:40px;padding:0 18px;border-radius:64px;border:1px solid rgba(156,177,194,.35);background:transparent;color:#CDD7DD;font:500 15px Heebo,Montserrat,sans-serif;cursor:pointer;transition:border-color .2s}
 .tab:hover{border-color:#FEFBF1;color:#FEFBF1}
 .tab.on{background:#FEFBF1;color:#0A0908;border-color:#FEFBF1}
 /* collection cards */
@@ -162,7 +167,7 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 .hud{position:absolute;left:20px;top:20px;display:flex;gap:8px;flex-wrap:wrap}
 .hud span{padding:6px 12px;border-radius:64px;background:rgba(10,9,8,.6);font-size:11px;font-weight:700;letter-spacing:.18em;color:#9CB1C2;transition:all .3s}
 .hud span.on{background:#FEFBF1;color:#0A0908}
-.pbar{position:absolute;left:20px;right:20px;bottom:20px;height:4px;border-radius:6px;background:rgba(254,251,241,.2);overflow:hidden}
+.pbar{position:absolute;left:20px;right:20px;bottom:20px;height:4px;border-radius:6px;background:rgba(156,177,194,.18);overflow:hidden}
 .pfill{height:100%;background:linear-gradient(90deg,#E4AA7C,#F8D29C);transition:width .6s ease}
 .plabel{position:absolute;left:20px;bottom:36px;font-size:11px;font-weight:700;letter-spacing:.18em}
 .shot .ph{bottom:40px;right:16px}
@@ -187,16 +192,16 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 .reset:hover{border-color:#FEFBF1;color:#FEFBF1}
 /* grids */
 .g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:48px;margin-top:56px}
-.step{display:flex;flex-direction:column;gap:10px;padding:24px 0 0;border-top:1px solid rgba(156,177,194,.22)}
+.step{display:flex;flex-direction:column;gap:10px;padding:24px 0 0;border-top:1px solid rgba(254,251,241,.22)}
 .alt .step{background:transparent}
 .step .k{font-size:40px;font-weight:900;line-height:1;letter-spacing:-.04em;margin-bottom:4px}
 .step .fk{font-size:12px;font-weight:800;letter-spacing:.22em;color:#F4AF56}
 .inc{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:56px}
-.inc .i{display:flex;flex-direction:column;gap:6px;padding:26px 24px;border-radius:22px;background:rgba(254,251,241,.04);border:1px solid rgba(156,177,194,.18)}
+.inc .i{display:flex;flex-direction:column;gap:6px;padding:26px 24px;border-radius:22px;background:rgba(254,251,241,.04);border:1px solid rgba(156,177,194,.16)}
 .inc .big{font-size:36px;font-weight:900;line-height:1;margin-bottom:6px}
 .apps{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin-top:36px}
 .plans{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:56px;align-items:stretch}
-.plan{position:relative;display:flex;flex-direction:column;gap:16px;padding:28px 24px;border-radius:20px;background:rgba(254,251,241,.04);border:1px solid rgba(156,177,194,.18)}
+.plan{position:relative;display:flex;flex-direction:column;gap:16px;padding:28px 24px;border-radius:20px;background:rgba(254,251,241,.04);border:1px solid rgba(156,177,194,.16)}
 .plan.hi{border-color:rgba(244,175,86,.7);background:rgba(244,175,86,.07)}
 .plan .tagx{position:absolute;top:-12px;right:24px;padding:4px 12px;border-radius:64px;background:#F4AF56;color:#0A0908;font-size:11px;font-weight:800;letter-spacing:.06em}
 .plan .price{font-size:20px;font-weight:800;color:#FEFBF1}
@@ -205,11 +210,11 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 .plan li svg{flex:none;margin-top:3px}
 .plan .btn,.plan .ghost{width:100%}
 /* faq */
-.faq{max-width:760px;margin:40px auto 0;border-top:1px solid rgba(156,177,194,.2)}
-.q{width:100%;min-height:64px;display:flex;justify-content:space-between;align-items:center;gap:24px;padding:18px 0;background:none;border:0;border-bottom:1px solid rgba(156,177,194,.2);color:#FEFBF1;font:600 17px/1.45 Heebo,Montserrat,sans-serif;text-align:right;cursor:pointer}
+.faq{max-width:760px;margin:40px auto 0;border-top:1px solid rgba(156,177,194,.18)}
+.q{width:100%;min-height:64px;display:flex;justify-content:space-between;align-items:center;gap:24px;padding:18px 0;background:none;border:0;border-bottom:1px solid rgba(156,177,194,.18);color:#FEFBF1;font:600 17px/1.45 Heebo,Montserrat,sans-serif;text-align:right;cursor:pointer}
 .q:hover{color:#F8D29C}
 .q .pm{flex:none;width:28px;height:28px;border-radius:50%;border:1px solid rgba(244,175,86,.55);display:flex;align-items:center;justify-content:center;color:#F4AF56;font-size:18px;font-weight:500;line-height:1}
-.ans{padding:4px 0 24px 60px;color:#CDD7DD;font-size:15px;line-height:1.65;border-bottom:1px solid rgba(156,177,194,.2)}
+.ans{padding:4px 0 24px 60px;color:#CDD7DD;font-size:15px;line-height:1.65;border-bottom:1px solid rgba(156,177,194,.18)}
 .help{display:flex;justify-content:center;margin-top:48px}
 /* final */
 .final{position:relative;padding:140px 0;overflow:hidden}
@@ -269,11 +274,60 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 .final .btn.lg{width:100%;font-size:17px;padding:0 20px}
 .family{width:100%}
 }
-.lang{display:inline-flex;align-items:center;height:32px;padding:3px;border-radius:64px;border:1px solid rgba(156,177,194,.3);direction:ltr}
-.lang a,.lang span{display:inline-flex;align-items:center;justify-content:center;min-width:36px;height:24px;padding:0 10px;border-radius:64px;font:600 12px/1 Montserrat,Heebo,sans-serif;letter-spacing:.06em;color:#9CB1C2;text-decoration:none}
-.lang a:hover{color:#FEFBF1}
-.lang .on{background:#FEFBF1;color:#0A0908}
-.navr{display:flex;align-items:center;gap:14px}
+
+/* ===== motion: count-up + gentle effects ===== */
+.stat{position:relative}
+.stat .bar{height:2px;margin-top:16px;background:rgba(254,251,241,.1);border-radius:2px;overflow:hidden}
+.stat .bar i{display:block;height:100%;background:linear-gradient(90deg,#F8D29C,#F4AF56);transition:width .2s linear}
+.stat .n,.card .num,.inc .big{font-variant-numeric:tabular-nums}
+@keyframes heroIn{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+@keyframes kenburns{from{transform:scale(1.08)}to{transform:scale(1)}}
+@keyframes rise{from{opacity:0;transform:translateY(32px)}to{opacity:1;transform:none}}
+.hero-bg{animation:kenburns 14s cubic-bezier(.16,1,.3,1) both}
+.hero-copy>*{animation:heroIn .9s cubic-bezier(.16,1,.3,1) both}
+.hero-copy>*:nth-child(2){animation-delay:.12s}.hero-copy>*:nth-child(3){animation-delay:.24s}.hero-copy>*:nth-child(4){animation-delay:.36s}.hero-copy>*:nth-child(5){animation-delay:.48s}
+.scene{animation:heroIn 1.2s .3s cubic-bezier(.16,1,.3,1) both}
+@supports (animation-timeline: view()){
+.sec .head,.card,.plan,.step,.inc .i,.frame,.ba,.combo,.thumbs img,.stat{animation:rise linear both;animation-timeline:view();animation-range:entry 0% cover 22%}
+}
+.card,.plan,.inc .i{transition:transform .5s cubic-bezier(.16,1,.3,1),border-color .3s,box-shadow .5s}
+.card:hover{transform:translateY(-6px);box-shadow:0 24px 60px rgba(0,0,0,.5)}
+.plan:hover,.inc .i:hover{transform:translateY(-4px);border-color:rgba(244,175,86,.45)}
+.btn{position:relative;overflow:hidden}
+.btn:after{content:"";position:absolute;top:0;bottom:0;width:40%;left:-60%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.45),transparent);transform:skewX(-20deg);transition:left .7s cubic-bezier(.16,1,.3,1)}
+.btn:hover:after{left:130%}
+.frame img,.ba img{transition:transform 1.2s cubic-bezier(.16,1,.3,1)}
+.frame:hover img{transform:scale(1.03)}
+@media (prefers-reduced-motion:reduce){.hero-bg,.hero-copy>*,.scene,.sec .head,.card,.plan,.step,.inc .i,.frame,.ba,.combo,.thumbs img,.stat{animation:none !important}.btn:after{display:none}.card:hover,.plan:hover,.inc .i:hover{transform:none}}
+
+/* devices: phone beside the laptop, no overlap */
+@media (min-width:1101px){
+.laptop{width:860px;margin-left:-545px}
+.screen .ui{grid-template-rows:460px;height:460px}
+.phone{right:-10px;top:150px;width:210px;height:430px}
+}
+/* ===== final polish ===== */
+.brand span{white-space:nowrap}
+.faq{max-width:820px;margin-left:auto;margin-right:auto}
+@media (max-width:900px){
+.cols{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:12px;margin-left:-24px;margin-right:-24px;padding:0 24px 8px;scrollbar-width:none}
+.cols::-webkit-scrollbar{display:none}
+.cols>*{flex:0 0 62%;scroll-snap-align:start}
+}
+@media (max-width:600px){
+.navr{gap:8px}
+.nav .btn.sm{min-height:36px;padding:0 14px;font-size:12px}
+.lang a,.lang span{min-width:32px;min-height:28px;padding:0 8px;font-size:12px}
+.cols{margin-left:-20px;margin-right:-20px;padding:0 20px 8px}
+.cols>*{flex-basis:74%}
+.card{aspect-ratio:3/4}
+.inc{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.inc .i{padding:20px 16px}
+.tabs{flex-wrap:nowrap;justify-content:flex-start;overflow-x:auto;margin-left:-20px;margin-right:-20px;padding:0 20px 4px;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:none}
+.thumbs{gap:8px}
+}
 </style>
 </helmet>
 <div class="pg" dir="rtl">
@@ -324,11 +378,11 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 </section>
 
 <section class="band">
-<div class="wrap stats">
-<div class="stat"><div class="n grad">50</div><div class="t">פריסטים ללייטרום</div></div>
-<div class="stat"><div class="n grad">12</div><div class="t">אדפטיביים עם AI</div></div>
-<div class="stat"><div class="n grad">33</div><div class="t">קובצי LUT לווידאו</div></div>
-<div class="stat"><div class="n grad">4</div><div class="t">תוכנות של Adobe</div></div>
+<div class="wrap stats" data-cnt="st">
+<div class="stat"><div class="n grad">{{cnt.st0}}</div><div class="t">פריסטים ללייטרום</div><div class="bar"><i style="width: {{cnt.bar}}%"></i></div></div>
+<div class="stat"><div class="n grad">{{cnt.st1}}</div><div class="t">אדפטיביים עם AI</div><div class="bar"><i style="width: {{cnt.bar}}%"></i></div></div>
+<div class="stat"><div class="n grad">{{cnt.st2}}</div><div class="t">קובצי LUT לווידאו</div><div class="bar"><i style="width: {{cnt.bar}}%"></i></div></div>
+<div class="stat"><div class="n grad">{{cnt.st3}}</div><div class="t">תוכנות של Adobe</div><div class="bar"><i style="width: {{cnt.bar}}%"></i></div></div>
 </div>
 </section>
 
@@ -368,12 +422,12 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 <h2 class="h2">חמישה אוספים, <span class="b grad">לכל סוג של אור.</span></h2>
 <p class="lead">מאור זהוב מאחור ועד השעה הכחולה, משמש מדברית ועד צל רך. כל אחד מתחיל מההגדרות שאנחנו משתמשים בהן בעבודה של MWP.</p>
 </div>
-<div class="cols">
-<div class="card"><img src="../assets/pages/img/6fbe4f2a1e8774797e76a9165fd05e51.jpg" alt="לביאה בעשב זהוב"><div class="ov"><div class="num grad">14</div><h3 class="h3">Signature</h3><p class="body">המראה של MWP והגרסאות שלו, מרך ועד עמוק.</p></div></div>
-<div class="card"><img src="../assets/pages/img/e83b19474f1b5e07f6d6edc06ca91eb0.jpg" alt="הר געש מתפרץ בלילה"><div class="ov"><div class="num grad">16</div><h3 class="h3">Light &amp; Scene</h3><p class="body">אור זהוב, שעה כחולה, מדבר, מים ולילה.</p></div></div>
-<div class="card"><img src="../assets/pages/img/f424f86bc52a764b29bb6c0ea50eb225.jpg" alt="אריה הולך, שחור-לבן"><div class="ov"><div class="num grad">3</div><h3 class="h3">Mono</h3><p class="body">שחור-לבן בגוונים של MWP.</p></div></div>
-<div class="card"><img src="../assets/pages/img/e55ba13821bd5c715d0a939a1cb10893.jpg" alt="שועל אדום מביט למצלמה"><div class="ov"><div class="num grad">12</div><h3 class="h3">Adaptive</h3><p class="body">מסכות AI לנושא, לשמיים ולרקע.</p></div></div>
-<div class="card"><img src="../assets/pages/img/ff95ea5c7aba4eba92df5afc39ee9eb7.jpg" alt="נמר יוצא מהיער"><div class="ov"><div class="num grad">5</div><h3 class="h3">Tools</h3><p class="body">חשיפה, פרטי פרווה, וינייט וגרעין.</p></div></div>
+<div class="cols" data-cnt="cd">
+<div class="card"><img src="../assets/pages/img/6fbe4f2a1e8774797e76a9165fd05e51.jpg" alt="לביאה בעשב זהוב"><div class="ov"><div class="num grad">{{cnt.cd0}}</div><h3 class="h3">Signature</h3><p class="body">המראה של MWP והגרסאות שלו, מרך ועד עמוק.</p></div></div>
+<div class="card"><img src="../assets/pages/img/e83b19474f1b5e07f6d6edc06ca91eb0.jpg" alt="הר געש מתפרץ בלילה"><div class="ov"><div class="num grad">{{cnt.cd1}}</div><h3 class="h3">Light &amp; Scene</h3><p class="body">אור זהוב, שעה כחולה, מדבר, מים ולילה.</p></div></div>
+<div class="card"><img src="../assets/pages/img/f424f86bc52a764b29bb6c0ea50eb225.jpg" alt="אריה הולך, שחור-לבן"><div class="ov"><div class="num grad">{{cnt.cd2}}</div><h3 class="h3">Mono</h3><p class="body">שחור-לבן בגוונים של MWP.</p></div></div>
+<div class="card"><img src="../assets/pages/img/e55ba13821bd5c715d0a939a1cb10893.jpg" alt="שועל אדום מביט למצלמה"><div class="ov"><div class="num grad">{{cnt.cd3}}</div><h3 class="h3">Adaptive</h3><p class="body">מסכות AI לנושא, לשמיים ולרקע.</p></div></div>
+<div class="card"><img src="../assets/pages/img/ff95ea5c7aba4eba92df5afc39ee9eb7.jpg" alt="נמר יוצא מהיער"><div class="ov"><div class="num grad">{{cnt.cd4}}</div><h3 class="h3">Tools</h3><p class="body">חשיפה, פרטי פרווה, וינייט וגרעין.</p></div></div>
 </div>
 </div>
 </section>
@@ -519,11 +573,11 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 <div class="kick">מה מקבלים</div>
 <h2 class="h2">מה יש <span class="b grad">בהורדה.</span></h2>
 </div>
-<div class="inc">
-<div class="i"><div class="big grad">50</div><h3 class="h3" style="font-size: 18px">פריסטים למחשב</h3><p class="small">XMP ל-Lightroom Classic, ל-Lightroom ול-Camera Raw</p></div>
-<div class="i"><div class="big grad">50</div><h3 class="h3" style="font-size: 18px">קבצים לנייד</h3><p class="small">DNG ל-Lightroom Mobile באייפון, באייפד ובאנדרואיד</p></div>
-<div class="i"><div class="big grad">33</div><h3 class="h3" style="font-size: 18px">קובצי LUT</h3><p class="small">בפורמט ‎.cube לפוטושופ ולתוכנות וידאו</p></div>
-<div class="i"><div class="big grad">1</div><h3 class="h3" style="font-size: 18px">מדריך התקנה</h3><p class="small">עמוד לכל תוכנה, צעד אחר צעד</p></div>
+<div class="inc" data-cnt="ic">
+<div class="i"><div class="big grad">{{cnt.ic0}}</div><h3 class="h3" style="font-size: 18px">פריסטים למחשב</h3><p class="small">XMP ל-Lightroom Classic, ל-Lightroom ול-Camera Raw</p></div>
+<div class="i"><div class="big grad">{{cnt.ic1}}</div><h3 class="h3" style="font-size: 18px">קבצים לנייד</h3><p class="small">DNG ל-Lightroom Mobile באייפון, באייפד ובאנדרואיד</p></div>
+<div class="i"><div class="big grad">{{cnt.ic2}}</div><h3 class="h3" style="font-size: 18px">קובצי LUT</h3><p class="small">בפורמט ‎.cube לפוטושופ ולתוכנות וידאו</p></div>
+<div class="i"><div class="big grad">{{cnt.ic3}}</div><h3 class="h3" style="font-size: 18px">מדריך התקנה</h3><p class="small">עמוד לכל תוכנה, צעד אחר צעד</p></div>
 </div>
 <p class="small" style="text-align: center; margin-top: 24px">הפריסטים האדפטיביים דורשים Lightroom Classic 11 ומעלה, Lightroom 5 ומעלה או Camera Raw 14 ומעלה.</p>
 </div>
@@ -570,14 +624,14 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 <p class="lead" style="max-width: 620px">50 פריסטים, 50 קבצים לנייד, 33 קובצי LUT ומדריך התקנה, בהורדה אחת.</p>
 <a class="btn lg" href="#buy">לרכישת MWP Presets <span class="pr">· [המחיר]</span></a>
 <a class="family" href="#bundles"><span style="font-size: 22px; font-weight: 900" class="grad">+</span><span style="text-align: right"><b>בחבילה עם MWP Panel ומדריכי השטח</b><br><span class="small" style="color: #CDD7DD">הפלאגין לפוטושופ ו-4 מדריכי PDF, באותו מראה · [מחיר חבילה]</span></span></a>
-<div class="small">[תנאי שימוש והחזרים: ממתין לאישור מתן]</div>
+<div class="small">רישיון אישי לכל החיים. החזר מלא תוך 14 יום לפני ההורדה.</div>
 </div>
 </section>
 
-<footer style="padding: 40px 0; border-top: 1px solid rgba(156,177,194,.15)">
+<footer style="padding: 40px 0; border-top: 1px solid rgba(156,177,194,.14)">
 <div class="wrap" style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; color: #9CB1C2; font-size: 13px">
-<div style="font-weight: 800; letter-spacing: .3em; color: #FEFBF1">MW PHOTO TOURS</div>
-<div>כל הצילומים: Matan Wild · contact@matanwildphotography.com</div>
+<div style="font-weight: 800; letter-spacing: .32em; color: #FEFBF1">MW PHOTO TOURS</div>
+<div>© 2026 Matan Wild Photography. כל הזכויות שמורות. · contact@matanwildphotography.com</div>
 </div>
 </footer>
 
@@ -587,7 +641,28 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 class Component extends DCLogic {
   constructor(props) {
     super(props);
-    this.state = { i: 0, pos: 50, cat: 'all', open: 'q0', pt: 1, fx: [] };
+    this.state = { i: 0, pos: 50, cat: 'all', open: 'q0', pt: 1, fx: [], p_st: 0, p_cd: 0, p_ic: 0 };
+  }
+  componentDidMount() {
+    const groups = ['st', 'cd', 'ic'];
+    const finish = () => this.setState({ p_st: 1, p_cd: 1, p_ic: 1 });
+    if (typeof IntersectionObserver === 'undefined' || (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)) { finish(); return; }
+    this._io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => { if (e.isIntersecting) { this.runCount(e.target.getAttribute('data-cnt')); this._io.unobserve(e.target); } });
+    }, { threshold: 0.35 });
+    this._t = setTimeout(() => { document.querySelectorAll('[data-cnt]').forEach((el) => this._io.observe(el)); }, 250);
+  }
+  componentWillUnmount() { if (this._io) this._io.disconnect(); clearTimeout(this._t); this._dead = true; }
+  runCount(g) {
+    if (!g || (this.state['p_' + g] || 0) >= 1) return;
+    const start = performance.now(), dur = 1600;
+    const step = (now) => {
+      if (this._dead) return;
+      const t = Math.min(1, (now - start) / dur);
+      this.setState({ ['p_' + g]: 1 - Math.pow(1 - t, 3) });
+      if (t < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
   }
   renderVals() {
     const P = [
@@ -599,24 +674,17 @@ class Component extends DCLogic {
     ];
     const F = [
       { c: 'use', q: 'הם עובדים גם על JPEG?', a: 'כן. הם מבריקים על קובצי RAW, שנותנים להם הכי הרבה מרחב, ועל JPEG הם נותנים גרסה עדינה יותר של המראה.' },
-      { c: 'use', q: 'איך קובעים איזון לבן?', a: 'קובעים אותו ראשון, לפי האור שזוכרים. לכל סצנה יש אור משלה, אז אתם בוחרים והפריסט ממשיך משם. במדריך ההתקנה יש עמוד על זה, עם נקודת הפתיחה של MWP.' },
-      { c: 'use', q: 'איך קובעים חשיפה?', a: 'מחילים את הפריסט, ואז קובעים חשיפה לפריים. כל תמונה צולמה קצת אחרת, ולכן את זה מכוונים בעצמכם.' },
-      { c: 'use', q: 'זה יעבוד עם המצלמה שלי?', a: 'הם עובדים על קובצי RAW מכל מצלמה שלייטרום תומך בה. כל מצלמה וכל סצנה קצת שונות, אז מכוונים חשיפה ומשתמשים במחוון Amount.' },
+      { c: 'use', q: 'איך קובעים איזון לבן וחשיפה?', a: 'קודם קובעים איזון לבן, לפי האור שזוכרים. אחר כך מחילים את הפריסט וקובעים חשיפה לפריים. במדריך ההתקנה יש עמוד על זה, עם נקודת הפתיחה של MWP.' },
+      { c: 'use', q: 'זה יעבוד עם המצלמה שלי?', a: 'הם עובדים על קובצי RAW מכל מצלמה שלייטרום תומך בה. מכוונים חשיפה ומשתמשים במחוון Amount לפי כל סצנה.' },
       { c: 'use', q: 'אפשר לחזק או לרכך פריסט?', a: 'כן. בלייטרום וב-Camera Raw, מחוון Amount שמתחת לפריסטים מחזק או מרכך כל פריסט.' },
-      { c: 'use', q: 'מה עושים פריסטי Tools?', a: 'הם משנים רק את המחוונים שלהם: חשיפה למעלה או למטה, פרטי פרווה ונוצות, וינייט רך או גרעין עדין. מחילים אותם מעל כל פריסט אחר.' },
       { c: 'use', q: 'מה צריך בשביל הפריסטים האדפטיביים?', a: 'Lightroom Classic 11 ומעלה, Lightroom 5 ומעלה או Camera Raw 14 ומעלה. אם לייטרום מבקש לעדכן את המסכות אחרי ההחלה, לוחצים Update.' },
-      { c: 'apps', q: 'באילו תוכנות הם עובדים?', a: 'Lightroom Classic, ‏Lightroom למחשב, Lightroom Mobile ו-Camera Raw בפוטושופ. קובצי ה-LUT עובדים בפוטושופ, ב-Premiere Pro, ב-DaVinci Resolve וב-Final Cut Pro.' },
-      { c: 'apps', q: 'צריך פוטושופ?', a: 'לייטרום לבד מספיק. אם אתם עובדים גם בפוטושופ, אותם פריסטים מותקנים ב-Camera Raw, ו-MWP Panel לוקח את העריכה רחוק יותר.' },
+      { c: 'apps', q: 'באילו תוכנות הם עובדים?', a: 'Lightroom Classic, ‏Lightroom למחשב, Lightroom Mobile ו-Camera Raw בפוטושופ. לייטרום לבד מספיק. קובצי ה-LUT עובדים בפוטושופ, ב-Premiere Pro, ב-DaVinci Resolve וב-Final Cut Pro.' },
       { c: 'apps', q: 'אפשר להשתמש רק בטלפון?', a: 'כן. בחבילה יש 50 קובצי DNG ל-Lightroom Mobile באייפון, באייפד ובאנדרואיד. אם אתם משתמשים גם בלייטרום במחשב, מתקינים שם והפריסטים מסתנכרנים לטלפון.' },
-      { c: 'apps', q: 'קובצי ה-LUT נראים כמו הפריסטים?', a: 'הם נושאים את הצבע והטון של פריסטים 01 עד 33. Clarity, טקסטורה, מסכות, וינייט וגרעין נשארים בפריסטים של לייטרום.' },
-      { c: 'apps', q: 'אפשר להשתמש ב-LUT בווידאו?', a: 'כן. הם בנויים לצילום Rec.709 רגיל. בצילום LOG ממירים קודם ל-Rec.709, ואז מחילים את ה-LUT.' },
-      { c: 'buy', q: 'איך מקבלים את הקבצים?', a: '[פרטי המסירה מהגדרות החנות: קישור להורדה אחרי התשלום.]' },
-      { c: 'buy', q: 'איך מתקינים?', a: 'בחבילה יש מדריך התקנה עם עמוד לכל תוכנה. רוב ההתקנות לוקחות כמה דקות.' },
+      { c: 'apps', q: 'אפשר להשתמש ב-LUT בווידאו?', a: 'כן. הם נושאים את הצבע והטון של פריסטים 01 עד 33 ובנויים לצילום Rec.709 רגיל. בצילום LOG ממירים קודם ל-Rec.709, ואז מחילים את ה-LUT.' },
+      { c: 'buy', q: 'איך מקבלים ומתקינים את הקבצים?', a: '[פרטי המסירה מהגדרות החנות: קישור להורדה אחרי התשלום.] בחבילה יש מדריך התקנה עם עמוד לכל תוכנה. רוב ההתקנות לוקחות כמה דקות.' },
       { c: 'buy', q: 'אפשר לקנות את הפריסטים בחבילה עם MWP Panel ומדריכי השטח?', a: 'כן. אפשר לבחור ב-MWP Presets לבד, עם MWP Panel, עם מדריכי השטח, או בסט המלא של שלושתם. [מחירי החבילות: לקביעת מתן.]' },
-      { c: 'buy', q: 'מה זה מדריכי השטח של MWP?', a: 'ארבעה מדריכי PDF על קומפוזיציה, צבע, אור ותכנון בצילום טבע: 137 שיעורים ב-229 עמודים, בעברית ובאנגלית. בכל מדריך יש תרגילים, צ׳קליסט ודף סיכום שלוקחים לשטח.' },
-      { c: 'buy', q: 'מה מותר לעשות עם הקבצים?', a: '[תשובה לפי הרישיון, אחרי אישור מתן.]' },
-      { c: 'buy', q: 'למי פונים לעזרה?', a: 'כתבו ל-contact@matanwildphotography.com עם שם התוכנה, הגרסה והמכשיר, ונעזור לכם להתחיל.' },
-      { c: 'buy', q: 'אפשר לקבל החזר?', a: '[תנאי ההחזר, אחרי אישור מתן.]' }
+      { c: 'buy', q: 'מה מותר לעשות עם הקבצים?', a: 'משתמשים בהם על כל התמונות והסרטונים שלכם, כולל עבודה בתשלום ללקוחות, בכל המכשירים שלכם. הקבצים אישיים: לא משתפים, לא מוכרים מחדש ולא אורזים מחדש.' },
+      { c: 'buy', q: 'אפשר לקבל החזר?', a: 'כן, תוך 14 יום אם עדיין לא הורדתם את הקבצים, או אם בעיה טכנית לא נפתרת יחד. כתבו ל-contact@matanwildphotography.com עם מספר ההזמנה.' }
     ];
     const T = [
       { label: 'Prepare', b: ['Crop', 'Straighten', 'Find dust', 'Erase', 'Denoise', 'White balance'], n: 'Clean the frame first: crop, straighten, find and erase dust, denoise.' },
@@ -624,10 +692,15 @@ class Component extends DCLogic {
       { label: 'Style', b: ['11 looks', 'My looks', 'Painted light', 'Colors'], n: 'Add a finishing look on top of the preset, or save your own.' },
       { label: 'Export', b: ['Instagram', 'Web', 'Print', 'Watermark', 'Apply to others'], n: 'Your own watermark, sized for where the photo is going.' }
     ];
+    const pc = (g) => (this.state['p_' + g] || 0);
+    const cnt = {};
+    [['st', [50, 12, 33, 4]], ['cd', [14, 16, 3, 12, 5]], ['ic', [50, 50, 33, 1]]].forEach(([g, arr]) => arr.forEach((v, k) => { cnt[g + k] = Math.round(v * pc(g)); }));
+    cnt.bar = Math.round(pc('st') * 100);
     const s = this.state;
     const n = s.fx.length;
     const list = F.map((f, k) => ({ ...f, id: 'q' + k })).filter((f) => s.cat === 'all' || f.c === s.cat);
     return {
+      cnt,
       pairs: P.map((p, k) => ({ ...p, cls: k === s.i ? 'tab on' : 'tab', pick: () => this.setState({ i: k, pos: 50 }) })),
       cur: P[s.i],
       pos: s.pos,

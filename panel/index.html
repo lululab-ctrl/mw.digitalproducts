@@ -222,6 +222,26 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 
 .plan{padding:32px 24px}
 }
+
+/* rolling numbers */
+.odo{display:inline-flex;direction:ltr;height:1em;line-height:1;overflow:hidden;clip-path:inset(0);vertical-align:top}
+.odo .d{display:flex;flex-direction:column;transform:translateY(calc(var(--d) * -1em))}
+.odo .d i{display:block;height:1em;font-style:normal;background:linear-gradient(90deg,#E4AA7C 0%,#F4AF56 55%,#F8D29C 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.stat .odo .d+.d{margin-left:-.05em}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+@keyframes roll{0%{transform:translateY(0)}78%{transform:translateY(calc(var(--d) * -1em - .2em))}100%{transform:translateY(calc(var(--d) * -1em))}}
+.fx .stat .odo .d{transform:translateY(0)}
+.fx .stat.in .odo .d{animation:roll 1.8s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(var(--dl,0s) + var(--di,0s))}
+@media (prefers-reduced-motion:reduce){.fx .stat .odo .d{animation:none!important;transform:translateY(calc(var(--d) * -1em))}}
+
+/* ---- light accents from mw.photography ---- */
+.pg{position:relative}
+.pg::after{content:"";position:absolute;inset:0;z-index:60;pointer-events:none;opacity:.035;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 0 0 0 0 1'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E")}
+.kick .n{color:rgba(244,244,244,.45);margin-inline-end:12px;font-variant-numeric:tabular-nums}
+.bigmark{margin:clamp(48px,8vh,96px) 0 0;padding:0;font-family:Montserrat,sans-serif;font-weight:900;font-size:clamp(90px,24vw,400px);line-height:.86;letter-spacing:.02em;text-align:center;white-space:nowrap;color:transparent;background-position:30% 34.6%;background-size:230% auto;-webkit-background-clip:text;background-clip:text;direction:ltr}
+.fx .rv{opacity:0;transform:translateY(28px);transition:opacity 1s cubic-bezier(.16,1,.3,1),transform 1.1s cubic-bezier(.16,1,.3,1);transition-delay:var(--rd,0s)}
+.fx .rv.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.fx .rv{opacity:1;transform:none;transition:none}}
 </style>
 </helmet>
 <div class="pg">
@@ -273,17 +293,17 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 
 <section class="band">
 <div class="wrap stats">
-<div class="stat"><div class="n grad">8</div><div class="t">One-click effects</div></div>
-<div class="stat"><div class="n grad">11</div><div class="t">Looks</div></div>
-<div class="stat"><div class="n grad">4</div><div class="t">Painted lights</div></div>
-<div class="stat"><div class="n grad">1</div><div class="t">Ctrl+Z undoes any button</div></div>
+<div class="stat"><div class="n"><span class="odo" aria-hidden="true"><span class="d" style="--d:8"><i>0</i><i>1</i><i>2</i><i>3</i><i>4</i><i>5</i><i>6</i><i>7</i><i>8</i><i>9</i></span></span><span class="sr">8</span></div><div class="t">One-click effects</div></div>
+<div class="stat"><div class="n"><span class="odo" aria-hidden="true"><span class="d" style="--d:1"><i>0</i><i>1</i><i>2</i><i>3</i><i>4</i><i>5</i><i>6</i><i>7</i><i>8</i><i>9</i></span><span class="d" style="--d:1"><i>0</i><i>1</i><i>2</i><i>3</i><i>4</i><i>5</i><i>6</i><i>7</i><i>8</i><i>9</i></span></span><span class="sr">11</span></div><div class="t">Looks</div></div>
+<div class="stat"><div class="n"><span class="odo" aria-hidden="true"><span class="d" style="--d:4"><i>0</i><i>1</i><i>2</i><i>3</i><i>4</i><i>5</i><i>6</i><i>7</i><i>8</i><i>9</i></span></span><span class="sr">4</span></div><div class="t">Painted lights</div></div>
+<div class="stat"><div class="n"><span class="odo" aria-hidden="true"><span class="d" style="--d:1"><i>0</i><i>1</i><i>2</i><i>3</i><i>4</i><i>5</i><i>6</i><i>7</i><i>8</i><i>9</i></span></span><span class="sr">1</span></div><div class="t">Ctrl+Z undoes any button</div></div>
 </div>
 </section>
 
 <section class="sec" id="ba">
 <div class="wrap">
 <div class="head">
-<div class="kick">From RAW to final</div>
+<div class="kick"><span class="n">01</span>From RAW to final</div>
 <h2 class="h2">The animal brighter. <span class="b grad">The sky calmer.</span></h2>
 <p class="lead">Choose the subject or the sky, then an effect. The panel builds the mask and puts the edit on its own layer.</p>
 </div>
@@ -312,7 +332,7 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 <section class="sec tight" id="inside">
 <div class="wrap">
 <div class="head">
-<div class="kick">What's inside</div>
+<div class="kick"><span class="n">02</span>What's inside</div>
 <h2 class="h2">Four tabs, <span class="b grad">in the order you edit.</span></h2>
 </div>
 <div class="cols">
@@ -332,7 +352,7 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 <span class="mchip" style="left: 8%; top: 10%">SUBJECT</span>
 </div>
 <div class="stack">
-<div class="kick">Subject, sky, background</div>
+<div class="kick"><span class="n">03</span>Subject, sky, background</div>
 <h2 class="h2">Photoshop finds the animal. <span class="b grad">You decide what happens to it.</span></h2>
 <p class="lead">Subject, Sky and Background use Photoshop's own AI. Hold a button to see the area in red before you edit.</p>
 </div>
@@ -342,7 +362,7 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 <section class="sec" style="background: linear-gradient(180deg,#0A0908,#0C2925); padding-bottom: 40px">
 <div class="wrap">
 <div class="head">
-<div class="kick">Inside Photoshop</div>
+<div class="kick"><span class="n">04</span>Inside Photoshop</div>
 <h2 class="h2">A panel next to <span class="b grad">your layers.</span></h2>
 <p class="lead">A tip on every button and a full guide inside. Photoshop 2023 or newer, Mac and Windows.</p>
 </div>
@@ -364,7 +384,7 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 <section class="sec">
 <div class="wrap">
 <div class="head">
-<div class="kick">Built to be safe</div>
+<div class="kick"><span class="n">05</span>Built to be safe</div>
 <h2 class="h2">Your original <span class="b grad">stays untouched.</span></h2>
 </div>
 <div class="g3">
@@ -378,7 +398,7 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 <section class="sec alt">
 <div class="wrap split">
 <div class="stack">
-<div class="kick">Where it comes from</div>
+<div class="kick"><span class="n">06</span>Where it comes from</div>
 <h2 class="h2">The questions <span class="b grad">from our evenings in camp.</span></h2>
 <p class="lead">On our expeditions the same editing questions come up at the end of the day: how to lift the animal, calm the sky, keep the colors true. MWP Panel puts our answers into Photoshop, simple enough for a first edit.</p>
 <div class="thumbs">
@@ -394,7 +414,7 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 <section class="sec" id="how">
 <div class="wrap">
 <div class="head">
-<div class="kick">Three steps</div>
+<div class="kick"><span class="n">07</span>Three steps</div>
 <h2 class="h2">How it <span class="b grad">works.</span></h2>
 </div>
 <div class="g3">
@@ -408,7 +428,7 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 <section class="sec tight">
 <div class="wrap">
 <div class="head">
-<div class="kick">What you get</div>
+<div class="kick"><span class="n">08</span>What you get</div>
 <h2 class="h2">What's in <span class="b grad">the download.</span></h2>
 </div>
 <div class="inc">
@@ -423,9 +443,9 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 
 <section class="sec alt" id="faq">
 <div class="wrap">
-<div class="head"><div class="kick">Before you buy</div><h2 class="h2">Questions</h2></div>
+<div class="head"><div class="kick"><span class="n">09</span>Before you buy</div><h2 class="h2">Questions</h2></div>
 <div class="faq">
-<sc-for list="{{faqs}}" as="f" hint-placeholder-count="8">
+<sc-for list="{{faqs}}" as="f" hint-placeholder-count="6">
 <div>
 <button type="button" class="q" onClick="{{f.toggle}}" aria-expanded="{{f.exp}}"><span>{{f.q}}</span><span class="pm" aria-hidden="true">{{f.sign}}</span></button>
 <sc-if value="{{f.open}}" hint-placeholder-val="{{false}}"><div class="ans">{{f.a}}</div></sc-if>
@@ -440,6 +460,7 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 <img class="final-bg" src="../assets/pages/img/d48f96a951ec30737515c3dafe85e8d2.jpg" alt="">
 <div class="final-shade"></div>
 <div class="wrap" style="position: relative; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 28px">
+<div class="kick"><span class="n">10</span>Get it</div>
 <h2 class="h1" style="max-width: 900px">MWP Panel <span class="b grad">for Photoshop.</span></h2>
 <p class="lead" style="max-width: 620px">The plugin with both PDF guides. Or together with MWP Presets, for Photoshop and Lightroom in the same look.</p>
 <div class="plans">
@@ -469,10 +490,12 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 </div>
 </section>
 
+<p class="bigmark" aria-hidden="true" style="background-image: url(../assets/pages/img/866c1bdb5cf29c21c1a04f6fc87b03e9.jpg)">MWP</p>
 <footer style="padding: 40px 0; border-top: 1px solid rgba(156,177,194,.15)">
 <div class="wrap" style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; color: #9CB1C2; font-size: 13px">
 <div style="font-weight: 800; letter-spacing: .3em; color: #FEFBF1">MW PHOTO TOURS</div>
 <div>All photos: Matan Wild · contact@matanwildphotography.com</div>
+<div style="flex-basis: 100%">© 2026 MWP · Matan Wild. All rights reserved.</div>
 </div>
 </footer>
 
@@ -484,6 +507,34 @@ class Component extends DCLogic {
     super(props);
     this.state = { i: 0, pos: 50, open: 0, all: false };
   }
+
+  componentDidMount() {
+    try {
+      if (typeof IntersectionObserver === 'undefined') return;
+      const root = document.querySelector('.pg');
+      if (!root) return;
+
+      const rsel = '.sec .h2,.final .h2,.head .lead,.cols .card,.g3 .step,.inc .i,.plans .plan,.bigmark';
+      const revs = Array.from(root.querySelectorAll(rsel));
+      revs.forEach((el) => {
+        el.classList.add('rv');
+        const sibs = Array.from(el.parentElement ? el.parentElement.children : []).filter((c) => c.matches(rsel));
+        el.style.setProperty('--rd', (Math.min(Math.max(0, sibs.indexOf(el)), 5) * 0.1) + 's');
+      });
+      const stats = Array.from(root.querySelectorAll('.stat'));
+      stats.forEach((el, i) => {
+        el.style.setProperty('--dl', (i * 0.15) + 's');
+        el.querySelectorAll('.odo .d').forEach((d, k) => d.style.setProperty('--di', (k * 0.15) + 's'));
+      });
+      this._io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); this._io.unobserve(e.target); } });
+      }, { threshold: 0.2 });
+      stats.forEach((el) => this._io.observe(el));
+      revs.forEach((el) => this._io.observe(el));
+      root.classList.add('fx');
+    } catch (err) {}
+  }
+  componentWillUnmount() { if (this._io) this._io.disconnect(); }
   renderVals() {
     const P = [
       { label: 'Subject · Pop', target: 'Subject', effect: 'Pop', amount: '60%', before: '../assets/pages/img/c339384fe0c6d91e7b1388d0fed7d1ae.jpg', after: '../assets/pages/img/52e0c3d2c90942f72d31faa689449bd0.jpg' },
@@ -492,31 +543,18 @@ class Component extends DCLogic {
     const F = [
       { q: "Do I need to know layers and masks?", a: "No. You choose what to edit and an effect, and the panel builds the layers and masks for you. A 21-page manual and a guide inside the panel explain every button from the start." },
       { q: "Which Photoshop do I need?", a: "Photoshop 2023 (version 24.2) or newer, on Mac or Windows, from a Creative Cloud subscription. It does not run in Lightroom, on iPad or on phones." },
-      { q: "What's in the download?", a: "The plugin file, the User Manual (PDF, 21 pages) and the Installation Guide (PDF). Read them on screen or print them." },
-      { q: "How do I install it?", a: "Double-click the .ccx file and Creative Cloud installs it. Then open Photoshop and choose Plugins → MWP - Panel. The installation guide covers the common problems and their fixes." },
-      { q: "Can it ruin my photo?", a: "No. Every button adds its own layer, your original layer is locked, and exports are always saved as new files." },
-      { q: "How do I undo something?", a: "One Ctrl+Z (Cmd+Z on Mac) undoes a whole button. Reset MWP removes every layer the panel added and leaves your original photo as it was." },
-      { q: "Can I come back and change an edit later?", a: "Yes. Save the photo as a PSD and every layer stays. Each effect has its own strength, and Camera Raw and Denoise layers open again with a double-click." },
-      { q: "Does it work with RAW files?", a: "Yes. A RAW file opens in Camera Raw first. Click Open and the photo arrives in Photoshop, ready for the panel. JPEG files open directly." },
-      { q: "What does Photoshop need to find the animal or the sky?", a: "Photoshop's own Select Subject and Select Sky. If they fail, the fix is one setting in Photoshop's preferences, and the panel's Help page shows exactly where it is." },
-      { q: "What if Photoshop picks the wrong thing?", a: "Use Paint in and Paint out to brush the effect on or off where the automatic area missed. You can also pick a color with Pick and edit only that." },
-      { q: "Can I edit a whole series the same way?", a: "Yes. Open the other photos, return to the edited one and click Apply under More photos. Subject, sky and background are found again on each photo." },
-      { q: "Can I save my own look?", a: "Yes. Type a name under Save my look and it appears in My looks, ready for any photo." },
-      { q: "What happens in the Export tab?", a: "Two steps. First your watermark, then a copy sized for where the photo is going. Every export is a new full-quality JPEG named after your photo, and you choose the folder." },
-      { q: "Which export sizes are there?", a: "Instagram fits the photo within 1080 × 1350 px. Web sets the long edge to 2048 px. Print keeps the full size and your color profile. Instagram and Web are converted to sRGB and sharpened for screens. Print gets print sharpening." },
-      { q: "Why do the Instagram and Web exports convert to sRGB?", a: "Phones and browsers show sRGB colors as you edited them. A photo saved in a wider profile can look dull or shifted once it is online." },
-      { q: "How do I prepare a photo for the feed, Stories or a print?", a: "Crop first, in the Prepare tab. 4:5 for the Instagram feed, 9:16 for Stories and Reels, 1:1 for a square, 3:2 for the classic camera frame, or Free. The crop centers on the animal and keeps the hidden pixels, so you can change it later." },
-      { q: "Which export should I use for Stories and Reels?", a: "Crop to 9:16 and use Web. It keeps more pixels for a tall frame than the Instagram export, which is built for the 4:5 feed." },
-      { q: "Can I add my own watermark?", a: "Yes. Use your signature or logo as a PNG with a transparent background, or type text. Pick one of nine positions and set the size, opacity, margin and color (original, white or black). Show on photo lets you see it before you export, and it is saved for next time." },
-      { q: "Does it use my Adobe generative credits?", a: "Only Expand and Generative Fill, and only when you click Generate in Photoshop. Everything else in the panel uses no credits." },
-      { q: "Can I use it for photo competitions?", a: "Most of the panel adjusts light and color on the photo you took. Expand and Generative Fill add pixels, and many competitions do not allow them, so check the rules before you use those two." },
-      { q: "Will my files get bigger?", a: "Yes. Each effect adds a layer, so a layered PSD is larger than the original. Exports are flattened to normal size." },
-      { q: "Which photos does it work on?", a: "RGB photos in 8 or 16 bit. If a photo is CMYK or 32 bit, the panel tells you which menu converts it." },
+      { q: "What's in the download?", a: "The plugin, the User Manual (PDF, 21 pages) and the Installation Guide (PDF). To install, double-click the plugin file and Creative Cloud does the rest. Then open it in Photoshop under Plugins → MWP - Panel." },
+      { q: "Can it ruin my photo?", a: "No. Every button adds its own layer and your original layer is locked. One Ctrl+Z (Cmd+Z on Mac) undoes a whole button, Reset MWP removes everything the panel added, and exports are always saved as new files." },
+      { q: "Can I change an edit later?", a: "Yes. Save the photo as a PSD and every layer stays. Each effect keeps its own strength, and Camera Raw and Denoise layers open again with a double-click." },
+      { q: "Which photos does it work on?", a: "RAW files (they open in Camera Raw first, then click Open) and JPEGs, in RGB at 8 or 16 bit. If a photo is CMYK or 32 bit, the panel tells you which menu converts it." },
+      { q: "What if Photoshop picks the wrong area?", a: "Brush the effect on or off with Paint in and Paint out, or pick a color with Pick and edit only that. If Select Subject or Select Sky stops working, one Photoshop setting fixes it, and the panel's Help page shows where." },
+      { q: "Can I edit a whole series the same way?", a: "Yes. Open the other photos, return to the edited one and click Apply under More photos. Subject, sky and background are found again on each. You can also save your edit as a look under Save my look." },
+      { q: "What can I export?", a: "Instagram (fits 1080 × 1350 px), Web (long edge 2048 px) and Print (full size, your color profile kept), each sharpened for where it is going and saved as a new JPEG. Add your own watermark, logo or text, before you export. For Stories and Reels, crop to 9:16 and use Web." },
+      { q: "Does it use my Adobe generative credits?", a: "Only Expand and Generative Fill, and only when you click Generate in Photoshop. Those two add pixels, so check the rules before using them for a photo competition. Everything else uses no credits." },
       { q: "Are updates included?", a: "[Matan to decide: updates policy.]" },
-      { q: "On how many computers can I install it?", a: "[Matan to decide: number of computers per license.]" },
-      { q: "What can I do with the plugin, and what is the refund policy?", a: "[Answer from the license and refund terms, after Matan approves them.]" },
-      { q: "I use Lightroom. Is there something for me?", a: "Yes: MWP Presets, 50 Lightroom presets in the same look, for Lightroom Classic, Lightroom, Lightroom Mobile and Camera Raw. You can buy them on their own or in a bundle with MWP Panel." },
-      { q: "Can I buy the panel and the presets together?", a: "Yes. The bundle has MWP Panel with both PDF guides, plus MWP Presets. Your Photoshop and Lightroom edits then share one look. [Bundle price: Matan to decide.]" }
+      { q: "License, computers and refunds?", a: "[Answer from the license and refund terms, after Matan approves them: what the plugin may be used for, on how many computers, and the refund policy.]" },
+      { q: "Can I get it together with MWP Presets?", a: "Yes. The bundle has MWP Panel with both PDF guides, plus MWP Presets: 50 Lightroom presets in the same look, for Lightroom Classic, Lightroom, Lightroom Mobile and Camera Raw. The presets are also sold on their own." },
+      { q: "What if I get stuck?", a: "The Installation Guide covers common problems and their fixes, and every button in the panel has a tip and a help entry. [Matan to confirm: support contact for buyers.]" }
     ];
     const s = this.state;
     return {
@@ -527,7 +565,7 @@ class Component extends DCLogic {
       showAll: () => this.setState({ all: true }),
       pos: s.pos,
       onSlide: (e) => this.setState({ pos: Number(e.target.value) }),
-      faqs: F.slice(0, s.all ? F.length : 8).map((f, k) => ({ ...f, open: k === s.open, exp: k === s.open ? 'true' : 'false', sign: k === s.open ? '−' : '+', toggle: () => this.setState({ open: k === s.open ? -1 : k }) }))
+      faqs: F.slice(0, s.all ? F.length : 6).map((f, k) => ({ ...f, open: k === s.open, exp: k === s.open ? 'true' : 'false', sign: k === s.open ? '−' : '+', toggle: () => this.setState({ open: k === s.open ? -1 : k }) }))
     };
   }
 }
