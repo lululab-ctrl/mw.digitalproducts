@@ -143,7 +143,7 @@ html = f'''<!doctype html>
 <nav class="nav site-header" aria-label="Main">
 <div class="wrap container">
 <a class="brand" href="./" aria-label="MWP, home"><img src="{IMG}2dd3356528167ddf9a64c0c7301c8aa3.png" alt=""><span>MWP</span></a>
-<div class="links"><a href="#shop">Shop</a><a href="#faq">Questions</a></div>
+<div class="links"><a href="#shop">Shop</a><a href="#bundles">Bundles</a><a href="#faq">Questions</a></div>
 <div class="navr"></div>
 </div>
 </nav>
@@ -167,7 +167,6 @@ html = f'''<!doctype html>
 {plan("Presets + Panel", "Lightroom and Photoshop", "[BUNDLE PRICE]", ["MWP Presets: 50 presets and 33 LUTs", "MWP Panel: the Photoshop plugin", "User manual and install guide"], "Get the bundle", "panel/#buy")}
 {plan("The full set", "From the shot to the share", "[BUNDLE PRICE]", ["MWP Presets: 50 presets and 33 LUTs", "MWP Panel: the Photoshop plugin", "MWP Field Guides: 4 PDF guides, 137 lessons"], "Get the full set", "presets/#bundles", hi=True)}
 </div>
-<p class="small" style="text-align: center; margin-top: 28px">[Bundle prices and discounts: Matan to decide]</p>
 </div>
 </section>
 

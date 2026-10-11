@@ -46,6 +46,9 @@ WORDS = {
            (">לפני ואחרי<", ">מ-RAW לתמונה הסופית<"), (">לראות לפני ואחרי ←<", ">מ-RAW לתמונה הסופית ←<")],
 }
 
+# Matan's placeholder note under the bundle cards is not shown on the site.
+BUNDLE_NOTE = re.compile(r'<p[^>]*>\[(?:Bundle prices and discounts: (?:Matan to decide|for Matan to set)|מחירים והנחות לחבילות: לקביעת מתן)\]</p>\s*')
+
 for path, lang in PAGES.items():
     s = open(path, encoding="utf-8").read()
     s = gold(s)
@@ -58,6 +61,7 @@ for path, lang in PAGES.items():
     s = re.sub(r'(<div class="links">[^\n]*?)<a href="#bundles">[^<]*</a>', r'\1', s, count=1)
     for a, b in WORDS[lang]:
         s = s.replace(a, b)
+    s = BUNDLE_NOTE.sub("", s)
     if 'id="mwp-fonts"' not in s:
         s = s.replace("</head>", FONTS + "\n</head>", 1)
     if 'id="mwp-unify"' not in s:

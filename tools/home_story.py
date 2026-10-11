@@ -25,7 +25,8 @@ CHAPTERS = [
          cta="See MWP Panel", box="866c1bdb5cf29c21c1a04f6fc87b03e9.jpg", gk="PHOTOSHOP PLUGIN", sub="8 effects · 11 looks"),
 ]
 
-HERO = f"""<section class="st-hero" id="top">
+HERO = f"""<script>(function(){{var h=document.documentElement;h.classList.add("st-wait");var go=function(){{h.classList.remove("st-wait")}};setTimeout(go,1500);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(go)}})();</script>
+<section class="st-hero" id="top">
 <img class="st-hero-img" src="{IMG}1a2e3ed3f44db1f671babb09a599b29f.jpg" alt="A male lion roaring, photographed by Matan Wild">
 <div class="st-hero-shade"></div>
 <div class="st-vf" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
@@ -108,9 +109,11 @@ CSS = home_devices.CSS + """
 .st-h1{margin:18px 0 0;font-size:clamp(52px,8.4vw,132px);line-height:.94;font-weight:400;letter-spacing:-.04em;color:#FEFBF1}
 .st-h1 .grad{font-weight:600}
 .st-l{display:block;overflow:hidden;padding-bottom:.22em;margin-bottom:-.16em}
-.st-l > span{display:inline-block;animation:strise 1.2s cubic-bezier(.2,.7,.1,1) both;animation-delay:calc(var(--i) * .12s + .2s)}
-@keyframes strise{from{transform:translateY(105%)}to{transform:none}}
-.st-in{animation:stfade 1.1s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(var(--i) * .12s + .25s)}
+.st-l > span{display:inline-block;will-change:transform,opacity;backface-visibility:hidden;animation:strise 1.6s cubic-bezier(.16,1,.3,1) both;animation-delay:calc(var(--i) * .14s + .1s)}
+@keyframes strise{from{transform:translate3d(0,110%,0);opacity:0}50%{opacity:1}to{transform:translate3d(0,0,0);opacity:1}}
+/* hold the intro until the fonts are in, so the words do not swap typeface mid-animation */
+html.st-wait .st-l > span,html.st-wait .st-in,html.st-wait .st-hero-img{animation-play-state:paused}
+.st-in{will-change:transform,opacity;animation:stfade 1.4s cubic-bezier(.16,1,.3,1) both;animation-delay:calc(var(--i) * .14s + .2s)}
 @keyframes stfade{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
 
 /* ---------- landing: pinned story ---------- */

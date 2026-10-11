@@ -494,9 +494,11 @@ html .nav .links + .navr{margin-inline-start:0}
 .st-h1{margin:18px 0 0;font-size:clamp(52px,8.4vw,132px);line-height:.94;font-weight:400;letter-spacing:-.04em;color:#FEFBF1}
 .st-h1 .grad{font-weight:600}
 .st-l{display:block;overflow:hidden;padding-bottom:.22em;margin-bottom:-.16em}
-.st-l > span{display:inline-block;animation:strise 1.2s cubic-bezier(.2,.7,.1,1) both;animation-delay:calc(var(--i) * .12s + .2s)}
-@keyframes strise{from{transform:translateY(105%)}to{transform:none}}
-.st-in{animation:stfade 1.1s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(var(--i) * .12s + .25s)}
+.st-l > span{display:inline-block;will-change:transform,opacity;backface-visibility:hidden;animation:strise 1.6s cubic-bezier(.16,1,.3,1) both;animation-delay:calc(var(--i) * .14s + .1s)}
+@keyframes strise{from{transform:translate3d(0,110%,0);opacity:0}50%{opacity:1}to{transform:translate3d(0,0,0);opacity:1}}
+/* hold the intro until the fonts are in, so the words do not swap typeface mid-animation */
+html.st-wait .st-l > span,html.st-wait .st-in,html.st-wait .st-hero-img{animation-play-state:paused}
+.st-in{will-change:transform,opacity;animation:stfade 1.4s cubic-bezier(.16,1,.3,1) both;animation-delay:calc(var(--i) * .14s + .2s)}
 @keyframes stfade{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
 
 /* ---------- landing: pinned story ---------- */
@@ -650,12 +652,13 @@ html[lang=he] body,html[lang=he] body *:not(svg):not(svg *),html body [lang=he],
 <nav class="nav site-header" aria-label="Main">
 <div class="wrap container">
 <a class="brand" href="./" aria-label="MWP, home"><img src="assets/pages/img/2dd3356528167ddf9a64c0c7301c8aa3.png" alt=""><span>MWP</span></a>
-<div class="links"><a href="#shop">Shop</a><a href="#faq">Questions</a></div>
+<div class="links"><a href="#shop">Shop</a><a href="#bundles">Bundles</a><a href="#faq">Questions</a></div>
 <div class="navr"></div>
 </div>
 </nav>
 
 <main id="main">
+<script>(function(){var h=document.documentElement;h.classList.add("st-wait");var go=function(){h.classList.remove("st-wait")};setTimeout(go,1500);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(go)})();</script>
 <section class="st-hero" id="top">
 <img class="st-hero-img" src="assets/pages/img/1a2e3ed3f44db1f671babb09a599b29f.jpg" alt="A male lion roaring, photographed by Matan Wild">
 <div class="st-hero-shade"></div>
@@ -799,7 +802,6 @@ html[lang=he] body,html[lang=he] body *:not(svg):not(svg *),html body [lang=he],
 <div class="plan"><div><h3 class="h3">Presets + Panel</h3><p class="small" style="margin-top: 6px">Lightroom and Photoshop</p></div><div class="price">[BUNDLE PRICE]</div><ul><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>MWP Presets: 50 presets and 33 LUTs</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>MWP Panel: the Photoshop plugin</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>User manual and install guide</span></li></ul><a class="ghost sm" href="panel/#buy">Get the bundle</a></div>
 <div class="plan hi"><span class="tagx">EVERYTHING</span><div><h3 class="h3">The full set</h3><p class="small" style="margin-top: 6px">From the shot to the share</p></div><div class="price">[BUNDLE PRICE]</div><ul><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>MWP Presets: 50 presets and 33 LUTs</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>MWP Panel: the Photoshop plugin</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>MWP Field Guides: 4 PDF guides, 137 lessons</span></li></ul><a class="btn sm" href="presets/#bundles">Get the full set</a></div>
 </div>
-<p class="small" style="text-align: center; margin-top: 28px">[Bundle prices and discounts: Matan to decide]</p>
 </div>
 </section>
 
