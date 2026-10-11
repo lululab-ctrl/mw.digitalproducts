@@ -432,8 +432,8 @@ html .nav .links + .navr{margin-inline-start:0}
 [dir=rtl] .st-count{left:auto;right:64px}
 .st-cur{font-size:56px;font-weight:500;letter-spacing:-.03em;line-height:1}
 .st-of{font-size:14px;color:rgba(254,251,241,.6);letter-spacing:.1em}
-.st-side{position:relative;display:flex;align-items:center;padding:96px clamp(40px,6vw,120px) 40px clamp(150px,13vw,220px);overflow:hidden}
-[dir=rtl] .st-side{padding:96px clamp(150px,13vw,220px) 40px clamp(40px,6vw,120px)}
+.st-side{position:relative;display:flex;align-items:center;padding:96px clamp(40px,6vw,120px) 40px clamp(56px,7vw,128px);overflow:hidden}
+[dir=rtl] .st-side{padding:96px clamp(56px,7vw,128px) 40px clamp(40px,6vw,120px)}
 .st-ambs{position:absolute;inset:-10%;z-index:0;pointer-events:none}
 .st-amb{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:blur(70px) saturate(1.4);opacity:0;transform:scale(1.2)}
 .st-ghosts{position:absolute;right:-1vw;top:50%;transform:translateY(-58%);z-index:0;pointer-events:none;direction:ltr}
@@ -441,19 +441,6 @@ html .nav .links + .navr{margin-inline-start:0}
 .st-ghost{position:absolute;right:0;top:0;transform:translateY(-50%);font-size:min(46vh,30vw);line-height:1;font-weight:600;letter-spacing:-.06em;color:transparent;-webkit-text-stroke:1px rgba(254,251,241,.1);opacity:0}
 [dir=rtl] .st-ghost{right:auto;left:0}
 .st-texts{position:relative;z-index:1;width:100%;max-width:560px;min-height:520px}
-.st-boxes{position:absolute;left:50%;bottom:9vh;z-index:3;width:230px;height:300px;transform:translateX(-58%);pointer-events:none;perspective:1400px}
-[dir=rtl] .st-boxes{transform:translateX(-42%)}
-.st-box{position:absolute;inset:0;transform-style:preserve-3d;opacity:0;will-change:opacity,transform}
-.st-bf{position:absolute;inset:0;border-radius:3px;overflow:hidden;transform:rotateY(-24deg) rotateX(6deg);transform-origin:center;box-shadow:0 40px 80px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.08)}
-[dir=rtl] .st-bf{transform:rotateY(24deg) rotateX(6deg)}
-.st-bf img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.st-bl{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;gap:4px;padding:18px;background:linear-gradient(0deg,rgba(10,9,8,.95) 0%,rgba(10,9,8,0) 60%,rgba(10,9,8,.45) 100%);color:#FEFBF1}
-.st-bn{position:absolute;top:16px;left:18px;font-size:8px;font-weight:700;letter-spacing:.3em}
-.st-bg{font-size:9px;font-weight:700;letter-spacing:.22em;color:#F4AF56}
-.st-bl b{font-size:30px;line-height:1;font-weight:700;letter-spacing:-.02em}
-.st-bl small{font-size:10px;color:#CDD7DD}
-.st-bs{display:none}
-.st-bsh{position:absolute;left:10%;right:10%;bottom:-38px;height:26px;background:radial-gradient(closest-side,rgba(0,0,0,.8),rgba(0,0,0,0));filter:blur(6px)}
 .st-prog{display:flex;gap:22px;margin-bottom:40px}
 .st-prog span{position:relative;padding-bottom:10px;font-size:12px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:rgba(254,251,241,.38);transition:color .5s}
 .st-prog span::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:linear-gradient(90deg,#E4AA7C,#F4AF56);transform:scaleX(0);transform-origin:left;transition:transform .7s cubic-bezier(.2,.7,.2,1)}
@@ -489,7 +476,7 @@ html .nav .links + .navr{margin-inline-start:0}
   .st-track{height:auto}
   .st-sticky{position:static;height:auto;display:block;padding:40px 0 24px}
   .st-grid{display:block}
-  .st-media,.st-prog,.st-boxes,.st-ambs,.st-ghosts{display:none}
+  .st-media,.st-prog,.st-ambs,.st-ghosts{display:none}
   .st-side{padding:0 20px;display:block}
   .st-texts{max-width:none}
   .st-texts{min-height:0;display:grid;gap:72px}
@@ -606,11 +593,10 @@ html[lang=he] body,html[lang=he] body *:not(svg):not(svg *),html body [lang=he],
 <div class="st-sticky">
 <div class="st-grid">
 <div class="st-media" aria-hidden="true">
-<img class="st-mimg" data-i="0" src="assets/pages/img/5275cc7bcd4fb7560d8f7163592e3122.jpg" alt="" loading="lazy"><img class="st-mimg" data-i="1" src="assets/pages/img/8cb56471dbe5940badc7a93cad5c8bf1.jpg" alt="" loading="lazy"><img class="st-mimg" data-i="2" src="assets/pages/img/866c1bdb5cf29c21c1a04f6fc87b03e9.jpg" alt="" loading="lazy">
+<img class="st-mimg" data-i="0" src="assets/pages/img/5275cc7bcd4fb7560d8f7163592e3122.jpg" alt="" loading="lazy" style="object-position: 56% 55%"><img class="st-mimg" data-i="1" src="assets/pages/img/8cb56471dbe5940badc7a93cad5c8bf1.jpg" alt="" loading="lazy" style="object-position: 50% 12%"><img class="st-mimg" data-i="2" src="assets/pages/img/866c1bdb5cf29c21c1a04f6fc87b03e9.jpg" alt="" loading="lazy" style="object-position: 62% 38%">
 <div class="st-vf st-vf-sm"><span></span><span></span><span></span><span></span></div>
 <div class="st-count"><span class="st-cur">01</span><span class="st-of">/ 03</span></div>
 </div>
-<div class="st-boxes" aria-hidden="true"><div class="st-box" data-i="0"><div class="st-bf"><img src="assets/pages/img/0cf44582c4078749d18156eec10c90d3.jpg" alt=""><div class="st-bl"><span class="st-bn">MW PHOTO TOURS</span><span class="st-bg">FIELD GUIDES · PDF</span><b data-no-i18n>Field Guides</b><small>4 guides · 229 pages</small></div></div><div class="st-bs"><span>MWP · FIELD GUIDES</span></div><div class="st-bsh"></div></div><div class="st-box" data-i="1"><div class="st-bf"><img src="assets/pages/img/8cb56471dbe5940badc7a93cad5c8bf1.jpg" alt=""><div class="st-bl"><span class="st-bn">MW PHOTO TOURS</span><span class="st-bg">LIGHTROOM PRESETS</span><b data-no-i18n>Presets</b><small>50 presets · 33 LUTs</small></div></div><div class="st-bs"><span>MWP · PRESETS</span></div><div class="st-bsh"></div></div><div class="st-box" data-i="2"><div class="st-bf"><img src="assets/pages/img/866c1bdb5cf29c21c1a04f6fc87b03e9.jpg" alt=""><div class="st-bl"><span class="st-bn">MW PHOTO TOURS</span><span class="st-bg">PHOTOSHOP PLUGIN</span><b data-no-i18n>Panel</b><small>8 effects · 11 looks</small></div></div><div class="st-bs"><span>MWP · PANEL</span></div><div class="st-bsh"></div></div></div>
 <div class="st-side">
 <div class="st-ambs" aria-hidden="true"><img class="st-amb" data-i="0" src="assets/pages/img/5275cc7bcd4fb7560d8f7163592e3122.jpg" alt=""><img class="st-amb" data-i="1" src="assets/pages/img/8cb56471dbe5940badc7a93cad5c8bf1.jpg" alt=""><img class="st-amb" data-i="2" src="assets/pages/img/866c1bdb5cf29c21c1a04f6fc87b03e9.jpg" alt=""></div>
 <div class="st-ghosts" aria-hidden="true"><span class="st-ghost" data-i="0">01</span><span class="st-ghost" data-i="1">02</span><span class="st-ghost" data-i="2">03</span></div>
@@ -623,7 +609,7 @@ html[lang=he] body,html[lang=he] body *:not(svg):not(svg *),html body [lang=he],
 <p class="st-line">See the photo before you press the shutter.</p>
 <ul class="st-pts"><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>4 PDF guides, 137 lessons</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>Composition, colour, light and planning</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>English and Hebrew</span></li></ul>
 <div class="st-acts"><a class="btn" href="field-guides/">See the Field Guides <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><a class="ghost" href="field-guides/#buy">[YOUR PRICE]</a></div>
-<img class="st-art-img" src="assets/pages/img/5275cc7bcd4fb7560d8f7163592e3122.jpg" alt="Mountains at dusk, photographed by Matan Wild" loading="lazy">
+<img class="st-art-img" src="assets/pages/img/5275cc7bcd4fb7560d8f7163592e3122.jpg" alt="Mountains at dusk, photographed by Matan Wild" loading="lazy" style="object-position: 56% 55%">
 </article><article class="st-art" data-i="1">
 <p class="st-step"><span class="st-num">02</span><span>Edit</span></p>
 <p class="st-tag">Lightroom presets</p>
@@ -631,7 +617,7 @@ html[lang=he] body,html[lang=he] body *:not(svg):not(svg *),html body [lang=he],
 <p class="st-line">The look behind every MWP frame.</p>
 <ul class="st-pts"><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>50 Lightroom presets, 12 adaptive</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>50 mobile files and 33 LUTs</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>Install guide for every program</span></li></ul>
 <div class="st-acts"><a class="btn" href="presets/">See MWP Presets <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><a class="ghost" href="presets/#buy">[YOUR PRICE]</a></div>
-<img class="st-art-img" src="assets/pages/img/8cb56471dbe5940badc7a93cad5c8bf1.jpg" alt="MWP Presets box" loading="lazy">
+<img class="st-art-img" src="assets/pages/img/8cb56471dbe5940badc7a93cad5c8bf1.jpg" alt="MWP Presets box" loading="lazy" style="object-position: 50% 12%">
 </article><article class="st-art" data-i="2">
 <p class="st-step"><span class="st-num">03</span><span>Finish</span></p>
 <p class="st-tag">Photoshop plugin</p>
@@ -639,7 +625,7 @@ html[lang=he] body,html[lang=he] body *:not(svg):not(svg *),html body [lang=he],
 <p class="st-line">You were there. Now make the photo show it.</p>
 <ul class="st-pts"><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>8 one-click effects</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>11 looks and 4 painted lights</span></li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>User manual and install guide</span></li></ul>
 <div class="st-acts"><a class="btn" href="panel/">See MWP Panel <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><a class="ghost" href="panel/#buy">[YOUR PRICE]</a></div>
-<img class="st-art-img" src="assets/pages/img/866c1bdb5cf29c21c1a04f6fc87b03e9.jpg" alt="A tiger, photographed by Matan Wild" loading="lazy">
+<img class="st-art-img" src="assets/pages/img/866c1bdb5cf29c21c1a04f6fc87b03e9.jpg" alt="A tiger, photographed by Matan Wild" loading="lazy" style="object-position: 62% 38%">
 </article>
 </div>
 </div>
@@ -922,7 +908,7 @@ html[lang=he] body,html[lang=he] body *:not(svg):not(svg *),html body [lang=he],
   var track = document.querySelector(".st-track"); if (!track) return;
   var imgs = track.querySelectorAll(".st-mimg"), arts = track.querySelectorAll(".st-art"), prog = track.querySelectorAll(".st-prog span");
   var cur = track.querySelector(".st-cur"), n = arts.length;
-  var boxes = track.querySelectorAll(".st-box"), ghosts = track.querySelectorAll(".st-ghost"), ambs = track.querySelectorAll(".st-amb");
+  var ghosts = track.querySelectorAll(".st-ghost"), ambs = track.querySelectorAll(".st-amb");
   var reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
   var target = 0, shown = 0, running = false, lastIdx = -1;
   var ss = function (a, b, x) { var t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
@@ -942,7 +928,6 @@ html[lang=he] body,html[lang=he] body *:not(svg):not(svg *),html body [lang=he],
       var op = 1 - ss(0.18, 0.5, Math.abs(d));
       arts[i].style.opacity = op.toFixed(3);
       arts[i].style.transform = "translateY(" + (-d * 40).toFixed(1) + "px)";
-      if (boxes[i]) { boxes[i].style.opacity = op.toFixed(3); boxes[i].style.transform = "translateY(" + (-d * 70).toFixed(1) + "px) rotate(" + (d * -4).toFixed(2) + "deg)"; }
       if (ghosts[i]) { ghosts[i].style.opacity = op.toFixed(3); ghosts[i].style.transform = "translateY(calc(-50% + " + (-d * 120).toFixed(1) + "px))"; }
       if (ambs[i]) ambs[i].style.opacity = (op * 0.26).toFixed(3);
     }
