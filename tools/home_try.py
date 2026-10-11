@@ -1,24 +1,25 @@
-"""'Try it yourself' playground for the home page: a small, honest taste of MWP Presets, MWP Panel and the Field Guides.
+"""'Try it yourself' playground for the home page: a small, honest taste of MWP Presets and MWP Panel, all on one photo.
 Every look shown is a real before/after pair from Matan's sales pages. The Amount slider fades
 between the RAW file and the finished frame; the handle on the photo compares with the RAW file."""
 
 IMG = "assets/pages/img/"
 LOCK = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>'
 
-# (tool, group, name, before, after)
+# One photo for everything, so visitors see each look change the same frame.
+# BASE is the RAW export; each look is the same RAW exported with that preset or effect only.
+# None = waiting for Matan's export of that look on this photo (shown as a placeholder slot).
+BASE = "3c14b23dbb00f051684ad60fb205ed10.jpg"
 LOOKS = [
-    ("presets", "Light and Scene", "Blue Hour", "3c14b23dbb00f051684ad60fb205ed10.jpg", "fbaf19aea2af10f26b2949ab31fff094.jpg"),
-    ("presets", "Light and Scene", "Macro Ground", "7c359a77f23f632596ebda32f1e9a72f.jpg", "84c2340ddf79f1f703f8c905e9b986be.jpg"),
-    ("panel", "Subject", "Pop", "c339384fe0c6d91e7b1388d0fed7d1ae.jpg", "52e0c3d2c90942f72d31faa689449bd0.jpg"),
-    ("panel", "Background", "Darken", "af0d1799831d0417d338c0b162975a7b.jpg", "95e0579188ba924ac89563eb21facef6.jpg"),
-    # Field Guides: real sample pages from the Field Guides sales page (no before/after).
-    ("guides", "", "Rule of thirds", None, "b8dddf776b0555122fbe159c327fb896.jpg"),
-    ("guides", "", "Fix white balance first", None, "349a280dc465d732b2db94a66d8bda5f.jpg"),
-    ("guides", "", "Side light", None, "4e5149d41f2cb2860f2e76848243a157.jpg"),
-    ("guides", "", "Light under the storm", None, "b49a68a97187304be4385b9dacfa7a8b.jpg"),
+    ("presets", "Blue Hour", "fbaf19aea2af10f26b2949ab31fff094.jpg"),
+    ("presets", "[Preset 2]", None),
+    ("presets", "[Preset 3]", None),
+    ("presets", "[Preset 4]", None),
+    ("panel", "Subject · Pop", None),
+    ("panel", "Background · Darken", None),
+    ("panel", "Sky", None),
 ]
-# The Panel's Edit tab, as listed in the Presets sales page. Only Subject and Background are open in the demo.
-PANEL_EDIT = ["Subject", "Eye", "Sky", "Background", "Lights", "Darks", "Dodge & Burn", "Vignette"]
+# The Panel's Edit tab, as listed in the Presets sales page. Tools without an export stay locked.
+PANEL_EDIT = ["Subject · Pop", "Eye", "Sky", "Background · Darken", "Lights", "Darks", "Dodge & Burn", "Vignette"]
 
 CSS = """
 .try{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:24px;margin-top:48px;align-items:stretch}
@@ -33,7 +34,7 @@ CSS = """
 .tstage .lbl.l{left:18px;color:#FEFBF1}.tstage .lbl.r{right:18px;color:#F2A541}
 .tstage .note{position:absolute;left:18px;right:18px;bottom:16px;font-size:12px;line-height:1.4;color:#CDD7DD;background:rgba(10,9,8,.7);padding:8px 12px;border-radius:10px;pointer-events:none}
 .app{display:flex;flex-direction:column;gap:18px;padding:22px;border-radius:24px;background:#141210;border:1px solid rgba(156,177,194,.16)}
-.seg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));padding:4px;border-radius:14px;background:#0A0908;border:1px solid rgba(156,177,194,.16)}
+.seg{display:grid;grid-template-columns:1fr 1fr;padding:4px;border-radius:14px;background:#0A0908;border:1px solid rgba(156,177,194,.16)}
 .seg button{min-height:56px;padding:0 4px;text-align:center;border:0;border-radius:10px;background:none;color:#9CB1C2;font:700 14px/1.2 inherit;font-family:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
 .seg button small{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;opacity:.8}
 .seg button.on{background:#FEFBF1;color:#0A0908}
@@ -55,74 +56,64 @@ CSS = """
 .amt input{grid-column:1/-1;width:100%;accent-color:#F2A541;height:28px;margin:0;cursor:pointer}
 .app .go{margin-top:auto;display:flex;align-items:center;justify-content:center;min-height:50px;border-radius:30px;background:linear-gradient(90deg,#DA5A22,#F2A541);color:#0A0908;font-weight:800;text-decoration:none}
 .try-hint{text-align:center;margin-top:16px}
-.tstage.page{background:#0A0908}
-.tstage.page img{object-fit:contain}
-.tstage.page #try-after{clip-path:none!important;opacity:1!important}
-.tstage.page #try-before,.tstage.page .line,.tstage.page .knob,.tstage.page .lbl.l,.tstage.page #try-split,.tstage.page .note{display:none}
-.try.pages .amt,.try.pages + .try-hint{visibility:hidden}
-.pager{display:none;position:absolute;bottom:16px;left:50%;transform:translateX(-50%);gap:8px}
-.tstage.page .pager{display:flex}
-.pager button{width:44px;height:44px;border-radius:50%;border:0;background:rgba(254,251,241,.92);color:#0A0908;cursor:pointer;display:inline-flex;align-items:center;justify-content:center}
+.tstage .wait{position:absolute;inset:0;display:none;align-items:center;justify-content:center;padding:24px;text-align:center;font-weight:700;color:#FEFBF1;background:rgba(10,9,8,.55);pointer-events:none}
+.tstage.waiting .wait{display:flex}
+.look.soon{border-style:dashed}
+.amt.off{opacity:.4;pointer-events:none}
 @media (min-width:981px){.tstage{aspect-ratio:auto;width:100%;height:100%;min-height:520px}}
 @media (max-width:980px){.try{grid-template-columns:minmax(0,1fr)}}
 @media (max-width:600px){.tstage{aspect-ratio:4/5;border-radius:18px}.app{padding:18px}}
 """
 
 
+def _btn(i, name, file, on=False):
+    cls = "look" + (" on" if on else "") + ("" if file else " soon")
+    return f'<button type="button" class="{cls}" data-look="{i}" aria-pressed="{"true" if on else "false"}"><span data-no-i18n>{name}</span><span class="dot" aria-hidden="true"></span></button>'
+
+
 def html():
-    looks = "".join(
-        f'<button type="button" class="look{" on" if i == 0 else ""}" data-look="{i}" aria-pressed="{"true" if i == 0 else "false"}"><span data-no-i18n>{name}</span><span class="dot" aria-hidden="true"></span></button>'
-        for i, (tool, group, name, b, a) in enumerate(LOOKS) if tool == "presets")
-    pages = "".join(
-        f'<button type="button" class="look" data-look="{i}" aria-pressed="false"><span>{name}</span><span class="dot" aria-hidden="true"></span></button>'
-        for i, (tool, group, name, b, a) in enumerate(LOOKS) if tool == "guides")
+    looks = "".join(_btn(i, n, f, i == 0) for i, (t, n, f) in enumerate(LOOKS) if t == "presets")
     fx = []
     for label in PANEL_EDIT:
         idx = next((i for i, l in enumerate(LOOKS) if l[0] == "panel" and l[1] == label), None)
         if idx is None:
             fx.append(f'<button type="button" class="look locked" data-locked aria-disabled="true"><span data-no-i18n>{label}</span>{LOCK}</button>')
         else:
-            fx.append(f'<button type="button" class="look" data-look="{idx}" aria-pressed="false"><span data-no-i18n>{label} · {LOOKS[idx][2]}</span><span class="dot" aria-hidden="true"></span></button>')
+            fx.append(_btn(idx, label, LOOKS[idx][2]))
     first = LOOKS[0]
     return f"""<section class="sec alt" id="try">
 <div class="wrap">
 <div class="head">
 <p class="kick">Try it yourself</p>
 <h2 class="h2">Get your hands <span class="b grad">on the tools.</span></h2>
-<p class="lead">Pick a tool, tap a look and set the amount. Then drag across the photo to see where it started. A small taste of what's inside.</p>
+<p class="lead">One photo, straight from the camera. Try a preset or a Panel effect on it, set the amount, then drag across the photo to see where it started.</p>
 </div>
 <div class="try">
 <div class="tstage" id="try-stage">
-<img id="try-before" src="{IMG}{first[3]}" alt="The RAW file as shot">
-<img id="try-after" src="{IMG}{first[4]}" alt="The same photo with the selected MWP look" style="clip-path: inset(0 0 0 50%)">
+<img id="try-before" src="{IMG}{BASE}" alt="The RAW file as shot">
+<img id="try-after" src="{IMG}{first[2]}" alt="The same photo with the selected MWP look" style="clip-path: inset(0 0 0 50%)">
 <div class="line" style="left: 50%"></div>
 <div class="knob" style="left: 50%" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0A0908" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l-6 6 6 6"></path><path d="M15 6l6 6-6 6"></path></svg></div>
 <span class="lbl l">RAW</span>
-<span class="lbl r" id="try-tag" data-no-i18n>MWP · {first[2]}</span>
+<span class="lbl r" id="try-tag" data-no-i18n>MWP · {first[1]}</span>
 <input type="range" id="try-split" min="0" max="100" value="50" aria-label="Drag to compare with the RAW file">
-<div class="pager"><button type="button" data-step="-1" aria-label="Previous page"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><button type="button" data-step="1" aria-label="Next page"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button></div>
-<p class="note">PLACEHOLDER: the finished frames are Matan's full edits. Replace with the same RAW edited only with the preset or effect before launch.</p>
+<p class="wait">PLACEHOLDER: this look needs Matan's export of the same photo.</p>
+<p class="note">PLACEHOLDER: Blue Hour here is Matan's finished edit. Replace with the same RAW edited only with the preset before launch.</p>
 </div>
 <aside class="app" aria-label="Try the tools">
 <div class="seg" role="group" aria-label="Choose a tool">
 <button type="button" class="on" data-tool="presets" aria-pressed="true"><small>Lightroom</small><span data-no-i18n>MWP Presets</span></button>
 <button type="button" data-tool="panel" aria-pressed="false"><small>Photoshop</small><span data-no-i18n>MWP Panel</span></button>
-<button type="button" data-tool="guides" aria-pressed="false"><small>PDF</small><span>Field Guides</span></button>
 </div>
 <div data-pane="presets">
-<p class="grp">Light and Scene</p>
+<p class="grp">Presets</p>
 <div class="looks">{looks}</div>
 <p class="more">The full pack: 50 Lightroom presets, 50 mobile files and 33 LUTs.</p>
 </div>
 <div data-pane="panel" hidden>
 <p class="grp">Edit</p>
 <div class="fx">{"".join(fx)}</div>
-<p class="more" id="try-more">Two effects are open to try. The full plugin has 8 one-click effects, 11 looks and 4 painted lights.</p>
-</div>
-<div data-pane="guides" hidden>
-<p class="grp">Sample pages</p>
-<div class="looks">{pages}</div>
-<p class="more">The full set: 4 PDF guides, 137 lessons on 229 pages, in English and Hebrew.</p>
+<p class="more" id="try-more">A few effects are open to try. The full plugin has 8 one-click effects, 11 looks and 4 painted lights.</p>
 </div>
 <div class="amt"><label for="try-amount">Amount</label><output id="try-amt" for="try-amount">100%</output><input type="range" id="try-amount" min="0" max="100" value="100"></div>
 <a class="go" id="try-cta" href="presets/">Get MWP Presets</a>
@@ -134,32 +125,28 @@ def html():
 
 
 def js():
-    data = [[t, (IMG + b) if b else "", IMG + a, n] for (t, g, n, b, a) in LOOKS]
+    data = [[t, n, (IMG + f) if f else ""] for (t, n, f) in LOOKS]
     return """<script>
-// Try it yourself: choose a tool and a look, set the amount, drag to compare with the RAW file.
+// Try it yourself: one photo; each preset or Panel effect swaps in that look on the same frame.
 (function () {
   var L = %s;
   var he = function () { return document.documentElement.lang === "he"; };
   var stage = document.getElementById("try-stage");
-  var before = document.getElementById("try-before"), after = document.getElementById("try-after");
+  var after = document.getElementById("try-after");
   var line = stage.querySelector(".line"), knob = stage.querySelector(".knob"), split = document.getElementById("try-split");
   var amount = document.getElementById("try-amount"), out = document.getElementById("try-amt"), tag = document.getElementById("try-tag");
-  var cta = document.getElementById("try-cta");
-  var CTA = { presets: ["presets/", "Get MWP Presets", "לפריסטים"], panel: ["panel/", "Get MWP Panel", "לפאנל"], guides: ["field-guides/", "Get the Field Guides", "למדריכי השטח"] };
-  var wrap = document.querySelector("#try .try"), cur = 0;
+  var amt = document.querySelector("#try .amt"), cta = document.getElementById("try-cta");
+  var CTA = { presets: ["presets/", "Get MWP Presets", "לפריסטים"], panel: ["panel/", "Get MWP Panel", "לפאנל"] };
   function setSplit(v) { after.style.clipPath = "inset(0 0 0 " + v + "%%)"; line.style.left = v + "%%"; knob.style.left = v + "%%"; }
   function setAmount(v) { after.style.opacity = v / 100; out.textContent = v + "%%"; }
   function pick(i) {
-    var l = L[i]; cur = i;
-    var page = !l[1];
-    stage.classList.toggle("page", page); wrap.classList.toggle("pages", page);
-    // preload, then swap both frames together so they never mismatch
-    var a = new Image(), b = new Image(), n = 0;
-    function done() { if (++n < 2) return; if (l[1]) before.src = l[1]; after.src = l[2]; }
-    a.onload = b.onload = a.onerror = b.onerror = done; a.src = l[1] || l[2]; b.src = l[2];
-    tag.textContent = page ? (he() ? "מדריכי השטח" : "MWP · Field Guides") : "MWP · " + l[3];
+    var l = L[i], ready = !!l[2];
+    stage.classList.toggle("waiting", !ready); amt.classList.toggle("off", !ready);
+    after.style.display = ready ? "" : "none";
+    if (ready) { var im = new Image(); im.onload = function () { after.src = l[2]; }; im.src = l[2]; }
+    tag.textContent = "MWP · " + l[1];
     document.querySelectorAll("#try .look[data-look]").forEach(function (o) { var on = +o.dataset.look === i; o.classList.toggle("on", on); o.setAttribute("aria-pressed", on); });
-    amount.value = 100; setAmount(100); split.value = 50; setSplit(50);
+    amount.value = 100; setAmount(100);
   }
   function tool(t) {
     document.querySelectorAll("#try .seg button").forEach(function (b) { var on = b.dataset.tool === t; b.classList.toggle("on", on); b.setAttribute("aria-pressed", on); });
@@ -167,10 +154,6 @@ def js():
     cta.href = CTA[t][0]; cta.textContent = he() ? CTA[t][2] : CTA[t][1];
     for (var i = 0; i < L.length; i++) if (L[i][0] === t) { pick(i); break; }
   }
-  stage.querySelectorAll("[data-step]").forEach(function (b) { b.addEventListener("click", function () {
-    var same = []; for (var k = 0; k < L.length; k++) if (L[k][0] === L[cur][0]) same.push(k);
-    var at = same.indexOf(cur); pick(same[(at + +b.dataset.step + same.length) %% same.length]);
-  }); });
   split.addEventListener("input", function () { setSplit(split.value); });
   amount.addEventListener("input", function () { setAmount(amount.value); });
   document.querySelectorAll("#try .seg button").forEach(function (b) { b.addEventListener("click", function () { tool(b.dataset.tool); }); });

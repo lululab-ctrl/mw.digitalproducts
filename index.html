@@ -221,7 +221,7 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 .tstage .lbl.l{left:18px;color:#FEFBF1}.tstage .lbl.r{right:18px;color:#F4AF56}
 .tstage .note{position:absolute;left:18px;right:18px;bottom:16px;font-size:12px;line-height:1.4;color:#CDD7DD;background:rgba(10,9,8,.7);padding:8px 12px;border-radius:10px;pointer-events:none}
 .app{display:flex;flex-direction:column;gap:18px;padding:22px;border-radius:24px;background:#141210;border:1px solid rgba(156,177,194,.16)}
-.seg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));padding:4px;border-radius:14px;background:#0A0908;border:1px solid rgba(156,177,194,.16)}
+.seg{display:grid;grid-template-columns:1fr 1fr;padding:4px;border-radius:14px;background:#0A0908;border:1px solid rgba(156,177,194,.16)}
 .seg button{min-height:56px;padding:0 4px;text-align:center;border:0;border-radius:10px;background:none;color:#9CB1C2;font:700 14px/1.2 inherit;font-family:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
 .seg button small{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;opacity:.8}
 .seg button.on{background:#FEFBF1;color:#0A0908}
@@ -243,14 +243,10 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 .amt input{grid-column:1/-1;width:100%;accent-color:#F4AF56;height:28px;margin:0;cursor:pointer}
 .app .go{margin-top:auto;display:flex;align-items:center;justify-content:center;min-height:50px;border-radius:30px;background:linear-gradient(90deg,#E4AA7C,#F4AF56);color:#0A0908;font-weight:800;text-decoration:none}
 .try-hint{text-align:center;margin-top:16px}
-.tstage.page{background:#0A0908}
-.tstage.page img{object-fit:contain}
-.tstage.page #try-after{clip-path:none!important;opacity:1!important}
-.tstage.page #try-before,.tstage.page .line,.tstage.page .knob,.tstage.page .lbl.l,.tstage.page #try-split,.tstage.page .note{display:none}
-.try.pages .amt,.try.pages + .try-hint{visibility:hidden}
-.pager{display:none;position:absolute;bottom:16px;left:50%;transform:translateX(-50%);gap:8px}
-.tstage.page .pager{display:flex}
-.pager button{width:44px;height:44px;border-radius:50%;border:0;background:rgba(254,251,241,.92);color:#0A0908;cursor:pointer;display:inline-flex;align-items:center;justify-content:center}
+.tstage .wait{position:absolute;inset:0;display:none;align-items:center;justify-content:center;padding:24px;text-align:center;font-weight:700;color:#FEFBF1;background:rgba(10,9,8,.55);pointer-events:none}
+.tstage.waiting .wait{display:flex}
+.look.soon{border-style:dashed}
+.amt.off{opacity:.4;pointer-events:none}
 @media (min-width:981px){.tstage{aspect-ratio:auto;width:100%;height:100%;min-height:520px}}
 @media (max-width:980px){.try{grid-template-columns:minmax(0,1fr)}}
 @media (max-width:600px){.tstage{aspect-ratio:4/5;border-radius:18px}.app{padding:18px}}
@@ -398,7 +394,7 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 <div class="head">
 <p class="kick">Try it yourself</p>
 <h2 class="h2">Get your hands <span class="b grad">on the tools.</span></h2>
-<p class="lead">Pick a tool, tap a look and set the amount. Then drag across the photo to see where it started. A small taste of what's inside.</p>
+<p class="lead">One photo, straight from the camera. Try a preset or a Panel effect on it, set the amount, then drag across the photo to see where it started.</p>
 </div>
 <div class="try">
 <div class="tstage" id="try-stage">
@@ -409,29 +405,23 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 <span class="lbl l">RAW</span>
 <span class="lbl r" id="try-tag" data-no-i18n>MWP · Blue Hour</span>
 <input type="range" id="try-split" min="0" max="100" value="50" aria-label="Drag to compare with the RAW file">
-<div class="pager"><button type="button" data-step="-1" aria-label="Previous page"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><button type="button" data-step="1" aria-label="Next page"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button></div>
-<p class="note">PLACEHOLDER: the finished frames are Matan's full edits. Replace with the same RAW edited only with the preset or effect before launch.</p>
+<p class="wait">PLACEHOLDER: this look needs Matan's export of the same photo.</p>
+<p class="note">PLACEHOLDER: Blue Hour here is Matan's finished edit. Replace with the same RAW edited only with the preset before launch.</p>
 </div>
 <aside class="app" aria-label="Try the tools">
 <div class="seg" role="group" aria-label="Choose a tool">
 <button type="button" class="on" data-tool="presets" aria-pressed="true"><small>Lightroom</small><span data-no-i18n>MWP Presets</span></button>
 <button type="button" data-tool="panel" aria-pressed="false"><small>Photoshop</small><span data-no-i18n>MWP Panel</span></button>
-<button type="button" data-tool="guides" aria-pressed="false"><small>PDF</small><span>Field Guides</span></button>
 </div>
 <div data-pane="presets">
-<p class="grp">Light and Scene</p>
-<div class="looks"><button type="button" class="look on" data-look="0" aria-pressed="true"><span data-no-i18n>Blue Hour</span><span class="dot" aria-hidden="true"></span></button><button type="button" class="look" data-look="1" aria-pressed="false"><span data-no-i18n>Macro Ground</span><span class="dot" aria-hidden="true"></span></button></div>
+<p class="grp">Presets</p>
+<div class="looks"><button type="button" class="look on" data-look="0" aria-pressed="true"><span data-no-i18n>Blue Hour</span><span class="dot" aria-hidden="true"></span></button><button type="button" class="look soon" data-look="1" aria-pressed="false"><span data-no-i18n>[Preset 2]</span><span class="dot" aria-hidden="true"></span></button><button type="button" class="look soon" data-look="2" aria-pressed="false"><span data-no-i18n>[Preset 3]</span><span class="dot" aria-hidden="true"></span></button><button type="button" class="look soon" data-look="3" aria-pressed="false"><span data-no-i18n>[Preset 4]</span><span class="dot" aria-hidden="true"></span></button></div>
 <p class="more">The full pack: 50 Lightroom presets, 50 mobile files and 33 LUTs.</p>
 </div>
 <div data-pane="panel" hidden>
 <p class="grp">Edit</p>
-<div class="fx"><button type="button" class="look" data-look="2" aria-pressed="false"><span data-no-i18n>Subject · Pop</span><span class="dot" aria-hidden="true"></span></button><button type="button" class="look locked" data-locked aria-disabled="true"><span data-no-i18n>Eye</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></button><button type="button" class="look locked" data-locked aria-disabled="true"><span data-no-i18n>Sky</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></button><button type="button" class="look" data-look="3" aria-pressed="false"><span data-no-i18n>Background · Darken</span><span class="dot" aria-hidden="true"></span></button><button type="button" class="look locked" data-locked aria-disabled="true"><span data-no-i18n>Lights</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></button><button type="button" class="look locked" data-locked aria-disabled="true"><span data-no-i18n>Darks</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></button><button type="button" class="look locked" data-locked aria-disabled="true"><span data-no-i18n>Dodge & Burn</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></button><button type="button" class="look locked" data-locked aria-disabled="true"><span data-no-i18n>Vignette</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></button></div>
-<p class="more" id="try-more">Two effects are open to try. The full plugin has 8 one-click effects, 11 looks and 4 painted lights.</p>
-</div>
-<div data-pane="guides" hidden>
-<p class="grp">Sample pages</p>
-<div class="looks"><button type="button" class="look" data-look="4" aria-pressed="false"><span>Rule of thirds</span><span class="dot" aria-hidden="true"></span></button><button type="button" class="look" data-look="5" aria-pressed="false"><span>Fix white balance first</span><span class="dot" aria-hidden="true"></span></button><button type="button" class="look" data-look="6" aria-pressed="false"><span>Side light</span><span class="dot" aria-hidden="true"></span></button><button type="button" class="look" data-look="7" aria-pressed="false"><span>Light under the storm</span><span class="dot" aria-hidden="true"></span></button></div>
-<p class="more">The full set: 4 PDF guides, 137 lessons on 229 pages, in English and Hebrew.</p>
+<div class="fx"><button type="button" class="look soon" data-look="4" aria-pressed="false"><span data-no-i18n>Subject · Pop</span><span class="dot" aria-hidden="true"></span></button><button type="button" class="look locked" data-locked aria-disabled="true"><span data-no-i18n>Eye</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></button><button type="button" class="look soon" data-look="6" aria-pressed="false"><span data-no-i18n>Sky</span><span class="dot" aria-hidden="true"></span></button><button type="button" class="look soon" data-look="5" aria-pressed="false"><span data-no-i18n>Background · Darken</span><span class="dot" aria-hidden="true"></span></button><button type="button" class="look locked" data-locked aria-disabled="true"><span data-no-i18n>Lights</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></button><button type="button" class="look locked" data-locked aria-disabled="true"><span data-no-i18n>Darks</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></button><button type="button" class="look locked" data-locked aria-disabled="true"><span data-no-i18n>Dodge & Burn</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></button><button type="button" class="look locked" data-locked aria-disabled="true"><span data-no-i18n>Vignette</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></button></div>
+<p class="more" id="try-more">A few effects are open to try. The full plugin has 8 one-click effects, 11 looks and 4 painted lights.</p>
 </div>
 <div class="amt"><label for="try-amount">Amount</label><output id="try-amt" for="try-amount">100%</output><input type="range" id="try-amount" min="0" max="100" value="100"></div>
 <a class="go" id="try-cta" href="presets/">Get MWP Presets</a>
@@ -493,30 +483,26 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 </div>
 
 <script>
-// Try it yourself: choose a tool and a look, set the amount, drag to compare with the RAW file.
+// Try it yourself: one photo; each preset or Panel effect swaps in that look on the same frame.
 (function () {
-  var L = [['presets', 'assets/pages/img/3c14b23dbb00f051684ad60fb205ed10.jpg', 'assets/pages/img/fbaf19aea2af10f26b2949ab31fff094.jpg', 'Blue Hour'], ['presets', 'assets/pages/img/7c359a77f23f632596ebda32f1e9a72f.jpg', 'assets/pages/img/84c2340ddf79f1f703f8c905e9b986be.jpg', 'Macro Ground'], ['panel', 'assets/pages/img/c339384fe0c6d91e7b1388d0fed7d1ae.jpg', 'assets/pages/img/52e0c3d2c90942f72d31faa689449bd0.jpg', 'Pop'], ['panel', 'assets/pages/img/af0d1799831d0417d338c0b162975a7b.jpg', 'assets/pages/img/95e0579188ba924ac89563eb21facef6.jpg', 'Darken'], ['guides', '', 'assets/pages/img/b8dddf776b0555122fbe159c327fb896.jpg', 'Rule of thirds'], ['guides', '', 'assets/pages/img/349a280dc465d732b2db94a66d8bda5f.jpg', 'Fix white balance first'], ['guides', '', 'assets/pages/img/4e5149d41f2cb2860f2e76848243a157.jpg', 'Side light'], ['guides', '', 'assets/pages/img/b49a68a97187304be4385b9dacfa7a8b.jpg', 'Light under the storm']];
+  var L = [['presets', 'Blue Hour', 'assets/pages/img/fbaf19aea2af10f26b2949ab31fff094.jpg'], ['presets', '[Preset 2]', ''], ['presets', '[Preset 3]', ''], ['presets', '[Preset 4]', ''], ['panel', 'Subject · Pop', ''], ['panel', 'Background · Darken', ''], ['panel', 'Sky', '']];
   var he = function () { return document.documentElement.lang === "he"; };
   var stage = document.getElementById("try-stage");
-  var before = document.getElementById("try-before"), after = document.getElementById("try-after");
+  var after = document.getElementById("try-after");
   var line = stage.querySelector(".line"), knob = stage.querySelector(".knob"), split = document.getElementById("try-split");
   var amount = document.getElementById("try-amount"), out = document.getElementById("try-amt"), tag = document.getElementById("try-tag");
-  var cta = document.getElementById("try-cta");
-  var CTA = { presets: ["presets/", "Get MWP Presets", "לפריסטים"], panel: ["panel/", "Get MWP Panel", "לפאנל"], guides: ["field-guides/", "Get the Field Guides", "למדריכי השטח"] };
-  var wrap = document.querySelector("#try .try"), cur = 0;
+  var amt = document.querySelector("#try .amt"), cta = document.getElementById("try-cta");
+  var CTA = { presets: ["presets/", "Get MWP Presets", "לפריסטים"], panel: ["panel/", "Get MWP Panel", "לפאנל"] };
   function setSplit(v) { after.style.clipPath = "inset(0 0 0 " + v + "%)"; line.style.left = v + "%"; knob.style.left = v + "%"; }
   function setAmount(v) { after.style.opacity = v / 100; out.textContent = v + "%"; }
   function pick(i) {
-    var l = L[i]; cur = i;
-    var page = !l[1];
-    stage.classList.toggle("page", page); wrap.classList.toggle("pages", page);
-    // preload, then swap both frames together so they never mismatch
-    var a = new Image(), b = new Image(), n = 0;
-    function done() { if (++n < 2) return; if (l[1]) before.src = l[1]; after.src = l[2]; }
-    a.onload = b.onload = a.onerror = b.onerror = done; a.src = l[1] || l[2]; b.src = l[2];
-    tag.textContent = page ? (he() ? "מדריכי השטח" : "MWP · Field Guides") : "MWP · " + l[3];
+    var l = L[i], ready = !!l[2];
+    stage.classList.toggle("waiting", !ready); amt.classList.toggle("off", !ready);
+    after.style.display = ready ? "" : "none";
+    if (ready) { var im = new Image(); im.onload = function () { after.src = l[2]; }; im.src = l[2]; }
+    tag.textContent = "MWP · " + l[1];
     document.querySelectorAll("#try .look[data-look]").forEach(function (o) { var on = +o.dataset.look === i; o.classList.toggle("on", on); o.setAttribute("aria-pressed", on); });
-    amount.value = 100; setAmount(100); split.value = 50; setSplit(50);
+    amount.value = 100; setAmount(100);
   }
   function tool(t) {
     document.querySelectorAll("#try .seg button").forEach(function (b) { var on = b.dataset.tool === t; b.classList.toggle("on", on); b.setAttribute("aria-pressed", on); });
@@ -524,10 +510,6 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
     cta.href = CTA[t][0]; cta.textContent = he() ? CTA[t][2] : CTA[t][1];
     for (var i = 0; i < L.length; i++) if (L[i][0] === t) { pick(i); break; }
   }
-  stage.querySelectorAll("[data-step]").forEach(function (b) { b.addEventListener("click", function () {
-    var same = []; for (var k = 0; k < L.length; k++) if (L[k][0] === L[cur][0]) same.push(k);
-    var at = same.indexOf(cur); pick(same[(at + +b.dataset.step + same.length) % same.length]);
-  }); });
   split.addEventListener("input", function () { setSplit(split.value); });
   amount.addEventListener("input", function () { setAmount(amount.value); });
   document.querySelectorAll("#try .seg button").forEach(function (b) { b.addEventListener("click", function () { tool(b.dataset.tool); }); });

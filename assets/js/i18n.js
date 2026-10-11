@@ -248,6 +248,10 @@ const HE = {
   "Browse all products": "לכל המוצרים",
   "Home": "דף הבית",
   // home: interactive shop
+  "One photo, straight from the camera. Try a preset or a Panel effect on it, set the amount, then drag across the photo to see where it started.": "תמונה אחת, ישר מהמצלמה. נסו עליה פריסט או אפקט של הפאנל, כוונו את העוצמה, ואז גררו על התמונה כדי לראות מאיפה היא התחילה.",
+  "PLACEHOLDER: this look needs Matan's export of the same photo.": "ממלא מקום: למראה הזה צריך את הייצוא של מתן על אותה תמונה.",
+  "PLACEHOLDER: Blue Hour here is Matan's finished edit. Replace with the same RAW edited only with the preset before launch.": "ממלא מקום: Blue Hour כאן הוא העריכה הסופית של מתן. לפני ההשקה מחליפים באותו RAW עם הפריסט בלבד.",
+  "A few effects are open to try. The full plugin has 8 one-click effects, 11 looks and 4 painted lights.": "כמה אפקטים פתוחים לניסיון. בפלאגין המלא יש 8 אפקטים בקליק, 11 מראות ו-4 תאורות מצוירות.",
   "Previous page": "העמוד הקודם",
   "Next page": "העמוד הבא",
   "PDF": "PDF",
