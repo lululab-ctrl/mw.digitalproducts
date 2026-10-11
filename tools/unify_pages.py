@@ -76,6 +76,8 @@ for path, lang in PAGES.items():
     s = re.sub(r'(<div class="links">[^\n]*?)<a href="#bundles">[^<]*</a>', r'\1', s, count=1)
     for a, b in WORDS[lang]:
         s = s.replace(a, b)
+    # no arrows on the outlined buttons
+    s = re.sub(r'(<a class="ghost"[^>]*>[^<]*?)\s*[→←]\s*<', r'\1<', s)
     s = BUNDLE_NOTE.sub("", s)
     slots = iter(PRICE_SLOTS[path.split("/")[0]])
     def slot(m):
