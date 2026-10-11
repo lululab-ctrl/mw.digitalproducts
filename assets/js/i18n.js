@@ -105,6 +105,28 @@ const HE = {
     "המוצרים הראשונים בהכנה. הירשמו לפריסטים החינמיים למטה ותשמעו ברגע שהם יוצאים.",
   "Coming soon": "בקרוב",
 
+  // home (in the sales-page look)
+  "MWP · by Matan Wild": "MWP · מאת מתן וויילד",
+  "Products": "מוצרים",
+  "MWP Presets · Lightroom": "MWP Presets · לייטרום",
+  "The look behind every MWP frame.": "המראה של כל פריים של MWP.",
+  "Now one click away.": "עכשיו בקליק אחד.",
+  "50 presets, 12 of them adaptive · 33 LUTs for video": "50 פריסטים, 12 מהם אדפטיביים · 33 קובצי LUT לווידאו",
+  "See MWP Presets": "ל-MWP Presets",
+  "MWP Panel · Photoshop": "MWP Panel · פוטושופ",
+  "You were there.": "הייתם שם.",
+  "Now make the photo show it.": "עכשיו תנו לתמונה להראות את זה.",
+  "8 one-click effects · 11 looks · 4 painted lights": "8 אפקטים בלחיצה · 11 לוקים · 4 תאורות מצוירות",
+  "See MWP Panel": "ל-MWP Panel",
+  "MWP Field Guides · PDF": "MWP Field Guides · PDF",
+  "See the photo": "לראות את התמונה",
+  "before you press the shutter.": "לפני שלוחצים.",
+  "4 guides · 137 lessons · 229 pages · English and Hebrew": "4 מדריכים · 137 שיעורים · 229 עמודים · עברית ואנגלית",
+  "See the Field Guides": "למדריכי השטח",
+  "Before you buy": "לפני שקונים",
+  "Footer": "קישורים",
+  "All photos: Matan Wild · contact@matanwildphotography.com": "כל הצילומים: מתן וויילד · contact@matanwildphotography.com",
+
   // categories
   "Preset pack": "חבילת פריסטים",
   "Guide": "מדריך",
