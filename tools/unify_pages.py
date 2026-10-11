@@ -13,7 +13,7 @@ PAGES = {
 DL = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>'
 CART = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h2l2.2 11.2a1.5 1.5 0 0 0 1.5 1.2h8.8a1.5 1.5 0 0 0 1.5-1.1L21 8H6.2"/><circle cx="9.5" cy="20" r="1.3"/><circle cx="17.5" cy="20" r="1.3"/></svg>'
 
-def navr(lang):
+def navr(lang, btn=""):
     he = lang == "he"
     t = (lambda e, h: h if he else e)
     toggle = ('<div class="lang-toggle" role="group" aria-label="שפה"><a href="./" hreflang="en" lang="en">EN</a><span class="on" aria-current="true" lang="he">עב</span></div>'
@@ -23,7 +23,7 @@ def navr(lang):
             f'<div class="nav-icons">'
             f'<a class="nav-ico" href="../account.html" aria-label="{t("My downloads", "ההורדות שלי")}">{DL}<span class="tip">{t("My downloads", "ההורדות שלי")}</span></a>'
             f'<button class="nav-ico" type="button" data-cart aria-label="{t("Cart", "עגלה")}" aria-haspopup="dialog">{CART}<span class="count" hidden>0</span><span class="tip">{t("Cart", "עגלה")}</span></button>'
-            f'</div>{toggle}</div>')
+            f'</div>{toggle}{btn}</div>')
 
 # Same header look as the home page. "html " prefix so it wins over the page styles the runtime moves into <head>.
 CSS = """<style id="mwp-unify">
@@ -31,6 +31,11 @@ html .nav .wrap{justify-content:flex-start;height:72px}
 html .nav .links{margin-inline:auto}
 html .navr{display:flex;align-items:center;gap:14px;margin-inline-start:auto}
 html .nav .links + .navr{margin-inline-start:0}
+html .navr .btn.sm{white-space:nowrap}
+html .nav .links{gap:22px}
+html .nav .links a{white-space:nowrap}
+@media (max-width:1280px){html .nav .links a{font-size:14px}html .nav .links{gap:16px}}
+@media (max-width:600px){html .navr .btn.sm{min-height:36px;padding:0 12px;font-size:12px}html .navr{gap:8px}}
 html .brand span{display:inline}
 html .navr a.nl{color:#CDD7DD;text-decoration:none;font-weight:600;font-size:15px}
 html .navr a.nl:hover{color:#FEFBF1}
@@ -60,7 +65,7 @@ for path, lang in PAGES.items():
     # header: home-page brand (logo + MWP, links home), Help + icons + language toggle
     s = re.sub(r'<a class="brand" href="[^"]*"[^>]*><img src="[^"]+" alt="[^"]*"><span>[^<]*</span></a>',
                r'<a class="brand" href="../" aria-label="MWP, home"><img src="../assets/pages/img/2dd3356528167ddf9a64c0c7301c8aa3.png" alt=""><span>MWP</span></a>', s, count=1)
-    s = re.sub(r'<div class="navr">.*?</a></div>(?=\s*</div>\s*</nav>)', lambda m: navr(lang), s, count=1, flags=re.S)
+    s = re.sub(r'<div class="navr">.*?</a></div>(?=\s*</div>\s*</nav>)', lambda m: navr(lang, (re.search(r'<a class="btn sm"[^>]*>.*?</a>', m.group(0)) or [''])[0]), s, count=1, flags=re.S)
     for a, b in WORDS[lang]:
         s = s.replace(a, b)
     if 'id="mwp-unify"' not in s:

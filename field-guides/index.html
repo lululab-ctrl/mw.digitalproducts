@@ -9,6 +9,11 @@ html .nav .wrap{justify-content:flex-start;height:72px}
 html .nav .links{margin-inline:auto}
 html .navr{display:flex;align-items:center;gap:14px;margin-inline-start:auto}
 html .nav .links + .navr{margin-inline-start:0}
+html .navr .btn.sm{white-space:nowrap}
+html .nav .links{gap:22px}
+html .nav .links a{white-space:nowrap}
+@media (max-width:1280px){html .nav .links a{font-size:14px}html .nav .links{gap:16px}}
+@media (max-width:600px){html .navr .btn.sm{min-height:36px;padding:0 12px;font-size:12px}html .navr{gap:8px}}
 html .brand span{display:inline}
 html .navr a.nl{color:#CDD7DD;text-decoration:none;font-weight:600;font-size:15px}
 html .navr a.nl:hover{color:#FEFBF1}
@@ -303,7 +308,7 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 <div class="wrap">
 <a class="brand" href="../" aria-label="MWP, home"><img src="../assets/pages/img/2dd3356528167ddf9a64c0c7301c8aa3.png" alt=""><span>MWP</span></a>
 <div class="links"><a href="#inside">Look inside</a><a href="#guides">The guides</a><a href="#how">How it works</a><a href="#bundles">Bundles</a><a href="#faq">Questions</a></div>
-<div class="navr"><a class="nl hide-sm" href="../support.html">Help</a><div class="nav-icons"><a class="nav-ico" href="../account.html" aria-label="My downloads"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg><span class="tip">My downloads</span></a><button class="nav-ico" type="button" data-cart aria-label="Cart" aria-haspopup="dialog"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h2l2.2 11.2a1.5 1.5 0 0 0 1.5 1.2h8.8a1.5 1.5 0 0 0 1.5-1.1L21 8H6.2"/><circle cx="9.5" cy="20" r="1.3"/><circle cx="17.5" cy="20" r="1.3"/></svg><span class="count" hidden>0</span><span class="tip">Cart</span></button></div><div class="lang-toggle" role="group" aria-label="Language"><span class="on" aria-current="true">EN</span><a href="he.html" hreflang="he" lang="he">עב</a></div></div>
+<div class="navr"><a class="nl hide-sm" href="../support.html">Help</a><div class="nav-icons"><a class="nav-ico" href="../account.html" aria-label="My downloads"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg><span class="tip">My downloads</span></a><button class="nav-ico" type="button" data-cart aria-label="Cart" aria-haspopup="dialog"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h2l2.2 11.2a1.5 1.5 0 0 0 1.5 1.2h8.8a1.5 1.5 0 0 0 1.5-1.1L21 8H6.2"/><circle cx="9.5" cy="20" r="1.3"/><circle cx="17.5" cy="20" r="1.3"/></svg><span class="count" hidden>0</span><span class="tip">Cart</span></button></div><div class="lang-toggle" role="group" aria-label="Language"><span class="on" aria-current="true">EN</span><a href="he.html" hreflang="he" lang="he">עב</a></div><a class="btn sm" href="#buy">Get the guides</a></div>
 </div>
 </nav>
 
