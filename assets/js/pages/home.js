@@ -17,7 +17,7 @@ function shelfHTML(counts, only = {}) {
   return SHELF_ORDER.map((key, i) => {
     const c = CATEGORIES[key];
     const n = counts[key] || 0;
-    const href = SALES_PAGE[key] || (n === 1 && only[key] ? `product.html?p=${encodeURIComponent(only[key])}` : `shop.html?cat=${key}`);
+    const href = SALES_PAGE[key] || (n === 1 && only[key] ? `/product/?p=${encodeURIComponent(only[key])}` : `/shop/?cat=${key}`);
     return `
       <a class="shelf__tile${i === 0 ? " shelf__tile--feature" : ""}" href="${href}">
         <span class="shelf__icon">${ICONS[key]}</span>
@@ -55,5 +55,5 @@ bindSubscribeForm(document.getElementById("sampler-form"), subscribe, toast);
 document.getElementById("hero-search")?.addEventListener("submit", (e) => {
   e.preventDefault();
   const q = new FormData(e.currentTarget).get("q")?.toString().trim();
-  location.href = q ? `shop.html?q=${encodeURIComponent(q)}` : "shop.html";
+  location.href = q ? `/shop/?q=${encodeURIComponent(q)}` : "/shop/";
 });

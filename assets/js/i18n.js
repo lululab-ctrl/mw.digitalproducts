@@ -613,7 +613,7 @@ const PATTERNS = [
     (m) => `הרישיון אישי: הפאנל עובד כשמתחברים אליו עם המייל הזה. אפשר להשתמש בו בעד ${m[1]} מחשבים בו־זמנית. החלפתם מחשב? הסירו את הישן כאן.`],
 ];
 
-const SALES = { "presets/": "presets/he.html", "panel/": "panel/he.html", "field-guides/": "field-guides/he.html" };
+const SALES = { "presets/": "presets/he/", "panel/": "panel/he/", "field-guides/": "field-guides/he/" };
 
 function translate(text) {
   const core = text.replace(/\s+/g, " ").trim();

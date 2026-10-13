@@ -155,7 +155,7 @@ async function handlePaid(
     receipt_url: a.urls?.receipt ?? null,
     source: plain(custom.source),
     repeat_customer: (count ?? 1) > 1,
-    downloads_url: `${Deno.env.get("SITE_URL")}/account.html?email=${encodeURIComponent(email)}`,
+    downloads_url: `${Deno.env.get("SITE_URL")}/account/?email=${encodeURIComponent(email)}`,
   });
 }
 

@@ -1,4 +1,4 @@
-// Testers page (shop.mw.photography/testers.html), shared by link only. Approved testers (at most 10, added
+// Testers page (shop.mw.photography/testers/), shared by link only. Approved testers (at most 10, added
 // in the admin) sign in with a one-time email link and download MWP Presets, MWP Panel and the Field Guides.
 // Same protection as buyers: get-download gives stamped personal copies on 5-minute links, with a daily limit.
 import { initChrome, toast } from "../lib/ui.js";

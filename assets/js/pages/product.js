@@ -23,7 +23,7 @@ function setMeta(p, image) {
   set('meta[property="og:title"]', "content", title);
   set('meta[property="og:description"]', "content", desc);
   if (image) set('meta[property="og:image"]', "content", image);
-  set('link[rel="canonical"]', "href", `${CONFIG.SITE_URL}/product.html?p=${encodeURIComponent(p.slug)}`);
+  set('link[rel="canonical"]', "href", `${CONFIG.SITE_URL}/product/?p=${encodeURIComponent(p.slug)}`);
 
   const ld = document.createElement("script");
   ld.type = "application/ld+json";
@@ -39,7 +39,7 @@ function setMeta(p, image) {
       price: (p.price_cents / 100).toFixed(2),
       priceCurrency: p.currency,
       availability: "https://schema.org/InStock",
-      url: `${CONFIG.SITE_URL}/product.html?p=${encodeURIComponent(p.slug)}`,
+      url: `${CONFIG.SITE_URL}/product/?p=${encodeURIComponent(p.slug)}`,
     },
   });
   document.head.append(ld);
@@ -93,11 +93,11 @@ function bindGallery(slides) {
 }
 
 async function load() {
-  if (!slug) { location.replace("shop.html"); return; }
+  if (!slug) { location.replace("/shop/"); return; }
   try {
     const p = await getProduct(slug);
     if (!p) {
-      root.innerHTML = `<div class="empty">This product isn't available. <a class="link" href="shop.html">See all products</a></div>`;
+      root.innerHTML = `<div class="empty">This product isn't available. <a class="link" href="/shop/">See all products</a></div>`;
       return;
     }
     const { pairs, gallery } = splitMedia(p.product_media);
@@ -107,8 +107,8 @@ async function load() {
     const cat = categoryOf(p);
     const crumbs = document.getElementById("crumbs");
     if (crumbs) {
-      crumbs.innerHTML = `<a href="shop.html">Shop</a><span aria-hidden="true">/</span>
-        <a href="shop.html?cat=${cat}">${esc(CATEGORIES[cat].label)}</a><span aria-hidden="true">/</span>
+      crumbs.innerHTML = `<a href="/shop/">Shop</a><span aria-hidden="true">/</span>
+        <a href="/shop/?cat=${cat}">${esc(CATEGORIES[cat].label)}</a><span aria-hidden="true">/</span>
         <span aria-current="page">${esc(p.name)}${p.name_emphasis ? " " + esc(p.name_emphasis) : ""}</span>`;
     }
 
@@ -136,7 +136,7 @@ async function load() {
             ${countLabel(p) ? `<dt>Contents</dt><dd>${esc(countLabel(p))}</dd>` : ""}
             ${p.compatibility.length ? `<dt>Works with</dt><dd data-no-i18n>${p.compatibility.map(esc).join(", ")}</dd>` : ""}
             <dt>Version</dt><dd>${esc(p.version)}</dd>
-            <dt>Licence</dt><dd>Personal and client work (<a class="link" href="legal.html#licence">details</a>)</dd>
+            <dt>Licence</dt><dd>Personal and client work (<a class="link" href="/legal/#licence">details</a>)</dd>
           </dl>
         </aside>
       </div>

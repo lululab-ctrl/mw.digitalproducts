@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Add one <url> per live product (product.html?p=<slug>) when a pack goes live. -->
+<!-- Add one <url> per live product (product/?p=<slug>) when a pack goes live. -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://shop.mw.photography/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
-  <url><loc>https://shop.mw.photography/shop.html</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://shop.mw.photography/shop/</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
   <url><loc>https://shop.mw.photography/presets/</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://shop.mw.photography/presets/he.html</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://shop.mw.photography/presets/he/</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
   <url><loc>https://shop.mw.photography/panel/</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://shop.mw.photography/panel/he.html</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://shop.mw.photography/panel/he/</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
   <url><loc>https://shop.mw.photography/field-guides/</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://shop.mw.photography/field-guides/he.html</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://shop.mw.photography/support.html</loc><changefreq>monthly</changefreq><priority>0.4</priority></url>
-  <url><loc>https://shop.mw.photography/legal.html</loc><changefreq>yearly</changefreq><priority>0.2</priority></url>
+  <url><loc>https://shop.mw.photography/field-guides/he/</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://shop.mw.photography/support/</loc><changefreq>monthly</changefreq><priority>0.4</priority></url>
+  <url><loc>https://shop.mw.photography/legal/</loc><changefreq>yearly</changefreq><priority>0.2</priority></url>
 </urlset>

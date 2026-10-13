@@ -608,7 +608,7 @@ $("#tst-form").addEventListener("submit", async (e) => {
     return;
   }
   f.reset();
-  toast("Approved. Their copies are being made, and monday is updated. Send them shop.mw.photography/testers.html");
+  toast("Approved. Their copies are being made, and monday is updated. Send them shop.mw.photography/testers/");
   loadTesters();
 });
 $("#tst-table").addEventListener("click", async (e) => {

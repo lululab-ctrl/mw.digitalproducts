@@ -1,4 +1,4 @@
-// Read online: the MWP Field Guides, page by page (shop.mw.photography/read.html).
+// Read online: the MWP Field Guides, page by page (shop.mw.photography/read/).
 // Ambassadors can only read the guides here; buyers can too. The pages come from the guide-view function
 // as private links that last 10 minutes, drawn on a canvas. No download, no print.
 import { initChrome } from "../lib/ui.js";
@@ -227,13 +227,13 @@ document.addEventListener("keydown", (e) => {
   const user = await currentUser().catch(() => null);
   if (!user) {
     message(`<p>${esc(T("Sign in to read your Field Guides.", "התחברו כדי לקרוא את המדריכים שלכם."))}</p>
-      <a class="btn" href="account.html?next=${encodeURIComponent("/read.html")}">${esc(T("Sign in", "התחברות"))}</a>`);
+      <a class="btn" href="/account/?next=${encodeURIComponent("/read/")}">${esc(T("Sign in", "התחברות"))}</a>`);
     return;
   }
   try {
     await load();
     render();
   } catch (err) {
-    message(`<p>${esc(err.message)}</p><a class="btn" href="account.html">${esc(T("Go to My downloads", "להורדות שלי"))}</a>`);
+    message(`<p>${esc(err.message)}</p><a class="btn" href="/account/">${esc(T("Go to My downloads", "להורדות שלי"))}</a>`);
   }
 })();

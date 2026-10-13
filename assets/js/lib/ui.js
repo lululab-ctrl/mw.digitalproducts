@@ -152,7 +152,7 @@ export function productCardHTML(p) {
   const hover = p.hover_path ? mediaUrl(p.hover_path, { width: 900 }) : "";
   const count = countLabel(p);
   return `
-    <a class="product-card" href="product.html?p=${encodeURIComponent(p.slug)}">
+    <a class="product-card" href="/product/?p=${encodeURIComponent(p.slug)}">
       <div class="product-card__media">
         ${cover ? `<img src="${esc(cover)}" alt="" loading="lazy" decoding="async">` : productArtHTML(p)}
         ${cover && hover ? `<img src="${esc(hover)}" alt="" loading="lazy" decoding="async">` : ""}

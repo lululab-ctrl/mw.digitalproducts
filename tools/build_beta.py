@@ -434,7 +434,7 @@ html .nav .wrap,html.nav-scrolled .nav .wrap{{height:80px;transition:none}}
 <span class="copy-tx"><strong>Your signed copy of the terms</strong><span id="terms-copy-state">Preparing your PDF…</span></span>
 <button class="copy-btn" type="button" id="terms-copy-btn" hidden>Download again</button>
 </div>
-<a class="btn" href="/account.html">Go to My downloads</a>
+<a class="btn" href="/account/">Go to My downloads</a>
 </div>
 </div>
 </div>
@@ -455,7 +455,7 @@ open("beta/index.html", "w", encoding="utf-8").write(html)
 # real My downloads page, keeping the sign-in details in the address.
 open("beta/account.html", "w", encoding="utf-8").write("""<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="robots" content="noindex">
 <title>My downloads · MWP</title>
-<script>location.replace("/account.html" + location.search + location.hash);</script></head>
-<body style="background:#0A0908"><a href="/account.html" style="color:#F4AF56">Go to My downloads</a></body></html>
+<script>location.replace("/account/" + location.search + location.hash);</script></head>
+<body style="background:#0A0908"><a href="/account/" style="color:#F4AF56">Go to My downloads</a></body></html>
 """)
 print("beta/index.html written", len(html))

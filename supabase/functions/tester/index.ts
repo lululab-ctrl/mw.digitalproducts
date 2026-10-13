@@ -1,5 +1,5 @@
 // ============================================================================
-// tester — the testers page (shop.mw.photography/testers.html), shared by link only.
+// tester — the testers page (shop.mw.photography/testers/), shared by link only.
 //   link { email, lang } → if this email is an approved tester, emails them a one-time sign-in link back
 //                    to the page. The answer is the same either way (it doesn't reveal who's a tester).
 //   me (signed in) → { tester, name, products } so the page can show their downloads.
@@ -35,7 +35,7 @@ Deno.serve(async (req) => {
     const t = Array.isArray(c?.testers) ? c?.testers[0] : c?.testers;
     if (t && !t.removed_at) {
       const lang = body.lang === "he" ? "he" : "en";
-      const { error } = await db.auth.signInWithOtp({ email, options: { emailRedirectTo: `${SITE}/testers.html${lang === "he" ? "?lang=he" : ""}`, shouldCreateUser: true } });
+      const { error } = await db.auth.signInWithOtp({ email, options: { emailRedirectTo: `${SITE}/testers/${lang === "he" ? "?lang=he" : ""}`, shouldCreateUser: true } });
       if (error) { console.error("tester link", error); return fail(req, "Couldn't send the link. Please try again in a minute.", 500); }
     }
     return json(req, { ok: true });

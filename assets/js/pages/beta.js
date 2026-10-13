@@ -157,14 +157,14 @@ form.addEventListener("submit", async (e) => {
   msg.className = "msg"; msg.textContent = T("Creating your account…", "יוצרים את החשבון…");
   try {
     const joined = await betaJoin(data);   // the tools go to this email first (the password never goes to our server)
-    const r = await signUpWithPassword(data.email, password, { name: data.name, redirectPath: "/account.html" });
+    const r = await signUpWithPassword(data.email, password, { name: data.name, redirectPath: "/account/" });
     const title = document.querySelector("#join-done h3");
     const text = document.getElementById("done-text");
     if (r === "signed-in") {
       title.textContent = T("You're all set", "הכול מוכן");
       text.textContent = T("Your account is ready and your tools are in it.", "החשבון מוכן והכלים כבר בתוכו.");
     } else if (r === "exists") {
-      await sendMagicLink(data.email, "/account.html").catch(() => {});
+      await sendMagicLink(data.email, "/account/").catch(() => {});
       title.textContent = T("Your tools are in your account", "הכלים נמצאים בחשבון שלכם");
       text.textContent = T(`${data.email} already has an MWP account, so we added the tools to it. Sign in with your password, or open the sign-in link we just emailed you.`,
         `ל־${data.email} כבר יש חשבון MWP, אז הוספנו אליו את הכלים. התחברו עם הסיסמה, או פתחו את קישור הכניסה ששלחנו עכשיו במייל.`);

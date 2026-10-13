@@ -111,7 +111,7 @@ function render() {
   if (!body) return;
   const list = items();
   if (!list.length) {
-    body.innerHTML = `<div class="cart-empty"><p>${T("Your cart is empty.", "העגלה ריקה.")}</p><a href="${base()}index.html#shop">${T("Browse the products", "לכל המוצרים")}</a></div>`;
+    body.innerHTML = `<div class="cart-empty"><p>${T("Your cart is empty.", "העגלה ריקה.")}</p><a href="/#shop">${T("Browse the products", "לכל המוצרים")}</a></div>`;
     foot.hidden = true;
     return;
   }
@@ -205,7 +205,7 @@ export async function addSlugToCart(slug) {
 // them to create an account or sign in first, then comes back here with the cart open.
 function gateHTML() {
   const back = location.pathname + (location.search ? location.search + "&" : "?") + "cart=1";
-  const to = (mode) => `${base()}account.html?${mode ? "mode=signup&" : ""}next=${encodeURIComponent(back)}`;
+  const to = (mode) => `/account/?${mode ? "mode=signup&" : ""}next=${encodeURIComponent(back)}`;
   return `<div class="cart-gate">
     <span class="gate-ic">${SVG.user}</span>
     <h3>${T("Create your account first", "קודם יוצרים חשבון")}</h3>
@@ -282,11 +282,11 @@ function menuHTML(user) {
     ? `<div class="who"><span class="av">${(user.email || "?")[0]}</span><div><small>${T("Signed in as", "מחוברים בתור")}</small><b>${user.email}</b></div></div>`
     : `<div class="who"><span class="av out">${SVG.user}</span><div><small>${T("Not signed in", "לא מחוברים")}</small><b>${T("Your MWP account", "החשבון שלכם ב-MWP")}</b></div></div>`;
   return `${who}
-    <a href="${b}account.html" role="menuitem">${SVG.dl}<span>${T("My downloads", "ההורדות שלי")}</span></a>
-    <a href="${b}support.html" role="menuitem">${SVG.help}<span>${T("Help", "עזרה")}</span></a>
+    <a href="/account/" role="menuitem">${SVG.dl}<span>${T("My downloads", "ההורדות שלי")}</span></a>
+    <a href="/support/" role="menuitem">${SVG.help}<span>${T("Help", "עזרה")}</span></a>
     <div class="sep"></div>
     ${user ? `<button class="item out" type="button" role="menuitem" data-signout>${T("Sign out", "התנתקות")}</button>`
-           : `<a href="${b}account.html" role="menuitem"><span>${T("Sign in", "התחברות")}</span></a>`}`;
+           : `<a href="/account/" role="menuitem"><span>${T("Sign in", "התחברות")}</span></a>`}`;
 }
 function placeMenu(btn) {
   const r = btn.getBoundingClientRect();
@@ -311,7 +311,7 @@ async function toggleMenu(btn) {
       const { api } = await accountUser();
       if (api) await api.signOut();
       closeMenu();
-      location.href = base() + "account.html";
+      location.href = "/account/";
     });
   }
   if (menu.classList.contains("open")) return closeMenu();
