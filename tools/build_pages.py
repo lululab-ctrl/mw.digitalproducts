@@ -390,6 +390,15 @@ html[dir=rtl] .rd-pick select{padding:0 18px 0 44px}
 .rd-ic:disabled{opacity:.35;cursor:default}
 html[dir=rtl] .rd-flip svg{transform:scaleX(-1)}
 .rd-count{min-width:64px;text-align:center;font-size:14px;font-variant-numeric:tabular-nums;color:#CDD7DD}
+/* previous / next on either side of the pages (mirrored in Hebrew by the grid itself) */
+/* Scroll mode: no arrows, the pages use the full width. Page by page: arrows only, no scrolling (see read.js). */
+.rd-stage{display:grid;grid-template-columns:minmax(0,1fr)}
+.rd-side{display:none}
+.rd-viewer.paged .rd-stage{grid-template-columns:52px minmax(0,1fr) 52px;gap:18px;overscroll-behavior:contain;touch-action:pan-x pinch-zoom}
+.rd-viewer.paged .rd-side{display:flex;align-items:center;padding-bottom:110px}
+.rd-side .rd-ic{width:52px;height:52px;background:rgba(20,18,16,.82);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);box-shadow:0 10px 28px -12px rgba(0,0,0,.8)}
+.rd-side .rd-ic svg{width:22px;height:22px}
+.rd-viewer.fs.paged .rd-side{padding-bottom:12px}
 .rd-viewer.paged .rd-page{display:none;width:min(100%,calc((100svh - 190px) * var(--ar,.7)));margin:0 auto}
 .rd-viewer.paged .rd-page.cur{display:block}
 .rd-viewer.fs{position:fixed;inset:0;z-index:200;width:100vw;height:100dvh;overflow-y:auto;background:#0A0908}
@@ -407,7 +416,7 @@ html[dir=rtl] .rd-flip svg{transform:scaleX(-1)}
 html.rd-fs-on body{overflow:hidden}
 html[lang=he] .rd-kick{letter-spacing:.04em}
 @media (max-width:820px){.rd-bar{top:56px}.rd-viewer.paged .rd-page{width:min(100%,calc((100svh - 230px) * var(--ar,.7)))}}
-@media (max-width:560px){.rd-viewer .rd-page{scroll-margin-top:200px}.rd-pick{flex-basis:100%}.rd-nav{margin-inline-start:auto}.rd-modes button{padding:0 10px;font-size:12.5px;min-height:36px}.rd-nav{gap:5px}.rd-ic{width:38px;height:38px}.rd-count{min-width:44px;font-size:13px}.rd-bar{gap:10px 8px}}
+@media (max-width:560px){.rd-viewer .rd-page{scroll-margin-top:200px}.rd-pick{flex-basis:100%}.rd-nav{margin-inline-start:auto}.rd-modes button{padding:0 10px;font-size:12.5px;min-height:36px}.rd-nav{gap:5px}.rd-ic{width:38px;height:38px}.rd-count{min-width:44px;font-size:13px}.rd-bar{gap:10px 8px}.rd-viewer.paged .rd-stage{grid-template-columns:38px minmax(0,1fr) 38px;gap:6px}.rd-side .rd-ic{width:38px;height:38px}.rd-side .rd-ic svg{width:18px;height:18px}}
 @media print{body{display:none!important}}
 </style>"""
 
