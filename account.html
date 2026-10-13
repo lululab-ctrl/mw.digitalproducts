@@ -33,6 +33,27 @@
 .glass{position:relative;border-radius:24px;background:linear-gradient(180deg,rgba(254,251,241,.06),rgba(254,251,241,.015));border:1px solid rgba(254,251,241,.1);box-shadow:0 50px 100px -50px rgba(0,0,0,.9),inset 0 1px 0 rgba(254,251,241,.07)}
 .glass::before{content:"";position:absolute;top:0;left:12%;right:12%;height:1px;background:linear-gradient(90deg,transparent,rgba(244,175,86,.55),transparent)}
 #signed-out.glass{padding:40px;max-width:560px}
+.auth{display:flex;flex-direction:column;gap:22px}
+.auth-tabs{display:grid;grid-template-columns:1fr 1fr;padding:5px;border-radius:64px;background:rgba(10,9,8,.5);border:1px solid rgba(254,251,241,.1)}
+.auth-tabs button{min-height:44px;border:0;border-radius:64px;background:none;color:#9CB1C2;font:inherit;font-weight:700;font-size:15px;cursor:pointer;transition:background .3s,color .3s}
+.auth-tabs button[aria-selected=true]{background:linear-gradient(90deg,#E4AA7C,#F4AF56);color:#0A0908;box-shadow:0 10px 26px -12px rgba(244,175,86,.7)}
+.auth-view{display:flex;flex-direction:column;gap:16px;animation:authin .45s cubic-bezier(.16,1,.3,1) both}
+@keyframes authin{from{opacity:0;transform:translateY(8px)}}
+.auth-view .btn{width:100%}
+.pw{position:relative}
+.pw .input{padding-inline-end:52px}
+.pw-eye{position:absolute;top:50%;inset-inline-end:8px;transform:translateY(-50%);display:grid;place-items:center;width:38px;height:38px;border:0;border-radius:50%;background:none;color:#9CB1C2;cursor:pointer}
+.pw-eye:hover,.pw-eye[aria-pressed=true]{color:#F4AF56;background:rgba(254,251,241,.06)}
+.auth-row{display:flex;justify-content:flex-end;margin-top:-6px}
+.auth-link{align-self:center;border:0;background:none;padding:4px 0;color:#F4AF56;font:inherit;font-size:14px;font-weight:600;cursor:pointer;text-decoration:underline;text-decoration-color:rgba(244,175,86,.4);text-underline-offset:3px}
+.auth-link:hover{text-decoration-color:#F4AF56}
+.auth-or{display:flex;align-items:center;gap:14px;color:#7E8A93;font-size:13px}
+.auth-or::before,.auth-or::after{content:"";flex:1;height:1px;background:rgba(254,251,241,.1)}
+.auth-note,.auth-why{margin:0;padding:14px 16px;border-radius:14px;background:rgba(244,175,86,.07);border:1px solid rgba(244,175,86,.25);color:#E9DCC6;font-size:14.5px;line-height:1.55}
+.auth-hint{margin:-8px 0 0;font-size:13px;color:#7E8A93}
+.auth-sent{align-items:center;text-align:center;padding:10px 0}
+.auth-sent .seal{display:inline-flex;align-items:center;justify-content:center;width:56px;height:56px;border-radius:50%;color:#F4AF56;background:rgba(244,175,86,.1);box-shadow:inset 0 0 0 1px rgba(244,175,86,.35)}
+.btn--ghost.auth-alt{background:rgba(10,9,8,.25);border:1px solid rgba(254,251,241,.32);color:#FEFBF1;box-shadow:none}
 .who{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:18px 22px}
 .who-l{display:flex;align-items:center;gap:14px;min-width:0}
 .avatar{flex:none;display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#E4AA7C,#F4AF56);color:#0A0908;font-weight:700;font-size:18px;text-transform:uppercase}
@@ -104,19 +125,59 @@ html[lang=he] body,html[lang=he] body *:not(svg):not(svg *),html body [lang=he],
   </section>
   <section class="acct">
     <div class="container container--text">
-      <div id="signed-out" class="glass stack-lg">
-        <div class="stack">
-          <h2 class="h3">Sign in with your email</h2>
-          <p class="muted">Use the email you paid with. We'll send a one-time sign-in link; there's no password.</p>
+      <div id="signed-out" class="glass auth">
+        <p class="auth-why" id="auth-why" hidden>Create your MWP account (or sign in) to check out. Everything you buy lives in your account: download it anytime, and get every future update free.</p>
+        <div class="auth-tabs" role="tablist" aria-label="Account">
+          <button type="button" role="tab" data-tab="signin" aria-selected="true">Sign in</button>
+          <button type="button" role="tab" data-tab="signup" aria-selected="false">Create account</button>
         </div>
-        <form class="form" id="login-form" novalidate>
-          <div class="field">
-            <label for="login-email">Email</label>
-            <input class="input" id="login-email" name="email" type="email" autocomplete="email" required>
-          </div>
-          <button class="btn" type="submit">Email me a sign-in link</button>
+        <form class="form auth-view" data-view="signin" id="signin-form" novalidate>
+          <div class="field"><label for="si-email">Email</label><input class="input" id="si-email" name="email" type="email" dir="ltr" autocomplete="email" required></div>
+          <div class="field"><label for="si-pw">Password</label><div class="pw"><input class="input" id="si-pw" name="password" type="password" autocomplete="current-password" minlength="8" required><button class="pw-eye" type="button" data-eye aria-label="Show password"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button></div></div>
+          <div class="auth-row"><button class="auth-link" type="button" data-go="forgot">Forgot password?</button></div>
+          <button class="btn" type="submit">Sign in</button>
+          <p class="form-status" role="status"></p>
+          <div class="auth-or"><span>or</span></div>
+          <button class="btn btn--ghost auth-alt" type="button" data-go="link">Email me a sign-in link</button>
+        </form>
+        <form class="form auth-view" data-view="signup" id="signup-form" novalidate hidden>
+          <p class="auth-note">Your account keeps everything you buy: download it anytime, on any computer, and get every future update free.</p>
+          <div class="field"><label for="su-name">Name</label><input class="input" id="su-name" name="name" autocomplete="name"></div>
+          <div class="field"><label for="su-email">Email</label><input class="input" id="su-email" name="email" type="email" dir="ltr" autocomplete="email" required></div>
+          <div class="field"><label for="su-pw">Password</label><div class="pw"><input class="input" id="su-pw" name="password" type="password" autocomplete="new-password" minlength="8" required><button class="pw-eye" type="button" data-eye aria-label="Show password"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button></div></div>
+          <p class="auth-hint">At least 8 characters.</p>
+          <button class="btn" type="submit">Create account</button>
           <p class="form-status" role="status"></p>
         </form>
+        <form class="form auth-view" data-view="link" id="login-form" novalidate hidden>
+          <h2 class="h3">Email me a sign-in link</h2>
+          <p class="muted">We'll send a one-time link to your email. No password needed.</p>
+          <div class="field"><label for="login-email">Email</label><input class="input" id="login-email" name="email" type="email" dir="ltr" autocomplete="email" required></div>
+          <button class="btn" type="submit">Send the link</button>
+          <p class="form-status" role="status"></p>
+          <button class="auth-link" type="button" data-go="signin">Back to sign in</button>
+        </form>
+        <form class="form auth-view" data-view="forgot" id="forgot-form" novalidate hidden>
+          <h2 class="h3">Reset your password</h2>
+          <p class="muted">We'll email you a link to choose a new password.</p>
+          <div class="field"><label for="fp-email">Email</label><input class="input" id="fp-email" name="email" type="email" dir="ltr" autocomplete="email" required></div>
+          <button class="btn" type="submit">Email me a reset link</button>
+          <p class="form-status" role="status"></p>
+          <button class="auth-link" type="button" data-go="signin">Back to sign in</button>
+        </form>
+        <form class="form auth-view" data-view="reset" id="reset-form" novalidate hidden>
+          <h2 class="h3">Choose a new password</h2>
+          <div class="field"><label for="rp-pw">New password</label><div class="pw"><input class="input" id="rp-pw" name="password" type="password" autocomplete="new-password" minlength="8" required><button class="pw-eye" type="button" data-eye aria-label="Show password"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button></div></div>
+          <p class="auth-hint">At least 8 characters.</p>
+          <button class="btn" type="submit">Save password</button>
+          <p class="form-status" role="status"></p>
+        </form>
+        <div class="auth-view auth-sent" data-view="sent" hidden>
+          <span class="seal"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16v12H4z"/><path d="m4 7 8 6 8-6"/></svg></span>
+          <h2 class="h3" id="sent-h">Check your inbox</h2>
+          <p class="muted" id="sent-text"></p>
+          <button class="auth-link" type="button" data-go="signin">Back to sign in</button>
+        </div>
       </div>
       <div id="signed-in" class="stack-lg" hidden>
         <div class="library" id="library" aria-live="polite"></div>
@@ -168,6 +229,6 @@ html[lang=he] body,html[lang=he] body *:not(svg):not(svg *),html body [lang=he],
     </div>
   </div>
 </footer>
-<script type="module" src="assets/js/pages/account.js?v=65e24366"></script>
+<script type="module" src="assets/js/pages/account.js?v=937efac9"></script>
 </body>
 </html>

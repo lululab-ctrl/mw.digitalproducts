@@ -109,6 +109,41 @@ export async function sendMagicLink(email, redirectPath = "/account.html") {
   if (error) throw new ApiError(error.message, error.status);
 }
 
+// Accounts: email + password. New accounts confirm their email first (Supabase sends the link),
+// so nobody can open an account on someone else's email. Passwords go straight to Supabase Auth.
+const back = (path) => `${CONFIG.SITE_URL}${path}`;
+
+export async function signInWithPassword(email, password) {
+  const { data, error } = await requireClient().auth.signInWithPassword({ email: email.trim().toLowerCase(), password });
+  if (error) throw new ApiError(error.message, error.status);
+  return data;
+}
+
+/** Creates the account. Returns "signed-in", "confirm" (check your inbox) or "exists" (email already has an account). */
+export async function signUpWithPassword(email, password, { name = "", redirectPath = "/account.html" } = {}) {
+  const { data, error } = await requireClient().auth.signUp({
+    email: email.trim().toLowerCase(), password,
+    options: { emailRedirectTo: back(redirectPath), data: name ? { name } : {} },
+  });
+  if (error) {
+    if (/already registered|already exists/i.test(error.message)) return "exists";
+    throw new ApiError(error.message, error.status);
+  }
+  if (data.session) return "signed-in";
+  if (data.user && Array.isArray(data.user.identities) && data.user.identities.length === 0) return "exists";
+  return "confirm";
+}
+
+export async function sendPasswordReset(email, redirectPath = "/account.html?reset=1") {
+  const { error } = await requireClient().auth.resetPasswordForEmail(email.trim().toLowerCase(), { redirectTo: back(redirectPath) });
+  if (error) throw new ApiError(error.message, error.status);
+}
+
+export async function updatePassword(password) {
+  const { error } = await requireClient().auth.updateUser({ password });
+  if (error) throw new ApiError(error.message, error.status);
+}
+
 export async function signOut() {
   if (supabase) await supabase.auth.signOut();
 }

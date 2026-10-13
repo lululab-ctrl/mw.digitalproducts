@@ -49,6 +49,14 @@ const CSS = `
 .cart-go{display:flex;align-items:center;justify-content:center;min-height:50px;border-radius:30px;border:0;background:linear-gradient(90deg,#E4AA7C,#F4AF56);color:#0A0908;font-weight:800;font-size:16px;;text-decoration:none;cursor:pointer}
 .cart-go[aria-disabled=true]{opacity:.45;pointer-events:none}
 .cart-note{margin:0;font-size:13px;color:#9CB1C2;text-align:center}
+.cart-gate{display:flex;flex-direction:column;align-items:center;gap:14px;padding:36px 4px;text-align:center}
+.cart-gate .gate-ic{display:inline-flex;align-items:center;justify-content:center;width:56px;height:56px;border-radius:50%;color:#F4AF56;background:rgba(244,175,86,.1);box-shadow:inset 0 0 0 1px rgba(244,175,86,.35)}
+.cart-gate h3{margin:6px 0 0;font-size:22px;font-weight:600;letter-spacing:-.01em}
+.cart-gate p{margin:0;font-size:15px;line-height:1.6;color:#CDD7DD}
+.cart-gate .cart-go{width:100%;margin-top:8px}
+.cart-gate .gate-alt{display:flex;align-items:center;justify-content:center;width:100%;min-height:48px;border-radius:30px;border:1px solid rgba(254,251,241,.32);color:#FEFBF1;font-weight:700;text-decoration:none}
+.cart-gate .gate-alt:hover{border-color:rgba(254,251,241,.6)}
+.cart-gate .gate-back{border:0;background:none;color:#9CB1C2;font:inherit;font-size:14px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
 
 .acct-menu{position:fixed;z-index:95;width:260px;padding:8px;border-radius:18px;background:rgba(20,18,16,.92);backdrop-filter:blur(18px) saturate(150%);-webkit-backdrop-filter:blur(18px) saturate(150%);border:1px solid rgba(254,251,241,.1);box-shadow:0 30px 70px -20px rgba(0,0,0,.8);color:#FEFBF1;opacity:0;transform:translateY(-6px) scale(.98);transform-origin:top right;pointer-events:none;transition:opacity .18s,transform .18s;font-family:"Google Sans",Heebo,system-ui,sans-serif}
 [dir=rtl] .acct-menu{transform-origin:top left;font-family:Heebo,"Google Sans",system-ui,sans-serif}
@@ -108,7 +116,7 @@ function render() {
   body.innerHTML = list.map((i) => `<div class="cart-row">
       ${i.image ? `<img src="${esc(i.image)}" alt="">` : `<span class="cart-ph"></span>`}
       <div><div class="nm" data-no-i18n>${esc(i.name)}</div><div class="pr">${money(i.price_cents, i.currency)}</div></div>
-      <div class="acts">${several && i.checkout_url ? `<a class="pay" href="${esc(i.checkout_url)}">${T("Pay", "לתשלום")}</a>` : ""}<button type="button" data-remove="${esc(i.slug)}">${T("Remove", "הסרה")}</button></div>
+      <div class="acts">${several && i.checkout_url ? `<a class="pay" data-checkout href="${esc(i.checkout_url)}">${T("Pay", "לתשלום")}</a>` : ""}<button type="button" data-remove="${esc(i.slug)}">${T("Remove", "הסרה")}</button></div>
     </div>`).join("");
   const cur = list[0].currency;
   const known = list.every((i) => i.price_cents != null);
@@ -119,12 +127,44 @@ function render() {
     go = `<a class="cart-go" aria-disabled="true">${T("Checkout", "לתשלום")}</a>`;
     note = T("Checkout opens at launch.", "התשלום ייפתח בהשקה.");
   } else if (!several) {
-    go = `<a class="cart-go" href="${esc(ready[0].checkout_url)}">${T("Checkout", "לתשלום")}</a>`;
+    go = `<a class="cart-go" data-checkout href="${esc(ready[0].checkout_url)}">${T("Checkout", "לתשלום")}</a>`;
   } else {
     go = "";
     note = T("Each product has its own secure checkout. Tap Pay next to each one.", "לכל מוצר יש תשלום מאובטח משלו. לחצו על \"לתשלום\" ליד כל מוצר.");
   }
   foot.innerHTML = `${known ? `<div class="cart-total"><span>${T("Total", "סה״כ")}</span><span>${money(total, cur)}</span></div>` : ""}${go}${note ? `<p class="cart-note">${note}</p>` : ""}`;
+}
+
+// ---------------------------------------------------------------- account before checkout
+// Purchases live in the buyer's account (downloads anytime, every future update), so checkout asks
+// them to create an account or sign in first, then comes back here with the cart open.
+function gateHTML() {
+  const back = location.pathname + (location.search ? location.search + "&" : "?") + "cart=1";
+  const to = (mode) => `${base()}account.html?${mode ? "mode=signup&" : ""}next=${encodeURIComponent(back)}`;
+  return `<div class="cart-gate">
+    <span class="gate-ic">${SVG.user}</span>
+    <h3>${T("Create your account first", "קודם יוצרים חשבון")}</h3>
+    <p>${T("Everything you buy lives in your MWP account. Sign in anytime to download it again, on any computer, and get every future update free.", "כל מה שאתם קונים נשמר בחשבון ה-MWP שלכם. מתחברים בכל זמן כדי להוריד שוב, בכל מחשב, ולקבל כל עדכון עתידי בחינם.")}</p>
+    <a class="cart-go" href="${to(true)}">${T("Create account", "יצירת חשבון")}</a>
+    <a class="gate-alt" href="${to(false)}">${T("I have an account: sign in", "יש לי חשבון: התחברות")}</a>
+    <button type="button" class="gate-back" data-gate-back>${T("Back to cart", "חזרה לעגלה")}</button>
+  </div>`;
+}
+function showGate() {
+  const body = document.querySelector(".cart-body"), foot = document.querySelector(".cart-foot");
+  if (!body) return;
+  if (!document.documentElement.classList.contains("cart-open")) openCart();
+  body.innerHTML = gateHTML();
+  foot.hidden = true;
+}
+async function goToCheckout(link) {
+  const { user } = await accountUser();
+  if (!user) { showGate(); return; }
+  // Checkout uses the account's email, so the purchase lands in this account.
+  const url = new URL(link.href, location.href);
+  url.searchParams.set("checkout[email]", user.email);
+  if (window.LemonSqueezy?.Url?.Open) window.LemonSqueezy.Url.Open(url.toString());
+  else location.href = url.toString();
 }
 
 function refresh() {
@@ -273,6 +313,23 @@ export function initCart() {
     if (document.documentElement.classList.contains("cart-open")) closeCart();
     closeMenu();
   });
+  // Checkout links (cart, Pay, Buy now): account first.
+  document.addEventListener("click", (e) => {
+    const co = e.target.closest("a[data-checkout]");
+    if (co && co.getAttribute("aria-disabled") !== "true") {
+      e.preventDefault(); e.stopImmediatePropagation();
+      goToCheckout(co);
+      return;
+    }
+    if (e.target.closest("[data-gate-back]")) render();
+  }, true);
   window.addEventListener("storage", (e) => { if (e.key === KEY) { memory = null; refresh(); } });
   refresh();
+  // Back from signing in for checkout (…?cart=1): open the cart where they left off.
+  const q = new URLSearchParams(location.search);
+  if (q.get("cart") === "1") {
+    q.delete("cart");
+    history.replaceState(null, "", location.pathname + (q.toString() ? "?" + q : "") + location.hash);
+    openCart();
+  }
 }

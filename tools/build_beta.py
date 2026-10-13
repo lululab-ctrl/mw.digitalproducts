@@ -286,6 +286,11 @@ html[lang=he] .fact span{letter-spacing:.03em}
 .modal-x{position:absolute;top:18px;inset-inline-end:18px;display:grid;place-items:center;width:40px;height:40px;border-radius:50%;border:1px solid rgba(254,251,241,.14);background:rgba(254,251,241,.04);color:#CDD7DD;cursor:pointer;transition:all .25s}
 .modal-x:hover{border-color:rgba(244,175,86,.6);color:#F4AF56;transform:rotate(90deg)}
 html.modal-on{overflow:hidden}
+.pw{position:relative}
+.pw .input{padding-inline-end:52px}
+.pw-eye{position:absolute;top:50%;inset-inline-end:8px;transform:translateY(-50%);display:grid;place-items:center;width:38px;height:38px;border:0;border-radius:50%;background:none;color:#9CB1C2;cursor:pointer}
+.pw-eye:hover,.pw-eye[aria-pressed=true]{color:#F4AF56;background:rgba(254,251,241,.06)}
+.pw-hint{margin:2px 0 0;font-size:13px;line-height:1.5;color:#7E8A93}
 .meta-note{font-size:14.5px!important;color:#9CB1C2!important}
 .acc-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:4px}
 .acc-head .kick{margin:0}
@@ -413,12 +418,13 @@ html .nav .wrap,html.nav-scrolled .nav .wrap{{height:80px;transition:none}}
 <div class="acc-step" id="step-details">
 <p class="kick">Step 2 of 2 · Your details</p>
 <h2 class="h2" id="details-h">You're <span class="grad">in.</span></h2>
-<p class="lead">Tell us who you are. We'll email you a link to download your tools.</p>
+<p class="lead">Create your MWP account. It keeps your tools, so you can come back and download them anytime.</p>
 <form id="join-form" novalidate>
 <div class="acc-head"><span class="acc-ok">Terms accepted</span><span class="acc-date" id="acc-date"></span></div>
 <div class="field"><label for="j-name">Name</label><input class="input" id="j-name" name="name" autocomplete="name" required></div>
 <div class="field"><label for="j-email">Email</label><input class="input" id="j-email" name="email" type="email" dir="ltr" autocomplete="email" required></div>
 <div class="field"><label for="j-ig">Instagram</label><input class="input" id="j-ig" name="instagram" dir="ltr" placeholder="@yourhandle" autocomplete="off"></div>
+<div class="field"><label for="j-pw">Choose a password</label><div class="pw"><input class="input" id="j-pw" name="password" type="password" autocomplete="new-password" minlength="8" required><button class="pw-eye" type="button" data-eye aria-label="Show password"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button></div><p class="pw-hint">At least 8 characters. You'll use it to sign in and download your tools anytime.</p></div>
 <div class="sig" id="sig" aria-live="polite">
 <div class="sig-in">
 <p class="sig-l">Signed by</p>
@@ -429,7 +435,7 @@ html .nav .wrap,html.nav-scrolled .nav .wrap{{height:80px;transition:none}}
 </div>
 <span class="sig-seal" aria-hidden="true"><img src="{IMG}{LOGO}" alt=""><i><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></i></span>
 </div>
-<button class="btn" type="submit">Get my tools</button>
+<button class="btn" type="submit">Create account and get my tools</button>
 <p class="msg" id="join-msg" role="status"></p>
 </form>
 </div>

@@ -109,6 +109,19 @@ jobs:
           done
           .github/scripts/run.sh "Function secrets" supabase secrets set "${args[@]}" --project-ref "$SUPABASE_PROJECT_REF"
 
+      - name: Account safety settings
+        # Accounts use email + password. New accounts must confirm their email before they can sign in,
+        # so nobody can open an account on someone else's email and see their purchases. Passwords
+        # need at least 8 characters. (Only these two settings are changed.)
+        if: steps.ready.outputs.ok == 'true'
+        run: |
+          code=$(curl -sS -o /tmp/auth.json -w "%{http_code}" -X PATCH \
+            "https://api.supabase.com/v1/projects/$SUPABASE_PROJECT_REF/config/auth" \
+            -H "Authorization: Bearer $SUPABASE_ACCESS_TOKEN" -H "Content-Type: application/json" \
+            -d '{"mailer_autoconfirm": false, "password_min_length": 8}')
+          if [ "$code" != "200" ]; then echo "::error title=Account safety settings::Supabase answered $code"; exit 1; fi
+          echo "Email confirmation required: $(jq -r '.mailer_autoconfirm == false' /tmp/auth.json), minimum password length: $(jq -r '.password_min_length' /tmp/auth.json)"
+
       - name: Deploy server functions
         # JWT settings per function come from supabase/config.toml
         if: steps.ready.outputs.ok == 'true'

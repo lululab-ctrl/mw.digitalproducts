@@ -3,7 +3,7 @@
 // (through the beta Edge Function and Make), and emails them a link to My downloads.
 import { initI18n } from "../i18n.js";
 import { initCart } from "../lib/cart.js";
-import { betaJoin, sendMagicLink } from "../lib/api.js";
+import { betaJoin, sendMagicLink, signUpWithPassword } from "../lib/api.js";
 
 initI18n();
 initCart();
@@ -132,6 +132,16 @@ if ("scrollRestoration" in history) history.scrollRestoration = "manual";
 if (location.hash) history.replaceState(null, "", location.pathname + location.search);
 window.scrollTo(0, 0);
 
+// ---------------------------------------------------------------- show / hide password
+document.addEventListener("click", (e) => {
+  const eye = e.target.closest("[data-eye]");
+  if (!eye) return;
+  const input = eye.parentElement.querySelector("input");
+  const on = input.type === "password";
+  input.type = on ? "text" : "password";
+  eye.setAttribute("aria-pressed", String(on));
+});
+
 // ---------------------------------------------------------------- step 2: details, then the download link
 const form = document.getElementById("join-form");
 const msg = document.getElementById("join-msg");
@@ -144,21 +154,35 @@ form.addEventListener("submit", async (e) => {
     instagram: f.instagram.value.trim(),
     agree: agreed,
   };
+  const password = f.password.value;
   msg.className = "msg err";
   if (!data.name) { msg.textContent = T("Please enter your name.", "נא למלא שם."); return; }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(data.email)) { msg.textContent = T("Please enter a valid email.", "נא למלא מייל תקין."); return; }
+  if (password.length < 8) { f.password.focus(); msg.textContent = T("Your password needs at least 8 characters.", "הסיסמה צריכה לפחות 8 תווים."); return; }
   if (!data.agree) { msg.textContent = T("Please accept the Ambassador Program terms.", "נא לאשר את תנאי תוכנית השגרירים."); return; }   // can't happen: the form opens only after accepting
 
-  const btn = form.querySelector("button");
+  const btn = form.querySelector("button[type=submit]");
   btn.disabled = true;
-  msg.className = "msg"; msg.textContent = T("Adding the tools to your library…", "מוסיפים את הכלים לספרייה שלכם…");
+  msg.className = "msg"; msg.textContent = T("Creating your account…", "יוצרים את החשבון…");
   try {
-    await betaJoin(data);
-    await sendMagicLink(data.email, "/account.html");
+    await betaJoin(data);   // the tools go to this email first (the password never goes to our server)
+    const r = await signUpWithPassword(data.email, password, { name: data.name, redirectPath: "/account.html" });
+    const title = document.querySelector("#join-done h3");
+    const text = document.getElementById("done-text");
+    if (r === "signed-in") {
+      title.textContent = T("You're all set", "הכול מוכן");
+      text.textContent = T("Your account is ready and your tools are in it.", "החשבון מוכן והכלים כבר בתוכו.");
+    } else if (r === "exists") {
+      await sendMagicLink(data.email, "/account.html").catch(() => {});
+      title.textContent = T("Your tools are in your account", "הכלים נמצאים בחשבון שלכם");
+      text.textContent = T(`${data.email} already has an MWP account, so we added the tools to it. Sign in with your password, or open the sign-in link we just emailed you.`,
+        `ל־${data.email} כבר יש חשבון MWP, אז הוספנו אליו את הכלים. התחברו עם הסיסמה, או פתחו את קישור הכניסה ששלחנו עכשיו במייל.`);
+    } else {
+      title.textContent = T("Confirm your email", "אשרו את המייל");
+      text.textContent = T(`We've sent a link to ${data.email}. Open it to confirm your account, and your tools will be waiting.`,
+        `שלחנו קישור אל ${data.email}. פתחו אותו כדי לאשר את החשבון, והכלים כבר יחכו לכם.`);
+    }
     document.getElementById("step-details").hidden = true;
-    document.getElementById("done-text").textContent = T(
-      `We've sent a link to ${data.email}. Open it to download your tools.`,
-      `שלחנו קישור אל ${data.email}. פתחו אותו כדי להוריד את הכלים.`);
     document.getElementById("join-done").hidden = false;
   } catch (err) {
     msg.className = "msg err";

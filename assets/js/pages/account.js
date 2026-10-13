@@ -1,6 +1,6 @@
 // My downloads: magic-link sign-in, then the customer's library with secure download buttons.
 import { initChrome, toast } from "../lib/ui.js";
-import { supabase, currentUser, sendMagicLink, signOut, myLibrary, requestDownload, panelDevices, removePanelDevice, mediaUrl, esc, shortDate } from "../lib/api.js";
+import { supabase, currentUser, sendMagicLink, signOut, signInWithPassword, signUpWithPassword, sendPasswordReset, updatePassword, myLibrary, requestDownload, panelDevices, removePanelDevice, mediaUrl, esc, shortDate } from "../lib/api.js";
 import { EMAIL_RE, setBusy, setStatus } from "./shared-forms.js";
 import { countLabel } from "../lib/catalog.js";
 
@@ -138,28 +138,135 @@ library.addEventListener("click", async (e) => {
   }
 });
 
-const form = document.getElementById("login-form");
-const status = form.querySelector(".form-status");
-form.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const input = form.elements.email;
-  const email = input.value.trim().toLowerCase();
-  if (!EMAIL_RE.test(email)) {
-    input.setAttribute("aria-invalid", "true");
-    setStatus(status, "Please enter the email you used at checkout.", "error");
-    return;
+// ---------------------------------------------------------------- sign in, create account, reset password
+const params = new URLSearchParams(location.search);
+// Where to go after signing in (e.g. back to checkout). Same-site paths only.
+const nextRaw = params.get("next");
+const next = nextRaw && /^\/(?!\/)/.test(nextRaw) ? nextRaw : null;
+const resetting = params.has("reset");
+const T = (en, hb) => (he() ? hb : en);
+const MIN_PW = 8;
+
+const views = [...signedOut.querySelectorAll(".auth-view")];
+const tabs = signedOut.querySelector(".auth-tabs");
+function show(name) {
+  views.forEach((v) => { v.hidden = v.dataset.view !== name; });
+  tabs.hidden = !["signin", "signup"].includes(name);
+  tabs.querySelectorAll("[data-tab]").forEach((t) => t.setAttribute("aria-selected", String(t.dataset.tab === name)));
+  const first = signedOut.querySelector(`[data-view="${name}"] input`);
+  if (first && !first.value) first.focus({ preventScroll: true });
+}
+function sent(title, text) {
+  document.getElementById("sent-h").textContent = title;
+  document.getElementById("sent-text").textContent = text;
+  show("sent");
+}
+tabs.addEventListener("click", (e) => { const t = e.target.closest("[data-tab]"); if (t) show(t.dataset.tab); });
+signedOut.addEventListener("click", (e) => {
+  const go = e.target.closest("[data-go]");
+  if (go) { show(go.dataset.go); return; }
+  const eye = e.target.closest("[data-eye]");
+  if (eye) {
+    const input = eye.parentElement.querySelector("input");
+    const on = input.type === "password";
+    input.type = on ? "text" : "password";
+    eye.setAttribute("aria-pressed", String(on));
+    eye.setAttribute("aria-label", on ? "Hide password" : "Show password");
   }
-  input.removeAttribute("aria-invalid");
+});
+
+// Fill the same email into every form, so switching views keeps it.
+const emails = [...signedOut.querySelectorAll('input[type="email"]')];
+emails.forEach((i) => i.addEventListener("input", () => emails.forEach((o) => { if (o !== i) o.value = i.value; })));
+
+function check(form, { pw = false } = {}) {
+  const status = form.querySelector(".form-status");
+  const email = form.elements.email;
+  if (email && !EMAIL_RE.test(email.value.trim())) {
+    email.setAttribute("aria-invalid", "true"); email.focus();
+    setStatus(status, T("Please enter a valid email.", "נא למלא מייל תקין."), "error");
+    return false;
+  }
+  email?.removeAttribute("aria-invalid");
+  if (pw && form.elements.password.value.length < MIN_PW) {
+    form.elements.password.focus();
+    setStatus(status, T(`Your password needs at least ${MIN_PW} characters.`, `הסיסמה צריכה לפחות ${MIN_PW} תווים.`), "error");
+    return false;
+  }
+  return true;
+}
+async function run(form, fn) {
+  const status = form.querySelector(".form-status");
   const btn = form.querySelector("button[type=submit]");
+  setStatus(status, "", "");
   setBusy(btn, true);
-  try {
-    await sendMagicLink(email);
-    setStatus(status, `We've sent a sign-in link to ${email}. Open it on this device.`, "ok");
-  } catch (err) {
-    setStatus(status, err.status === 429 ? "Too many requests. Please wait a minute and try again." : err.message, "error");
-  } finally {
-    setBusy(btn, false);
-  }
+  try { await fn(status); }
+  catch (err) {
+    const msg = /invalid login credentials/i.test(err.message) ? T("That email and password don't match. Try again, or reset your password.", "המייל והסיסמה לא תואמים. נסו שוב, או אפסו את הסיסמה.")
+      : /email not confirmed/i.test(err.message) ? T("Please confirm your email first: open the link we sent you.", "נא לאשר קודם את המייל: פתחו את הקישור ששלחנו.")
+      : err.status === 429 ? T("Too many requests. Please wait a minute and try again.", "יותר מדי בקשות. המתינו דקה ונסו שוב.")
+      : err.message;
+    setStatus(status, msg, "error");
+  } finally { setBusy(btn, false); }
+}
+// After an emailed link, come back to the same place (checkout, for example).
+const backPath = (extra = "") => `/account.html${next ? `?next=${encodeURIComponent(next)}` : ""}${extra}`;
+
+document.getElementById("signin-form").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const f = e.currentTarget;
+  if (!check(f, { pw: true })) return;
+  run(f, async () => { await signInWithPassword(f.elements.email.value, f.elements.password.value); });
+});
+
+document.getElementById("signup-form").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const f = e.currentTarget;
+  if (!check(f, { pw: true })) return;
+  run(f, async () => {
+    const email = f.elements.email.value.trim().toLowerCase();
+    const r = await signUpWithPassword(email, f.elements.password.value, { name: f.elements.name.value.trim(), redirectPath: backPath() });
+    if (r === "confirm") sent(T("Confirm your email", "אשרו את המייל"), T(`We've sent a link to ${email}. Open it to finish creating your account.`, `שלחנו קישור אל ${email}. פתחו אותו כדי לסיים את יצירת החשבון.`));
+    else if (r === "exists") {
+      show("signin");
+      setStatus(document.querySelector("#signin-form .form-status"), T("This email already has an account. Sign in, or reset your password if you don't have one yet.", "למייל הזה כבר יש חשבון. התחברו, או אפסו סיסמה אם עדיין אין לכם."), "ok");
+    }
+  });
+});
+
+const linkForm = document.getElementById("login-form");
+linkForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  if (!check(linkForm)) return;
+  run(linkForm, async () => {
+    const email = linkForm.elements.email.value.trim().toLowerCase();
+    await sendMagicLink(email, backPath());
+    sent(T("Check your inbox", "בדקו את תיבת הדואר"), T(`We've sent a sign-in link to ${email}. Open it on this device.`, `שלחנו קישור כניסה אל ${email}. פתחו אותו במכשיר הזה.`));
+  });
+});
+
+document.getElementById("forgot-form").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const f = e.currentTarget;
+  if (!check(f)) return;
+  run(f, async () => {
+    const email = f.elements.email.value.trim().toLowerCase();
+    await sendPasswordReset(email, backPath(next ? "&reset=1" : "?reset=1"));
+    sent(T("Check your inbox", "בדקו את תיבת הדואר"), T(`If ${email} has an account, we've sent it a link to choose a new password.`, `אם ל־${email} יש חשבון, שלחנו אליו קישור לבחירת סיסמה חדשה.`));
+  });
+});
+
+document.getElementById("reset-form").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const f = e.currentTarget;
+  if (!check(f, { pw: true })) return;
+  run(f, async () => {
+    await updatePassword(f.elements.password.value);
+    toast(T("Your new password is saved.", "הסיסמה החדשה נשמרה."));
+    history.replaceState(null, "", location.pathname + (next ? `?next=${encodeURIComponent(next)}` : ""));
+    recovering = false;
+    afterSignIn(await currentUser());
+  });
 });
 
 document.getElementById("sign-out")?.addEventListener("click", async () => {
@@ -167,12 +274,23 @@ document.getElementById("sign-out")?.addEventListener("click", async () => {
   location.reload();
 });
 
-// Prefill from the thank-you page or the delivery email (?email=)
-const preset = new URLSearchParams(location.search).get("email");
-if (preset && EMAIL_RE.test(preset)) form.elements.email.value = preset;
+// Prefill from the thank-you page or the delivery email (?email=), and open the right tab.
+const preset = params.get("email");
+if (preset && EMAIL_RE.test(preset)) emails.forEach((i) => { i.value = preset; });
+if (next && /checkout|cart=1/.test(next)) document.getElementById("auth-why").hidden = false;
+show(params.get("mode") === "signup" ? "signup" : "signin");
+
+let recovering = resetting;
+function afterSignIn(user) {
+  if (!user) return;
+  if (recovering) { signedOut.hidden = false; show("reset"); return; }
+  if (next) { location.replace(next); return; }
+  showLibrary(user);
+}
 
 const user = await currentUser();
-if (user) showLibrary(user);
+if (user) afterSignIn(user);
 supabase?.auth.onAuthStateChange((event, session) => {
-  if (event === "SIGNED_IN" && session?.user) showLibrary(session.user);
+  if (event === "PASSWORD_RECOVERY") { recovering = true; signedOut.hidden = false; show("reset"); return; }
+  if (event === "SIGNED_IN" && session?.user) afterSignIn(session.user);
 });
