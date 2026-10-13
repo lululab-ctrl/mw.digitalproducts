@@ -89,7 +89,7 @@ const items = () => memory || (memory = getCart());
 
 export function addToCart(p) {
   const list = items().filter((i) => i.slug !== p.slug);
-  list.push({ slug: p.slug, name: p.name, price_cents: p.price_cents ?? null, currency: p.currency || "USD", checkout_url: p.checkout_url || null, image: p.image || null });
+  list.push({ slug: p.slug, name: p.name, price_cents: p.price_cents ?? null, currency: p.currency || "USD", price_ils_cents: p.price_ils_cents ?? null, checkout_url: p.checkout_url || null, image: p.image || null });
   save(list);
   openCart();
 }
@@ -100,6 +100,10 @@ function money(cents, cur) {
   if (cents == null) return "";
   try { return new Intl.NumberFormat(he() ? "he-IL" : "en-US", { style: "currency", currency: cur || "USD" }).format(cents / 100); }
   catch { return (cents / 100).toFixed(2) + " " + cur; }
+}
+
+function priceOf(i) {
+  return he() && i.price_ils_cents != null ? money(i.price_ils_cents, "ILS") : money(i.price_cents, i.currency);
 }
 
 function render() {
@@ -115,12 +119,13 @@ function render() {
   const several = list.length > 1;
   body.innerHTML = list.map((i) => `<div class="cart-row">
       ${i.image ? `<img src="${esc(i.image)}" alt="">` : `<span class="cart-ph"></span>`}
-      <div><div class="nm" data-no-i18n>${esc(i.name)}</div><div class="pr">${money(i.price_cents, i.currency)}</div></div>
+      <div><div class="nm" data-no-i18n>${esc(i.name)}</div><div class="pr">${priceOf(i)}</div></div>
       <div class="acts">${several && i.checkout_url ? `<a class="pay" data-checkout href="${esc(i.checkout_url)}">${T("Pay", "לתשלום")}</a>` : ""}<button type="button" data-remove="${esc(i.slug)}">${T("Remove", "הסרה")}</button></div>
     </div>`).join("");
-  const cur = list[0].currency;
-  const known = list.every((i) => i.price_cents != null);
-  const total = list.reduce((s, i) => s + (i.price_cents || 0), 0);
+  const ils = he() && list.every((i) => i.price_ils_cents != null);   // Hebrew shows shekels, like the pages
+  const cur = ils ? "ILS" : list[0].currency;
+  const known = list.every((i) => (ils ? i.price_ils_cents : i.price_cents) != null);
+  const total = list.reduce((s, i) => s + ((ils ? i.price_ils_cents : i.price_cents) || 0), 0);
   const ready = list.filter((i) => i.checkout_url);
   let go, note = "";
   if (!ready.length) {
@@ -133,6 +138,66 @@ function render() {
     note = T("Each product has its own secure checkout. Tap Pay next to each one.", "לכל מוצר יש תשלום מאובטח משלו. לחצו על \"לתשלום\" ליד כל מוצר.");
   }
   foot.innerHTML = `${known ? `<div class="cart-total"><span>${T("Total", "סה״כ")}</span><span>${money(total, cur)}</span></div>` : ""}${go}${note ? `<p class="cart-note">${note}</p>` : ""}`;
+}
+
+// ---------------------------------------------------------------- add to cart from the home and sales pages
+// Their buy buttons ("Get the presets", "Get the bundle" …) add that product to the cart. The product is the
+// price card the button sits in; else the nearest price before it in the same section; else the button's
+// words; else the page's own product. Names, prices and checkout links come from the public price list.
+const PAGE_PRODUCT = { presets: "mwp-presets", panel: "mwp-panel", "field-guides": "mwp-field-guides" };
+const IMG = "/assets/pages/img/";
+const COVER = {
+  "mwp-presets": "c88e041b857fb964607aaec43ad1753d.jpg", "mwp-panel": "8f730b9bb76b93ca707cae719a309479.jpg",
+  "mwp-field-guides": "0cf44582c4078749d18156eec10c90d3.jpg", "presets-panel": "8f730b9bb76b93ca707cae719a309479.jpg",
+  "presets-field-guides": "c88e041b857fb964607aaec43ad1753d.jpg", "field-guides-panel": "0cf44582c4078749d18156eec10c90d3.jpg",
+  "full-set": "c88e041b857fb964607aaec43ad1753d.jpg",
+};
+const SLUGS = Object.keys(COVER);
+
+function slugFor(a) {
+  const href = a.getAttribute("href") || "";
+  const plan = a.closest(".plan");
+  const inPlan = plan?.querySelector("[data-price]:not([data-was])")?.dataset.price;
+  if (inPlan) return inPlan;
+  if (!/#buy\b/.test(href)) return null;                       // only buy buttons
+  const section = a.closest("section") || document.body;
+  let near = null;
+  section.querySelectorAll("[data-price]:not([data-was])").forEach((el) => {
+    if (el.compareDocumentPosition(a) & Node.DOCUMENT_POSITION_FOLLOWING) near = el.dataset.price;
+  });
+  if (near) return near;
+  const t = a.textContent.toLowerCase().replace(/\s+/g, " ");
+  if (/full set|everything/.test(t)) return "full-set";
+  if (/presets ?\+ ?panel/.test(t)) return "presets-panel";
+  if (/presets ?\+ ?field|field guides ?\+ ?presets/.test(t)) return "presets-field-guides";
+  if (/field guides ?\+ ?panel/.test(t)) return "field-guides-panel";
+  const folder = (href.match(/^(?:\.\.\/)?([\w-]+)\/#buy/) || [])[1] || location.pathname.split("/").filter(Boolean)[0];
+  return PAGE_PRODUCT[folder] || null;
+}
+
+let priceRows = null;
+async function priceList() {
+  if (priceRows) return priceRows;
+  const { CONFIG } = await import("../config.js");
+  const res = await fetch(`${CONFIG.SUPABASE_URL}/rest/v1/page_prices?select=*`, {
+    headers: { apikey: CONFIG.SUPABASE_ANON_KEY, Authorization: `Bearer ${CONFIG.SUPABASE_ANON_KEY}` },
+  });
+  if (!res.ok) throw new Error("prices");
+  priceRows = {};
+  (await res.json()).forEach((r) => { priceRows[r.slug] = r; });
+  return priceRows;
+}
+const FALLBACK_NAME = { "mwp-presets": "MWP Presets", "mwp-panel": "MWP Panel", "mwp-field-guides": "MWP Field Guides",
+  "presets-field-guides": "Presets + Field Guides", "presets-panel": "Presets + Panel", "field-guides-panel": "Field Guides + Panel", "full-set": "The full set" };
+
+export async function addSlugToCart(slug) {
+  let r = null;
+  try { r = (await priceList())[slug] || null; } catch { /* offline: add it with its name, the price shows later */ }
+  addToCart({
+    slug, name: r ? [r.name, r.name_emphasis].filter(Boolean).join(" ") : FALLBACK_NAME[slug] || slug,
+    price_cents: r ? r.price_cents : null, currency: r?.currency || "USD", price_ils_cents: r ? r.price_ils_cents : null,
+    checkout_url: r?.checkout_url || null, image: COVER[slug] ? IMG + COVER[slug] : null,
+  });
 }
 
 // ---------------------------------------------------------------- account before checkout
@@ -321,7 +386,13 @@ export function initCart() {
       goToCheckout(co);
       return;
     }
-    if (e.target.closest("[data-gate-back]")) render();
+    if (e.target.closest("[data-gate-back]")) { render(); return; }
+    // Buy buttons on the home and sales pages: add to cart (they used to jump to the sales pages).
+    const buy = e.target.closest("a[href*='#buy'], .plan a, [data-add-to-cart]");
+    if (buy && !buy.closest(".cart-panel, .acct-menu")) {
+      const slug = buy.dataset.addToCart || slugFor(buy);
+      if (slug && SLUGS.includes(slug)) { e.preventDefault(); e.stopImmediatePropagation(); addSlugToCart(slug); }
+    }
   }, true);
   window.addEventListener("storage", (e) => { if (e.key === KEY) { memory = null; refresh(); } });
   refresh();

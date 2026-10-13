@@ -53,7 +53,7 @@ copied.className = "copied"; copied.setAttribute("role", "status");
 document.body.append(copied);
 let copiedTimer;
 document.addEventListener("click", async (e) => {
-  const b = e.target.closest(".cp");
+  const b = e.target.closest("button.cp[data-copy]");
   if (!b) return;
   const text = b.dataset.copy;
   try { await navigator.clipboard.writeText(text); } catch {
