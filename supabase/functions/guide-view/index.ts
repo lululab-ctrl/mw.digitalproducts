@@ -41,7 +41,7 @@ Deno.serve(async (req) => {
   if (view.version !== file.version) await requestPersonalCopies();
 
   type Page = { path: string; w: number; h: number };
-  const guides = (view.guides ?? []) as { title: string; pages: Page[] }[];
+  const guides = (view.guides ?? []) as { title: string; lang?: string; pages: Page[] }[];
   const paths = guides.flatMap((g) => g.pages.map((p) => p.path));
   const { data: signed, error } = await db.storage.from("guide-pages").createSignedUrls(paths, LINK_SECONDS);
   if (error || !signed) { console.error(error); return fail(req, "Couldn't open the guides. Please try again.", 500); }
@@ -51,6 +51,6 @@ Deno.serve(async (req) => {
   return json(req, {
     stamp: [customer.name, email, licence].filter(Boolean).join(" · "),
     expires_in: LINK_SECONDS,
-    guides: guides.map((g) => ({ title: g.title, pages: g.pages.map((p) => ({ url: url.get(p.path), w: p.w, h: p.h })) })),
+    guides: guides.map((g) => ({ title: g.title, lang: g.lang ?? null, pages: g.pages.map((p) => ({ url: url.get(p.path), w: p.w, h: p.h })) })),
   });
 });
