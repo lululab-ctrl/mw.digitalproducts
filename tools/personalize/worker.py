@@ -1,4 +1,4 @@
-"""Makes the missing personal copies (run by the "Personal copies" GitHub workflow).
+"""Makes the missing personal copies and signed-terms PDFs (run by the "Personal copies" GitHub workflow).
 
 For every active entitlement to a Presets or Field Guides product whose personal copy is missing or
 older than the product's current file, it downloads the base zip once, stamps a copy for that person
@@ -53,11 +53,18 @@ def upload(path, src):
 
 
 def main():
+    failed = personal_copies()
+    failed += signed_terms()
+    if failed:
+        sys.exit(1)
+
+
+def personal_copies():
     products = rest("products", select="id,slug,category,product_files(path,version)",
                     category=f"in.({','.join(PERSONAL)})")
     products = {p["id"]: p for p in products if p.get("product_files")}
     if not products:
-        print("No Presets or Field Guides files yet."); return
+        print("No Presets or Field Guides files yet."); return 0
 
     ents = rest("entitlements", select="id,product_id,customers(name,email),personal_files(path,version)",
                 revoked_at="is.null", product_id=f"in.({','.join(products)})")
@@ -97,9 +104,54 @@ def main():
             except Exception as err:  # one bad copy shouldn't stop the rest
                 failed += 1
                 print(f"  failed one copy: {type(err).__name__}: {str(err)[:200]}", flush=True)
-    print(f"Done: {made} made, {failed} failed")
-    if failed:
-        sys.exit(1)
+    print(f"Personal copies: {made} made, {failed} failed")
+    return failed
+
+
+# ---------------------------------------------------------------- signed Ambassador Program terms
+def signed_terms():
+    """A PDF of the terms for each acceptance that doesn't have one yet (or accepted again since), stored
+    privately in documents/agreements/, then sent to Make to attach on the Shop Ambassadors row."""
+    from terms_pdf import terms_pdf
+    hook = os.environ.get("MAKE_WEBHOOK_URL", "")
+    members = rest("beta_members", select="id,instagram,facebook,agreed_at,terms_version,terms_pdf_at,customers(name,email)")
+    todo = [m for m in members if (m.get("customers") or {}).get("email")
+            and (not m.get("terms_pdf_at") or m["terms_pdf_at"] < (m.get("agreed_at") or ""))]
+    print(f"{len(members)} ambassadors, {len(todo)} signed-terms PDFs to make", flush=True)
+    made = failed = 0
+    with tempfile.TemporaryDirectory() as tmp:
+        for m in todo:
+            try:
+                c = m["customers"]
+                out = os.path.join(tmp, "terms.pdf")
+                terms_pdf({**m, "name": (c.get("name") or "").strip() or c["email"], "email": c["email"]}, out)
+                path = f"agreements/{m['id']}.pdf"
+                with open(out, "rb") as f:
+                    r = S.post(f"{URL}/storage/v1/object/documents/{path}", data=f, timeout=120,
+                               headers={"content-type": "application/pdf", "x-upsert": "true"})
+                r.raise_for_status()
+                sent = False
+                if hook:
+                    r = S.post(f"{URL}/storage/v1/object/sign/documents/{path}", json={"expiresIn": 3600}, timeout=60)
+                    r.raise_for_status()
+                    link = URL + "/storage/v1" + r.json()["signedURL"]
+                    day = (m.get("agreed_at") or "")[:10]
+                    r = requests.post(hook, timeout=30, json={
+                        "type": "ambassador_terms_pdf", "email": c["email"], "file_url": link,
+                        "file_name": f"MWP Ambassador terms - signed {day}.pdf"},
+                        headers={"x-mwp-secret": os.environ.get("MAKE_SHARED_SECRET", "")})
+                    sent = r.ok
+                patch = {"terms_pdf_path": path}
+                if sent:   # only marked done once monday has it on its way; otherwise the next run tries again
+                    patch["terms_pdf_at"] = datetime.now(timezone.utc).isoformat()
+                S.patch(f"{URL}/rest/v1/beta_members", params={"id": f"eq.{m['id']}"},
+                        headers={"content-type": "application/json"}, json=patch, timeout=60).raise_for_status()
+                made += 1
+                print(f"  signed terms {made}/{len(todo)}{'' if sent else ' (stored; not sent to monday yet)'}", flush=True)
+            except Exception as err:
+                failed += 1
+                print(f"  failed one signed-terms PDF: {type(err).__name__}: {str(err)[:200]}", flush=True)
+    return failed
 
 
 if __name__ == "__main__":

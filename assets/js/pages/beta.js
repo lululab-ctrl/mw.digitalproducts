@@ -161,6 +161,7 @@ form.addEventListener("submit", async (e) => {
     name: f.name.value.trim(),
     email: f.email.value.trim().toLowerCase(),
     instagram: f.instagram.value.trim(),
+    facebook: f.facebook.value.trim(),
     agree: agreed,
   };
   const password = f.password.value;

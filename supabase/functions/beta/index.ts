@@ -14,7 +14,7 @@
 import { admin, clientIp, cors, EMAIL_RE, fail, json, notifyMake, requestPersonalCopies, sha256Hex } from "../_shared/http.ts";
 
 const PRODUCTS = ["mwp-presets", "mwp-panel", "mwp-field-guides"];
-const TERMS_VERSION = "2026-10-13";   // date of Matan's Ambassador Program terms; change when the terms change
+const TERMS_VERSION = "2026-10-13.2";   // must match TERMS_VERSION in tools/ambassador_terms.py
 const MAX_JOINS_PER_HOUR = 5;         // per IP
 
 Deno.serve(async (req) => {
@@ -45,6 +45,8 @@ Deno.serve(async (req) => {
 
   const email = String(body.email ?? "").trim().toLowerCase();
   const name = String(body.name ?? "").trim().slice(0, 80);
+  // Facebook: a name or a profile link. No quotes, angle brackets or line breaks (it goes into monday and a PDF).
+  const facebook = String(body.facebook ?? "").replace(/[\u0000-\u001f"\\<>]/g, "").trim().slice(0, 100);
   const instagram = String(body.instagram ?? "").trim().replace(/^@/, "").replace(/[^A-Za-z0-9._]/g, "").slice(0, 60);
   if (!EMAIL_RE.test(email)) return fail(req, "Please enter a valid email.", 400);
   if (!name) return fail(req, "Please enter your name.", 400);
@@ -67,7 +69,7 @@ Deno.serve(async (req) => {
   const { data: before } = await db.from("beta_members").select("id").eq("customer_id", customer.id).maybeSingle();
   const agreedAt = new Date();
   const { error: mErr } = await db.from("beta_members").upsert(
-    { customer_id: customer.id, instagram: instagram || null, ip_hash: ipHash,
+    { customer_id: customer.id, instagram: instagram || null, facebook: facebook || null, ip_hash: ipHash,
       agreed_at: agreedAt.toISOString(), terms_version: TERMS_VERSION },
     { onConflict: "customer_id" });
   if (mErr) {
@@ -93,7 +95,7 @@ Deno.serve(async (req) => {
   await notifyMake("MAKE_WEBHOOK_URL", {
     type: "ambassador",
     rejoined: Boolean(before),
-    name, email, instagram: instagram ? `@${instagram}` : "",
+    name, email, instagram: instagram ? `@${instagram}` : "", facebook,
     agreed_on: day(agreedAt), first_months_end: day(firstMonths), ends_on: day(ends),
     terms_version: TERMS_VERSION,
     products: "MWP Presets, MWP Panel, MWP Field Guides",
