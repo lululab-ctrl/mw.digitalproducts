@@ -29,18 +29,8 @@ async function start() {
   let me;
   try { me = await testerMe(); } catch (err) { show("t-out"); toast(err.message, { type: "error" }); return; }
   if (!me.tester) { show("t-no"); return; }
-  show("t-in");
-  $("t-hi").textContent = T(`Hi ${me.name || me.email}. Your downloads are ready.`, `היי ${me.name || me.email}. ההורדות שלכם מוכנות.`);
-  $("t-lib").innerHTML = me.products.map((p, i) => {
-    const [img, pos] = COVERS[p.slug] || [];
-    return `<article class="lib" style="--i:${i}">
-      <div class="ph">${img ? `<img src="${esc(img)}" alt="" loading="lazy" style="object-position:${pos}">` : ""}</div>
-      <div><p class="tg">${esc(TAGS[p.category] || "")}</p>
-        <h3 class="nm" data-no-i18n>${esc(p.name)}${p.name_emphasis ? ` <span class="grad">${esc(p.name_emphasis)}</span>` : ""}</h3>
-        <div class="chips"><span>Version ${esc(p.version)}</span></div></div>
-      <button class="dl" type="button" data-download="${esc(p.slug)}">${DL}<span>Download</span></button>
-    </article>`;
-  }).join("");
+  // Testers use My downloads exactly like ambassadors: Presets and Panel to download, Field Guides to read online.
+  location.replace("/account/");
 }
 
 // the sign-in link
