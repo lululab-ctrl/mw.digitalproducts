@@ -33,7 +33,8 @@ HERO = f"""<script>(function(){{var h=document.documentElement;h.classList.add("
 <div class="wrap st-hero-in">
 <p class="kick st-in" style="--i:0">MWP · by Matan Wild</p>
 <h1 class="st-h1"><span class="st-l"><span style="--i:1">Editing tools</span></span> <span class="st-l"><span class="grad" style="--i:2">from the field.</span></span></h1>
-<p class="lead st-in" style="--i:3">Lightroom presets, a Photoshop plugin and field guides from wildlife photographer Matan Wild. Instant download, secure checkout.</p>
+<p class="lead st-in" style="--i:3">Lightroom presets, a Photoshop plugin and field guides by Matan Wild, founder of MWP. Years of leading photography tours and editing alongside photographers of every level, distilled into one signature look: professional colour, natural tones, effortless to use.</p>
+<p class="st-meta st-in" style="--i:3">Instant download<span aria-hidden="true">·</span>Secure checkout</p>
 <div class="ctas st-in" style="--i:4"><a class="btn" href="#shop">Shop the collection</a></div>
 </div>
 </section>"""
@@ -105,7 +106,10 @@ CSS = home_devices.CSS + """
 .st-vf span:nth-child(3){bottom:0;left:0;border-bottom-width:1px;border-left-width:1px}
 .st-vf span:nth-child(4){bottom:0;right:0;border-bottom-width:1px;border-right-width:1px}
 .st-hero-in{position:relative;width:100%;padding-top:140px;padding-bottom:clamp(72px,12vh,140px)}
-.st-hero-in .lead{max-width:520px;margin-top:28px}
+.st-hero-in .lead{max-width:560px;margin-top:28px}
+.st-hero-in .st-meta{display:flex;align-items:center;gap:12px;margin:18px 0 0;font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:rgba(254,251,241,.55)}
+.st-hero-in .st-meta span{color:#F4AF56}
+[dir="rtl"] .st-hero-in .st-meta{letter-spacing:normal;font-size:13px}
 .st-hero-in .ctas{margin-top:36px}
 .st-h1{margin:18px 0 0;font-size:clamp(52px,8.4vw,132px);line-height:.94;font-weight:400;letter-spacing:-.04em;color:#FEFBF1}
 .st-h1 .grad{font-weight:600}
