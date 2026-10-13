@@ -55,7 +55,7 @@ jobs:
       - name: Install the stamping tools
         run: |
           sudo apt-get install -y -qq fonts-dejavu-core >/dev/null
-          pip install -q pypdf reportlab python-bidi requests
+          pip install -q pypdf reportlab python-bidi requests pymupdf
 
       - name: Make the copies
         env:

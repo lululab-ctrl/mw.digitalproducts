@@ -76,8 +76,16 @@ Deno.serve(async (req) => {
   const ipHash = clientIp(req) ? await sha256Hex(salt + clientIp(req)) : null;
   const now = new Date().toISOString();
 
-  const { data: existing } = await db.from("license_devices").select("id")
+  // The same computer can run MWP Panel in Photoshop and in Photoshop (Beta). Each app keeps its own
+  // plugin storage, so older copies of the plugin send a different id from each app: a computer already
+  // listed under the same name counts once.
+  let { data: existing } = await db.from("license_devices").select("id")
     .eq("entitlement_id", ent.id).eq("device_id", deviceId).maybeSingle();
+  if (!existing && deviceName) {
+    ({ data: existing } = await db.from("license_devices").select("id")
+      .eq("entitlement_id", ent.id).eq("device_name", deviceName)
+      .order("last_seen_at", { ascending: false }).limit(1).maybeSingle());
+  }
   if (existing) {
     await db.from("license_devices").update({ last_seen_at: now, ip_hash: ipHash, device_name: deviceName })
       .eq("id", existing.id);

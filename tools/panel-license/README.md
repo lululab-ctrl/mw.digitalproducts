@@ -40,3 +40,15 @@ The sign-in email must include the code. In Supabase → Authentication → Emai
 > Your MWP sign-in code: **{{ .Token }}**
 
 Keep the existing link in that email: the shop's My downloads page still uses it.
+
+## Photoshop and Photoshop (Beta)
+MWP Panel should install and run in both. Three things make that work:
+1. In `manifest.json`, the host is Photoshop with a minimum version and **no maximum**, so new Photoshop and Beta versions are accepted:
+   ```json
+   "host": [{ "app": "PS", "minVersion": "24.2.0" }]
+   ```
+   A `maxVersion` would block the Beta, which always has a higher version number.
+2. Install it from the `.ccx` file by double-clicking. Creative Cloud then offers it to every installed Photoshop, including the Beta.
+3. A computer counts once. Photoshop and the Beta keep separate plugin storage, so `license.js` works out the computer's id from the computer itself (name, system, user folder). The licence server also counts a computer already listed under the same name only once, which covers older copies of the plugin.
+
+Test once in each app: install, sign in with the code, and check that My downloads lists the computer only once.

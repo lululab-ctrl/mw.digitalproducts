@@ -108,7 +108,7 @@ async function handlePaid(
   if (iErr) throw iErr;
 
   const { error: eErr } = await db.from("entitlements").upsert(
-    { customer_id: customer.id, product_id: product.id, order_id: order.id, revoked_at: null },
+    { customer_id: customer.id, product_id: product.id, order_id: order.id, revoked_at: null, view_only: false },
     { onConflict: "customer_id,product_id" });
   if (eErr) throw eErr;
 
@@ -120,11 +120,11 @@ async function handlePaid(
     const { data: partRows, error: ppErr } = await db.from("products").select("id, slug").in("slug", parts);
     if (ppErr) throw ppErr;
     for (const part of partRows ?? []) {
-      const { data: owned } = await db.from("entitlements").select("id, revoked_at")
+      const { data: owned } = await db.from("entitlements").select("id, revoked_at, view_only")
         .eq("customer_id", customer.id).eq("product_id", part.id).maybeSingle();
-      if (owned && !owned.revoked_at) continue;
+      if (owned && !owned.revoked_at && !owned.view_only) continue;   // an ambassador's read-only guides become a download
       const { error: bErr } = await db.from("entitlements").upsert(
-        { customer_id: customer.id, product_id: part.id, order_id: order.id, revoked_at: null },
+        { customer_id: customer.id, product_id: part.id, order_id: order.id, revoked_at: null, view_only: false },
         { onConflict: "customer_id,product_id" });
       if (bErr) throw bErr;
     }

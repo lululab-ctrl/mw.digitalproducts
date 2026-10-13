@@ -60,13 +60,14 @@ def terms_block(kind, body, chapter):
 
 PLUS = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>'
 
+# The terms as one document to read through: every chapter shown, with a contents list at the top.
 T_SECTIONS = "".join(
-    f'<section class="ch" id="t{i}" data-t="{i}">'
-    f'<h3><button type="button" class="ch-b" aria-expanded="false" aria-controls="t{i}-b" id="t{i}-h">'
-    f'<span class="num">{i:02d}</span><span class="ttl">{title}</span><span class="pm">{PLUS}</span></button></h3>'
-    f'<div class="ch-p" id="t{i}-b" role="region" aria-labelledby="t{i}-h"><div class="ch-in">'
-    f'{"".join(terms_block(k, body, i) for k, body in blocks)}</div></div></section>'
+    f'<section class="ch doc" id="t{i}" data-t="{i}">'
+    f'<h3 class="doc-h"><span class="num">{i:02d}</span><span class="ttl">{title}</span></h3>'
+    f'<div class="ch-in">{"".join(terms_block(k, body, i) for k, body in blocks)}</div></section>'
     for i, (title, blocks) in enumerate(TERMS, 1))
+T_TOC = "".join(f'<li><a href="#t{i}" data-open="{i}"><span class="num">{i:02d}</span>{title}</a></li>'
+                for i, (title, _) in enumerate(TERMS, 1))
 
 # The terms at a glance (our summary, not part of Matan's text). Each opens the chapter it comes from.
 FACTS = [
@@ -139,6 +140,13 @@ html[dir=rtl] .top .shade{background:linear-gradient(180deg,rgba(10,9,8,.55) 0%,
 .done h3{margin:22px 0 0;font-size:30px;font-weight:400;letter-spacing:-.02em}
 .done p{margin:14px auto 0;max-width:420px;font-size:16px;line-height:1.6;color:#CDD7DD}
 .done .btn{margin-top:26px;width:auto}
+.copy-row{display:flex;align-items:center;gap:14px;margin:26px auto 0;max-width:440px;padding:14px 16px;border:1px solid rgba(244,175,86,.28);border-radius:14px;background:rgba(244,175,86,.06);text-align:start}
+.copy-ic{flex:none;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#F4AF56;border:1px solid rgba(244,175,86,.4)}
+.copy-tx{flex:1;display:flex;flex-direction:column;gap:2px;font-size:14.5px;line-height:1.45;color:#CDD7DD}
+.copy-tx strong{font-weight:500;color:#FEFBF1}
+.copy-btn{flex:none;font:inherit;font-size:13.5px;color:#F4AF56;background:none;border:1px solid rgba(244,175,86,.45);border-radius:999px;padding:7px 14px;cursor:pointer}
+.copy-btn:hover{background:rgba(244,175,86,.12)}
+@media (max-width:560px){.copy-row{flex-wrap:wrap}.copy-tx{flex-basis:calc(100% - 52px)}.copy-btn{margin-inline-start:52px}}
 .sheet{position:relative;max-width:900px;margin:0 auto;border-radius:28px;background:linear-gradient(180deg,rgba(254,251,241,.055),rgba(254,251,241,.015) 55%,rgba(254,251,241,.03)),#0A0908;border:1px solid rgba(254,251,241,.08);box-shadow:0 60px 120px -60px rgba(0,0,0,.95),inset 0 1px 0 rgba(254,251,241,.06);overflow:hidden}
 .sheet::before{content:"";position:absolute;top:0;left:20%;right:20%;height:1px;background:linear-gradient(90deg,transparent,rgba(244,175,86,.55),transparent)}
 .sh-head{position:relative;padding:56px 64px 0;text-align:center}
@@ -167,6 +175,18 @@ html[lang=he] .fact span{letter-spacing:.03em}
 .ch-all{border:0;background:none;padding:6px 0;color:#F4AF56;font:inherit;font-size:14px;font-weight:600;cursor:pointer}
 .ch-all:hover{color:#F8D29C}
 .ch{border-bottom:1px solid rgba(254,251,241,.08);scroll-margin-top:96px}
+.toc{margin-top:40px;padding:22px 26px;border-radius:18px;background:rgba(254,251,241,.025);border:1px solid rgba(254,251,241,.07)}
+.toc p{margin:0 0 12px;font-size:12px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:#9CB1C2}
+.toc ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:6px 28px}
+.toc a{display:flex;gap:12px;padding:5px 0;color:#CDD7DD;font-size:15px;text-decoration:none;transition:color .2s}
+.toc a:hover{color:#F4AF56}
+.toc .num{flex:none;width:22px;font-size:12px;font-weight:700;color:#8C979F;font-variant-numeric:tabular-nums;line-height:1.9}
+.ch.doc{border-bottom:0;padding-top:12px}
+.doc-h{display:grid;grid-template-columns:52px minmax(0,1fr);align-items:baseline;margin:30px 0 14px;padding-top:26px;border-top:1px solid rgba(254,251,241,.08);font-weight:600}
+.doc-h .num{font-size:13px;font-weight:700;color:#F4AF56;font-variant-numeric:tabular-nums;letter-spacing:.06em}
+.doc-h .ttl{font-size:21px;letter-spacing:-.015em;color:#FEFBF1}
+.ch.doc .ch-in{overflow:visible;opacity:1}
+.ch.doc .ch-in>:last-child{margin-bottom:6px}
 .ch h3{margin:0}
 .ch-b{display:grid;grid-template-columns:52px minmax(0,1fr) 36px;align-items:center;width:100%;padding:24px 0;border:0;background:none;color:#FEFBF1;font:inherit;text-align:left;cursor:pointer}
 .ch-b .num{font-size:13px;font-weight:700;color:#8C979F;font-variant-numeric:tabular-nums;letter-spacing:.06em;transition:color .3s}
@@ -263,6 +283,7 @@ html[dir=rtl] .sig-rule::after{background:linear-gradient(270deg,#F4AF56,rgba(24
 html[lang=he] .sig-l,html[lang=he] .sig-what{letter-spacing:.06em}
 @media (max-width:600px){.sig-in{padding:22px 20px 18px}.sig .sig-in{padding-inline-end:84px}.sig-seal{width:52px;height:52px;top:18px;inset-inline-end:18px}.sig-seal img{width:28px;height:28px}}
 @media (max-width:760px){
+ .toc ol{grid-template-columns:1fr}.toc{padding:18px}.doc-h{grid-template-columns:40px minmax(0,1fr)}.doc-h .ttl{font-size:19px}.ch.doc .ch-in{padding-left:0}
  .modal.modal-terms{padding:10px 10px 0}.modal-terms .modal-sheet{min-height:calc(100svh - 10px)}.sh-bar{padding:14px 16px;flex-direction:column;align-items:stretch;text-align:center;gap:10px}.sh-bar-b{flex-direction:column-reverse}.sh-bar .btn{width:100%;min-height:48px}
  .sh-head{padding:40px 22px 0}.facts{grid-template-columns:repeat(2,minmax(0,1fr));margin:30px 22px 0}
  .fact:nth-child(3){border-inline-start:0}.fact:nth-child(n+3){border-top:1px solid rgba(254,251,241,.08)}
@@ -346,7 +367,7 @@ html .nav .wrap,html.nav-scrolled .nav .wrap{{height:80px;transition:none}}
 <div class="facts">{FACTS_HTML}</div>
 <div class="sh-body" lang="en" dir="ltr" data-no-i18n>
 <div class="t-intro"><p>{TERMS_INTRO[0]}</p><p class="agree">{TERMS_INTRO[1]}</p></div>
-<div class="ch-tools"><p>{len(TERMS)} chapters</p><button type="button" class="ch-all" id="ch-all" aria-expanded="false">Expand all</button></div>
+<nav class="toc" aria-label="Contents"><p>Contents</p><ol>{T_TOC}</ol></nav>
 {T_SECTIONS}
 </div>
 <div class="sh-bar">
@@ -389,6 +410,11 @@ html .nav .wrap,html.nav-scrolled .nav .wrap{{height:80px;transition:none}}
 <h3>Check your inbox</h3>
 <p id="done-text">We've sent you a link. Open it to download your tools.</p>
 <p class="meta-note">Then, in Photoshop, open MWP Panel and sign in with the same email.</p>
+<div class="copy-row" id="terms-copy" aria-live="polite">
+<span class="copy-ic" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg></span>
+<span class="copy-tx"><strong>Your signed copy of the terms</strong><span id="terms-copy-state">Preparing your PDF…</span></span>
+<button class="copy-btn" type="button" id="terms-copy-btn" hidden>Download again</button>
+</div>
 <a class="btn" href="/account.html">Go to My downloads</a>
 </div>
 </div>

@@ -4,7 +4,7 @@ Change the wording only with Matan's OK, and when you do, bump TERMS_VERSION her
 supabase/functions/beta/index.ts (each acceptance records the version).
 Blocks: ("p", html) a paragraph, ("ul", [html, ...]) a list. Only <strong> and <a> tags are used."""
 
-TERMS_VERSION = "2026-10-13.2"   # .2: the Field Guides are included; Facebook page is MW Photo Tours
+TERMS_VERSION = "2026-10-13.3"   # .2: the Field Guides are included; Facebook page is MW Photo Tours. .3: guides are read online
 
 TERMS_DATE = "Oct 13, 2026"
 TERMS_INTRO = [
@@ -14,7 +14,7 @@ TERMS_INTRO = [
 TERMS = [
     ("Your free license", [
         ("p", 'MW Photo Tours ("MWP", "we") grants you a free, personal, non-exclusive, non-transferable, lifetime license to use:'),
-        ("ul", ["MWP - PS Panel", "MWP - Signature Preset Pack", "MWP Field Guides", "All future updates to all three, for life"]),
+        ("ul", ["MWP - PS Panel", "MWP - Signature Preset Pack", "MWP Field Guides, to read online in your account (they can't be downloaded)", "All future updates to all three, for life"]),
         ("p", "You may use them on your own photos, for personal and professional work, including paid client work. The license is for you only. It covers up to 2 devices."),
     ]),
     ("What we invite you to do", [
@@ -49,7 +49,7 @@ TERMS = [
         ("p", "In return, you'll be in regular contact with our team through Emilya, and you'll have a direct line to Matan. MWP may use your feedback and suggestions to improve its tools, with no payment owed."),
     ]),
     ("What's not allowed", [
-        ("ul", ["Sharing, selling, giving away or uploading the panel, preset or guide files, or your access, to anyone",
+        ("ul", ["Sharing, selling, giving away or uploading the panel or preset files, screenshots or copies of the guides, or your access, to anyone",
                 "Copying, modifying or repackaging the presets or guides as your own product",
                 "Reverse-engineering the panel",
                 "Claiming the presets are your own creation",
