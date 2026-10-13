@@ -238,7 +238,7 @@ html = f"""<!doctype html>
 <span class="seal"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span>
 <h3>Check your inbox</h3>
 <p id="done-text">We've sent you a sign-in link. Open it to download everything from My downloads.</p>
-<a class="btn" href="../account.html">Go to My downloads</a>
+<a class="btn" href="/account.html">Go to My downloads</a>
 </div>
 </div>
 </div>
@@ -256,4 +256,11 @@ html = f"""<!doctype html>
 
 os.makedirs("beta", exist_ok=True)
 open("beta/index.html", "w", encoding="utf-8").write(html)
+# Safety net: anything that lands on /beta/account.html (an old link, a relative redirect) goes to the
+# real My downloads page, keeping the sign-in details in the address.
+open("beta/account.html", "w", encoding="utf-8").write("""<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="robots" content="noindex">
+<title>My downloads · MWP</title>
+<script>location.replace("/account.html" + location.search + location.hash);</script></head>
+<body style="background:#0A0908"><a href="/account.html" style="color:#F4AF56">Go to My downloads</a></body></html>
+""")
 print("beta/index.html written", len(html))
