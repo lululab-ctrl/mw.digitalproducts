@@ -327,6 +327,10 @@ main { flex: 1; }
 .sampler .btn:hover { --btn-bg: var(--c-accent-2); --btn-bd: var(--c-accent-2); }
 .page-hero { padding-block: var(--s-8) var(--s-5); }
 .library { display: grid; gap: var(--s-3); }
+.devices-box { margin-top: var(--s-6); }
+.devices { padding: var(--s-4); border: 1px solid var(--c-line); border-radius: var(--r-md); background: var(--c-surface); }
+.device-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--s-2); }
+.device { display: flex; align-items: center; justify-content: space-between; gap: var(--s-3); padding: var(--s-3) 0; border-top: 1px solid var(--c-line); }
 .library-item { display: grid; grid-template-columns: 96px 1fr auto; gap: var(--s-4); align-items: center; padding: var(--s-3); border: 1px solid var(--c-line); border-radius: var(--r-md); background: var(--c-surface); }
 .library-item img, .library-item .thumb { width: 96px; height: 72px; object-fit: cover; border-radius: var(--r-sm); background: var(--c-accent-tint); }
 .library-item__title { font-weight: var(--fw-semibold); }

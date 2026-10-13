@@ -141,5 +141,7 @@ async function callFunction(name, body, { auth = false } = {}) {
 }
 
 export const requestDownload = (slug) => callFunction("get-download", { slug }, { auth: true });
+export const panelDevices = () => callFunction("license", { action: "devices" }, { auth: true });
+export const removePanelDevice = (device_id) => callFunction("license", { action: "remove", device_id }, { auth: true });
 export const sendSupport = (form) => callFunction("support", form);
 export const subscribe = (email, source = "free-sampler") => callFunction("subscribe", { email, source });

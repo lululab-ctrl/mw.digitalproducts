@@ -297,6 +297,7 @@ page("account.html", "My downloads · MWP",
           <button class="btn btn--sm btn--ghost" id="sign-out" type="button">Sign out</button>
         </div>
         <div class="library" id="library" aria-live="polite"></div>
+        <div class="devices-box" id="devices" hidden></div>
         <p class="meta">Download links are created when you click and expire after 5 minutes. Trouble? <a class="link" href="support.html?topic=download">Contact support</a>.</p>
       </div>
     </div>

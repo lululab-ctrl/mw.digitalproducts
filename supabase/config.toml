@@ -10,6 +10,9 @@ verify_jwt = false   # checkout provider: verified by HMAC signature
 [functions.get-download]
 verify_jwt = false   # verifies the customer's session token itself (auth.getUser)
 
+[functions.license]
+verify_jwt = false   # MWP Panel licences: verifies the buyer's session token itself (auth.getUser)
+
 [functions.support]
 verify_jwt = false   # public form: honeypot + per-email rate limit
 

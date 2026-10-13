@@ -1,6 +1,6 @@
 // My downloads: magic-link sign-in, then the customer's library with secure download buttons.
 import { initChrome, toast } from "../lib/ui.js";
-import { supabase, currentUser, sendMagicLink, signOut, myLibrary, requestDownload, mediaUrl, esc, shortDate } from "../lib/api.js";
+import { supabase, currentUser, sendMagicLink, signOut, myLibrary, requestDownload, panelDevices, removePanelDevice, mediaUrl, esc, shortDate } from "../lib/api.js";
 import { EMAIL_RE, setBusy, setStatus } from "./shared-forms.js";
 import { countLabel } from "../lib/catalog.js";
 
@@ -29,17 +29,57 @@ function libraryHTML(items) {
     </article>`).join("");
 }
 
+// MWP Panel works only for the buyer: each computer they sign in on is listed here, and they can
+// free one up when they change computers.
+const PANEL_SLUGS = ["mwp-panel", "presets-panel", "field-guides-panel", "full-set"];
+
+function devicesHTML({ devices, max }) {
+  const rows = devices.map((d) => `
+    <li class="device">
+      <div><strong>${esc(d.device_name || "Computer")}</strong>
+      <p class="meta">Last used ${shortDate(d.last_seen_at)}</p></div>
+      <button class="btn btn--ghost btn--sm" type="button" data-remove-device="${esc(d.device_id)}">Remove</button>
+    </li>`).join("");
+  return `<section class="devices stack" aria-labelledby="devices-h">
+    <h2 class="h3" id="devices-h">MWP Panel on your computers</h2>
+    <p class="meta">Your licence is personal: Panel works when you sign in to it with this email. You can use it on up to ${max} computers at a time. Changed computer? Remove the old one here.</p>
+    ${devices.length ? `<ul class="device-list">${rows}</ul>` : `<p class="meta">No computers yet. Open MWP Panel in Photoshop and sign in with this email.</p>`}
+  </section>`;
+}
+
+async function showDevices() {
+  const box = document.getElementById("devices");
+  if (!box) return;
+  try { box.innerHTML = devicesHTML(await panelDevices()); box.hidden = false; }
+  catch { box.hidden = true; }
+}
+
 async function showLibrary(user) {
   signedOut.hidden = true;
   signedIn.hidden = false;
   who.textContent = user.email;
   library.innerHTML = `<div class="skeleton" style="height:96px"></div>`;
   try {
-    library.innerHTML = libraryHTML(await myLibrary());
+    const items = await myLibrary();
+    library.innerHTML = libraryHTML(items);
+    if (items.some((i) => PANEL_SLUGS.includes(i.products?.slug))) showDevices();
   } catch (err) {
     library.innerHTML = `<p class="empty">${esc(err.message)}</p>`;
   }
 }
+
+document.addEventListener("click", async (e) => {
+  const rm = e.target.closest("[data-remove-device]");
+  if (!rm) return;
+  setBusy(rm, true, "Removing…");
+  try {
+    document.getElementById("devices").innerHTML = devicesHTML(await removePanelDevice(rm.dataset.removeDevice));
+    toast("Computer removed. You can now sign in to MWP Panel on another one.");
+  } catch (err) {
+    toast(err.message, { type: "error", timeout: 7000 });
+    setBusy(rm, false);
+  }
+});
 
 library.addEventListener("click", async (e) => {
   const btn = e.target.closest("[data-download]");

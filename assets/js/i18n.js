@@ -248,6 +248,13 @@ const HE = {
   "Browse all products": "לכל המוצרים",
   "Home": "דף הבית",
   // home: interactive shop
+  // My downloads: MWP Panel computers (drafts for Matan)
+  "MWP Panel on your computers": "MWP Panel במחשבים שלכם",
+  "Computer": "מחשב",
+  "Remove": "הסרה",
+  "Removing…": "מסירים…",
+  "Computer removed. You can now sign in to MWP Panel on another one.": "המחשב הוסר. אפשר עכשיו להתחבר ל-MWP Panel במחשב אחר.",
+  "No computers yet. Open MWP Panel in Photoshop and sign in with this email.": "עדיין אין מחשבים. פתחו את MWP Panel בפוטושופ והתחברו עם המייל הזה.",
   "SUBJECT · POP": "SUBJECT · POP",
   "Shoot": "צילום",
   "Finish": "גימור",
@@ -393,6 +400,9 @@ const PATTERNS = [
   [/^We've sent a sign-in link to (.+)\. Open it on this device\.$/, (m) => `שלחנו קישור כניסה אל ${m[1]}. פתחו אותו במכשיר הזה.`],
   [/^Nothing matches "(.*)" here\.$/, (m) => `אין תוצאות עבור "${m[1]}" כאן.`],
   [/^Nothing matches here\.$/, () => "אין כאן תוצאות."],
+  [/^Last used (.+)$/, (m) => `שימוש אחרון: ${m[1]}`],
+  [/^Your licence is personal: Panel works when you sign in to it with this email\. You can use it on up to (\d+) computers at a time\. Changed computer\? Remove the old one here\.$/,
+    (m) => `הרישיון אישי: הפאנל עובד כשמתחברים אליו עם המייל הזה. אפשר להשתמש בו בעד ${m[1]} מחשבים בו־זמנית. החלפתם מחשב? הסירו את הישן כאן.`],
 ];
 
 const SALES = { "presets/": "presets/he.html", "panel/": "panel/he.html", "field-guides/": "field-guides/he.html" };
