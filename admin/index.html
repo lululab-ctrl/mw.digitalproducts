@@ -22,12 +22,14 @@
     <div class="stack">
       <p class="brand">MWP <small>Admin</small></p>
       <h1 class="h3">Sign in to <strong>manage the shop.</strong></h1>
-      <p class="muted" id="gate-msg">We'll email you a one-time sign-in link.</p>
+      <p class="muted" id="gate-msg">Sign in with your admin email and password.</p>
     </div>
     <form class="form" id="gate-form" novalidate>
-      <div class="field"><label for="gate-email">Email</label><input class="input" id="gate-email" name="email" type="email" autocomplete="email" required></div>
-      <button class="btn btn--accent" type="submit">Email me a link</button>
+      <div class="field"><label for="gate-email">Email</label><input class="input" id="gate-email" name="email" type="email" autocomplete="username" required></div>
+      <div class="field"><label for="gate-password">Password</label><input class="input" id="gate-password" name="password" type="password" autocomplete="current-password" required></div>
+      <button class="btn btn--accent" type="submit">Sign in</button>
       <p class="form-status" role="status"></p>
+      <p class="meta">No password yet, or forgot it? Set one on <a class="link" href="/account/">My downloads</a> with the same email.</p>
     </form>
   </div>
 </section>

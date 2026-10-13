@@ -1,6 +1,6 @@
 // ============================================================================
 // MWP Presets — admin dashboard
-// Sign-in with a magic link; access is granted only if the user is in the
+// Sign-in with email and password; access is granted only if the user is in the
 // `admins` table (checked by the database, not by this script). Every write
 // below is also enforced by row level security, so a tampered browser can't
 // do more than an admin could.
@@ -47,15 +47,17 @@ $("#gate-form").addEventListener("submit", async (e) => {
   e.preventDefault();
   const form = e.currentTarget;
   const email = form.elements.email.value.trim().toLowerCase();
+  const password = form.elements.password.value;
   const status = $(".form-status", form);
   if (!EMAIL_RE.test(email)) return setStatus(status, "Enter a valid email.", "error");
+  if (!password) return setStatus(status, "Enter your password.", "error");
   const btn = $("button[type=submit]", form);
   setBusy(btn, true);
-  const { error } = await supabase.auth.signInWithOtp({
-    email, options: { emailRedirectTo: `${CONFIG.SITE_URL}/admin/`, shouldCreateUser: true },
-  });
+  // Email and password only (Matan, 13 Oct 2026): no sign-in links for the admin.
+  const { error } = await supabase.auth.signInWithPassword({ email, password });   // onAuthStateChange opens the admin
   setBusy(btn, false);
-  setStatus(status, error ? error.message : "Check your inbox for the sign-in link.", error ? "error" : "ok");
+  if (error) return setStatus(status, /invalid/i.test(error.message) ? "Wrong email or password." : error.message, "error");
+  form.elements.password.value = "";
 });
 
 supabase?.auth.onAuthStateChange((event, session) => {
