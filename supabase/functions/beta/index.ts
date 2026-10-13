@@ -1,5 +1,6 @@
 // ============================================================================
 // beta — the MWP Ambassador Program page (shop.mw.photography/beta/).
+//   status {}                              → { open }: is the program still taking people? (26 at most)
 //   join { name, email, instagram, agree } → records that this person accepted
 //         the Ambassador Program terms, gives their email MWP Presets, MWP Panel
 //         and the Field Guides (exactly like a purchase), and sends them to
@@ -22,9 +23,16 @@ Deno.serve(async (req) => {
 
   let body: Record<string, unknown> = {};
   try { body = await req.json(); } catch { /* empty */ }
+  const db = admin();
+  const FULL = "The Ambassador Program is full. Thank you for your interest.";
+
+  if (body.action === "status") {
+    const { data: open, error } = await db.rpc("ambassador_program_open");
+    if (error) { console.error(error); return fail(req, "Couldn't check the program. Please try again.", 500); }
+    return json(req, { open: Boolean(open) });
+  }
   if (body.action !== "join") return fail(req, "Unknown action.", 400);
 
-  const db = admin();
   const salt = Deno.env.get("IP_HASH_SALT") ?? "";
   const ipHash = clientIp(req) ? await sha256Hex(salt + clientIp(req)) : null;
 
@@ -44,6 +52,14 @@ Deno.serve(async (req) => {
 
   await db.from("beta_attempts").insert({ ip_hash: ipHash });
 
+  // Full? Only people who are already members can still come in (no new place taken).
+  const { data: known } = await db.from("customers").select("id, beta_members(id)").eq("email", email).maybeSingle();
+  const isMember = Boolean(known && (Array.isArray(known.beta_members) ? known.beta_members.length : known.beta_members));
+  if (!isMember) {
+    const { data: open } = await db.rpc("ambassador_program_open");
+    if (open === false) return fail(req, FULL, 409);
+  }
+
   const { data: customer, error: cErr } = await db.from("customers")
     .upsert({ email, name }, { onConflict: "email" }).select("id").single();
   if (cErr) { console.error(cErr); return fail(req, "Couldn't save your details. Please try again.", 500); }
@@ -54,7 +70,10 @@ Deno.serve(async (req) => {
     { customer_id: customer.id, instagram: instagram || null, ip_hash: ipHash,
       agreed_at: agreedAt.toISOString(), terms_version: TERMS_VERSION },
     { onConflict: "customer_id" });
-  if (mErr) { console.error(mErr); return fail(req, "Couldn't save your details. Please try again.", 500); }
+  if (mErr) {
+    if (/ambassador_program_full/.test(mErr.message)) return fail(req, FULL, 409);   // filled up a moment ago
+    console.error(mErr); return fail(req, "Couldn't save your details. Please try again.", 500);
+  }
 
   const { data: products } = await db.from("products").select("id, slug").in("slug", PRODUCTS);
   for (const p of products ?? []) {

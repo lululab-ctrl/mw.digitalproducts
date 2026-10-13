@@ -3,7 +3,7 @@
 // (through the beta Edge Function and Make), and emails them a link to My downloads.
 import { initI18n } from "../i18n.js";
 import { initCart } from "../lib/cart.js";
-import { betaJoin, sendMagicLink, signUpWithPassword } from "../lib/api.js";
+import { betaJoin, betaStatus, sendMagicLink, signUpWithPassword } from "../lib/api.js";
 
 initI18n();
 initCart();
@@ -132,6 +132,15 @@ if ("scrollRestoration" in history) history.scrollRestoration = "manual";
 if (location.hash) history.replaceState(null, "", location.pathname + location.search);
 window.scrollTo(0, 0);
 
+// ---------------------------------------------------------------- full? (26 ambassadors at most; the server enforces it)
+function showFull() {
+  document.querySelectorAll(".hero-cta").forEach((el) => { el.hidden = true; });
+  const note = document.getElementById("full-note");
+  if (note) { note.hidden = false; note.classList.add("on"); }
+  document.querySelectorAll(".modal").forEach((m) => { if (!m.hidden) closeModal(m); });
+}
+betaStatus().then((r) => { if (r && r.open === false) showFull(); }).catch(() => { /* can't tell: leave it open, the server still checks */ });
+
 // ---------------------------------------------------------------- show / hide password
 document.addEventListener("click", (e) => {
   const eye = e.target.closest("[data-eye]");
@@ -187,6 +196,7 @@ form.addEventListener("submit", async (e) => {
   } catch (err) {
     msg.className = "msg err";
     msg.textContent = err.status === 429 ? T("Too many requests. Please wait a minute and try again.", "יותר מדי בקשות. המתינו דקה ונסו שוב.") : err.message;
+    if (err.status === 409) setTimeout(showFull, 2500);   // filled up while they were filling in the form
   } finally {
     btn.disabled = false;
   }

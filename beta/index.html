@@ -163,6 +163,8 @@ html.modal-on{overflow:hidden}
 .pw-eye{position:absolute;top:50%;inset-inline-end:8px;transform:translateY(-50%);display:grid;place-items:center;width:38px;height:38px;border:0;border-radius:50%;background:none;color:#9CB1C2;cursor:pointer}
 .pw-eye:hover,.pw-eye[aria-pressed=true]{color:#F4AF56;background:rgba(254,251,241,.06)}
 .pw-hint{margin:2px 0 0;font-size:13px;line-height:1.5;color:#7E8A93}
+.full-note{display:inline-flex;align-items:center;gap:12px;margin:34px 0 0;padding:14px 22px;border-radius:64px;background:rgba(10,9,8,.55);border:1px solid rgba(254,251,241,.18);color:#FEFBF1;font-size:16px;font-weight:600}
+.full-note .dot{width:8px;height:8px;border-radius:50%;background:#9CB1C2}
 .meta-note{font-size:14.5px!important;color:#9CB1C2!important}
 .acc-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:4px}
 .acc-head .kick{margin:0}
@@ -269,7 +271,8 @@ html[lang=he] body,html[lang=he] body *:not(svg):not(svg *),html body [lang=he],
 <div class="wrap">
 <h1 class="h1 hero-h reveal" style="--d:.08s">Create with MWP.<br><span class="grad">Join our Ambassador Program.</span></h1>
 <p class="lead reveal" style="--d:.16s">A small group of selected photographers gets MWP Presets, MWP Panel and the Field Guides free. In return, create with them, share your work and tell us what you think.</p>
-<p class="reveal" style="--d:.24s;margin-top:34px"><button type="button" class="btn" data-terms>Read the terms</button></p>
+<p class="reveal hero-cta" style="--d:.24s;margin-top:34px"><button type="button" class="btn" data-terms>Read the terms</button></p>
+<p class="full-note reveal" id="full-note" style="--d:.24s" hidden><span class="dot"></span>The Ambassador Program is full. Thank you for your interest.</p>
 </div>
 </section>
 
@@ -340,6 +343,6 @@ html[lang=he] body,html[lang=he] body *:not(svg):not(svg *),html body [lang=he],
 </main>
 
 <script src="../assets/js/lib/nav.js" defer></script>
-<script type="module" src="../assets/js/pages/beta.js?v=fd271856"></script>
+<script type="module" src="../assets/js/pages/beta.js?v=a4c176d6"></script>
 </body>
 </html>
