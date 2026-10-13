@@ -30,6 +30,7 @@ IMPORT_MAP = ('<script type="importmap" id="mwp-scripts">'
               + json.dumps({"imports": {u: f"{u}?v={v}" for u, v in sorted(versions.items())}}, separators=(",", ":"))
               + "</script>")
 SRC = re.compile(r'(<script\b[^>]*\bsrc=")([^"?#]*assets/js/[^"?#]+\.js)(?:\?v=[0-9a-f]+)?(")')
+LOCAL = re.compile(r'(<script\b[^>]*\bsrc=")([^"?#:]+\.js)(?:\?v=[0-9a-f]+)?(")')
 
 changed = 0
 for folder, _, files in os.walk(ROOT):
@@ -50,6 +51,16 @@ for folder, _, files in os.walk(ROOT):
             return f"{m.group(1)}{src}?v={v}{m.group(3)}" if v else m.group(0)
 
         out = SRC.sub(stamp, html)
+
+        # Scripts next to the page (admin/admin.js): versioned too, so the admin never runs an old copy.
+        def stamp_local(m):
+            src = m.group(2)
+            full = os.path.normpath(os.path.join(folder, src))
+            if src.startswith(("http", "/")) or "assets/js/" in src or not os.path.isfile(full):
+                return m.group(0)
+            return f"{m.group(1)}{src}?v={fingerprint(full)}{m.group(3)}"
+
+        out = LOCAL.sub(stamp_local, out)
         out = re.sub(r'<script type="importmap" id="mwp-scripts">.*?</script>\s*', "", out, flags=re.S)
         if 'type="module"' in out:
             # the import map has to come before any module script: put it first in <head>
