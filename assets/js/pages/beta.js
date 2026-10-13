@@ -1,11 +1,14 @@
-// MWP Ambassador Program page: open to anyone with the link (no password). Step 1: read and accept the
-// terms. Step 2: a short questionnaire. The application goes to the team in monday.com (through the beta
-// Edge Function and Make); the shop gives the tools and emails the answer once they decide.
+// MWP Ambassador Program page: open to anyone with the link (no password).
+// Apply: a short questionnaire; the application goes to the team in monday.com (beta function → Make).
+// Approved people get an email with a personal link (?accept=<token>): the page then shows the terms, and
+// accepting them makes them an ambassador and unlocks their tools (beta → accept).
 import { initI18n } from "../i18n.js";
 import { initCart } from "../lib/cart.js";
-import { betaApply, betaStatus } from "../lib/api.js";
+import { betaAccept, betaAcceptInfo, betaApply, betaStatus } from "../lib/api.js";
 import { ambassadorLanding } from "../lib/landing.js";
 
+// a link from a Hebrew email opens the page in Hebrew
+try { const l = new URLSearchParams(location.search).get("lang"); if (l === "he" || l === "en") localStorage.setItem("mwp_lang", l); } catch { /* fine */ }
 ambassadorLanding();   // already an ambassador and signed in: straight to My downloads
 initI18n();
 initCart();
@@ -46,29 +49,8 @@ document.addEventListener("click", async (e) => {
   copiedTimer = setTimeout(() => copied.classList.remove("show"), 1600);
 });
 
-// ---------------------------------------------------------------- acceptance card: fills in as they type
-const sig = document.getElementById("sig");
-const sigName = document.getElementById("sig-name");
-const sigMeta = document.getElementById("sig-meta");
-const accDate = document.getElementById("acc-date");
-const today = new Intl.DateTimeFormat(he() ? "he-IL" : "en-GB", { day: "numeric", month: "long", year: "numeric" }).format(new Date());
-if (accDate) accDate.textContent = today;
-function showSignature() {
-  const f = document.getElementById("join-form").elements;
-  const name = f.name.value.trim();
-  const ig = f.instagram.value.trim().replace(/^@+/, "").replace(/[^A-Za-z0-9._]/g, "");
-  sigName.textContent = name || T("Your name", "השם שלכם");
-  sig.classList.toggle("typed", Boolean(name));
-  // each piece isolated, so a handle and a Hebrew date don't run into each other
-  sigMeta.innerHTML = [ig && `<bdi dir="ltr">@${ig}</bdi>`, `<bdi>${today}</bdi>`].filter(Boolean).join(" · ");
-  sig.classList.toggle("signed", Boolean(name));
-}
-document.getElementById("join-form").addEventListener("input", showSignature);
-document.getElementById("join-form").addEventListener("change", showSignature);
-showSignature();
 
-// ---------------------------------------------------------------- pop-ups: the terms (step 1), then the details form (step 2)
-let agreed = false;
+// ---------------------------------------------------------------- pop-ups: the questionnaire, and (after approval) the terms
 const termsModal = document.getElementById("terms-modal");
 const joinModal = document.getElementById("join-modal");
 let lastFocus = null;
@@ -96,16 +78,54 @@ document.addEventListener("keydown", (e) => {
 });
 document.addEventListener("click", (e) => {
   if (e.target.closest("[data-terms]")) { e.preventDefault(); openModal(termsModal); }
+  if (e.target.closest("[data-apply]")) { e.preventDefault(); openModal(joinModal, document.getElementById("join-done").hidden ? document.getElementById("j-name") : null); }
 });
 // a key fact or a contents line jumps to its chapter inside the terms
 document.querySelectorAll("[data-open]").forEach((a) => a.addEventListener("click", (e) => {
   e.preventDefault();
   document.getElementById(`${he() ? "h" : "t"}${a.dataset.open}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
 }));
-document.getElementById("agree-btn").addEventListener("click", () => {
-  agreed = true;
-  closeModal(termsModal);
-  openModal(joinModal, document.getElementById("join-done").hidden ? document.getElementById("j-name") : null);
+// ---------------------------------------------------------------- after approval: accept the terms (?accept=<token>)
+const acceptToken = new URLSearchParams(location.search).get("accept") || "";
+const heroH = document.getElementById("hero-h");
+const heroLead = document.getElementById("hero-lead");
+function heroCta(which) {
+  for (const id of ["apply-cta", "accept-cta", "downloads-cta"]) document.getElementById(id).hidden = id !== which;
+}
+if (acceptToken) {
+  heroCta(null);
+  betaAcceptInfo(acceptToken).then((r) => {
+    const first = (r.name || "").trim().split(/\s+/)[0];
+    if (r.accepted) return showAccepted(r.email);
+    heroH.innerHTML = T(`Welcome${first ? `, ${esc(first)}` : ""}.<br><span class="grad">One last step.</span>`,
+      `ברוכים הבאים${first ? `, ${esc(first)}` : ""}.<br><span class="grad">עוד צעד אחד.</span>`);
+    heroLead.textContent = T("You're approved for the MWP Ambassador Program. Read and accept the terms, and your tools are ready.",
+      "התקבלתם לתוכנית השגרירים של MWP. קראו ואשרו את התנאים, והכלים שלכם מוכנים.");
+    heroCta("accept-cta");
+  }).catch((err) => {
+    heroLead.textContent = err.message || T("This link isn't valid any more. Please contact us.", "הקישור הזה כבר לא בתוקף. צרו איתנו קשר.");
+  });
+}
+function showAccepted(email) {
+  heroH.innerHTML = T(`You're <span class="grad">in.</span>`, `אתם <span class="grad">בפנים.</span>`);
+  heroLead.textContent = email
+    ? T(`Your tools are waiting in My downloads. Sign in, or create your account, with ${email}.`,
+        `הכלים שלכם מחכים בהורדות שלי. התחברו, או פתחו חשבון, עם ${email}.`)
+    : T("Your tools are waiting in My downloads.", "הכלים שלכם מחכים בהורדות שלי.");
+  heroCta("downloads-cta");
+}
+const esc = (v) => String(v).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+document.getElementById("agree-btn").addEventListener("click", async () => {
+  if (!acceptToken) { closeModal(termsModal); return; }   // reading the terms without a link: nothing to accept
+  const btn = document.getElementById("agree-btn");
+  btn.disabled = true;
+  try {
+    const r = await betaAccept(acceptToken, he() ? "he" : "en");
+    closeModal(termsModal);
+    showAccepted(r.email);
+  } catch (err) {
+    alert(err.message);
+  } finally { btn.disabled = false; }
 });
 // a refresh always starts at the top ("Create with MWP"), never inside the terms
 if ("scrollRestoration" in history) history.scrollRestoration = "manual";
@@ -114,6 +134,7 @@ window.scrollTo(0, 0);
 
 // ---------------------------------------------------------------- full? (26 ambassadors at most; the server enforces it)
 function showFull() {
+  if (acceptToken) return;   // approved before it filled up: they can still accept
   document.querySelectorAll(".hero-cta").forEach((el) => { el.hidden = true; });
   const note = document.getElementById("full-note");
   if (note) { note.hidden = false; note.classList.add("on"); }
@@ -155,8 +176,7 @@ form.addEventListener("submit", async (e) => {
     instagram: val("instagram"),
     facebook: val("facebook"),
     answers,
-    agree: agreed,
-    lang: he() ? "he" : "en",   // the terms they read; their signed copy comes in the same language
+    lang: he() ? "he" : "en",   // the language they apply in: their emails and terms come in it
   };
   msg.className = "msg err";
   if (!data.name) { f.name.focus(); msg.textContent = T("Please enter your name.", "נא למלא שם."); return; }
@@ -170,7 +190,6 @@ form.addEventListener("submit", async (e) => {
     msg.textContent = T("Please answer every question.", "נא לענות על כל השאלות.");
     return;
   }
-  if (!data.agree) { msg.textContent = T("Please accept the Ambassador Program terms.", "נא לאשר את תנאי תוכנית השגרירים."); return; }   // can't happen: the form opens only after accepting
 
   const btn = form.querySelector("button[type=submit]");
   btn.disabled = true;

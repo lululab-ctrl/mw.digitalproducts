@@ -196,6 +196,9 @@ export const panelDevices = () => callFunction("license", { action: "devices" },
 export const removePanelDevice = (device_id) => callFunction("license", { action: "remove", device_id }, { auth: true });
 export const sendSupport = (form) => callFunction("support", form);
 export const betaApply = (form) => callFunction("beta", { action: "apply", ...form });
+// after approval: the personal link from the welcome email (?accept=<token>)
+export const betaAcceptInfo = (token) => callFunction("beta", { action: "accept_info", token });
+export const betaAccept = (token, lang) => callFunction("beta", { action: "accept", token, agree: true, lang });
 export const betaStatus = () => callFunction("beta", { action: "status" });
 // The ambassador's signed-terms PDF: { url } when ready, { preparing } while it's being made (202).
 export const signedTerms = (receipt) => callFunction("beta", { action: "signed_terms", ...(receipt ? { receipt } : {}) }, { auth: !receipt });

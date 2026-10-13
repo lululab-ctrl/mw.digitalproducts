@@ -3,14 +3,16 @@
 // applications          → (cron, every 10 minutes) if any application is waiting, asks Make to read the
 //                         Shop Ambassador Applications board and post it back here with a one-time nonce.
 // applicationsCallback  → for every waiting application whose Decision is now Approved or Declined:
-//                         Approved → grantAmbassador() (tools, beta_members, Shop Ambassadors), then Make sets
-//                                    Shop result = Access given and emails the welcome message;
+//                         Approved → the welcome email with a personal link to read and accept the terms
+//                                    (Shop result = Waiting for terms); accepting it on /beta/ makes them an
+//                                    ambassador (beta → accept: tools, Shop result = Access given);
 //                                    the program is full (26) → Shop result = Program full, no email.
 //                         Declined → Make sets Shop result = Declined and emails the decline message.
 // The emails are written here (English or Hebrew, the language they applied in) and sent by Make from
 // contact@matanwildphotography.com. The texts are Matan's approved drafts, signed by Emilya.
-import { notifyMake } from "../_shared/http.ts";
-import { grantAmbassador } from "../_shared/ambassador.ts";
+import { notifyMake, sha256Hex } from "../_shared/http.ts";
+
+const SITE = Deno.env.get("SITE_URL") ?? "https://shop.mw.photography";
 
 // Shop Ambassador Applications column ids (docs/monday-map.json)
 const COL_APP_ID = "application_id";
@@ -57,7 +59,7 @@ export async function applicationsCallback(db: Db, body: Record<string, any>) {
   if (!decided.size) return { ok: true, decided: 0 };
 
   const { data: apps, error } = await db.from("ambassador_applications")
-    .select("id, email, name, lang, instagram, facebook, terms_version, agreed_at, ip_hash")
+    .select("id, email, name, lang")
     .in("id", [...decided.keys()]).eq("status", "new");
   if (error) throw error;
 
@@ -71,25 +73,19 @@ export async function applicationsCallback(db: Db, body: Record<string, any>) {
     if (!claimed?.length) continue;
 
     if (next === "approved") {
-      let r;
-      try {
-        r = await grantAmbassador(db, { email: a.email, name: a.name, instagram: a.instagram, facebook: a.facebook,
-          lang, termsVersion: a.terms_version, agreedAt: a.agreed_at, ipHash: a.ip_hash });
-      } catch (err) {
-        console.error("grant failed", a.id, err);
-        await db.from("ambassador_applications").update({ status: "new", decided_at: null }).eq("id", a.id);   // try again next round
-        continue;
-      }
-      if ("full" in r) {
+      // Approved: a personal link to read and accept the terms; the tools come when they accept (beta → accept).
+      const { data: open } = await db.rpc("ambassador_program_open");
+      if (open === false) {
         await db.from("ambassador_applications").update({ status: "full" }).eq("id", a.id);
         await notifyMake("MAKE_WEBHOOK_URL", { type: "application_decided", application_id: a.id, result: "Program full",
           send_email: "no", email: a.email, subject: "", body_html: "" });
         done[a.id] = "full";
         continue;
       }
-      await db.from("ambassador_applications").update({ member_id: r.memberId }).eq("id", a.id);
-      const m = welcome(lang, a.name);
-      await notifyMake("MAKE_WEBHOOK_URL", { type: "application_decided", application_id: a.id, result: "Access given",
+      const token = crypto.randomUUID().replaceAll("-", "") + crypto.randomUUID().replaceAll("-", "");
+      await db.from("ambassador_applications").update({ accept_token_hash: await sha256Hex(token) }).eq("id", a.id);
+      const m = welcome(lang, a.name, `${SITE}/beta/?accept=${token}${lang === "he" ? "&lang=he" : ""}`);
+      await notifyMake("MAKE_WEBHOOK_URL", { type: "application_decided", application_id: a.id, result: "Waiting for terms",
         send_email: "yes", email: a.email, subject: m.subject, body_html: m.html });
       done[a.id] = "approved";
     } else {
@@ -113,7 +109,7 @@ function wrap(lang: "en" | "he", inner: string) {
   return `<div dir="${dir}" style="font-family:${font};font-size:15px;line-height:1.6;color:#1a1a1a;text-align:${lang === "he" ? "right" : "left"}">${inner}</div>`;
 }
 
-function welcome(lang: "en" | "he", name: string) {
+function welcome(lang: "en" | "he", name: string, acceptUrl: string) {
   if (lang === "he") {
     return {
       subject: "ברוכים הבאים לתוכנית השגרירים של MWP",
@@ -121,7 +117,8 @@ function welcome(lang: "en" | "he", name: string) {
 <p>איזה כיף! ברוכים הבאים לתוכנית השגרירים של MWP.</p>
 <p>כל מה שצריך כדי להתחיל:</p>
 <ul>
-<li><b>הכלים:</b> נכנסים ל<a href="${ACCOUNT}?lang=he">הורדות שלי</a> עם המייל הזה (או פותחים איתו חשבון) ומורידים את הפריסטים של MWP ואת הפאנל של MWP. בפוטושופ פותחים את הפאנל ומתחברים עם אותו מייל. הרישיון לכל החיים, כולל כל העדכונים, על עד 2 מכשירים.</li>
+<li><b>הצעד הראשון:</b> <a href="${acceptUrl}">קוראים ומאשרים את תנאי תוכנית השגרירים</a>. ברגע שמאשרים, הכלים שלכם מוכנים.</li>
+<li><b>הכלים:</b> אחרי האישור נכנסים ל<a href="${ACCOUNT}?lang=he">הורדות שלי</a> עם המייל הזה (או פותחים איתו חשבון) ומורידים את הפריסטים של MWP ואת הפאנל של MWP. בפוטושופ פותחים את הפאנל ומתחברים עם אותו מייל. הרישיון לכל החיים, כולל כל העדכונים, על עד 2 מכשירים.</li>
 <li><b>שלושת החודשים הראשונים:</b> 3 פוסטים ורילס אחד בחודש, וגם סטורי אחד בשבוע.</li>
 <li><b>תיוג:</b> @mw_phototours באינסטגרם ו-Matan Wild בפייסבוק, עם #mwppanel #mwppresets #jointhewildsideofphotography. חשוב לסמן את הפוסטים בתווית "שותפות בתשלום" או ב-#פרסומת.</li>
 <li><b>פידבק ובאגים:</b> כל הערה עוזרת לנו להשתפר. אפשר לשלוח אותן ישר אליי, ויש גם קו ישיר למתן.</li>
@@ -137,7 +134,8 @@ function welcome(lang: "en" | "he", name: string) {
 <p>Great news: you're in! Welcome to the MWP Ambassador Program.</p>
 <p>Here's everything you need to get started:</p>
 <ul>
-<li><b>Your tools:</b> sign in to <a href="${ACCOUNT}">My downloads</a> with this email (or create your account with it) and download the MWP - Signature Preset Pack and the MWP - PS Panel. In Photoshop, open the panel and sign in with the same email. Your license is for life, with all future updates, on up to 2 devices.</li>
+<li><b>First step:</b> <a href="${acceptUrl}">read and accept the Ambassador Program terms</a>. As soon as you accept, your tools are ready.</li>
+<li><b>Your tools:</b> then sign in to <a href="${ACCOUNT}">My downloads</a> with this email (or create your account with it) and download the MWP - Signature Preset Pack and the MWP - PS Panel. In Photoshop, open the panel and sign in with the same email. Your license is for life, with all future updates, on up to 2 devices.</li>
 <li><b>Your first 3 months:</b> 3 posts and 1 reel a month, plus 1 story a week.</li>
 <li><b>Tagging:</b> @mw_phototours on Instagram and Matan Wild on Facebook, with #mwppanel #mwppresets #jointhewildsideofphotography. Please mark posts with the "Paid partnership" label or #ad.</li>
 <li><b>Feedback and bugs:</b> every note helps us improve. Send them straight to me, and you also have a direct line to Matan.</li>

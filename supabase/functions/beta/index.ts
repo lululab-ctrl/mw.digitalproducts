@@ -2,14 +2,17 @@
 // beta — the MWP Ambassador Program page (shop.mw.photography/beta/).
 //   status {}                              → { open }: is the program still taking people? (26 at most)
 //   signed_terms (signed in)               → { url } of their signed-terms PDF, or 202 while it's being made
-//   apply { name, email, ..., agree, lang } → { ok }: an application. The person accepted the terms (step 1)
-//         and answered the questionnaire (step 2). It's saved and sent to monday.com (Shop Ambassador
-//         Applications) through Make. Nothing is given yet: the team decides in monday, and the scheduler
-//         (job "applications") gives approved people their tools and has Make email the answer.
+//   apply { name, email, ..., lang }      → { ok }: an application (the questionnaire; no terms yet). It's saved
+//         and sent to monday.com (Shop Ambassador Applications) through Make. Nothing is given: the team
+//         decides in monday; the scheduler (job "applications") emails approved people a personal link.
+//   accept_info { token }                  → { name, email, accepted }: for the page behind that link.
+//   accept { token, agree, lang }          → { ok, email }: they read and accepted the terms on that page. Now
+//         they become ambassadors: tools, beta_members (terms version), signed-terms PDF, Shop Ambassadors.
 // No password: the page is open to anyone with the link. Applications are limited per IP.
 // (Joining on the spot, the old "join" action, is gone: access now needs the team's approval.)
 // ============================================================================
 import { admin, clientIp, cors, EMAIL_RE, fail, json, notifyMake, requestPersonalCopies, sha256Hex } from "../_shared/http.ts";
+import { grantAmbassador } from "../_shared/ambassador.ts";
 
 const TERMS_VERSION = "2026-10-13.4";   // must match TERMS_VERSION in tools/ambassador_terms.py
 const MAX_APPLICATIONS_PER_HOUR = 5;  // per IP
@@ -51,6 +54,7 @@ Deno.serve(async (req) => {
     return json(req, { open: Boolean(open) });
   }
   if (body.action === "signed_terms") return signedTerms(req, db);
+  if (body.action === "accept_info" || body.action === "accept") return accept(req, db, body);
   if (body.action !== "apply") return fail(req, "Unknown action.", 400);
 
   const salt = Deno.env.get("IP_HASH_SALT") ?? "";
@@ -70,7 +74,6 @@ Deno.serve(async (req) => {
   if (!EMAIL_RE.test(email)) return fail(req, "Please enter a valid email.", 400);
   if (!name) return fail(req, "Please enter your name.", 400);
   if (!instagram) return fail(req, "Please enter your Instagram handle.", 400);
-  if (body.agree !== true) return fail(req, "Please accept the Ambassador Program terms.", 400);
 
   const raw = (body.answers ?? {}) as Record<string, unknown>;
   const answers: Record<string, string> = {};
@@ -88,7 +91,7 @@ Deno.serve(async (req) => {
   const { data: known } = await db.from("customers").select("id, beta_members(status)").eq("email", email).maybeSingle();
   const bm = Array.isArray(known?.beta_members) ? known?.beta_members[0] : known?.beta_members;
   if (bm && bm.status === "active") return json(req, { ok: true, already: "member" });
-  const { data: waiting } = await db.from("ambassador_applications").select("id").eq("email", email).eq("status", "new").limit(1);
+  const { data: waiting } = await db.from("ambassador_applications").select("id").eq("email", email).in("status", ["new", "approved"]).limit(1);
   if (waiting?.length) return json(req, { ok: true, already: "waiting" });
   if (!bm) {
     const { data: open } = await db.rpc("ambassador_program_open");
@@ -97,7 +100,7 @@ Deno.serve(async (req) => {
 
   const { data: app, error } = await db.from("ambassador_applications").insert({
     email, name, lang, instagram: instagram || null, facebook: facebook || null, answers,
-    terms_version: TERMS_VERSION, ip_hash: ipHash,
+    ip_hash: ipHash,
   }).select("id, created_at").single();
   if (error) { console.error(error); return fail(req, "Couldn't send your application. Please try again.", 500); }
 
@@ -144,4 +147,48 @@ async function signedTerms(req: Request, db: any): Promise<Response> {
     .createSignedUrl(member.terms_pdf_path, 300, { download: `MWP Ambassador terms - signed ${day}.pdf` });
   if (error || !signed) { console.error(error); return fail(req, "Couldn't prepare your copy. Please try again.", 500); }
   return json(req, { url: signed.signedUrl });
+}
+
+// ---------------------------------------------------------------- after approval: accept the terms
+// The welcome email links to /beta/?accept=<token> (the token is only stored as a hash; good for 60 days).
+// deno-lint-ignore no-explicit-any
+async function accept(req: Request, db: any, body: Record<string, unknown>): Promise<Response> {
+  const token = String(body.token ?? "");
+  const BAD = "This link isn't valid any more. Please contact us.";
+  if (!/^[a-f0-9]{64}$/.test(token)) return fail(req, BAD, 404);
+  const { data: app } = await db.from("ambassador_applications")
+    .select("id, email, name, lang, instagram, facebook, status, decided_at, ip_hash")
+    .eq("accept_token_hash", await sha256Hex(token)).maybeSingle();
+  if (!app || !["approved", "accepted"].includes(app.status)) return fail(req, BAD, 404);
+  if (app.status === "approved" && Date.now() - Date.parse(app.decided_at) > 60 * 86400 * 1000) return fail(req, BAD, 410);
+  if (body.action === "accept_info") return json(req, { name: app.name, email: app.email, accepted: app.status === "accepted" });
+
+  if (app.status === "accepted") return json(req, { ok: true, email: app.email });
+  if (body.agree !== true) return fail(req, "Please accept the Ambassador Program terms.", 400);
+  // Claim it first, so a double click can't do it twice.
+  const { data: claimed } = await db.from("ambassador_applications")
+    .update({ status: "accepted", accepted_at: new Date().toISOString(), terms_version: TERMS_VERSION,
+              agreed_at: new Date().toISOString() })
+    .eq("id", app.id).eq("status", "approved").select("id");
+  if (!claimed?.length) return json(req, { ok: true, email: app.email });
+  const lang = body.lang === "he" ? "he" : (app.lang === "he" ? "he" : "en");
+  let r;
+  try {
+    r = await grantAmbassador(db, { email: app.email, name: app.name, instagram: app.instagram, facebook: app.facebook,
+      lang, termsVersion: TERMS_VERSION, agreedAt: new Date().toISOString(), ipHash: app.ip_hash });
+  } catch (err) {
+    console.error("accept grant", err);
+    await db.from("ambassador_applications").update({ status: "approved", accepted_at: null }).eq("id", app.id);
+    return fail(req, "Couldn't finish. Please try again in a minute.", 500);
+  }
+  if ("full" in r) {
+    await db.from("ambassador_applications").update({ status: "full" }).eq("id", app.id);
+    await notifyMake("MAKE_WEBHOOK_URL", { type: "application_decided", application_id: app.id, result: "Program full",
+      send_email: "no", email: app.email, subject: "", body_html: "" });
+    return fail(req, "The Ambassador Program is full. Thank you for your interest.", 409);
+  }
+  await db.from("ambassador_applications").update({ member_id: r.memberId }).eq("id", app.id);
+  await notifyMake("MAKE_WEBHOOK_URL", { type: "application_decided", application_id: app.id, result: "Access given",
+    send_email: "no", email: app.email, subject: "", body_html: "" });
+  return json(req, { ok: true, email: app.email });
 }
