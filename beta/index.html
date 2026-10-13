@@ -70,37 +70,41 @@ html[dir=rtl] .top .shade{background:linear-gradient(180deg,rgba(10,9,8,.55) 0%,
 .done h3{margin:22px 0 0;font-size:30px;font-weight:400;letter-spacing:-.02em}
 .done p{margin:14px auto 0;max-width:420px;font-size:16px;line-height:1.6;color:#CDD7DD}
 .done .btn{margin-top:26px;width:auto}
-.sheet{position:relative;max-width:900px;margin:0 auto;border-radius:30px;background:linear-gradient(180deg,#14120f,#0d0c0b 40%);border:1px solid rgba(254,251,241,.09);box-shadow:0 60px 120px -60px rgba(0,0,0,.95),inset 0 1px 0 rgba(254,251,241,.06);overflow:hidden}
-.sheet::before{content:"";position:absolute;top:0;left:12%;right:12%;height:1px;background:linear-gradient(90deg,transparent,rgba(244,175,86,.8),transparent)}
-.sheet::after{content:"";position:absolute;top:-160px;left:50%;width:620px;height:320px;transform:translateX(-50%);background:radial-gradient(closest-side,rgba(244,175,86,.10),transparent);pointer-events:none}
+.sheet{position:relative;max-width:900px;margin:0 auto;border-radius:28px;background:linear-gradient(180deg,rgba(254,251,241,.055),rgba(254,251,241,.015) 55%,rgba(254,251,241,.03)),#0A0908;border:1px solid rgba(254,251,241,.08);box-shadow:0 60px 120px -60px rgba(0,0,0,.95),inset 0 1px 0 rgba(254,251,241,.06);overflow:hidden}
+.sheet::before{content:"";position:absolute;top:0;left:20%;right:20%;height:1px;background:linear-gradient(90deg,transparent,rgba(244,175,86,.55),transparent)}
 .sh-head{position:relative;padding:56px 64px 0;text-align:center}
 .sh-brand{display:inline-flex;align-items:center;gap:12px}
-.sh-brand img{width:38px;height:38px;object-fit:contain}
+.sh-brand img{width:34px;height:34px;object-fit:contain}
+.sh-brand .kick{font-size:13px;letter-spacing:.28em}
 .sh-brand .kick{margin:0}
-.sh-title{margin:22px 0 0;font-size:clamp(40px,5vw,64px);font-weight:300;line-height:1;letter-spacing:-.035em}
-.sh-meta{margin:16px 0 0;font-size:14px;color:#7E8A93;letter-spacing:.02em}
+.sh-title{margin:20px 0 0;font-size:clamp(34px,4.2vw,56px);font-weight:400;line-height:1.08;letter-spacing:-.015em}
+.sh-title .grad{font-weight:600}
+.sh-meta{margin:14px 0 0;font-size:14px;color:#8C979F}
 .he-note{display:none;margin:10px 0 0;font-size:14px;color:#9CB1C2}
 html[lang=he] .he-note{display:block}
 .facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin:40px 64px 0;border-top:1px solid rgba(254,251,241,.08);border-bottom:1px solid rgba(254,251,241,.08)}
 .fact{display:flex;flex-direction:column;align-items:center;gap:6px;padding:24px 14px;text-align:center;text-decoration:none;transition:background .3s}
 .fact+.fact{border-inline-start:1px solid rgba(254,251,241,.08)}
-.fact:hover{background:rgba(244,175,86,.05)}
-.fact b{font-size:30px;font-weight:300;letter-spacing:-.02em;background:linear-gradient(90deg,#F8D29C,#F4AF56);-webkit-background-clip:text;background-clip:text;color:transparent}
-.fact span{font-size:12.5px;line-height:1.45;color:#9CB1C2;max-width:170px}
+.fact:hover{background:rgba(254,251,241,.03)}
+.fact:hover b{color:#F8D29C}
+.fact b{font-size:clamp(26px,2.6vw,34px);font-weight:400;letter-spacing:-.03em;line-height:1;color:#FEFBF1;font-variant-numeric:tabular-nums}
+.fact span{margin-top:6px;font-size:11px;font-weight:700;line-height:1.5;letter-spacing:.14em;text-transform:uppercase;color:#8C979F;max-width:180px}
+html[lang=he] .fact span{letter-spacing:.03em}
 .sh-body{position:relative;padding:40px 64px 56px}
-.t-intro p{margin:0;font-size:17.5px;line-height:1.75;color:#E3E9EC;text-wrap:pretty}
+.t-intro p{margin:0;font-size:17px;line-height:1.7;color:#CDD7DD;text-wrap:pretty}
 .t-intro p.agree{margin-top:18px;font-size:15px;font-weight:600;color:#F4AF56}
 .ch-tools{display:flex;align-items:center;justify-content:space-between;margin-top:44px;padding-bottom:14px;border-bottom:1px solid rgba(254,251,241,.08)}
-.ch-tools p{margin:0;font-size:11.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#7E8A93}
+.ch-tools p{margin:0;font-size:12px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:#9CB1C2}
 .ch-all{border:0;background:none;padding:6px 0;color:#F4AF56;font:inherit;font-size:14px;font-weight:600;cursor:pointer}
 .ch-all:hover{color:#F8D29C}
 .ch{border-bottom:1px solid rgba(254,251,241,.08);scroll-margin-top:96px}
 .ch h3{margin:0}
 .ch-b{display:grid;grid-template-columns:52px minmax(0,1fr) 36px;align-items:center;width:100%;padding:24px 0;border:0;background:none;color:#FEFBF1;font:inherit;text-align:left;cursor:pointer}
-.ch-b .num{font-size:14px;font-weight:600;color:#7E8A93;font-variant-numeric:tabular-nums;letter-spacing:.06em;transition:color .3s}
-.ch-b .ttl{font-size:21px;font-weight:400;letter-spacing:-.01em;transition:color .3s}
+.ch-b .num{font-size:13px;font-weight:700;color:#8C979F;font-variant-numeric:tabular-nums;letter-spacing:.06em;transition:color .3s}
+.ch-b .ttl{font-size:19px;font-weight:600;letter-spacing:-.015em;transition:color .3s}
 .ch-b .pm{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;border:1px solid rgba(254,251,241,.14);color:#CDD7DD;transition:transform .45s cubic-bezier(.2,.8,.2,1),border-color .3s,background .3s,color .3s}
-.ch-b:hover .ttl{color:#F8D29C}
+.ch-b:hover .ttl{color:#FEFBF1}
+.ch-b:hover .num{color:#F4AF56}
 .ch-b:hover .pm{border-color:rgba(244,175,86,.6);color:#F4AF56}
 .ch-b:focus-visible{outline:2px solid rgba(244,175,86,.6);outline-offset:4px;border-radius:8px}
 .ch.open .num{color:#F4AF56}
@@ -142,12 +146,12 @@ html[lang=he] .he-note{display:block}
 .modal.modal-terms{align-items:start;padding:40px 20px 0}
 .modal-terms .modal-sheet{border-bottom-left-radius:0;border-bottom-right-radius:0;min-height:calc(100svh - 40px)}
 .modal-sheet .modal-x{z-index:3}
-.sh-bar{position:sticky;bottom:0;margin-top:auto;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:18px 64px;background:rgba(13,12,11,.98);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid rgba(244,175,86,.2)}
+.sh-bar{position:sticky;bottom:0;margin-top:auto;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:18px 64px;background:rgba(10,9,8,.96);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid rgba(254,251,241,.08)}
 .sh-bar p{margin:0;font-size:14px;color:#9CB1C2}
 .sh-bar-b{display:flex;gap:10px}
-.btn-ghost{background:transparent;border:1px solid rgba(254,251,241,.2);color:#FEFBF1;box-shadow:none}
-.btn-ghost:hover{border-color:rgba(254,251,241,.45);box-shadow:none}
-.modal-card{position:relative;width:100%;max-width:560px;margin:auto;padding:44px 44px 38px;text-align:center;background:linear-gradient(180deg,rgba(24,21,18,.96),rgba(12,11,10,.96));animation:modalin .55s cubic-bezier(.16,1,.3,1) both}
+.btn-ghost{background:rgba(10,9,8,.25);border:1px solid rgba(254,251,241,.32);color:#FEFBF1;box-shadow:none}
+.btn-ghost:hover{border-color:rgba(254,251,241,.6);background:rgba(254,251,241,.06);box-shadow:none;transform:none}
+.modal-card{position:relative;width:100%;max-width:560px;margin:auto;padding:44px 44px 38px;text-align:center;background:linear-gradient(180deg,rgba(254,251,241,.055),rgba(254,251,241,.015) 55%,rgba(254,251,241,.03)),#0A0908;animation:modalin .55s cubic-bezier(.16,1,.3,1) both}
 @keyframes modalin{from{opacity:0;transform:translateY(24px) scale(.97)}}
 .modal-card .h2{font-size:clamp(30px,3.4vw,40px)}
 .modal-card .lead{margin:14px auto 0;font-size:16px}
@@ -164,7 +168,7 @@ html.modal-on{overflow:hidden}
 .sig.signed .sig-in::after{animation:sheen 1.6s cubic-bezier(.2,.7,.1,1) .25s both}
 @keyframes sheen{to{transform:translateX(60%)}}
 .sig-l{margin:0;font-size:10.5px;font-weight:700;letter-spacing:.32em;text-transform:uppercase;color:#9CB1C2}
-.sig-name{margin:14px 0 0;min-height:1.15em;font-size:clamp(30px,3vw,38px);font-weight:300;line-height:1.1;letter-spacing:-.025em;color:rgba(254,251,241,.22);transition:color .4s;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sig-name{margin:14px 0 0;min-height:1.15em;font-size:clamp(30px,3vw,38px);font-weight:400;line-height:1.1;letter-spacing:-.025em;color:rgba(254,251,241,.22);transition:color .4s;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .sig.typed .sig-name{background:linear-gradient(90deg,#FEFBF1 0%,#F8D29C 60%,#F4AF56 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
 html[dir=rtl] .sig.typed .sig-name{background:linear-gradient(270deg,#FEFBF1 0%,#F8D29C 60%,#F4AF56 100%);-webkit-background-clip:text;background-clip:text}
 .sig-rule{position:relative;display:block;height:1px;margin-top:12px;background:rgba(254,251,241,.12)}
@@ -232,6 +236,11 @@ html .nav .links + .navr{margin-inline-start:0}
 @media (max-width:1100px){html .nav .links{display:none}html .nav .navr,html .nav .links + .navr{margin-inline-start:auto}}
 @media (max-width:600px){html .nav .wrap{height:64px;gap:10px}html.nav-scrolled .nav .wrap{height:58px}html .nav .brand span{display:none}html .nav .navr .btn.sm{display:none}html .nav .nav-ico{width:38px;height:38px}html .nav .lang-toggle{padding-left:10px;margin-inline-start:2px}html[lang=he] .nav .lang-toggle{padding:0 10px 0 0}}
 
+/* Beta page: one steady header. No height change and no blur when scrolling or hovering (the page is
+   short, and a blur over the big photo can flicker in Chrome on Windows). */
+html .nav,html.nav-scrolled .nav{background:linear-gradient(180deg,rgba(10,9,8,.82),rgba(10,9,8,.45));border-bottom:1px solid rgba(254,251,241,.06);backdrop-filter:none!important;-webkit-backdrop-filter:none!important;transition:none}
+html .nav .wrap,html.nav-scrolled .nav .wrap{height:80px;transition:none}
+@media (max-width:600px){html .nav .wrap,html.nav-scrolled .nav .wrap{height:64px}}
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700&family=Heebo:wght@300..900&display=swap">
 <style id="mwp-fonts">
@@ -268,7 +277,7 @@ html[lang=he] body,html[lang=he] body *:not(svg):not(svg *),html body [lang=he],
 
 <header class="sh-head">
 <div class="sh-brand"><img src="../assets/pages/img/2dd3356528167ddf9a64c0c7301c8aa3.png" alt=""><p class="kick">MWP Ambassador Program</p></div>
-<h2 class="sh-title" id="terms-h">Terms of Use</h2>
+<h2 class="sh-title" id="terms-h">Terms of <span class="grad">Use.</span></h2>
 <p class="sh-meta" data-no-i18n>Oct 13, 2026 · @Matan Wild</p>
 <p class="he-note" lang="he" dir="rtl" data-no-i18n>התנאים זמינים כרגע באנגלית.</p>
 </header>
@@ -325,6 +334,6 @@ html[lang=he] body,html[lang=he] body *:not(svg):not(svg *),html body [lang=he],
 </main>
 
 <script src="../assets/js/lib/nav.js" defer></script>
-<script type="module" src="../assets/js/pages/beta.js?v=7fc7b6d4"></script>
+<script type="module" src="../assets/js/pages/beta.js?v=5cf4e76a"></script>
 </body>
 </html>

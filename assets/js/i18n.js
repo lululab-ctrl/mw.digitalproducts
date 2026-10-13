@@ -330,6 +330,8 @@ const HE = {
   "By accepting, you agree to these terms.": "באישור, אתם מסכימים לתנאים האלה.",
   "Read and accept the terms": "לקריאה ואישור התנאים",
   "To join, read and accept the MWP Ambassador Program Terms of Use. Then you'll fill in your details and get your tools.": "כדי להצטרף, קראו ואשרו את תנאי השימוש של תוכנית השגרירים של MWP. אחר כך תמלאו פרטים ותקבלו את הכלים.",
+  "Terms of": "תנאי",
+  "Use.": "שימוש.",
   "Please agree to the Ambassador Program terms.": "נא לאשר את תנאי תוכנית השגרירים.",
   "Couldn't save your details. Please try again.": "לא הצלחנו לשמור את הפרטים. נסו שוב.",
   "Couldn't add the tools to your library. Please try again.": "לא הצלחנו להוסיף את הכלים לספרייה. נסו שוב.",

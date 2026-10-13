@@ -45,7 +45,7 @@ document.querySelectorAll("[data-open]").forEach((a) => a.addEventListener("clic
   const ch = document.getElementById(`t${a.dataset.open}`);
   if (ch) { setOpen(ch, true); syncAll(); }
 }));   // (scrolling to it is handled with the pop-ups below)
-if (chapters[0]) setOpen(chapters[0], true);
+// every chapter starts closed; visitors open the ones they want
 
 // ---------------------------------------------------------------- tap to copy the handle and hashtags
 const copied = document.createElement("div");
@@ -127,7 +127,10 @@ document.getElementById("agree-btn").addEventListener("click", () => {
   closeModal(termsModal);
   openModal(joinModal, document.getElementById("join-done").hidden ? document.getElementById("j-name") : null);
 });
-if (location.hash === "#terms") openModal(termsModal);
+// a refresh always starts at the top ("Create with MWP"), never inside the terms
+if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+if (location.hash) history.replaceState(null, "", location.pathname + location.search);
+window.scrollTo(0, 0);
 
 // ---------------------------------------------------------------- step 2: details, then the download link
 const form = document.getElementById("join-form");
