@@ -1,6 +1,6 @@
 // My downloads: magic-link sign-in, then the customer's library with secure download buttons.
 import { initChrome, toast } from "../lib/ui.js";
-import { supabase, currentUser, sendMagicLink, signOut, signInWithPassword, signUpWithPassword, sendPasswordReset, updatePassword, myLibrary, requestDownload, panelDevices, removePanelDevice, mediaUrl, esc, shortDate } from "../lib/api.js";
+import { supabase, currentUser, sendMagicLink, signOut, signInWithPassword, signUpWithPassword, sendPasswordReset, updatePassword, myLibrary, requestDownload, signedTerms, panelDevices, removePanelDevice, mediaUrl, esc, shortDate } from "../lib/api.js";
 import { EMAIL_RE, setBusy, setStatus } from "./shared-forms.js";
 import { countLabel } from "../lib/catalog.js";
 
@@ -21,6 +21,8 @@ const COVERS = {
 const TAGS = { preset: "Lightroom presets", plugin: "Photoshop plugin", guide: "PDF field guides", bundle: "Bundle" };
 const DL_ICON = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>';
 
+const READ_ICON = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 5h7a3 3 0 0 1 3 3v12a2 2 0 0 0-2-2H2zM22 5h-7a3 3 0 0 0-3 3v12a2 2 0 0 1 2-2h8z"/></svg>';
+
 function libraryHTML(items) {
   items = items.filter((i) => i.products);   // a product that can't be shown is skipped, not fatal
   if (!items.length) {
@@ -29,7 +31,7 @@ function libraryHTML(items) {
       <p class="meta">Bought with a different email? Sign out and use that one, or <a class="link" href="support.html">contact support</a> with your order number.</p>
     </div>`;
   }
-  return items.map(({ granted_at, products: p }, i) => {
+  return items.map(({ granted_at, view_only: viewOnly, products: p }, i) => {
     const [img, pos] = p.cover_path ? [mediaUrl(p.cover_path, { width: 600 }), "50% 40%"] : (COVERS[p.slug] || []);
     const count = countLabel(p);
     return `
@@ -40,7 +42,9 @@ function libraryHTML(items) {
         <h3 class="nm" data-no-i18n>${esc(p.name)}${p.name_emphasis ? ` <span class="grad">${esc(p.name_emphasis)}</span>` : ""}</h3>
         <div class="chips"><span>Version ${esc(p.version)}</span>${count ? `<span>${esc(count)}</span>` : ""}<span>Added ${shortDate(granted_at)}</span></div>
       </div>
-      <button class="dl" type="button" data-download="${esc(p.slug)}">${DL_ICON}<span>Download</span></button>
+      ${viewOnly
+        ? `<a class="dl" href="read.html">${READ_ICON}<span>Read online</span></a>`
+        : `<button class="dl" type="button" data-download="${esc(p.slug)}">${DL_ICON}<span>Download</span></button>`}
     </article>`;
   }).join("");
 }
@@ -79,10 +83,29 @@ async function showLibrary(user) {
     const items = await myLibrary();
     library.innerHTML = libraryHTML(items);
     if (items.some((i) => PANEL_SLUGS.includes(i.products?.slug))) showDevices();
+    showSignedTerms();
   } catch (err) {
     library.innerHTML = `<p class="empty">${esc(err.message)}</p>`;
   }
 }
+
+// Ambassadors: their signed copy of the Ambassador Program terms.
+async function showSignedTerms() {
+  const box = document.getElementById("terms-box");
+  if (!box) return;
+  try { await signedTerms(); } catch { box.hidden = true; return; }   // 404: not an ambassador
+  box.hidden = false;
+}
+document.getElementById("terms-dl")?.addEventListener("click", async (e) => {
+  const btn = e.currentTarget;
+  setBusy(btn, true, he() ? "מכינים…" : "Preparing…");
+  try {
+    const r = await signedTerms();
+    if (r.url) location.href = r.url;
+    else toast(he() ? "העותק החתום שלכם עוד בהכנה. נסו שוב בעוד כמה דקות." : "Your signed copy is still being made. Please try again in a few minutes.", { timeout: 8000 });
+  } catch (err) { toast(err.message, { type: "error", timeout: 7000 }); }
+  finally { setBusy(btn, false); }
+});
 
 document.addEventListener("click", async (e) => {
   const rm = e.target.closest("[data-remove-device]");

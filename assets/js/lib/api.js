@@ -152,7 +152,7 @@ export async function signOut() {
 export async function myLibrary() {
   const { data, error } = await requireClient()
     .from("entitlements")
-    .select("id, granted_at, revoked_at, products(slug, name, name_emphasis, category, cover_path, version, item_count)")
+    .select("id, granted_at, revoked_at, view_only, products(slug, name, name_emphasis, category, cover_path, version, item_count)")
     .is("revoked_at", null)
     .order("granted_at", { ascending: false });
   if (error) throw new ApiError(error.message);
@@ -181,4 +181,7 @@ export const removePanelDevice = (device_id) => callFunction("license", { action
 export const sendSupport = (form) => callFunction("support", form);
 export const betaJoin = (form) => callFunction("beta", { action: "join", ...form });
 export const betaStatus = () => callFunction("beta", { action: "status" });
+// The ambassador's signed-terms PDF: { url } when ready, { preparing } while it's being made (202).
+export const signedTerms = (receipt) => callFunction("beta", { action: "signed_terms", ...(receipt ? { receipt } : {}) }, { auth: !receipt });
+export const guideView = () => callFunction("guide-view", {}, { auth: true });
 export const subscribe = (email, source = "free-sampler") => callFunction("subscribe", { email, source });

@@ -337,9 +337,37 @@ ACCOUNT_CSS = """
 .devices-box .devices{padding:28px 30px;border-radius:24px;background:linear-gradient(180deg,rgba(254,251,241,.05),rgba(254,251,241,.015));border:1px solid rgba(254,251,241,.08)}
 .devices-box .h3{font-size:22px;font-weight:500}
 .acct-note{margin-top:26px;font-size:13px;color:#7E8A93}
+a.dl{text-decoration:none}
+.terms-box{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-top:26px;padding:24px 30px;border-radius:24px;background:linear-gradient(180deg,rgba(254,251,241,.05),rgba(254,251,241,.015));border:1px solid rgba(254,251,241,.08)}
+.terms-box .h3{margin:0;font-size:22px;font-weight:500}.terms-box .meta{margin:6px 0 0}
+@media (max-width:820px){.terms-box{flex-direction:column;align-items:flex-start;padding:22px}}
 html[lang=he] .acct-kick,html[lang=he] .lib .tg{letter-spacing:.04em}
 @media (max-width:820px){.lib{grid-template-columns:minmax(0,1fr);gap:18px;padding:14px 14px 22px}.lib .ph{aspect-ratio:16/9}.lib > div:nth-child(2),.lib .dl{margin:0 10px}.dl{justify-content:center}.who{flex-wrap:wrap}#signed-out.glass{padding:28px 22px}}
 @media (prefers-reduced-motion:reduce){.lib,.acct-hero .bg{animation:none;opacity:1;transform:none}}
+</style>"""
+
+READ_CSS = """
+<style id="read">
+.rd-hero{padding:clamp(70px,9vw,110px) 0 26px}
+.rd-kick{margin:0;font-size:12px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:#9CB1C2}
+.rd-h1{margin:14px 0 0;font-size:clamp(40px,6vw,76px);line-height:1;font-weight:400;letter-spacing:-.04em}
+.grad{background:linear-gradient(90deg,#E4AA7C 0%,#F4AF56 55%,#F8D29C 100%);-webkit-background-clip:text;background-clip:text;color:transparent;font-weight:600}
+.rd-lead{margin:16px 0 0;max-width:620px;font-size:17px;line-height:1.6;color:#CDD7DD}
+.rd .container{max-width:1000px}
+.rd-tabs{position:sticky;top:64px;z-index:5;display:flex;gap:8px;overflow-x:auto;padding:12px 0;margin-bottom:22px;background:linear-gradient(180deg,#0A0908 70%,rgba(10,9,8,0));scrollbar-width:none}
+.rd-tabs::-webkit-scrollbar{display:none}
+.rd-tabs button{flex:none;min-height:40px;padding:0 18px;border-radius:64px;border:1px solid rgba(254,251,241,.16);background:rgba(254,251,241,.03);color:#CDD7DD;font:inherit;font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap}
+.rd-tabs button[aria-selected=true]{background:linear-gradient(90deg,#E4AA7C,#F4AF56);border-color:transparent;color:#0A0908}
+.rd-pages{display:flex;flex-direction:column;gap:18px;padding-bottom:110px;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.rd-page{position:relative;width:100%;border-radius:10px;overflow:hidden;background:#15130f;box-shadow:0 30px 60px -40px rgba(0,0,0,.9)}
+.rd-page canvas{display:block;width:100%;height:100%;pointer-events:none}
+.rd-n{position:absolute;bottom:10px;inset-inline-end:12px;font-size:11.5px;color:rgba(254,251,241,.55);background:rgba(10,9,8,.55);padding:3px 8px;border-radius:64px}
+.rd-msg{padding:40px 32px;text-align:center;border-radius:24px;background:linear-gradient(180deg,rgba(254,251,241,.05),rgba(254,251,241,.015));border:1px solid rgba(254,251,241,.08);color:#CDD7DD}
+.rd-msg .btn{margin-top:18px}
+.rd-note{margin:0 0 18px;font-size:13px;color:#7E8A93}
+html[lang=he] .rd-kick{letter-spacing:.04em}
+@media (max-width:820px){.rd-tabs{top:56px}}
+@media print{body{display:none!important}}
 </style>"""
 
 page("account.html", "My downloads · MWP",
@@ -412,10 +440,30 @@ page("account.html", "My downloads · MWP",
       <div id="signed-in" class="stack-lg" hidden>
         <div class="library" id="library" aria-live="polite"></div>
         <div class="devices-box" id="devices" hidden></div>
+        <section class="terms-box" id="terms-box" hidden>
+          <div><h2 class="h3">Your Ambassador Program terms</h2>
+          <p class="meta">The signed copy of the terms you accepted, as a PDF.</p></div>
+          <button class="btn btn--ghost btn--sm" type="button" id="terms-dl">Download PDF</button>
+        </section>
         <p class="acct-note">Download links are created when you click and expire after 5 minutes. Trouble? <a class="link" href="support.html?topic=download">Contact support</a>.</p>
       </div>
     </div>
   </section>""", "account.js", extra_head='\n  <meta name="robots" content="noindex">' + ACCOUNT_CSS)
+
+page("read.html", "Field Guides · Read online · MWP",
+ "Read the MWP Field Guides online.",
+ """  <section class="rd-hero">
+    <div class="container container--text">
+      <p class="rd-kick">Read online</p>
+      <h1 class="rd-h1"><span data-no-i18n>MWP</span> <span class="grad" data-no-i18n>Field Guides</span></h1>
+      <p class="rd-lead">Your guides, page by page. They're for your eyes only: every page carries your name and licence.</p>
+    </div>
+  </section>
+  <section class="rd">
+    <div class="container">
+      <div id="rd-body" aria-live="polite"><div class="skeleton" style="height:420px;border-radius:10px"></div></div>
+    </div>
+  </section>""", "read.js", extra_head='\n  <meta name="robots" content="noindex">' + READ_CSS)
 
 page("support.html", "Help · MWP",
  "Help with downloading, installing or using MWP products.",

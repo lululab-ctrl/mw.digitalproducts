@@ -1,9 +1,10 @@
 // ============================================================================
 // beta — the MWP Ambassador Program page (shop.mw.photography/beta/).
 //   status {}                              → { open }: is the program still taking people? (26 at most)
-//   join { name, email, instagram, agree } → records that this person accepted
+//   signed_terms { receipt } or signed in   → { url } of their signed-terms PDF, or 202 while it's being made
+//   join { name, email, instagram, facebook, agree } → { ok, receipt }: records that this person accepted
 //         the Ambassador Program terms, gives their email MWP Presets, MWP Panel
-//         and the Field Guides (exactly like a purchase), and sends them to
+//         and the Field Guides (the guides to read online only), and sends them to
 //         monday.com (Shop Ambassadors) through Make. The page then emails them
 //         a link to My downloads.
 // No password: the page is open to anyone with the link. Sign-ups are limited
@@ -14,7 +15,7 @@
 import { admin, clientIp, cors, EMAIL_RE, fail, json, notifyMake, requestPersonalCopies, sha256Hex } from "../_shared/http.ts";
 
 const PRODUCTS = ["mwp-presets", "mwp-panel", "mwp-field-guides"];
-const TERMS_VERSION = "2026-10-13.2";   // must match TERMS_VERSION in tools/ambassador_terms.py
+const TERMS_VERSION = "2026-10-13.3";   // must match TERMS_VERSION in tools/ambassador_terms.py
 const MAX_JOINS_PER_HOUR = 5;         // per IP
 
 Deno.serve(async (req) => {
@@ -31,6 +32,7 @@ Deno.serve(async (req) => {
     if (error) { console.error(error); return fail(req, "Couldn't check the program. Please try again.", 500); }
     return json(req, { open: Boolean(open) });
   }
+  if (body.action === "signed_terms") return signedTerms(req, db, body);
   if (body.action !== "join") return fail(req, "Unknown action.", 400);
 
   const salt = Deno.env.get("IP_HASH_SALT") ?? "";
@@ -68,9 +70,11 @@ Deno.serve(async (req) => {
 
   const { data: before } = await db.from("beta_members").select("id").eq("customer_id", customer.id).maybeSingle();
   const agreedAt = new Date();
+  // A one-time receipt lets this page download their signed copy as soon as it's made (only its hash is kept).
+  const receipt = crypto.randomUUID().replace(/-/g, "") + crypto.randomUUID().replace(/-/g, "");
   const { error: mErr } = await db.from("beta_members").upsert(
     { customer_id: customer.id, instagram: instagram || null, facebook: facebook || null, ip_hash: ipHash,
-      agreed_at: agreedAt.toISOString(), terms_version: TERMS_VERSION },
+      agreed_at: agreedAt.toISOString(), terms_version: TERMS_VERSION, receipt_hash: await sha256Hex(receipt) },
     { onConflict: "customer_id" });
   if (mErr) {
     if (/ambassador_program_full/.test(mErr.message)) return fail(req, FULL, 409);   // filled up a moment ago
@@ -82,7 +86,9 @@ Deno.serve(async (req) => {
     const { data: owned } = await db.from("entitlements").select("id, revoked_at")
       .eq("customer_id", customer.id).eq("product_id", p.id).maybeSingle();
     if (owned) continue;   // already has it (bought, or joined before); a revoked one stays revoked
-    const { error } = await db.from("entitlements").insert({ customer_id: customer.id, product_id: p.id });
+    // Ambassadors read the Field Guides online only (see guide-view); presets and panel download as usual.
+    const { error } = await db.from("entitlements").insert({
+      customer_id: customer.id, product_id: p.id, view_only: p.slug === "mwp-field-guides" });
     if (error) { console.error(error); return fail(req, "Couldn't add the tools to your library. Please try again.", 500); }
   }
 
@@ -98,8 +104,41 @@ Deno.serve(async (req) => {
     name, email, instagram: instagram ? `@${instagram}` : "", facebook,
     agreed_on: day(agreedAt), first_months_end: day(firstMonths), ends_on: day(ends),
     terms_version: TERMS_VERSION,
-    products: "MWP Presets, MWP Panel, MWP Field Guides",
+    products: "MWP Presets, MWP Panel, MWP Field Guides (read online)",
   });
 
-  return json(req, { ok: true });
+  return json(req, { ok: true, receipt });
 });
+
+// The ambassador's own signed-terms PDF: with the receipt from joining (good for a day), or signed in.
+// deno-lint-ignore no-explicit-any
+async function signedTerms(req: Request, db: any, body: Record<string, unknown>): Promise<Response> {
+  let member: { agreed_at: string; terms_pdf_path: string | null; terms_pdf_made_at: string | null } | null = null;
+  const receipt = String(body.receipt ?? "");
+  if (/^[a-f0-9]{64}$/.test(receipt)) {
+    const { data } = await db.from("beta_members").select("agreed_at, terms_pdf_path, terms_pdf_made_at")
+      .eq("receipt_hash", await sha256Hex(receipt)).maybeSingle();
+    if (data && Date.now() - Date.parse(data.agreed_at) < 24 * 3600 * 1000) member = data;
+  } else {
+    const jwt = (req.headers.get("authorization") ?? "").replace(/^Bearer\s+/i, "");
+    const { data: auth } = await db.auth.getUser(jwt);
+    const email = auth?.user?.email?.toLowerCase();
+    if (email) {
+      const { data } = await db.from("customers")
+        .select("beta_members(agreed_at, terms_pdf_path, terms_pdf_made_at)").eq("email", email).maybeSingle();
+      const b = data?.beta_members;
+      member = (Array.isArray(b) ? b[0] : b) ?? null;
+    }
+  }
+  if (!member) return fail(req, "No signed terms found.", 404);
+  const ready = member.terms_pdf_path && member.terms_pdf_made_at && member.terms_pdf_made_at >= member.agreed_at;
+  if (!ready) {
+    await requestPersonalCopies();
+    return json(req, { preparing: true }, 202);
+  }
+  const day = member.agreed_at.slice(0, 10);
+  const { data: signed, error } = await db.storage.from("documents")
+    .createSignedUrl(member.terms_pdf_path, 300, { download: `MWP Ambassador terms - signed ${day}.pdf` });
+  if (error || !signed) { console.error(error); return fail(req, "Couldn't prepare your copy. Please try again.", 500); }
+  return json(req, { url: signed.signedUrl });
+}

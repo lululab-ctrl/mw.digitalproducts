@@ -3,7 +3,7 @@
 // (through the beta Edge Function and Make), and emails them a link to My downloads.
 import { initI18n } from "../i18n.js";
 import { initCart } from "../lib/cart.js";
-import { betaJoin, betaStatus, sendMagicLink, signUpWithPassword } from "../lib/api.js";
+import { betaJoin, betaStatus, sendMagicLink, signedTerms, signUpWithPassword } from "../lib/api.js";
 
 initI18n();
 initCart();
@@ -22,30 +22,8 @@ if (!("IntersectionObserver" in window)) {
   els.forEach((e) => io.observe(e));
 }
 
-// ---------------------------------------------------------------- terms: chapters open and close
-const chapters = [...document.querySelectorAll(".ch")];
-const allBtn = document.getElementById("ch-all");
-function setOpen(ch, open) {
-  ch.classList.toggle("open", open);
-  ch.querySelector(".ch-b").setAttribute("aria-expanded", String(open));
-}
-function syncAll() {
-  const allOpen = chapters.every((c) => c.classList.contains("open"));
-  if (allBtn) { allBtn.textContent = allOpen ? "Collapse all" : "Expand all"; allBtn.setAttribute("aria-expanded", String(allOpen)); }
-}
-chapters.forEach((ch) => ch.querySelector(".ch-b").addEventListener("click", () => {
-  setOpen(ch, !ch.classList.contains("open")); syncAll();
-}));
-allBtn?.addEventListener("click", () => {
-  const open = !chapters.every((c) => c.classList.contains("open"));
-  chapters.forEach((c) => setOpen(c, open)); syncAll();
-});
-// a key fact opens its chapter
-document.querySelectorAll("[data-open]").forEach((a) => a.addEventListener("click", () => {
-  const ch = document.getElementById(`t${a.dataset.open}`);
-  if (ch) { setOpen(ch, true); syncAll(); }
-}));   // (scrolling to it is handled with the pop-ups below)
-// every chapter starts closed; visitors open the ones they want
+// ---------------------------------------------------------------- terms: one document to read through
+// The contents list and the key facts jump to their chapter (handled with the pop-ups below).
 
 // ---------------------------------------------------------------- tap to copy the handle and hashtags
 const copied = document.createElement("div");
@@ -117,7 +95,7 @@ document.addEventListener("keydown", (e) => {
 document.addEventListener("click", (e) => {
   if (e.target.closest("[data-terms]")) { e.preventDefault(); openModal(termsModal); }
 });
-// a key fact jumps to its chapter inside the terms
+// a key fact or a contents line jumps to its chapter inside the terms
 document.querySelectorAll("[data-open]").forEach((a) => a.addEventListener("click", (e) => {
   e.preventDefault();
   document.getElementById(`t${a.dataset.open}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -175,7 +153,7 @@ form.addEventListener("submit", async (e) => {
   btn.disabled = true;
   msg.className = "msg"; msg.textContent = T("Creating your account…", "יוצרים את החשבון…");
   try {
-    await betaJoin(data);   // the tools go to this email first (the password never goes to our server)
+    const joined = await betaJoin(data);   // the tools go to this email first (the password never goes to our server)
     const r = await signUpWithPassword(data.email, password, { name: data.name, redirectPath: "/account.html" });
     const title = document.querySelector("#join-done h3");
     const text = document.getElementById("done-text");
@@ -194,6 +172,7 @@ form.addEventListener("submit", async (e) => {
     }
     document.getElementById("step-details").hidden = true;
     document.getElementById("join-done").hidden = false;
+    if (joined?.receipt) downloadSignedTerms(joined.receipt);
   } catch (err) {
     msg.className = "msg err";
     msg.textContent = err.status === 429 ? T("Too many requests. Please wait a minute and try again.", "יותר מדי בקשות. המתינו דקה ונסו שוב.") : err.message;
@@ -202,3 +181,41 @@ form.addEventListener("submit", async (e) => {
     btn.disabled = false;
   }
 });
+
+// ---------------------------------------------------------------- their own signed copy of the terms
+// The PDF is made on our side a moment after joining; we check every 10 seconds and download it to
+// their computer as soon as it's ready. It also stays in My downloads.
+async function downloadSignedTerms(receipt) {
+  const state = document.getElementById("terms-copy-state");
+  const again = document.getElementById("terms-copy-btn");
+  const started = Date.now();
+  const fetchUrl = async () => {
+    while (Date.now() - started < 5 * 60000) {
+      try {
+        const r = await signedTerms(receipt);
+        if (r.url) return r.url;
+      } catch { /* try again in a moment */ }
+      await new Promise((ok) => setTimeout(ok, 10000));
+    }
+    return null;
+  };
+  const save = (url) => {
+    const f = document.createElement("iframe");   // downloads without leaving the page
+    f.hidden = true; f.src = url; document.body.append(f);
+    setTimeout(() => f.remove(), 60000);
+  };
+  const url = await fetchUrl();
+  if (!url) {
+    state.textContent = T("It's taking a little longer. You'll find it in My downloads in a few minutes.",
+      "זה לוקח קצת יותר זמן. תמצאו אותו בהורדות שלי בעוד כמה דקות.");
+    return;
+  }
+  save(url);
+  state.textContent = T("Downloaded to your computer. Keep it with your records.", "ירד למחשב שלכם. שמרו אותו אצלכם.");
+  again.hidden = false;
+  again.onclick = async () => {
+    again.disabled = true;
+    try { const r = await signedTerms(receipt); if (r.url) save(r.url); } catch { /* the copy in My downloads still works */ }
+    again.disabled = false;
+  };
+}

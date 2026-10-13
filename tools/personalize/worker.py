@@ -1,9 +1,12 @@
-"""Makes the missing personal copies and signed-terms PDFs (run by the "Personal copies" GitHub workflow).
+"""Makes the missing personal copies, signed-terms PDFs and online guide pages (run by the "Personal copies" GitHub workflow).
 
 For every active entitlement to a Presets or Field Guides product whose personal copy is missing or
 older than the product's current file, it downloads the base zip once, stamps a copy for that person
 (personalize.py), uploads it to presets/personal/<entitlement>/<file> and records it in personal_files.
 My downloads then serves that copy instead of the base file.
+
+Ambassadors read the Field Guides online only (view-only entitlements get no zip): guide_views() renders
+each guide version's pages once, privately, for the guide-view function and the reader page.
 
 Needs SUPABASE_URL and SUPABASE_SERVICE_KEY in the environment. Prints counts only, never emails.
 """
@@ -40,11 +43,11 @@ def download(path, dest):
                 f.write(chunk)
 
 
-def upload(path, src):
+def upload(path, src, content_type="application/zip"):
     for attempt in range(3):
         with open(src, "rb") as f:
             r = S.post(f"{URL}/storage/v1/object/presets/{path}", data=f, timeout=900,
-                       headers={"content-type": "application/zip", "x-upsert": "true", "cache-control": "no-store"})
+                       headers={"content-type": content_type, "x-upsert": "true", "cache-control": "no-store"})
         if r.ok:
             return
         print(f"  upload failed ({r.status_code}), retrying", flush=True)
@@ -53,8 +56,9 @@ def upload(path, src):
 
 
 def main():
-    failed = personal_copies()
-    failed += signed_terms()
+    failed = signed_terms()        # first: a new ambassador's page is waiting to download it
+    failed += personal_copies()
+    failed += guide_views()
     if failed:
         sys.exit(1)
 
@@ -67,7 +71,7 @@ def personal_copies():
         print("No Presets or Field Guides files yet."); return 0
 
     ents = rest("entitlements", select="id,product_id,customers(name,email),personal_files(path,version)",
-                revoked_at="is.null", product_id=f"in.({','.join(products)})")
+                revoked_at="is.null", view_only="is.false", product_id=f"in.({','.join(products)})")
     todo = []
     for e in ents:
         pf = products[e["product_id"]]["product_files"]
@@ -108,13 +112,75 @@ def personal_copies():
     return failed
 
 
+# ---------------------------------------------------------------- Field Guides to read online
+PAGE_WIDTH = 1400   # pixels; sharp on a laptop, small enough to load quickly
+
+
+def guide_views():
+    """Renders each guide product's current version to page images, once: views/<product>/<version>/<g>-<nnn>.jpg.
+    The pages are the plain guides; the reader draws each person's name, email and licence ID over them."""
+    import re, zipfile
+    import pymupdf
+    products = rest("products", select="id,slug,product_files(path,version),guide_views(version)", category="eq.guide")
+    failed = 0
+    for p in products:
+        pf = p.get("product_files"); pf = (pf[0] if isinstance(pf, list) and pf else pf) or {}
+        gv = p.get("guide_views"); gv = (gv[0] if isinstance(gv, list) and gv else gv) or {}
+        if not pf.get("path") or gv.get("version") == pf["version"]:
+            continue
+        print(f"Rendering {p['slug']} {pf['version']} for reading online", flush=True)
+        try:
+            with tempfile.TemporaryDirectory() as tmp:
+                src = os.path.join(tmp, "base")
+                download(pf["path"], src)
+                pdfs = []
+                if zipfile.is_zipfile(src):
+                    with zipfile.ZipFile(src) as z:
+                        for n in sorted(z.namelist()):
+                            if n.lower().endswith(".pdf") and not os.path.basename(n).startswith((".", "_")) and "__MACOSX" not in n:
+                                pdfs.append((n, z.read(n)))
+                else:
+                    pdfs.append((pf["path"], open(src, "rb").read()))
+                version = re.sub(r"[^A-Za-z0-9._-]", "-", pf["version"])
+                prefix = f"views/{p['id']}/{version}"
+                guides = []
+                for g, (name, data) in enumerate(pdfs, 1):
+                    title = re.sub(r"^\d+\s*", "", re.sub(r"[_-]+", " ", os.path.splitext(os.path.basename(name))[0]).strip())
+                    doc = pymupdf.open(stream=data, filetype="pdf")
+                    pages = []
+                    for i, page in enumerate(doc, 1):
+                        pix = page.get_pixmap(matrix=pymupdf.Matrix(PAGE_WIDTH / page.rect.width, PAGE_WIDTH / page.rect.width), alpha=False)
+                        out = os.path.join(tmp, "page.jpg")
+                        pix.save(out, jpg_quality=78)
+                        path = f"{prefix}/{g}-{i:03d}.jpg"
+                        upload(path, out, "image/jpeg")
+                        pages.append({"path": path, "w": pix.width, "h": pix.height})
+                    guides.append({"title": title, "pages": pages})
+                    print(f"  {title}: {len(pages)} pages", flush=True)
+            S.post(f"{URL}/rest/v1/guide_views", params={"on_conflict": "product_id"},
+                   headers={"content-type": "application/json", "prefer": "resolution=merge-duplicates"},
+                   json={"product_id": p["id"], "version": pf["version"], "guides": guides,
+                         "created_at": datetime.now(timezone.utc).isoformat()}, timeout=60).raise_for_status()
+            old = gv.get("version")
+            if old:   # the pages of the version no longer shown
+                old_prefix = f"views/{p['id']}/{re.sub(r'[^A-Za-z0-9._-]', '-', old)}"
+                r = S.post(f"{URL}/storage/v1/object/list/presets", json={"prefix": old_prefix, "limit": 1000}, timeout=60)
+                names = [f"{old_prefix}/{o['name']}" for o in (r.json() if r.ok else [])]
+                if names:
+                    S.delete(f"{URL}/storage/v1/object/presets", json={"prefixes": names}, timeout=60)
+        except Exception as err:
+            failed += 1
+            print(f"  failed to render {p['slug']}: {type(err).__name__}: {str(err)[:200]}", flush=True)
+    return failed
+
+
 # ---------------------------------------------------------------- signed Ambassador Program terms
 def signed_terms():
     """A PDF of the terms for each acceptance that doesn't have one yet (or accepted again since), stored
     privately in documents/agreements/, then sent to Make to attach on the Shop Ambassadors row."""
     from terms_pdf import terms_pdf
     hook = os.environ.get("MAKE_WEBHOOK_URL", "")
-    members = rest("beta_members", select="id,instagram,facebook,agreed_at,terms_version,terms_pdf_at,customers(name,email)")
+    members = rest("beta_members", select="id,instagram,facebook,agreed_at,terms_version,terms_pdf_at,terms_pdf_made_at,customers(name,email)")
     todo = [m for m in members if (m.get("customers") or {}).get("email")
             and (not m.get("terms_pdf_at") or m["terms_pdf_at"] < (m.get("agreed_at") or ""))]
     print(f"{len(members)} ambassadors, {len(todo)} signed-terms PDFs to make", flush=True)
@@ -141,7 +207,7 @@ def signed_terms():
                         "file_name": f"MWP Ambassador terms - signed {day}.pdf"},
                         headers={"x-mwp-secret": os.environ.get("MAKE_SHARED_SECRET", "")})
                     sent = r.ok
-                patch = {"terms_pdf_path": path}
+                patch = {"terms_pdf_path": path, "terms_pdf_made_at": datetime.now(timezone.utc).isoformat()}
                 if sent:   # only marked done once monday has it on its way; otherwise the next run tries again
                     patch["terms_pdf_at"] = datetime.now(timezone.utc).isoformat()
                 S.patch(f"{URL}/rest/v1/beta_members", params={"id": f"eq.{m['id']}"},

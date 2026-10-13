@@ -31,10 +31,28 @@ function newId() {
   });
 }
 
+// One id per computer, the same in Photoshop and Photoshop (Beta): each app keeps its own plugin storage,
+// so the id is worked out from the computer itself (name, system, user folder) rather than only stored.
+function machineId() {
+  try {
+    const os = require("os");
+    const parts = [os.hostname?.(), os.platform?.(), os.arch?.(), os.homedir?.()].filter(Boolean).join("|");
+    if (!parts) return null;
+    let a = 0x811c9dc5, b = 0x01000193;          // two FNV-1a passes → 16 hex characters
+    for (let i = 0; i < parts.length; i++) {
+      const c = parts.charCodeAt(i);
+      a = Math.imul(a ^ c, 16777619) >>> 0;
+      b = Math.imul(b ^ c, 2246822519) >>> 0;
+    }
+    return `mwp-${a.toString(16).padStart(8, "0")}${b.toString(16).padStart(8, "0")}`;
+  } catch { return null; }
+}
+
 function deviceId() {
   const s = read();
-  if (!s.deviceId) { s.deviceId = newId(); write(s); }
-  return s.deviceId;
+  const id = machineId() || s.deviceId || newId();
+  if (s.deviceId !== id) { s.deviceId = id; write(s); }
+  return id;
 }
 
 function deviceName() {

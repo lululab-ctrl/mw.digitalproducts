@@ -11,7 +11,7 @@ verify_jwt = false   # checkout provider: verified by HMAC signature
 verify_jwt = false   # verifies the customer's session token itself (auth.getUser)
 
 [functions.beta]
-verify_jwt = false   # invite-only beta page: password checked server-side, guesses rate-limited
+verify_jwt = false   # Ambassador Program page: open by link, sign-ups rate-limited per IP
 
 [functions.license]
 verify_jwt = false   # MWP Panel licences: verifies the buyer's session token itself (auth.getUser)
@@ -24,3 +24,6 @@ verify_jwt = false   # public form: validation + idempotent upsert
 
 [functions.scheduler]
 verify_jwt = false   # database calls carry the Vault key; Make call back carries a one-time nonce
+
+[functions.guide-view]
+verify_jwt = false   # Field Guides online: verifies the reader's session token itself (auth.getUser)
