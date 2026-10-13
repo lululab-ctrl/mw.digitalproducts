@@ -8,6 +8,7 @@ HOOK = 3879124
 MATAN = 104260573
 
 B_ORD, B_CUS, B_PRD, B_SUP = 5105799198, 5105799189, 5105799186, 5105799201
+B_AMB = 5105939043   # Shop Ambassadors
 
 # Free text that ends up inside a JSON string: strip quotes, backslashes and line breaks.
 def clean(expr):
@@ -230,6 +231,35 @@ payout_route = [
     gql(51, q_create % B_PAY, {"name": "{{1.title}}", "group": "topics", "cv": payout_cv}, "Add payout row"),
 ]
 
+# ---------------------------------------------------------------- ambassador (Ambassador Program sign-up)
+q_amb_lookup = """query ($email: String!) {
+  a: items_page_by_column_values(board_id: %d, limit: 1, columns: [{column_id: "email_mm8331he", column_values: [$email]}]) { items { id } }
+}""" % B_AMB
+amb_cv = ('{"color_mm8391jm":{"label":"Active"},"email_mm8331he":{"email":"{{1.email}}","text":"{{1.email}}"},'
+          '"text_mm83z0v6":"' + clean("1.instagram") + '",'
+          '"date_mm83z07a":{"date":"{{1.agreed_on}}"},"date_mm83mwfv":{"date":"{{1.first_months_end}}"},'
+          '"date_mm83s7ad":{"date":"{{1.ends_on}}"},"color_mm835th0":{"label":"Not checked"},'
+          '"text_mm831gvm":"{{1.terms_version}}","text_mm837ysb":"{{1.products}}"}')
+amb_update_cv = ('{"text_mm83z0v6":"' + clean("1.instagram") + '","text_mm831gvm":"{{1.terms_version}}",'
+                 '"text_mm837ysb":"{{1.products}}"}')
+ambassador_route = [
+    gql(60, q_amb_lookup, {"email": "{{1.email}}"}, "Find ambassador",
+        f("Ambassador", ("{{1.type}}", "text:equal", "ambassador"))),
+    router(61, [
+        [gql(62, """mutation ($name: String!, $cv: JSON!) {
+  c: create_item(board_id: %d, group_id: "topics", item_name: $name, column_values: $cv) { id }
+}""" % B_AMB, {"name": "{{1.name}}", "cv": amb_cv}, "New ambassador",
+             f("New", ("{{60.body.data.a.items[1].id}}", "notexist", None))),
+         gql(63, "mutation ($id: ID!, $text: String!) { create_notification(user_id: %d, target_id: $id, text: $text, target_type: Project) { text } }" % MATAN,
+             {"id": "{{62.body.data.c.id}}",
+              "text": "New MWP ambassador: {{1.name}} {{1.instagram}} accepted the Ambassador Program terms and got free access."},
+             "Tell Matan")],
+        [gql(64, "mutation ($id: ID!, $cv: JSON!) { change_multiple_column_values(board_id: %d, item_id: $id, column_values: $cv) { id } }" % B_AMB,
+             {"id": "{{60.body.data.a.items[1].id}}", "cv": amb_update_cv}, "Joined again: update",
+             f("Already on the board", ("{{60.body.data.a.items[1].id}}", "exist", None)))],
+    ]),
+]
+
 blueprint = {
     "name": "MWP Shop · Events to monday (orders, products, support, reports)",
     "flow": [
@@ -237,7 +267,7 @@ blueprint = {
          "parameters": {"hook": HOOK, "maxResults": 1}, "mapper": {},
          "metadata": {"designer": {"x": 0, "y": 0}}},
         router(2, [order_route, refund_route, support_route, subscribe_route,
-                   product_route, approvals_route, weekly_route, payout_route]),
+                   product_route, approvals_route, weekly_route, payout_route, ambassador_route]),
     ],
     "metadata": {"version": 1, "scenario": {"roundtrips": 1, "maxErrors": 3, "autoCommit": True, "sequential": True,
                                             "confidential": False, "dataloss": False, "dlq": True}},

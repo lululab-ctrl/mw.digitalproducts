@@ -1,62 +1,26 @@
-// Beta page: the password opens the page (checked by the server), then the join form gives the
-// member's email all three tools and emails them a sign-in link to My downloads.
+// MWP Ambassador Program page: open to anyone with the link (no password). Accepting the terms in the
+// join form gives the member's email MWP Presets, MWP Panel and the Field Guides, adds them to monday.com
+// (through the beta Edge Function and Make), and emails them a link to My downloads.
 import { initI18n } from "../i18n.js";
 import { initCart } from "../lib/cart.js";
-import { betaCheck, betaJoin, sendMagicLink } from "../lib/api.js";
+import { betaJoin, sendMagicLink } from "../lib/api.js";
 
 initI18n();
 initCart();
 
-const KEY = "mwp_beta_pw";
 const he = () => document.documentElement.lang === "he";
 const T = (en, hebrew) => (he() ? hebrew : en);
-const store = {
-  get: () => { try { return sessionStorage.getItem(KEY) || ""; } catch { return ""; } },
-  set: (v) => { try { sessionStorage.setItem(KEY, v); } catch { /* private mode: fine */ } },
-};
 
-function reveal() {
-  const els = document.querySelectorAll(".in .reveal");
-  if (!("IntersectionObserver" in window)) { els.forEach((e) => e.classList.add("on")); return; }
+// ---------------------------------------------------------------- reveal on scroll
+const els = document.querySelectorAll(".reveal");
+if (!("IntersectionObserver" in window)) {
+  els.forEach((e) => e.classList.add("on"));
+} else {
   const io = new IntersectionObserver((entries) => entries.forEach((e) => {
     if (e.isIntersecting) { e.target.classList.add("on"); io.unobserve(e.target); }
-  }), { threshold: 0.15 });
+  }), { threshold: 0.12 });
   els.forEach((e) => io.observe(e));
 }
-
-function open() {
-  document.documentElement.classList.add("beta-open");
-  window.scrollTo(0, 0);
-  reveal();
-}
-
-// ---------------------------------------------------------------- gate
-const gate = document.getElementById("gate-form");
-const gateMsg = document.getElementById("gate-msg");
-gate.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const pw = gate.elements.password.value.trim();
-  if (!pw) return;
-  const btn = gate.querySelector("button");
-  btn.disabled = true;
-  gateMsg.className = "msg"; gateMsg.textContent = T("Checking…", "בודקים…");
-  try {
-    await betaCheck(pw);
-    store.set(pw);
-    gateMsg.textContent = "";
-    open();
-  } catch (err) {
-    gateMsg.className = "msg err";
-    gateMsg.textContent = err.status === 429 ? T("Too many tries. Please wait an hour and try again.", "יותר מדי ניסיונות. נסו שוב בעוד שעה.")
-      : T("That password isn't right.", "הסיסמה לא נכונה.");
-    const card = gate.closest(".glass");
-    card.classList.remove("shake"); void card.offsetWidth; card.classList.add("shake");
-  } finally {
-    btn.disabled = false;
-  }
-});
-
-if (store.get()) open();
 
 // ---------------------------------------------------------------- join
 const form = document.getElementById("join-form");
@@ -65,7 +29,6 @@ form.addEventListener("submit", async (e) => {
   e.preventDefault();
   const f = form.elements;
   const data = {
-    password: store.get(),
     name: f.name.value.trim(),
     email: f.email.value.trim().toLowerCase(),
     instagram: f.instagram.value.trim(),
@@ -74,7 +37,7 @@ form.addEventListener("submit", async (e) => {
   msg.className = "msg err";
   if (!data.name) { msg.textContent = T("Please enter your name.", "נא למלא שם."); return; }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(data.email)) { msg.textContent = T("Please enter a valid email.", "נא למלא מייל תקין."); return; }
-  if (!data.agree) { msg.textContent = T("Please agree to the beta terms.", "נא לאשר את תנאי הבטא."); return; }
+  if (!data.agree) { msg.textContent = T("Please accept the Ambassador Program terms.", "נא לאשר את תנאי תוכנית השגרירים."); return; }
 
   const btn = form.querySelector("button");
   btn.disabled = true;
@@ -83,14 +46,12 @@ form.addEventListener("submit", async (e) => {
     await betaJoin(data);
     await sendMagicLink(data.email, "/account.html");
     form.hidden = true;
-    document.getElementById("done-text").textContent = `We've sent a sign-in link to ${data.email}. Open it on this device.`;
+    document.getElementById("done-text").textContent = T(
+      `We've sent a link to ${data.email}. Open it to download your tools.`,
+      `שלחנו קישור אל ${data.email}. פתחו אותו כדי להוריד את הכלים.`);
     document.getElementById("join-done").hidden = false;
   } catch (err) {
     msg.className = "msg err";
-    if (err.status === 403) {   // password changed or session lost: back to the gate
-      try { sessionStorage.removeItem(KEY); } catch { /* ignore */ }
-      document.documentElement.classList.remove("beta-open");
-    }
     msg.textContent = err.status === 429 ? T("Too many requests. Please wait a minute and try again.", "יותר מדי בקשות. המתינו דקה ונסו שוב.") : err.message;
   } finally {
     btn.disabled = false;

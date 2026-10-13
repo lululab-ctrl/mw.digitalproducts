@@ -4,7 +4,8 @@
 // login as My downloads), then calls this function with that session token.
 // Actions:
 //   activate  { device_id, device_name }  → registers this computer (up to
-//             PANEL_MAX_DEVICES) and returns who it's licensed to.
+//             PANEL_MAX_DEVICES, or AMBASSADOR_MAX_DEVICES for Ambassador Program
+//             members) and returns who it's licensed to.
 //   devices   {}                          → the buyer's registered computers.
 //   remove    { device_id }               → frees a computer (My downloads).
 // Access counts if the buyer owns MWP Panel or a bundle that includes it, and
@@ -12,7 +13,8 @@
 // ============================================================================
 import { admin, clientIp, cors, fail, json, sha256Hex } from "../_shared/http.ts";
 
-const MAX_DEVICES = Number(Deno.env.get("PANEL_MAX_DEVICES") ?? "3");
+const BUYER_MAX_DEVICES = Number(Deno.env.get("PANEL_MAX_DEVICES") ?? "3");
+const AMBASSADOR_MAX_DEVICES = Number(Deno.env.get("AMBASSADOR_MAX_DEVICES") ?? "2"); // the Ambassador terms: up to 2 devices
 const RECHECK_DAYS = 7;        // the plugin checks in again after this many days
 const OFFLINE_GRACE_DAYS = 14; // and keeps working offline this long after the last check
 const PANEL_SLUGS = ["mwp-panel", "presets-panel", "field-guides-panel", "full-set"];
@@ -46,6 +48,10 @@ Deno.serve(async (req) => {
     return fail(req, refunded ? "This licence was cancelled after a refund." : "MWP Panel isn't in your library on this email.", 403);
   }
   const ent = active[0];
+
+  // Ambassadors (the free program) get 2 computers; buyers get 3.
+  const { data: ambassador } = await db.from("beta_members").select("id").eq("customer_id", customer.id).maybeSingle();
+  const MAX_DEVICES = ambassador ? AMBASSADOR_MAX_DEVICES : BUYER_MAX_DEVICES;
 
   const devices = async () => (await db.from("license_devices")
     .select("device_id, device_name, created_at, last_seen_at")
