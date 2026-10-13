@@ -23,7 +23,7 @@ async function load() {
   while (r.preparing && Date.now() - started < 15 * 60000) {
     message(`<p>${esc(T("We're getting the guides ready to read online. This page will open them as soon as they're ready (usually a few minutes).",
       "אנחנו מכינים את המדריכים לקריאה אונליין. הדף יפתח אותם ברגע שיהיו מוכנים (בדרך כלל כמה דקות)."))}</p>`);
-    await wait(30000);
+    await wait(15000);
     r = await guideView();
   }
   if (r.preparing) throw new Error(T("The guides are still being prepared. Please come back in a little while.", "המדריכים עדיין בהכנה. חזרו בעוד קצת."));

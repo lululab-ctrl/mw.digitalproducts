@@ -16,6 +16,10 @@ on:
   repository_dispatch:
     types: [personalize]
   workflow_dispatch:
+  # right after each deploy (new tables and functions are in place by then)
+  workflow_run:
+    workflows: [Deploy]
+    types: [completed]
   push:
     branches: [main]
     paths: ["tools/personalize/**", ".github/workflows/personalize.yml"]
