@@ -105,13 +105,15 @@ COPY = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="curr
 
 
 INSTAGRAM = "https://www.instagram.com/mw_phototours"
+FACEBOOK = "https://www.facebook.com/p/MW-Photo-Tours-61580936126537/"
 OUT = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>'
 
 
 def chips(html):
-    """@mw_phototours links to the Instagram profile; the hashtags are tap-to-copy chips.
+    """@mw_phototours and MW Photo Tours link to the Instagram and Facebook pages; the hashtags are tap-to-copy chips.
     (The words themselves stay exactly as written.)"""
     html = html.replace("@mw_phototours", f'<a class="cp" href="{INSTAGRAM}" target="_blank" rel="noopener">@mw_phototours{OUT}</a>')
+    html = html.replace("MW Photo Tours on Facebook", f'<a class="cp" href="{FACEBOOK}" target="_blank" rel="noopener">MW Photo Tours{OUT}</a> on Facebook')
     return _re.sub(r"(#mwppanel|#mwppresets|#jointhewildsideofphotography)",
                    lambda m: f'<button type="button" class="cp" data-copy="{m.group(1)}" title="Copy">{m.group(1)}{COPY}</button>', html)
 
