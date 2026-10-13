@@ -207,6 +207,23 @@
         "all_answers": "answers",
         "application_id": "application_id"
       }
+    },
+    "feedback": {
+      "id": 5105987095,
+      "name": "Shop Feedback",
+      "groups": {
+        "feedback": "topics"
+      },
+      "columns": {
+        "status": "status",
+        "type": "kind",
+        "product": "product",
+        "from": "from_role",
+        "email": "email",
+        "sent": "sent",
+        "message": "message",
+        "their_setup": "setup"
+      }
     }
   },
   "make": {

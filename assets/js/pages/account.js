@@ -1,6 +1,6 @@
 // My downloads: magic-link sign-in, then the customer's library with secure download buttons.
 import { initChrome, toast } from "../lib/ui.js";
-import { supabase, currentUser, sendMagicLink, signOut, signInWithPassword, signUpWithPassword, sendPasswordReset, updatePassword, myProfile, saveMyProfile, myLibrary, requestDownload, signedTerms, panelDevices, removePanelDevice, mediaUrl, esc, shortDate } from "../lib/api.js";
+import { supabase, currentUser, sendMagicLink, signOut, signInWithPassword, signUpWithPassword, sendPasswordReset, updatePassword, myProfile, saveMyProfile, myLibrary, requestDownload, signedTerms, sendFeedback, panelDevices, removePanelDevice, mediaUrl, esc, shortDate } from "../lib/api.js";
 import { EMAIL_RE, setBusy, setStatus } from "./shared-forms.js";
 import { countLabel } from "../lib/catalog.js";
 
@@ -84,10 +84,33 @@ async function showLibrary(user) {
     library.innerHTML = libraryHTML(items);
     if (items.some((i) => PANEL_SLUGS.includes(i.products?.slug))) showDevices();
     showSignedTerms();
+    // ambassadors and testers (their Field Guides are read online) can send feedback to the team
+    document.getElementById("feedback").hidden = !items.some((i) => i.view_only);
   } catch (err) {
     library.innerHTML = `<p class="empty">${esc(err.message)}</p>`;
   }
 }
+
+// ---------------------------------------------------------------- Feedback (ambassadors and testers) → monday Shop Feedback
+const feedbackForm = document.getElementById("feedback-form");
+feedbackForm?.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const f = feedbackForm.elements;
+  const status = feedbackForm.querySelector(".form-status");
+  const he = document.documentElement.lang === "he";
+  const message = f.message.value.trim();
+  if (message.length < 5) { status.textContent = he ? "נא לכתוב כמה מילים." : "Please write a few words."; status.dataset.state = "error"; return; }
+  const btn = feedbackForm.querySelector("button[type=submit]");
+  btn.disabled = true;
+  status.textContent = he ? "שולחים…" : "Sending…"; status.dataset.state = "";
+  try {
+    await sendFeedback({ kind: f.kind.value, product: f.product.value, message, setup: navigator.userAgent });
+    f.message.value = "";
+    status.textContent = he ? "תודה! זה אצלנו." : "Thank you! Our team has it."; status.dataset.state = "ok";
+  } catch (err) {
+    status.textContent = err.message; status.dataset.state = "error";
+  } finally { btn.disabled = false; }
+});
 
 // ---------------------------------------------------------------- My details
 const detailsForm = document.getElementById("details-form");

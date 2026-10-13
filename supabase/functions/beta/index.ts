@@ -55,6 +55,7 @@ Deno.serve(async (req) => {
   }
   if (body.action === "signed_terms") return signedTerms(req, db);
   if (body.action === "accept_info" || body.action === "accept") return accept(req, db, body);
+  if (body.action === "feedback") return feedback(req, db, body);
   if (body.action !== "apply") return fail(req, "Unknown action.", 400);
 
   const salt = Deno.env.get("IP_HASH_SALT") ?? "";
@@ -191,4 +192,45 @@ async function accept(req: Request, db: any, body: Record<string, unknown>): Pro
   await notifyMake("MAKE_WEBHOOK_URL", { type: "application_decided", application_id: app.id, result: "Access given",
     send_email: "no", email: app.email, subject: "", body_html: "" });
   return json(req, { ok: true, email: app.email });
+}
+
+// ---------------------------------------------------------------- feedback from ambassadors and testers
+// Signed in only; the person must be an active ambassador or tester. Kept in `feedback` and sent to monday
+// (Shop Feedback) through Make. 20 a day per person.
+const KINDS = ["Bug", "Recommendation", "Report", "Other"];
+const PRODUCTS = ["MWP Presets", "MWP Panel", "MWP Field Guides", "General"];
+// deno-lint-ignore no-explicit-any
+async function feedback(req: Request, db: any, body: Record<string, unknown>): Promise<Response> {
+  const jwt = (req.headers.get("authorization") ?? "").replace(/^Bearer\s+/i, "");
+  const { data: auth } = await db.auth.getUser(jwt);
+  const email = auth?.user?.email?.toLowerCase();
+  if (!email) return fail(req, "Please sign in again.", 401);
+  const { data: c } = await db.from("customers").select("id, name, beta_members(status), testers(removed_at)").eq("email", email).maybeSingle();
+  const one = (v: unknown) => (Array.isArray(v) ? v[0] : v) as Record<string, unknown> | undefined;
+  const isAmb = one(c?.beta_members)?.status === "active";
+  const isTester = Boolean(one(c?.testers)) && !one(c?.testers)?.removed_at;
+  if (!c || (!isAmb && !isTester)) return fail(req, "Feedback is for ambassadors and testers.", 403);
+
+  const kind = KINDS.includes(String(body.kind)) ? String(body.kind) : "Other";
+  const product = PRODUCTS.includes(String(body.product)) ? String(body.product) : "General";
+  const message = String(body.message ?? "").replace(/[\u0000-\u0009\u000b-\u001f\u007f]/g, "").replace(/"/g, "”").trim().slice(0, 4000);
+  const setup = String(body.setup ?? "").replace(/[\u0000-\u001f"\<>]/g, "").slice(0, 300);
+  if (message.length < 5) return fail(req, "Please write a few words.", 400);
+
+  const dayAgo = new Date(Date.now() - 86400 * 1000).toISOString();
+  const { count } = await db.from("feedback").select("id", { count: "exact", head: true }).eq("customer_id", c.id).gte("created_at", dayAgo);
+  if ((count ?? 0) >= 20) return fail(req, "That's a lot of feedback for one day. Please send the rest tomorrow, or email us.", 429);
+
+  const fromRole = isAmb && isTester ? "ambassador and tester" : isAmb ? "ambassador" : "tester";
+  const { data: row, error } = await db.from("feedback")
+    .insert({ customer_id: c.id, from_role: fromRole, kind, product, message, setup }).select("created_at").single();
+  if (error) { console.error(error); return fail(req, "Couldn't send it. Please try again.", 500); }
+
+  const esc = (s: string) => JSON.stringify(s).slice(1, -1);   // line breaks travel as \n inside Make's JSON
+  await notifyMake("MAKE_WEBHOOK_URL", {
+    type: "feedback", kind, product, from_role: fromRole[0].toUpperCase() + fromRole.slice(1),
+    name: String(c.name || email).replace(/["\\\r\n]+/g, " "), email, sent_on: row.created_at.slice(0, 10),
+    message: esc(message), setup: esc(setup),
+  });
+  return json(req, { ok: true });
 }
