@@ -66,6 +66,14 @@ Deno.serve(async (req) => {
   }
 });
 
+// Bundle slug -> the products it unlocks (slugs as set in the admin).
+const BUNDLES: Record<string, string[]> = {
+  "presets-field-guides": ["mwp-presets", "mwp-field-guides"],
+  "presets-panel": ["mwp-presets", "mwp-panel"],
+  "field-guides-panel": ["mwp-field-guides", "mwp-panel"],
+  "full-set": ["mwp-presets", "mwp-panel", "mwp-field-guides"],
+};
+
 async function handlePaid(
   db: ReturnType<typeof admin>, orderId: string, a: LsOrder["data"]["attributes"], custom: Record<string, string>, testMode: boolean,
 ) {
@@ -103,6 +111,24 @@ async function handlePaid(
     { customer_id: customer.id, product_id: product.id, order_id: order.id, revoked_at: null },
     { onConflict: "customer_id,product_id" });
   if (eErr) throw eErr;
+
+  // A bundle also unlocks each product in it, so My downloads shows them as separate downloads and
+  // only one file per product is ever uploaded. A product the buyer already owns keeps its own order,
+  // so refunding the bundle never takes away something bought separately.
+  const parts = BUNDLES[product.slug] ?? [];
+  if (parts.length) {
+    const { data: partRows, error: ppErr } = await db.from("products").select("id, slug").in("slug", parts);
+    if (ppErr) throw ppErr;
+    for (const part of partRows ?? []) {
+      const { data: owned } = await db.from("entitlements").select("id, revoked_at")
+        .eq("customer_id", customer.id).eq("product_id", part.id).maybeSingle();
+      if (owned && !owned.revoked_at) continue;
+      const { error: bErr } = await db.from("entitlements").upsert(
+        { customer_id: customer.id, product_id: part.id, order_id: order.id, revoked_at: null },
+        { onConflict: "customer_id,product_id" });
+      if (bErr) throw bErr;
+    }
+  }
 
   const { count } = await db.from("orders").select("id", { count: "exact", head: true })
     .eq("customer_id", customer.id).eq("status", "paid");
