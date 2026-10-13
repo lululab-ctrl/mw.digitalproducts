@@ -1,6 +1,7 @@
 // ============================================================================
 // tester — the testers page (shop.mw.photography/testers/), shared by link only.
-//   join { name, email, code, lang } → right tester code: they become a tester now and get a sign-in link.
+//   join { name, email, code, lang } → right tester code: they become a tester (or already are) and are signed in
+//                    on the page at once ({ token_hash }); admin, buyer and ambassador emails get an emailed link.
 //   link { email, lang } → if this email is an approved tester, emails them a one-time sign-in link back
 //                    to the page. The answer is the same either way (it doesn't reveal who's a tester).
 //   me (signed in) → { tester, name, products } so the page can show their downloads.
@@ -67,10 +68,27 @@ Deno.serve(async (req) => {
       if (/tester_program_full/.test(tErr.message)) return fail(req, "The testers group is full right now. Please contact us.", 409);
       console.error("tester join", tErr); return fail(req, "Couldn't add you. Please try again.", 500);
     }
+    // The code signs them in right here (Matan: no email step for testers). The page gets a one-time token and
+    // turns it into a session. Exception: an email that is the admin's, a buyer's or an ambassador's. The shared
+    // code mustn't open those accounts, so they get the usual emailed link instead.
+    const { data: cust } = await db.from("customers").select("id, beta_members(id), orders(id)").eq("email", email).maybeSingle();
+    const many = (v: unknown) => Array.isArray(v) ? v.length > 0 : Boolean(v);
+    const { data: adm } = await db.from("admin_allowlist").select("email").eq("email", email).maybeSingle();
+    const { data: adm2 } = await db.from("admins").select("user_id").eq("email", email).maybeSingle();
+    const protectedAccount = Boolean(adm || adm2 || many(cust?.beta_members) || many(cust?.orders));
     const lang = body.lang === "he" ? "he" : "en";
-    const { error } = await db.auth.signInWithOtp({ email, options: { emailRedirectTo: `${SITE}/testers/${lang === "he" ? "?lang=he" : ""}`, shouldCreateUser: true } });
-    if (error) { console.error("tester link", error); return fail(req, "You're in, but the sign-in link didn't send. Please try again in a minute.", 500); }
-    return json(req, { ok: true });
+    if (protectedAccount) {
+      const { error } = await db.auth.signInWithOtp({ email, options: { emailRedirectTo: `${SITE}/testers/${lang === "he" ? "?lang=he" : ""}`, shouldCreateUser: true } });
+      if (error) { console.error("tester link", error); return fail(req, "You're in, but the sign-in link didn't send. Please try again in a minute.", 500); }
+      return json(req, { ok: true, emailed: true });
+    }
+    // their login: made on first use (confirmed, no password), then a one-time sign-in token for this page
+    const { error: cuErr } = await db.auth.admin.createUser({ email, email_confirm: true, user_metadata: { name } });
+    if (cuErr && !/already|registered|exists/i.test(cuErr.message)) { console.error("tester user", cuErr); return fail(req, "Couldn't sign you in. Please try again.", 500); }
+    const { data: link, error: lErr } = await db.auth.admin.generateLink({ type: "magiclink", email });
+    const tokenHash = link?.properties?.hashed_token;
+    if (lErr || !tokenHash) { console.error("tester token", lErr); return fail(req, "Couldn't sign you in. Please try again.", 500); }
+    return json(req, { ok: true, token_hash: tokenHash });
   }
 
   if (body.action === "me") {

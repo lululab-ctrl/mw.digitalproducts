@@ -547,7 +547,7 @@ page("testers.html", "Testers · MWP",
     <div class="container container--text">
       <p class="acct-kick">Testers</p>
       <h1 class="acct-h1">Test the <span class="grad">tools</span></h1>
-      <p class="acct-lead">Got a tester code? Enter it with your email and your downloads are ready.</p>
+      <p class="acct-lead">Enter your name, email and tester code, and your downloads are ready.</p>
     </div>
   </section>
   <section class="acct">
@@ -557,8 +557,7 @@ page("testers.html", "Testers · MWP",
           <div class="field"><label for="t-name">Name</label><input class="input" id="t-name" name="name" autocomplete="name" required></div>
           <div class="field"><label for="t-email">Email</label><input class="input" id="t-email" name="email" type="email" dir="ltr" autocomplete="email" required></div>
           <div class="field"><label for="t-code">Tester code</label><input class="input" id="t-code" name="code" dir="ltr" autocomplete="off" autocapitalize="characters" spellcheck="false"></div>
-          <p class="meta">Already a tester? Leave the code empty and we'll email you a sign-in link.</p>
-          <button class="btn" type="submit">Get access</button>
+          <button class="btn" type="submit">Sign in</button>
           <p class="form-status" role="status"></p>
         </form>
         <div class="auth-view auth-sent" id="t-sent" hidden>
