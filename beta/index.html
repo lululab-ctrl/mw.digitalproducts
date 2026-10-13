@@ -56,15 +56,6 @@ html[dir=rtl] .top .shade{background:linear-gradient(180deg,rgba(10,9,8,.55) 0%,
 .terms{padding-top:24px}
 .sec.alt{background:linear-gradient(180deg,#0A0908,#0f1f1c 30%,#0f1f1c 70%,#0A0908)}
 .head{max-width:720px}
-.gifts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin-top:52px}
-.gift{position:relative;aspect-ratio:4/5;border-radius:26px;overflow:hidden;background:#141210;box-shadow:0 40px 80px -50px rgba(0,0,0,.9)}
-.gift img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 1.4s cubic-bezier(.2,.7,.1,1)}
-.gift::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(10,9,8,.92));pointer-events:none}
-.gift:hover img{transform:scale(1.05)}
-.gift .cb{position:absolute;inset:auto 0 0 0;z-index:1;padding:28px}
-.gift .tg{margin:0;font-size:11.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#CDD7DD}
-.gift .nm{margin:8px 0 0;font-size:30px;font-weight:400;letter-spacing:-.02em}
-.gift .ln{margin:8px 0 0;font-size:15px;color:#AEB9C1}
 .join{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:64px;align-items:start}
 .join .glass{max-width:none;text-align:start;animation:none;padding:40px}
 .join form{display:flex;flex-direction:column;gap:18px}
@@ -137,16 +128,6 @@ html[lang=he] .he-note{display:block}
 .cp.done{background:#F4AF56;color:#0A0908}
 .copied{position:fixed;left:50%;bottom:28px;z-index:60;transform:translate(-50%,20px);opacity:0;padding:10px 18px;border-radius:64px;background:#FEFBF1;color:#0A0908;font-size:14px;font-weight:600;pointer-events:none;transition:all .35s cubic-bezier(.2,.8,.2,1)}
 .copied.show{opacity:1;transform:translate(-50%,0)}
-.accept{position:relative;margin-top:60px;padding:160px 0;overflow:hidden}
-.accept .bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 70%;opacity:.85}
-.accept .shade{position:absolute;inset:0;background:linear-gradient(180deg,#0A0908 0%,rgba(10,9,8,.35) 28%,rgba(10,9,8,.2) 70%,#0A0908 100%)}
-.accept .wrap{position:relative}
-.acc{max-width:620px;margin:0 auto;background:linear-gradient(180deg,rgba(18,16,14,.78),rgba(10,9,8,.72));scroll-margin-top:96px;padding:48px 48px 44px;text-align:center}
-.acc .kick{margin-top:20px}
-.acc .h2{font-size:clamp(30px,3.4vw,44px)}
-.acc .lead{margin:16px auto 0;font-size:16.5px}
-.acc-actions{display:flex;flex-direction:column;align-items:center;gap:18px;margin-top:32px}
-.acc-actions .btn{min-width:min(100%,340px)}
 .acc-step{animation:stepin .7s cubic-bezier(.16,1,.3,1) both}
 @keyframes stepin{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
 #step-details .kick{margin-top:0}
@@ -212,9 +193,8 @@ html[lang=he] .sig-l,html[lang=he] .sig-what{letter-spacing:.06em}
 .link-gold{color:#F4AF56;text-decoration:underline;text-decoration-color:rgba(244,175,86,.4);text-underline-offset:3px}
 .link-gold:hover{text-decoration-color:#F4AF56}
 .foot{padding:56px 0 70px;border-top:1px solid rgba(254,251,241,.06);font-size:13px;color:#7E8A93;text-align:center}
-html[lang=he] .kick,html[lang=he] .field label,html[lang=he] .gift .tg,html[lang=he] .badge,html[lang=he] .free{letter-spacing:.04em}
-@media (max-width:980px){.gifts{grid-template-columns:minmax(0,1fr);max-width:520px}.gift{aspect-ratio:5/4}}
-@media (max-width:600px){.wrap{padding:0 20px}.glass{padding:34px 22px 28px;border-radius:22px}.top{margin-top:-64px;padding:150px 0 80px}.sec{padding:80px 0}.accept{padding:110px 0;margin-top:30px}.gift .cb{padding:22px}.gift .nm{font-size:26px}.t-sec .tb{padding-left:0}.acc{padding:34px 22px 30px}.modal{padding:12px}.modal-card{padding:56px 20px 28px}}
+html[lang=he] .kick,html[lang=he] .field label,html[lang=he] .badge{letter-spacing:.04em}
+@media (max-width:600px){.wrap{padding:0 20px}.glass{padding:34px 22px 28px;border-radius:22px}.top{margin-top:-64px;padding:150px 0 80px}.sec{padding:80px 0}.modal{padding:12px}.modal-card{padding:56px 20px 28px}}
 @media (prefers-reduced-motion:reduce){.bg,.glass{animation:none}.reveal{opacity:1;transform:none;transition:none}}
 
 
@@ -279,39 +259,7 @@ html[lang=he] body,html[lang=he] body *:not(svg):not(svg *),html body [lang=he],
 </div>
 </section>
 
-<section class="sec">
-<div class="wrap">
-<div class="head reveal"><p class="kick">What you get</p><h2 class="h2">Everything we make. <span class="grad">Free.</span></h2></div>
-<div class="gifts"><article class="gift reveal">
-<img src="../assets/pages/img/c88e041b857fb964607aaec43ad1753d.jpg" alt="" loading="lazy" style="object-position:45% 12%">
-<div class="cb"><p class="tg">Lightroom presets</p><h3 class="nm" data-no-i18n>MWP <span class="grad">Presets</span></h3><p class="ln">50 presets and 33 LUTs</p></div>
-</article><article class="gift reveal">
-<img src="../assets/pages/img/8f730b9bb76b93ca707cae719a309479.jpg" alt="" loading="lazy" style="object-position:50% 40%">
-<div class="cb"><p class="tg">Photoshop plugin</p><h3 class="nm" data-no-i18n>MWP <span class="grad">Panel</span></h3><p class="ln">8 one-click effects and 11 looks</p></div>
-</article><article class="gift reveal">
-<img src="../assets/pages/img/0cf44582c4078749d18156eec10c90d3.jpg" alt="" loading="lazy" style="object-position:62% 35%">
-<div class="cb"><p class="tg">PDF field guides</p><h3 class="nm" data-no-i18n>MWP <span class="grad">Field Guides</span></h3><p class="ln">4 guides, 137 lessons</p></div>
-</article></div>
-</div>
-</section>
 
-<section class="accept" id="join">
-<img class="bg" src="../assets/pages/img/fbaf19aea2af10f26b2949ab31fff094.jpg" alt="" loading="lazy">
-<div class="shade"></div>
-<div class="wrap">
-<div class="acc glass reveal" id="acc">
-<div class="acc-step" id="step-agree">
-<span class="seal"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.4-3 8.3-7 9.5C8 19.3 5 15.4 5 11V6z"/><path d="M9 12l2 2 4-4"/></svg></span>
-<p class="kick">Step 1 of 2 · Acceptance</p>
-<h2 class="h2">Do you accept <span class="grad">the terms?</span></h2>
-<p class="lead">To join, read and accept the MWP Ambassador Program Terms of Use. Then you'll fill in your details and get your tools.</p>
-<div class="acc-actions">
-<button class="btn" type="button" data-terms>Read and accept the terms</button>
-</div>
-</div>
-</div>
-</div>
-</section>
 
 <div class="modal modal-terms" id="terms-modal" hidden>
 <div class="modal-back" data-close></div>
