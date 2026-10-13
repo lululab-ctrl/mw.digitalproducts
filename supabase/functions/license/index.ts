@@ -50,8 +50,10 @@ Deno.serve(async (req) => {
   const ent = active[0];
 
   // Ambassadors (the free program) get 2 computers; buyers get 3.
+  // Testers too (they get the same free access, for trying it).
   const { data: ambassador } = await db.from("beta_members").select("id").eq("customer_id", customer.id).maybeSingle();
-  const MAX_DEVICES = ambassador ? AMBASSADOR_MAX_DEVICES : BUYER_MAX_DEVICES;
+  const { data: tester } = await db.from("testers").select("id").eq("customer_id", customer.id).is("removed_at", null).maybeSingle();
+  const MAX_DEVICES = ambassador || tester ? AMBASSADOR_MAX_DEVICES : BUYER_MAX_DEVICES;
 
   const devices = async () => (await db.from("license_devices")
     .select("device_id, device_name, created_at, last_seen_at")

@@ -64,7 +64,7 @@ supabase?.auth.onAuthStateChange((event, session) => {
 $("#admin-signout").addEventListener("click", async () => { await supabase.auth.signOut(); location.reload(); });
 
 // ---------------------------------------------------------------- navigation
-const loaders = { overview: loadOverview, products: loadProducts, orders: loadOrders, customers: loadCustomers, ambassadors: loadAmbassadors, support: loadTickets };
+const loaders = { overview: loadOverview, products: loadProducts, orders: loadOrders, customers: loadCustomers, ambassadors: loadAmbassadors, testers: loadTesters, support: loadTickets };
 
 function show(tab) {
   $$("[data-panel]").forEach((p) => { p.hidden = p.dataset.panel !== tab; });
@@ -574,6 +574,54 @@ $("#amb-table").addEventListener("click", async (e) => {
   if (error) { toast(error.message, { type: "error", timeout: 7000 }); setBusy(btn, false); return; }
   toast(breach ? "Ended for breach. Their free access is removed and monday is updated." : "Ended. They keep their licence, and monday is updated.");
   loadAmbassadors();
+});
+
+// ---------------------------------------------------------------- testers (10 at most; add_tester / remove_tester in the database)
+const tstCols = [
+  { label: "Name", value: (r) => r.customers?.name || "" },
+  { label: "Email", value: (r) => r.customers?.email || "" },
+  { label: "Approved", value: (r) => shortDate(r.added_at) },
+  { label: "Status", value: (r) => (r.removed_at ? "Removed" : "Active"),
+    html: (r) => r.removed_at ? `<span class="status status--amb-ended">Removed</span> <span class="meta">${esc(shortDate(r.removed_at))}</span>` : `<span class="status status--amb-active">Active</span>` },
+  { label: "", value: () => "",
+    html: (r) => r.removed_at ? "" : `<button class="btn btn--sm btn--ghost" type="button" data-remove-tester="${esc(r.id)}">Remove</button>` },
+];
+let tstRows = [];
+async function loadTesters() {
+  const { data, error } = await supabase.from("testers")
+    .select("id, added_at, removed_at, customers(email, name)").order("added_at", { ascending: false }).limit(200);
+  check(error);
+  tstRows = data;
+  $("#tst-count").textContent = `${data.filter((r) => !r.removed_at).length} of 10 places used`;
+  $("#tst-table").innerHTML = tableHTML(tstCols, tstRows);
+}
+$("#tst-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const f = e.currentTarget;
+  const btn = f.querySelector("button");
+  setBusy(btn, true);
+  const { error } = await supabase.rpc("add_tester", { p_email: f.elements.email.value, p_name: f.elements.name.value });
+  setBusy(btn, false);
+  if (error) {
+    const full = /tester_program_full/.test(error.message);
+    toast(full ? "There are already 10 testers. Remove one first." : error.message, { type: "error", timeout: 7000 });
+    return;
+  }
+  f.reset();
+  toast("Approved. Their copies are being made, and monday is updated. Send them shop.mw.photography/testers.html");
+  loadTesters();
+});
+$("#tst-table").addEventListener("click", async (e) => {
+  const btn = e.target.closest("[data-remove-tester]");
+  if (!btn) return;
+  const row = tstRows.find((r) => r.id === btn.dataset.removeTester);
+  const who = row?.customers?.name || row?.customers?.email || "this tester";
+  if (!window.confirm(`Remove ${who} as a tester?\n\nTheir free access to the tools is removed now. Anything they bought stays. monday will be updated.`)) return;
+  setBusy(btn, true);
+  const { error } = await supabase.rpc("remove_tester", { p_tester: btn.dataset.removeTester });
+  if (error) { toast(error.message, { type: "error", timeout: 7000 }); setBusy(btn, false); return; }
+  toast("Removed. Their free access is gone, and monday is updated.");
+  loadTesters();
 });
 
 // ---------------------------------------------------------------- support

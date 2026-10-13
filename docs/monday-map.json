@@ -172,6 +172,21 @@
         "products": "text_mm837ysb",
         "notes": "long_text_mm83y19w"
       }
+    },
+    "testers": {
+      "id": 5105950543,
+      "name": "Shop Testers",
+      "groups": {
+        "testers": "topics"
+      },
+      "columns": {
+        "status": "color_mm83c278",
+        "email": "email_mm83cv73",
+        "approved": "date_mm837r4w",
+        "removed": "date_mm83wrd9",
+        "products": "text_mm833w4f",
+        "notes": "long_text_mm83kpyx"
+      }
     }
   },
   "make": {

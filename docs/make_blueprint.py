@@ -9,6 +9,7 @@ MATAN = 104260573
 
 B_ORD, B_CUS, B_PRD, B_SUP = 5105799198, 5105799189, 5105799186, 5105799201
 B_AMB = 5105939043   # Shop Ambassadors
+B_TST = 5105950543   # Shop Testers
 
 # Free text that ends up inside a JSON string: strip quotes, backslashes and line breaks.
 def clean(expr):
@@ -298,6 +299,26 @@ ambassador_status_route = [
 ]
 
 # ---------------------------------------------------------------- ambassador_terms_pdf (signed terms → file column)
+# ---------------------------------------------------------------- tester (approved / removed in the shop admin → Shop Testers)
+q_tst_lookup = """query ($email: String!) {
+  t: items_page_by_column_values(board_id: %d, limit: 1, columns: [{column_id: "email_mm83cv73", column_values: [$email]}]) { items { id } }
+}""" % B_TST
+tst_cv = ('{"color_mm83c278":{"label":"{{1.status_label}}"},"email_mm83cv73":{"email":"{{1.email}}","text":"{{1.email}}"},'
+          '"date_mm837r4w":{"date":"{{1.added_on}}"},"date_mm83wrd9":{"date":"{{1.removed_on}}"},"text_mm833w4f":"{{1.products}}"}')
+tester_route = [
+    gql(110, q_tst_lookup, {"email": "{{1.email}}"}, "Find tester", f("Tester", ("{{1.type}}", "text:equal", "tester"))),
+    router(111, [
+        [gql(112, """mutation ($name: String!, $cv: JSON!) {
+  c: create_item(board_id: %d, group_id: "topics", item_name: $name, column_values: $cv, create_labels_if_missing: true) { id }
+}""" % B_TST, {"name": "{{1.name}}", "cv": tst_cv}, "New tester",
+             f("New", ("{{110.body.data.t.items[1].id}}", "notexist", None)))],
+        [gql(113, "mutation ($id: ID!, $cv: JSON!) { change_multiple_column_values(board_id: %d, item_id: $id, column_values: $cv, create_labels_if_missing: true) { id } }" % B_TST,
+             {"id": "{{110.body.data.t.items[1].id}}", "cv": tst_cv}, "Update tester",
+             f("Already on the board", ("{{110.body.data.t.items[1].id}}", "exist", None)))],
+    ]),
+]
+
+
 def module(mid, name, mod, version, parameters, mapper, filt=None):
     m = {"id": mid, "module": mod, "version": version, "parameters": parameters, "mapper": mapper,
          "metadata": {"designer": {"x": 0, "y": 0, "name": name}}}
@@ -324,7 +345,7 @@ blueprint = {
          "parameters": {"hook": HOOK, "maxResults": 1}, "mapper": {},
          "metadata": {"designer": {"x": 0, "y": 0}}},
         router(2, [order_route, refund_route, support_route, subscribe_route,
-                   product_route, approvals_route, weekly_route, payout_route, ambassador_route, account_route, downloaded_route, ambassador_status_route, terms_pdf_route]),
+                   product_route, approvals_route, weekly_route, payout_route, ambassador_route, account_route, downloaded_route, ambassador_status_route, terms_pdf_route, tester_route]),
     ],
     "metadata": {"version": 1, "scenario": {"roundtrips": 1, "maxErrors": 3, "autoCommit": True, "sequential": True,
                                             "confidential": False, "dataloss": False, "dlq": True}},

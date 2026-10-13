@@ -27,3 +27,6 @@ verify_jwt = false   # database calls carry the Vault key; Make call back carrie
 
 [functions.guide-view]
 verify_jwt = false   # Field Guides online: verifies the reader's session token itself (auth.getUser)
+
+[functions.tester]
+verify_jwt = false   # testers page: sign-in links only for approved emails (rate-limited per IP); "me" checks the session itself

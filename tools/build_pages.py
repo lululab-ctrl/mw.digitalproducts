@@ -498,6 +498,48 @@ page("read.html", "Field Guides · Read online · MWP",
     </div>
   </section>""", "read.js", extra_head='\n  <meta name="robots" content="noindex">' + READ_CSS, announce=False)
 
+page("testers.html", "Testers · MWP",
+ "For approved MWP testers.",
+ """  <section class="acct-hero">
+    <img class="bg" src="assets/pages/img/5275cc7bcd4fb7560d8f7163592e3122.jpg" alt="">
+    <div class="shade"></div>
+    <div class="container container--text">
+      <p class="acct-kick">Testers</p>
+      <h1 class="acct-h1">Test the <span class="grad">tools</span></h1>
+      <p class="acct-lead">For approved testers only. Sign in with your email and your downloads are ready.</p>
+    </div>
+  </section>
+  <section class="acct">
+    <div class="container container--text">
+      <div id="t-out" class="glass auth" hidden>
+        <form class="form auth-view" id="t-form" novalidate>
+          <div class="field"><label for="t-email">Email</label><input class="input" id="t-email" name="email" type="email" dir="ltr" autocomplete="email" required></div>
+          <button class="btn" type="submit">Email me a sign-in link</button>
+          <p class="form-status" role="status"></p>
+        </form>
+        <div class="auth-view auth-sent" id="t-sent" hidden>
+          <span class="seal"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16v12H4z"/><path d="m4 7 8 6 8-6"/></svg></span>
+          <h2 class="h3">Check your inbox</h2>
+          <p class="muted">If this email is on the testers list, a sign-in link is on its way. Open it on this device.</p>
+        </div>
+      </div>
+      <div id="t-no" class="glass lib-empty stack" hidden>
+        <p>This email isn't on the testers list.</p>
+        <p class="meta">Ask Matan to add it, or sign out and use the email he approved.</p>
+        <button class="btn btn--ghost" type="button" data-signout>Sign out</button>
+      </div>
+      <div id="t-in" class="stack-lg" hidden>
+        <p class="t-hi" id="t-hi"></p>
+        <div class="library" id="t-lib" aria-live="polite"></div>
+        <div class="terms-box">
+          <div><h2 class="h3">MWP Panel</h2>
+          <p class="meta">In Photoshop, open MWP Panel and sign in with this email. It works on up to 2 computers.</p></div>
+        </div>
+        <p class="acct-note">Your copies are made for you and carry your name. Please don't share them. Download links work for 5 minutes. Trouble? <a class="link" href="support.html">Contact support</a>.</p>
+      </div>
+    </div>
+  </section>""", "testers.js", extra_head='\n  <meta name="robots" content="noindex">' + ACCOUNT_CSS + "<style>.t-hi{margin:0;font-size:18px;color:#CDD7DD}</style>")
+
 page("support.html", "Help · MWP",
  "Help with downloading, installing or using MWP products.",
  """  <section class="page-hero">
