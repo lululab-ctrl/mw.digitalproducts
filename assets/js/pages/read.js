@@ -62,7 +62,8 @@ async function draw(el) {
 }
 
 // ---------------------------------------------------------------- the reader
-// A guide picker, Scroll or Page-by-page, arrows (and arrow keys, swipe), and full screen.
+// A guide picker, Scroll or Page-by-page, and full screen. Scroll mode scrolls (no arrows);
+// Page by page turns pages with the side arrows (and arrow keys, swipe), with scrolling off.
 // English pages show the English guides, Hebrew pages the Hebrew ones.
 const ICONS = {
   prev: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>',
@@ -179,12 +180,14 @@ function render() {
           <button type="button" data-mode="pages" aria-pressed="${mode === "pages"}">${esc(T("Page by page", "עמוד אחר עמוד"))}</button>
         </div>
         <div class="rd-nav">
-          <button type="button" class="rd-ic rd-flip" id="rd-prev" aria-label="${esc(T("Previous page", "העמוד הקודם"))}">${ICONS.prev}</button>
           <span class="rd-count" id="rd-count" dir="ltr">1 / 1</span>
-          <button type="button" class="rd-ic rd-flip" id="rd-next" aria-label="${esc(T("Next page", "העמוד הבא"))}">${ICONS.next}</button>
         </div>
       </div>
-      <div class="rd-pages" id="rd-pages"></div>
+      <div class="rd-stage">
+        <div class="rd-side"><button type="button" class="rd-ic rd-flip" id="rd-prev" aria-label="${esc(T("Previous page", "העמוד הקודם"))}">${ICONS.prev}</button></div>
+        <div class="rd-pages" id="rd-pages"></div>
+        <div class="rd-side"><button type="button" class="rd-ic rd-flip" id="rd-next" aria-label="${esc(T("Next page", "העמוד הבא"))}">${ICONS.next}</button></div>
+      </div>
     </div>`;
   document.getElementById("rd-guide").addEventListener("change", (e) => show(Number(e.target.value)));
   body.querySelector(".rd-modes").addEventListener("click", (e) => {
@@ -194,6 +197,14 @@ function render() {
   document.getElementById("rd-prev").addEventListener("click", () => go(page - 1));
   document.getElementById("rd-next").addEventListener("click", () => go(page + 1));
   pagesEl().addEventListener("click", (e) => { if (e.target.closest("[data-full]")) toggleFull(); });
+  // Page by page turns pages with the arrows only: scrolling over the pages does nothing (pinch zoom still works).
+  const stage = body.querySelector(".rd-stage");
+  const noScroll = (e) => {
+    if (mode !== "pages" || (e.touches && e.touches.length > 1) || e.ctrlKey) return;
+    if (e.cancelable) e.preventDefault();
+  };
+  stage.addEventListener("wheel", noScroll, { passive: false });
+  stage.addEventListener("touchmove", noScroll, { passive: false });
   // swipe between pages (Page by page)
   let x0 = null;
   pagesEl().addEventListener("touchstart", (e) => { x0 = e.touches[0].clientX; }, { passive: true });
@@ -210,8 +221,9 @@ function render() {
 document.addEventListener("keydown", (e) => {
   if (!document.getElementById("rd-pages") || e.target.closest("input, select, textarea")) return;
   const fwd = he() ? "ArrowLeft" : "ArrowRight", back = he() ? "ArrowRight" : "ArrowLeft";
-  if (e.key === fwd || (mode === "pages" && (e.key === "PageDown" || e.key === " "))) { e.preventDefault(); go(page + 1); }
-  else if (e.key === back || (mode === "pages" && e.key === "PageUp")) { e.preventDefault(); go(page - 1); }
+  // Page by page: the keys turn pages (and never scroll). Scroll: the keys scroll as usual.
+  if (mode === "pages" && [fwd, "ArrowDown", "PageDown", " "].includes(e.key)) { e.preventDefault(); go(page + 1); }
+  else if (mode === "pages" && [back, "ArrowUp", "PageUp"].includes(e.key)) { e.preventDefault(); go(page - 1); }
   else if (e.key.toLowerCase() === "f" && !e.ctrlKey && !e.metaKey) toggleFull();
   else if (e.key === "Escape" && viewer()?.classList.contains("fs") && !document.fullscreenElement) setFull(false);
 });
