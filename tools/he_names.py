@@ -1,9 +1,9 @@
-"""Names in Hebrew, for the Hebrew site (Matan: "everything in Hebrew"). The header logo stays MWP.
+"""Names in Hebrew, for the Hebrew site (Matan: "everything in Hebrew"). MWP always stays in Latin letters.
 Used by tools/unify_pages.py for the Hebrew sales pages; assets/js/i18n.js has the same list (NAMES)
 for every other page. Keep the two lists the same. Longest names first."""
 import re
 
-MWP = "אם־דבליו־פי"
+MWP = "MWP"
 NAMES = [
     ("MWP - PS Panel", f"הפאנל של {MWP}"),
     ("MWP - Signature Preset Pack", f"הפריסטים של {MWP}"),
@@ -22,7 +22,6 @@ NAMES = [
     ("Windows", "ווינדוס"), ("Mac", "מק"),
     ("Instagram", "אינסטגרם"), ("Facebook", "פייסבוק"), ("WhatsApp", "וואטסאפ"), ("YouTube", "יוטיוב"),
     ("Supabase", "סופאבייס"), ("MailerLite", "מיילרלייט"), ("Make.com", "מייק"), ("monday.com", "מאנדיי"),
-    ("MWP", MWP),
 ]
 _RE = [(re.compile(r"(?<![A-Za-z0-9@._/])" + re.escape(en) + r"(?![A-Za-z0-9])"), he) for en, he in NAMES]
 

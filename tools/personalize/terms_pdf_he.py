@@ -66,7 +66,7 @@ def terms_pdf_he(member, out_path):
         ("רשומה", f'<span class="ltr">{record}</span>'),
     ]
     body = [
-        '<p class="kick">תוכנית השגרירים של אם־דבליו־פי</p>',
+        '<p class="kick">תוכנית השגרירים של MWP</p>',
         "<h1>תנאי השימוש: עותק חתום</h1>",
         f'<p class="meta">{TERMS_DATE_HE} · מתן וויילד · גרסת התנאים <span class="ltr">{TERMS_VERSION}</span></p>',
         # one line per detail (MuPDF's table layout doesn't handle right-to-left columns)
@@ -82,7 +82,7 @@ def terms_pdf_he(member, out_path):
             else:
                 body.append(f"<p>{clean(content)}</p>")
     body.append(f'<p class="foot">התנאים אושרו באופן מקוון על ידי {safe(member.get("name"))} ({safe(member.get("email"))}) ב־{html.escape(accepted_text)}. '
-                "העותק הזה נוצר אוטומטית בחנות של אם־דבליו־פי מתוך הרשומה של האישור.</p>")
+                "העותק הזה נוצר אוטומטית בחנות של MWP מתוך הרשומה של האישור.</p>")
 
     story = pymupdf.Story(html='<body><div dir="rtl">' + "".join(body) + "</div></body>", user_css=CSS)
     page_rect = pymupdf.paper_rect("a4")

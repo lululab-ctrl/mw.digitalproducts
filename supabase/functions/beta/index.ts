@@ -15,7 +15,7 @@
 import { admin, clientIp, cors, EMAIL_RE, fail, json, notifyMake, requestPersonalCopies, sha256Hex } from "../_shared/http.ts";
 
 const PRODUCTS = ["mwp-presets", "mwp-panel", "mwp-field-guides"];
-const TERMS_VERSION = "2026-10-13.3";   // must match TERMS_VERSION in tools/ambassador_terms.py
+const TERMS_VERSION = "2026-10-13.4";   // must match TERMS_VERSION in tools/ambassador_terms.py
 const MAX_JOINS_PER_HOUR = 5;         // per IP
 
 Deno.serve(async (req) => {
