@@ -213,6 +213,8 @@ html = f'''<!doctype html>
   import {{ initI18n }} from "./assets/js/i18n.js";
   import {{ initCart }} from "./assets/js/lib/cart.js";
   import {{ initPrices }} from "./assets/js/lib/prices.js";
+  import {{ ambassadorLanding }} from "./assets/js/lib/landing.js";
+  ambassadorLanding();
   initI18n();
   initCart();
   initPrices();
