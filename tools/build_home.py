@@ -21,6 +21,7 @@ import home_fx, home_story
 import sys as _s, os as _o; _s.path.insert(0, _o.path.dirname(__file__))
 from brand import NAV_CSS, FONTS
 CHECK = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F2A541" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>'
+EXT = '<svg class="ext" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>'
 ARROW = '<svg class="arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>'
 
 home_css = """
@@ -74,6 +75,20 @@ home_css = """
 .faq details[open] summary::after{content:"\\2212"}
 .faq details div{padding:0 0 26px;color:#CDD7DD;font-size:17px;line-height:1.7;max-width:680px}
 
+.about{border-top:1px solid rgba(156,177,194,.12)}
+.about-in{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:64px;align-items:center}
+.about .head{margin:0;max-width:none;text-align:start;align-items:flex-start}
+.about .head > *{text-align:start;margin-inline:0}
+.about .lead{margin-top:20px}
+.about-go{display:inline-flex;align-items:center;gap:10px;margin-top:32px;text-decoration:none}
+[dir="rtl"] .about-go .ext{transform:scaleX(-1)}
+.roles{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.roles li{display:flex;flex-direction:column;gap:6px;padding:24px 0;border-top:1px solid rgba(254,251,241,.09)}
+.roles li:last-child{border-bottom:1px solid rgba(254,251,241,.09)}
+.roles span{font-size:12px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#F2A541}
+[dir="rtl"] .roles span{letter-spacing:normal}
+.roles strong{font-size:20px;line-height:1.35;font-weight:700;color:#FEFBF1}
+@media (max-width:1100px){.about-in{grid-template-columns:minmax(0,1fr);gap:40px}}
 @media (max-width:1100px){.shop{grid-template-columns:minmax(0,1fr);max-width:560px;margin-inline:auto}.trust{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:40px}.trust > div{padding:0 28px}.trust > div:nth-child(odd){padding-inline-start:0;border-inline-start:0}}
 @media (max-width:600px){.trust{grid-template-columns:minmax(0,1fr);padding-top:56px;padding-bottom:56px;row-gap:0}.trust > div,.trust > div:nth-child(odd){display:grid;grid-template-columns:52px 1fr;column-gap:16px;row-gap:4px;padding:20px 0;border:0;border-top:1px solid rgba(254,251,241,.08)}.trust > div:first-child{border-top:0}.trust .ti{grid-row:span 2;margin:0}.trust > div + div{border-inline-start:0}.navr a.nl.hide-sm{display:none}.card .act{flex-direction:column}}
 @media (prefers-reduced-motion:reduce){.card,.card .ph img{transition:none}}
@@ -143,7 +158,7 @@ html = f'''<!doctype html>
 <nav class="nav site-header" aria-label="Main">
 <div class="wrap container">
 <a class="brand" href="./" aria-label="MWP, home"><img src="{IMG}2dd3356528167ddf9a64c0c7301c8aa3.png" alt=""><span>MWP</span></a>
-<div class="links"><a href="#shop">Shop</a><a href="#bundles">Bundles</a><a href="#faq">Questions</a></div>
+<div class="links"><a href="#shop">Shop</a><a href="#bundles">Bundles</a><a href="#faq">FAQs</a><a href="#about">About Matan</a></div>
 <div class="navr"></div>
 </div>
 </nav>
@@ -183,7 +198,7 @@ html = f'''<!doctype html>
 <div class="wrap">
 <div class="head">
 <p class="kick">Before you buy</p>
-<h2 class="h2">Questions</h2>
+<h2 class="h2">FAQs</h2>
 </div>
 <div class="faq">
 <details><summary>How do I get my files after paying?</summary><div>You get an email straight away. Open <a href="/account/">My downloads</a>, sign in to your MWP account, and everything you bought is there.</div></details>
@@ -191,6 +206,24 @@ html = f'''<!doctype html>
 <details><summary>Do I need an account?</summary><div>Yes. You create one with your email and a password before you pay, so your files and future updates are always waiting for you.</div></details>
 <details><summary>Do they work in Photoshop (Beta)?</summary><div>Yes. MWP Panel installs in both Photoshop and Photoshop (Beta), and one computer counts once even if you use both. The presets live in Camera Raw, which both apps share. The LUTs load in either app from Color Lookup, then Load 3D LUT.</div></details>
 <details><summary>What if something doesn't work for me?</summary><div>Write to <a href="/support/">support</a> and we'll help. Our <a href="/legal/#refunds">refund policy</a> has the details.</div></details>
+</div>
+</div>
+</section>
+
+<section class="sec about" id="about">
+<div class="wrap">
+<div class="about-in">
+<div class="head">
+<p class="kick">About Matan</p>
+<h2 class="h2">Tools from a photographer <span class="b grad">who works in the field.</span></h2>
+<p class="lead">Matan Wild is a wildlife photographer, the owner of MW Photo Tours and the founder of The Wild Side of Photography magazine. Matan leads photography expeditions around the world and teaches photographers and content creators. The presets, the Panel and the Field Guides come from that same work, from the shot to the edit.</p>
+<a class="ghost about-go" href="https://mw.photography" rel="noopener">Visit mw.photography {EXT}</a>
+</div>
+<ul class="roles">
+<li><span>Owner</span><strong>MW Photo Tours</strong></li>
+<li><span>Founder</span><strong>The Wild Side of Photography</strong></li>
+<li><span>Educator</span><strong>Mentoring photographers and content creators</strong></li>
+</ul>
 </div>
 </div>
 </section>

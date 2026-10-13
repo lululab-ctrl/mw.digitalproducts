@@ -144,6 +144,22 @@ export async function updatePassword(password) {
   if (error) throw new ApiError(error.message, error.status);
 }
 
+// ---------------------------------------------------------------- My details
+/** The signed-in customer's name, phone and address (also links the login to its customer record). */
+export async function myProfile() {
+  const { data, error } = await requireClient().rpc("my_profile");
+  if (error) throw new ApiError(error.message);
+  return data?.[0] ?? null;
+}
+
+export async function saveMyProfile(p) {
+  const { error } = await requireClient().rpc("save_my_profile", {
+    p_name: p.name, p_phone: p.phone, p_address_line1: p.address_line1, p_address_line2: p.address_line2,
+    p_city: p.city, p_region: p.region, p_postal_code: p.postal_code, p_country: p.country,
+  });
+  if (error) throw new ApiError(error.message);
+}
+
 export async function signOut() {
   if (supabase) await supabase.auth.signOut();
 }

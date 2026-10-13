@@ -89,7 +89,7 @@ FOOTER = f"""<footer class="site-footer">
         <ul role="list">
           <li><a href="/account/">My downloads</a></li>
           <li><a href="/support/">Contact support</a></li>
-          <li><a href="/#faq">Questions</a></li>
+          <li><a href="/#faq">FAQs</a></li>
           <li><a href="/legal/#refunds">Refunds</a></li>
           <li><a href="/legal/#licence">Licence</a></li>
         </ul>
@@ -234,7 +234,7 @@ page("index.html",
 
   <section class="section" id="faq" aria-labelledby="faq-title">
     <div class="container container--text">
-      <h2 class="h2" id="faq-title" style="margin-bottom:var(--s-5)">Questions</h2>
+      <h2 class="h2" id="faq-title" style="margin-bottom:var(--s-5)">FAQs</h2>
       <div class="faq">
         <details><summary>Which programs do the products work with?</summary><div>Every product page lists what it works with under "Works with". Presets work in Lightroom Classic, Lightroom and Photoshop's Camera Raw; the plugin and the guides state their own requirements.</div></details>
         <details><summary>How do I get my files after paying?</summary><div>You get an email straight away. Open <a class="link" href="/account/">My downloads</a>, enter the email you paid with, and click the sign-in link we send. Everything you bought is there.</div></details>
@@ -349,6 +349,14 @@ ACCOUNT_CSS = """
 .devices-box .h3{font-size:22px;font-weight:500}
 .acct-note{margin-top:26px;font-size:13px;color:#7E8A93}
 a.dl{text-decoration:none}
+.details-box{margin-top:26px;padding:28px 30px;border-radius:24px;background:linear-gradient(180deg,rgba(254,251,241,.05),rgba(254,251,241,.015));border:1px solid rgba(254,251,241,.08);scroll-margin-top:96px}
+.details-box .h3{margin:0;font-size:22px;font-weight:500}.details-box .meta{margin:6px 0 22px}
+.details-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.details-grid .field--full{grid-column:1/-1}
+.details-box .input[readonly]{color:#9CB1C2;background:transparent}
+.details-actions{display:flex;align-items:center;flex-wrap:wrap;gap:12px 18px}
+.details-actions .form-status{margin:0}
+@media (max-width:820px){.details-box{padding:22px}.details-grid{grid-template-columns:minmax(0,1fr)}}
 .terms-box{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-top:26px;padding:24px 30px;border-radius:24px;background:linear-gradient(180deg,rgba(254,251,241,.05),rgba(254,251,241,.015));border:1px solid rgba(254,251,241,.08)}
 .terms-box .h3{margin:0;font-size:22px;font-weight:500}.terms-box .meta{margin:6px 0 0}
 @media (max-width:820px){.terms-box{flex-direction:column;align-items:flex-start;padding:22px}}
@@ -494,6 +502,25 @@ page("account.html", "My downloads · MWP",
           <div><h2 class="h3">Your Ambassador Program terms</h2>
           <p class="meta">The signed copy of the terms you accepted, as a PDF.</p></div>
           <button class="btn btn--ghost btn--sm" type="button" id="terms-dl">Download PDF</button>
+        </section>
+        <section class="details-box" id="details" aria-labelledby="details-h">
+          <div><h2 class="h3" id="details-h">My details</h2>
+          <p class="meta">Used on your receipts and when we help you with an order.</p></div>
+          <form class="form" id="details-form" novalidate>
+            <div class="field"><label for="d-email">Email</label><input class="input" id="d-email" type="email" dir="ltr" readonly aria-describedby="d-email-hint">
+            <p class="auth-hint" id="d-email-hint">Your purchases are tied to this email. To change it, <a class="link" href="/support/">contact support</a>.</p></div>
+            <div class="details-grid">
+            <div class="field field--full"><label for="d-name">Full name</label><input class="input" id="d-name" name="name" type="text" autocomplete="name"></div>
+            <div class="field"><label for="d-phone">Phone (optional)</label><input class="input" id="d-phone" name="phone" type="tel" autocomplete="tel" dir="ltr"></div>
+            <div class="field"><label for="d-country">Country</label><input class="input" id="d-country" name="country" type="text" autocomplete="country-name"></div>
+            <div class="field field--full"><label for="d-address_line1">Address</label><input class="input" id="d-address_line1" name="address_line1" type="text" autocomplete="address-line1"></div>
+            <div class="field field--full"><label for="d-address_line2">Apartment, suite, etc. (optional)</label><input class="input" id="d-address_line2" name="address_line2" type="text" autocomplete="address-line2"></div>
+            <div class="field"><label for="d-city">City</label><input class="input" id="d-city" name="city" type="text" autocomplete="address-level2"></div>
+            <div class="field"><label for="d-region">State or region (optional)</label><input class="input" id="d-region" name="region" type="text" autocomplete="address-level1"></div>
+            <div class="field"><label for="d-postal_code">Postal code</label><input class="input" id="d-postal_code" name="postal_code" type="text" autocomplete="postal-code"></div>
+            </div>
+            <div class="details-actions"><button class="btn" type="submit">Save details</button><p class="form-status" role="status"></p></div>
+          </form>
         </section>
         <p class="acct-note">Download links are created when you click and expire after 5 minutes. Trouble? <a class="link" href="/support/?topic=download">Contact support</a>.</p>
       </div>

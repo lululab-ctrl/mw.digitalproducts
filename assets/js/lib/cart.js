@@ -8,6 +8,7 @@ const SVG = {
   user: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20.5c1.4-3.6 4.3-5.5 7.5-5.5s6.1 1.9 7.5 5.5"/></svg>',
   cart: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h2l2.2 11.2a1.5 1.5 0 0 0 1.5 1.2h8.8a1.5 1.5 0 0 0 1.5-1.1L21 8H6.2"/><circle cx="9.5" cy="20" r="1.3"/><circle cx="17.5" cy="20" r="1.3"/></svg>',
   dl: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>',
+  edit: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4Z"/><path d="m13.5 6.5 4 4"/></svg>',
   help: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.6 9.3a2.5 2.5 0 0 1 4.8.9c0 1.7-2.4 2.2-2.4 3.6"/><circle cx="12" cy="17.2" r=".6" fill="currentColor"/></svg>',
   x: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>',
 };
@@ -269,7 +270,7 @@ export function navIconsInner() {
 }
 
 // ---------------------------------------------------------------- account menu
-// Opens from the person icon: who's signed in, My downloads, Help, and sign in / sign out.
+// Opens from the person icon: who's signed in, My downloads, My details (signed in), Help, and sign in / sign out.
 // The sign-in check loads only when the menu is first opened, so pages stay light.
 let menu = null;
 async function accountUser() {
@@ -283,6 +284,7 @@ function menuHTML(user) {
     : `<div class="who"><span class="av out">${SVG.user}</span><div><small>${T("Not signed in", "לא מחוברים")}</small><b>${T("Your MWP account", "החשבון שלכם ב-MWP")}</b></div></div>`;
   return `${who}
     <a href="/account/" role="menuitem">${SVG.dl}<span>${T("My downloads", "ההורדות שלי")}</span></a>
+    ${user ? `<a href="/account/#details" role="menuitem">${SVG.edit}<span>${T("My details", "הפרטים שלי")}</span></a>` : ""}
     <a href="/support/" role="menuitem">${SVG.help}<span>${T("Help", "עזרה")}</span></a>
     <div class="sep"></div>
     ${user ? `<button class="item out" type="button" role="menuitem" data-signout>${T("Sign out", "התנתקות")}</button>`

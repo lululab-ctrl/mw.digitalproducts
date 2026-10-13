@@ -1,6 +1,6 @@
 // My downloads: magic-link sign-in, then the customer's library with secure download buttons.
 import { initChrome, toast } from "../lib/ui.js";
-import { supabase, currentUser, sendMagicLink, signOut, signInWithPassword, signUpWithPassword, sendPasswordReset, updatePassword, myLibrary, requestDownload, signedTerms, panelDevices, removePanelDevice, mediaUrl, esc, shortDate } from "../lib/api.js";
+import { supabase, currentUser, sendMagicLink, signOut, signInWithPassword, signUpWithPassword, sendPasswordReset, updatePassword, myProfile, saveMyProfile, myLibrary, requestDownload, signedTerms, panelDevices, removePanelDevice, mediaUrl, esc, shortDate } from "../lib/api.js";
 import { EMAIL_RE, setBusy, setStatus } from "./shared-forms.js";
 import { countLabel } from "../lib/catalog.js";
 
@@ -88,6 +88,51 @@ async function showLibrary(user) {
     library.innerHTML = `<p class="empty">${esc(err.message)}</p>`;
   }
 }
+
+// ---------------------------------------------------------------- My details
+const detailsForm = document.getElementById("details-form");
+const DETAIL_KEYS = ["name", "phone", "country", "address_line1", "address_line2", "city", "region", "postal_code"];
+
+async function showDetails(user) {
+  document.getElementById("d-email").value = user.email;
+  const status = detailsForm.querySelector(".form-status");
+  try {
+    const profile = await myProfile();
+    for (const k of DETAIL_KEYS) detailsForm.elements[k].value = profile?.[k] ?? "";
+  } catch (err) {
+    setStatus(status, err.message, "error");
+  }
+  if (location.hash === "#details") document.getElementById("details").scrollIntoView({ block: "start" });
+}
+
+detailsForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const status = detailsForm.querySelector(".form-status");
+  const values = Object.fromEntries(DETAIL_KEYS.map((k) => [k, detailsForm.elements[k].value.trim()]));
+  const nameInput = detailsForm.elements.name;
+  if (!values.name) {
+    nameInput.setAttribute("aria-invalid", "true");
+    setStatus(status, "Please enter your name.", "error");
+    nameInput.focus();
+    return;
+  }
+  nameInput.removeAttribute("aria-invalid");
+  const btn = detailsForm.querySelector("button[type=submit]");
+  setBusy(btn, true, "Saving…");
+  try {
+    await saveMyProfile(values);
+    setStatus(status, "Your details are saved.", "ok");
+  } catch (err) {
+    setStatus(status, err.message, "error");
+  } finally {
+    setBusy(btn, false);
+  }
+});
+
+// The account menu links to /account/#details.
+window.addEventListener("hashchange", () => {
+  if (location.hash === "#details" && !signedIn.hidden) document.getElementById("details").scrollIntoView({ behavior: "smooth", block: "start" });
+});
 
 // Ambassadors: their signed copy of the Ambassador Program terms.
 async function showSignedTerms() {
@@ -309,6 +354,7 @@ function afterSignIn(user) {
   if (recovering) { signedOut.hidden = false; show("reset"); return; }
   if (next) { location.replace(next); return; }
   showLibrary(user);
+  showDetails(user);
 }
 
 const user = await currentUser();
