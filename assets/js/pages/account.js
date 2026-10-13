@@ -97,17 +97,39 @@ document.addEventListener("click", async (e) => {
   }
 });
 
+// Presets and Field Guides come as a personal copy made for this buyer. The first time, the server
+// answers "preparing" while the copy is made; we keep checking and start the download when it's ready.
+const POLL_MS = 30000, POLL_FOR_MS = 12 * 60000;
+const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+const he = () => document.documentElement.lang === "he";
+
 library.addEventListener("click", async (e) => {
   const btn = e.target.closest("[data-download]");
-  if (!btn) return;
+  if (!btn || btn.disabled) return;
   const label = btn.querySelector("span");
   const was = label ? label.textContent : "";
-  const busy = (on) => { btn.disabled = on; btn.setAttribute("aria-busy", String(on)); if (label) label.textContent = on ? (document.documentElement.lang === "he" ? "מכינים…" : "Preparing…") : was; };
-  busy(true);
+  const busy = (on, text) => {
+    btn.disabled = on; btn.setAttribute("aria-busy", String(on));
+    if (label) label.textContent = on ? text : was;
+  };
+  busy(true, he() ? "מכינים…" : "Preparing…");
   try {
-    const { url } = await requestDownload(btn.dataset.download);
+    const started = Date.now();
+    let res = await requestDownload(btn.dataset.download);
+    if (res.preparing) {
+      busy(true, he() ? "מכינים את העותק שלכם…" : "Making your copy…");
+      toast(res.message, { timeout: 9000 });
+      while (res.preparing && Date.now() - started < POLL_FOR_MS) {
+        await wait(POLL_MS);
+        res = await requestDownload(btn.dataset.download);
+      }
+      if (res.preparing) {
+        toast("Your personal copy is still being made. Please come back in a little while and download it from here.", { timeout: 10000 });
+        return;
+      }
+    }
     // A same-tab navigation to a Content-Disposition: attachment URL downloads without leaving the page.
-    location.href = url;
+    location.href = res.url;
     toast("Your download has started. The link is valid for 5 minutes.");
   } catch (err) {
     toast(err.message, { type: "error", timeout: 7000 });

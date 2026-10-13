@@ -6,7 +6,7 @@
 // Idempotent: each event is recorded in webhook_events after it succeeds, and a
 // repeat delivery of the same event returns 200 without doing anything twice.
 // ============================================================================
-import { admin, hmacHex, notifyMake, plain, safeEqual } from "../_shared/http.ts";
+import { requestPersonalCopies, admin, hmacHex, notifyMake, plain, safeEqual } from "../_shared/http.ts";
 
 const SECRET = Deno.env.get("CHECKOUT_WEBHOOK_SECRET") ?? "";
 
@@ -129,6 +129,8 @@ async function handlePaid(
       if (bErr) throw bErr;
     }
   }
+
+  await requestPersonalCopies();   // start making their marked copies right away
 
   const { count } = await db.from("orders").select("id", { count: "exact", head: true })
     .eq("customer_id", customer.id).eq("status", "paid");

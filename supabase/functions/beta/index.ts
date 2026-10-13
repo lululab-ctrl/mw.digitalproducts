@@ -8,7 +8,7 @@
 // limited per IP. Real protection is per person: downloads and the Panel licence
 // need the member's own email inbox.
 // ============================================================================
-import { admin, clientIp, cors, EMAIL_RE, fail, json, safeEqual, sha256Hex } from "../_shared/http.ts";
+import { admin, clientIp, cors, EMAIL_RE, fail, json, requestPersonalCopies, safeEqual, sha256Hex } from "../_shared/http.ts";
 
 const SALT = "8c6faab7b9d7f0e0efaba8ecbc9ea9a8";
 const ITERATIONS = 310000;
@@ -75,5 +75,6 @@ Deno.serve(async (req) => {
     if (error) { console.error(error); return fail(req, "Couldn't add the tools to your library. Please try again.", 500); }
   }
 
+  await requestPersonalCopies();   // start making their marked copies right away
   return json(req, { ok: true });
 });

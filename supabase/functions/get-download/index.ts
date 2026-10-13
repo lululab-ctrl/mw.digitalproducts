@@ -4,10 +4,12 @@
 // Checks: signed in → owns the product → access not revoked → under the daily
 // limit. Every download is logged with a salted IP hash (no raw IPs stored).
 // ============================================================================
-import { admin, clientIp, cors, fail, json, sha256Hex } from "../_shared/http.ts";
+import { admin, clientIp, cors, fail, json, requestPersonalCopies, sha256Hex } from "../_shared/http.ts";
 
 const DAILY_LIMIT = Number(Deno.env.get("DOWNLOAD_DAILY_LIMIT") ?? "5");
 const LINK_SECONDS = 300;
+// Categories downloaded as a personal, marked copy (see tools/personalize). Panel is protected by its licence instead.
+const PERSONAL = ["preset", "guide"];
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: cors(req) });
@@ -32,7 +34,7 @@ Deno.serve(async (req) => {
     await db.from("customers").update({ auth_user_id: user.id }).eq("id", customer.id);
   }
 
-  const { data: product } = await db.from("products").select("id, name").eq("slug", slug).maybeSingle();
+  const { data: product } = await db.from("products").select("id, name, category").eq("slug", slug).maybeSingle();
   if (!product) return fail(req, "Unknown product.", 404);
 
   const { data: ent } = await db.from("entitlements")
@@ -47,8 +49,19 @@ Deno.serve(async (req) => {
     return fail(req, "You've reached today's download limit for this pack. Please try tomorrow or contact support.", 429);
   }
 
-  const { data: file } = await db.from("product_files").select("path").eq("product_id", product.id).maybeSingle();
+  const { data: file } = await db.from("product_files").select("path, version").eq("product_id", product.id).maybeSingle();
   if (!file) return fail(req, "This pack's file is being updated. Please try again shortly.", 503);
+
+  // Presets and guides are downloaded as the buyer's own marked copy. If it isn't ready yet
+  // (new purchase, or a new version was just uploaded), ask for it and tell the page to wait.
+  if (PERSONAL.includes(product.category)) {
+    const { data: mine } = await db.from("personal_files").select("path, version").eq("entitlement_id", ent.id).maybeSingle();
+    if (!mine || mine.version !== file.version) {
+      await requestPersonalCopies();
+      return json(req, { preparing: true, message: "We're making your personal copy. It's usually ready in a few minutes; this page will start the download when it is." }, 202);
+    }
+    file.path = mine.path;
+  }
 
   const fileName = file.path.split("/").pop();
   const { data: signed, error } = await db.storage.from("presets")

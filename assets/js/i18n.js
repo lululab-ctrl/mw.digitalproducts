@@ -196,6 +196,9 @@ const HE = {
   "Please enter the email you used at checkout.": "הזינו את המייל שאיתו שילמתם.",
   "Too many requests. Please wait a minute and try again.": "יותר מדי בקשות. חכו דקה ונסו שוב.",
   "Your download has started. The link is valid for 5 minutes.": "ההורדה התחילה. הקישור תקף ל-5 דקות.",
+  // Personal copies (drafts for Matan)
+  "We're making your personal copy. It's usually ready in a few minutes; this page will start the download when it is.": "אנחנו מכינים עותק אישי בשבילכם. בדרך כלל זה לוקח כמה דקות, וההורדה תתחיל מהעמוד הזה ברגע שהוא מוכן.",
+  "Your personal copy is still being made. Please come back in a little while and download it from here.": "העותק האישי שלכם עדיין בהכנה. חזרו בעוד קצת זמן והורידו אותו מכאן.",
   "Please sign in first.": "צריך להיכנס קודם.",
   "Preparing…": "מכינים…",
 
