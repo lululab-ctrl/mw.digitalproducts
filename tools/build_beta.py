@@ -15,20 +15,12 @@ LOGO = "2dd3356528167ddf9a64c0c7301c8aa3.png"
 CHECK = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F4AF56" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>'
 
 PRODUCTS = [
-    ("Lightroom presets", "MWP", "Presets", "c88e041b857fb964607aaec43ad1753d.jpg", "45% 6%",
-     ["50 Lightroom presets, 12 adaptive", "50 mobile files and 33 LUTs", "Install guide for every program"]),
-    ("Photoshop plugin", "MWP", "Panel", "8f730b9bb76b93ca707cae719a309479.jpg", "50% 40%",
-     ["8 one-click effects", "11 looks and 4 painted lights", "User manual and install guide"]),
-    ("PDF field guides", "MWP", "Field Guides", "0cf44582c4078749d18156eec10c90d3.jpg", "62% 30%",
-     ["4 PDF guides, 137 lessons", "Composition, colour, light and planning", "English and Hebrew"]),
+    ("Lightroom presets", "MWP", "Presets", "c88e041b857fb964607aaec43ad1753d.jpg", "45% 12%", "50 presets and 33 LUTs"),
+    ("Photoshop plugin", "MWP", "Panel", "8f730b9bb76b93ca707cae719a309479.jpg", "50% 40%", "8 one-click effects and 11 looks"),
+    ("PDF field guides", "MWP", "Field Guides", "0cf44582c4078749d18156eec10c90d3.jpg", "62% 35%", "4 guides, 137 lessons"),
 ]
+ACCEPT_BG = "fbaf19aea2af10f26b2949ab31fff094.jpg"   # ibex at dusk, behind the acceptance card
 
-ASKS = [
-    ("01", "Create and share", "In your first 3 months: at least 3 posts and 1 reel a month, and 1 story a week. After that, tag us whenever you use the tools and love the results."),
-    ("02", "Tag and disclose", "Tag @mw_phototours and Matan Wild, use our hashtags, and mark your posts as gifted. The terms explain how."),
-    ("03", "Keep it personal", "Your licence is yours alone, on up to 2 computers. Don't share the files or your access."),
-    ("04", "Tell us what you think", "Share honest feedback and report bugs as you find them. You'll have a direct line to our team and to Matan."),
-]
 
 # ---------------------------------------------------------------- Ambassador Program terms (Matan's text)
 TERMS_DATE = "Oct 13, 2026"
@@ -146,8 +138,6 @@ FACTS = [
     ("Lifetime", "licence, with every future update", 1),
     ("2", "devices, for you only", 1),
     ("3 + 1", "posts and a reel a month, first 3 months", 2),
-    ("1", "story a week, first 3 months", 2),
-    ("100%", "your copyright, always", 4),
     ("12", "months, renewable", 7),
 ]
 FACTS_HTML = "".join(
@@ -191,36 +181,25 @@ html[dir=rtl] .input[dir=ltr]{text-align:right}
 /* after unlocking */
 .reveal{opacity:0;transform:translateY(28px);transition:opacity 1s cubic-bezier(.16,1,.3,1),transform 1.1s cubic-bezier(.16,1,.3,1);transition-delay:var(--d,0s)}
 .reveal.on{opacity:1;transform:none}
-.top{position:relative;margin-top:-80px;padding:200px 0 120px;overflow:hidden}
-.top .bg{opacity:.45}
-.top .shade{background:linear-gradient(180deg,rgba(10,9,8,.55),rgba(10,9,8,.75) 55%,#0A0908)}
+.top{position:relative;margin-top:-80px;min-height:100svh;display:flex;align-items:flex-end;padding:180px 0 110px;overflow:hidden}
+.top .bg{opacity:.9}
+.top .shade{background:linear-gradient(180deg,rgba(10,9,8,.55) 0%,rgba(10,9,8,.15) 35%,rgba(10,9,8,.55) 70%,#0A0908 100%),linear-gradient(90deg,rgba(10,9,8,.7),transparent 65%)}
+html[dir=rtl] .top .shade{background:linear-gradient(180deg,rgba(10,9,8,.55) 0%,rgba(10,9,8,.15) 35%,rgba(10,9,8,.55) 70%,#0A0908 100%),linear-gradient(270deg,rgba(10,9,8,.7),transparent 65%)}
 .top .wrap{position:relative}
 .badge{display:inline-flex;align-items:center;gap:10px;padding:8px 16px;border-radius:64px;background:rgba(244,175,86,.1);border:1px solid rgba(244,175,86,.4);color:#F4AF56;font-size:12px;font-weight:700;letter-spacing:.2em;text-transform:uppercase}
 .badge::before{content:"";width:7px;height:7px;border-radius:50%;background:#F4AF56;box-shadow:0 0 12px #F4AF56}
 .sec{padding:110px 0}
 .sec.alt{background:linear-gradient(180deg,#0A0908,#0f1f1c 30%,#0f1f1c 70%,#0A0908)}
 .head{max-width:720px}
-.gifts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;margin-top:56px}
-.gift{position:relative;display:flex;flex-direction:column;border-radius:26px;overflow:hidden;background:linear-gradient(180deg,rgba(254,251,241,.055),rgba(254,251,241,.015));border:1px solid rgba(254,251,241,.08);box-shadow:0 40px 80px -50px rgba(0,0,0,.9);transition:transform .5s cubic-bezier(.2,.8,.2,1),border-color .4s}
-.gift:hover{transform:translateY(-6px);border-color:rgba(244,175,86,.35)}
-.gift .ph{aspect-ratio:4/3;overflow:hidden}
-.gift .ph img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s cubic-bezier(.2,.7,.1,1)}
-.gift:hover .ph img{transform:scale(1.05)}
-.gift .cb{padding:26px 26px 30px}
-.gift .tg{margin:0;font-size:11.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#9CB1C2}
-.gift .nm{margin:8px 0 0;font-size:28px;font-weight:400;letter-spacing:-.02em}
-.gift ul{list-style:none;margin:20px 0 0;padding:18px 0 0;border-top:1px solid rgba(254,251,241,.08);display:flex;flex-direction:column;gap:12px}
-.gift li{display:flex;gap:12px;align-items:flex-start;font-size:15px;line-height:1.5;color:#AEB9C1}
-.gift li svg{flex:none;width:18px;height:18px;padding:4px;margin-top:1px;border-radius:50%;background:rgba(244,175,86,.12);box-shadow:inset 0 0 0 1px rgba(244,175,86,.3)}
-.free{position:absolute;top:16px;inset-inline-end:16px;padding:6px 12px;border-radius:64px;background:rgba(10,9,8,.6);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(244,175,86,.45);color:#F4AF56;font-size:11px;font-weight:800;letter-spacing:.18em;text-transform:uppercase}
-.asks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;margin-top:56px;border-top:1px solid rgba(254,251,241,.08)}
-.ask{display:grid;grid-template-columns:72px 1fr;gap:18px;padding:34px 28px 34px 0;border-bottom:1px solid rgba(254,251,241,.08)}
-.ask:nth-child(odd){border-inline-end:1px solid rgba(254,251,241,.08)}
-.ask:nth-child(even){padding-inline-start:36px}
-.ask .n{font-size:15px;font-weight:700;color:#F4AF56;font-variant-numeric:tabular-nums;padding-top:6px}
-.ask h3{margin:0;font-size:22px;font-weight:500;letter-spacing:-.01em}
-.ask p{margin:10px 0 0;font-size:15.5px;line-height:1.6;color:#AEB9C1}
-.ask .tag{color:#F4AF56;font-weight:600}
+.gifts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin-top:52px}
+.gift{position:relative;aspect-ratio:4/5;border-radius:26px;overflow:hidden;background:#141210;box-shadow:0 40px 80px -50px rgba(0,0,0,.9)}
+.gift img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 1.4s cubic-bezier(.2,.7,.1,1)}
+.gift::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(10,9,8,.92));pointer-events:none}
+.gift:hover img{transform:scale(1.05)}
+.gift .cb{position:absolute;inset:auto 0 0 0;z-index:1;padding:28px}
+.gift .tg{margin:0;font-size:11.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#CDD7DD}
+.gift .nm{margin:8px 0 0;font-size:30px;font-weight:400;letter-spacing:-.02em}
+.gift .ln{margin:8px 0 0;font-size:15px;color:#AEB9C1}
 .join{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:64px;align-items:start}
 .join .glass{max-width:none;text-align:start;animation:none;padding:40px}
 .join form{display:flex;flex-direction:column;gap:18px}
@@ -235,7 +214,7 @@ html[dir=rtl] .input[dir=ltr]{text-align:right}
 .done h3{margin:22px 0 0;font-size:30px;font-weight:400;letter-spacing:-.02em}
 .done p{margin:14px auto 0;max-width:420px;font-size:16px;line-height:1.6;color:#CDD7DD}
 .done .btn{margin-top:26px;width:auto}
-.facts{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;margin-top:44px}
+.facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:44px}
 .fact{display:flex;flex-direction:column;gap:6px;padding:20px 18px;border-radius:20px;text-decoration:none;background:linear-gradient(180deg,rgba(254,251,241,.06),rgba(254,251,241,.015));border:1px solid rgba(254,251,241,.09);transition:transform .45s cubic-bezier(.2,.8,.2,1),border-color .3s,background .3s}
 .fact:hover{transform:translateY(-4px);border-color:rgba(244,175,86,.45);background:linear-gradient(180deg,rgba(244,175,86,.1),rgba(254,251,241,.02))}
 .fact b{font-size:28px;font-weight:500;letter-spacing:-.02em;background:linear-gradient(90deg,#E4AA7C,#F4AF56 55%,#F8D29C);-webkit-background-clip:text;background-clip:text;color:transparent}
@@ -262,13 +241,15 @@ html[dir=rtl] .input[dir=ltr]{text-align:right}
 .t-intro{position:relative;padding:34px 36px;border-radius:26px;background:radial-gradient(120% 140% at 0% 0%,rgba(244,175,86,.12),transparent 55%),linear-gradient(180deg,rgba(254,251,241,.06),rgba(254,251,241,.015));border:1px solid rgba(244,175,86,.22)}
 .t-intro p{margin:14px 0 0;font-size:17px;line-height:1.72;color:#E3E9EC}
 .t-intro p.agree{display:inline-flex;align-items:center;gap:10px;margin-top:20px;padding:8px 16px;border-radius:64px;background:rgba(244,175,86,.1);border:1px solid rgba(244,175,86,.35);color:#F4AF56;font-size:14.5px;font-weight:600}
-.t-sec{margin-top:18px;padding:30px 34px 32px;border-radius:24px;background:linear-gradient(180deg,rgba(254,251,241,.045),rgba(254,251,241,.012));border:1px solid rgba(254,251,241,.08);scroll-margin-top:96px;transition:border-color .5s,box-shadow .5s,transform .5s}
-.t-sec.on{border-color:rgba(244,175,86,.32);box-shadow:0 30px 70px -40px rgba(244,175,86,.25)}
+.t-sec{padding:40px 0 6px;border-top:1px solid rgba(254,251,241,.08);scroll-margin-top:96px}
+.t-intro+.t-sec{margin-top:40px}
+.t-sec h3{transition:color .4s}
+.t-sec.on h3{color:#F8D29C}
 .t-sec header{display:flex;align-items:center;gap:14px}
-.t-sec .ic{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:14px;color:#F4AF56;background:rgba(244,175,86,.1);box-shadow:inset 0 0 0 1px rgba(244,175,86,.28)}
+.t-sec .ic{display:inline-flex;color:#F4AF56;opacity:.85}
 .t-sec .num{font-size:13px;font-weight:700;color:#F4AF56;font-variant-numeric:tabular-nums;letter-spacing:.08em}
 .t-sec h3{margin:0;font-size:23px;font-weight:500;letter-spacing:-.015em}
-.t-sec .tb{padding-left:58px}
+.t-sec .tb{padding-left:36px}
 .t-sec p{margin:14px 0 0;font-size:16px;line-height:1.72;color:#AEB9C1}
 .t-sec strong{color:#FEFBF1;font-weight:600}
 .t-sec a{color:#F4AF56}
@@ -285,8 +266,11 @@ html[dir=rtl] .input[dir=ltr]{text-align:right}
 .cp.done{background:#F4AF56;color:#0A0908}
 .copied{position:fixed;left:50%;bottom:28px;z-index:60;transform:translate(-50%,20px);opacity:0;padding:10px 18px;border-radius:64px;background:#FEFBF1;color:#0A0908;font-size:14px;font-weight:600;pointer-events:none;transition:all .35s cubic-bezier(.2,.8,.2,1)}
 .copied.show{opacity:1;transform:translate(-50%,0)}
-.accept{padding-top:40px}
-.acc{max-width:640px;margin:0 auto;scroll-margin-top:96px;padding:48px 48px 44px;text-align:center}
+.accept{position:relative;margin-top:60px;padding:160px 0;overflow:hidden}
+.accept .bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 70%;opacity:.85}
+.accept .shade{position:absolute;inset:0;background:linear-gradient(180deg,#0A0908 0%,rgba(10,9,8,.35) 28%,rgba(10,9,8,.2) 70%,#0A0908 100%)}
+.accept .wrap{position:relative}
+.acc{max-width:620px;margin:0 auto;background:linear-gradient(180deg,rgba(18,16,14,.78),rgba(10,9,8,.72));scroll-margin-top:96px;padding:48px 48px 44px;text-align:center}
 .acc .kick{margin-top:20px}
 .acc .h2{font-size:clamp(30px,3.4vw,44px)}
 .acc .lead{margin:16px auto 0;font-size:16.5px}
@@ -327,7 +311,7 @@ html[dir=rtl] .sig-rule::after{background:linear-gradient(270deg,#F4AF56,rgba(24
 .sig .sig-in{padding-inline-end:104px}
 html[lang=he] .sig-l,html[lang=he] .sig-what{letter-spacing:.06em}
 @media (max-width:600px){.sig-in{padding:22px 20px 18px}.sig .sig-in{padding-inline-end:84px}.sig-seal{width:52px;height:52px;top:18px;inset-inline-end:18px}.sig-seal img{width:28px;height:28px}}
-@media (max-width:1100px){.facts{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:1100px){.facts{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:900px){
  .t-layout{grid-template-columns:minmax(0,1fr);gap:20px;margin-top:40px}
  .t-nav{top:64px;z-index:5;flex-direction:row;gap:6px;overflow-x:auto;margin:0 -20px;padding:12px 20px;background:rgba(10,9,8,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(254,251,241,.06);scrollbar-width:none}
@@ -343,24 +327,27 @@ html[lang=he] .he-note{display:block}
 .link-gold:hover{text-decoration-color:#F4AF56}
 .foot{padding:56px 0 70px;border-top:1px solid rgba(254,251,241,.06);font-size:13px;color:#7E8A93;text-align:center}
 html[lang=he] .kick,html[lang=he] .field label,html[lang=he] .gift .tg,html[lang=he] .badge,html[lang=he] .free{letter-spacing:.04em}
-@media (max-width:980px){.gifts{grid-template-columns:minmax(0,1fr);max-width:520px}.join{grid-template-columns:minmax(0,1fr);gap:40px}.asks{grid-template-columns:minmax(0,1fr)}.ask:nth-child(odd){border-inline-end:0}.ask:nth-child(even){padding-inline-start:0}}
-@media (max-width:600px){.wrap{padding:0 20px}.glass{padding:34px 22px 28px;border-radius:22px}.top{margin-top:-64px;padding:150px 0 80px}.sec{padding:80px 0}.ask{grid-template-columns:48px 1fr;padding-inline-end:0}.acc{padding:34px 22px 30px}}
+@media (max-width:980px){.gifts{grid-template-columns:minmax(0,1fr);max-width:520px}.gift{aspect-ratio:5/4}}
+@media (max-width:600px){.wrap{padding:0 20px}.glass{padding:34px 22px 28px;border-radius:22px}.top{margin-top:-64px;padding:150px 0 80px}.sec{padding:80px 0}.accept{padding:110px 0;margin-top:30px}.gift .cb{padding:22px}.gift .nm{font-size:26px}.t-sec .tb{padding-left:0}.acc{padding:34px 22px 30px}}
 @media (prefers-reduced-motion:reduce){.bg,.glass{animation:none}.reveal{opacity:1;transform:none;transition:none}}
 """
 
 
-def gift(tag, first, last, img, pos, points):
-    lis = "".join(f"<li>{CHECK}<span>{p}</span></li>" for p in points)
+def gift(tag, first, last, img, pos, line):
     return f"""<article class="gift reveal">
-<div class="ph"><img src="{IMG}{img}" alt="" loading="lazy" style="object-position:{pos}"></div>
-<span class="free">Free for ambassadors</span>
-<div class="cb"><p class="tg">{tag}</p><h3 class="nm" data-no-i18n>{first} <span class="grad">{last}</span></h3><ul>{lis}</ul></div>
+<img src="{IMG}{img}" alt="" loading="lazy" style="object-position:{pos}">
+<div class="cb"><p class="tg">{tag}</p><h3 class="nm" data-no-i18n>{first} <span class="grad">{last}</span></h3><p class="ln">{line}</p></div>
 </article>"""
 
 
-def ask(n, title, text):
-    text = text.replace("@mw_phototours", '<span class="tag" data-no-i18n>@mw_phototours</span>')
-    return f'<div class="ask reveal"><span class="n">{n}</span><div><h3>{title}</h3><p>{text}</p></div></div>'
+def ver():
+    """Fingerprint of the page script and the code it uses, so browsers fetch the new one after every change."""
+    import hashlib
+    h = hashlib.sha1()
+    for f in ["assets/js/pages/beta.js", "assets/js/i18n.js"] + sorted(
+            os.path.join("assets/js/lib", n) for n in os.listdir("assets/js/lib")):
+        h.update(open(f, "rb").read())
+    return h.hexdigest()[:8]
 
 
 html = f"""<!doctype html>
@@ -388,7 +375,7 @@ html = f"""<!doctype html>
 
 <main id="main">
 <div class="in">
-<section class="top">
+<section class="top" id="top">
 <img class="bg" src="{IMG}{HERO}" alt="">
 <div class="shade"></div>
 <div class="wrap">
@@ -403,13 +390,6 @@ html = f"""<!doctype html>
 <div class="wrap">
 <div class="head reveal"><p class="kick">What you get</p><h2 class="h2">Everything we make. <span class="grad">Free.</span></h2></div>
 <div class="gifts">{"".join(gift(*p) for p in PRODUCTS)}</div>
-</div>
-</section>
-
-<section class="sec alt">
-<div class="wrap">
-<div class="head reveal"><p class="kick">What we ask</p><h2 class="h2">Use it. Share it. <span class="grad">Tag us.</span></h2></div>
-<div class="asks">{"".join(ask(*a) for a in ASKS)}</div>
 </div>
 </section>
 
@@ -437,7 +417,9 @@ html = f"""<!doctype html>
 </div>
 </section>
 
-<section class="sec accept" id="join">
+<section class="accept" id="join">
+<img class="bg" src="{IMG}{ACCEPT_BG}" alt="" loading="lazy">
+<div class="shade"></div>
 <div class="wrap">
 <div class="acc glass reveal" id="acc">
 <div class="acc-step" id="step-agree">
@@ -489,7 +471,7 @@ html = f"""<!doctype html>
 </main>
 
 <script src="../assets/js/lib/nav.js" defer></script>
-<script type="module" src="../assets/js/pages/beta.js"></script>
+<script type="module" src="../assets/js/pages/beta.js?v={ver()}"></script>
 </body>
 </html>
 """
