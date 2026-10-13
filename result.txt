@@ -1,0 +1,13 @@
+mwp-presets OK mwp-presets/v1.1/MWP-Presets-v1.1.zip 152902853 bytes
+mwp-field-guides OK mwp-field-guides/v1.0/MWP-Field-Guides.zip 188704456 bytes
+--- checks
+upload size limit: HTTP 200 
+products: HTTP 206, rows 7
+product_files: HTTP 206, rows 3
+license_devices: HTTP 200, rows 0
+beta_members: HTTP 200, rows 1
+page_prices: HTTP 206, rows 7
+entitlements: HTTP 206, rows 3
+customers: HTTP 200, rows 1
+product slugs: ["presets-field-guides","presets-panel","field-guides-panel","full-set","mwp-panel","mwp-presets","mwp-field-guides"]
+files: [{"path":"mwp-panel/v2.2.0/MWP-Panel-2.2.0.zip","size_bytes":502208},{"path":"mwp-presets/v1.1/MWP-Presets-v1.1.zip","size_bytes":152902853},{"path":"mwp-field-guides/v1.0/MWP-Field-Guides.zip","size_bytes":188704456}]
