@@ -236,11 +236,11 @@ q_amb_lookup = """query ($email: String!) {
   a: items_page_by_column_values(board_id: %d, limit: 1, columns: [{column_id: "email_mm8331he", column_values: [$email]}]) { items { id } }
 }""" % B_AMB
 amb_cv = ('{"color_mm8391jm":{"label":"Active"},"email_mm8331he":{"email":"{{1.email}}","text":"{{1.email}}"},'
-          '"text_mm83z0v6":"{{1.instagram}}",'
+          '"text_mm83z0v6":"{{1.instagram}}","text_mm83q03t":"{{1.facebook}}",'
           '"date_mm83z07a":{"date":"{{1.agreed_on}}"},"date_mm83mwfv":{"date":"{{1.first_months_end}}"},'
           '"date_mm83s7ad":{"date":"{{1.ends_on}}"},"color_mm835th0":{"label":"Not checked"},'
           '"text_mm831gvm":"{{1.terms_version}}","text_mm837ysb":"{{1.products}}"}')
-amb_update_cv = ('{"text_mm83z0v6":"{{1.instagram}}","text_mm831gvm":"{{1.terms_version}}",'
+amb_update_cv = ('{"text_mm83z0v6":"{{1.instagram}}","text_mm83q03t":"{{1.facebook}}","text_mm831gvm":"{{1.terms_version}}",'
                  '"text_mm837ysb":"{{1.products}}"}')
 ambassador_route = [
     gql(60, q_amb_lookup, {"email": "{{1.email}}"}, "Find ambassador",
@@ -297,6 +297,26 @@ ambassador_status_route = [
         "Update status", f("Found", ("{{90.body.data.a.items[1].id}}", "exist", None))),
 ]
 
+# ---------------------------------------------------------------- ambassador_terms_pdf (signed terms → file column)
+def module(mid, name, mod, version, parameters, mapper, filt=None):
+    m = {"id": mid, "module": mod, "version": version, "parameters": parameters, "mapper": mapper,
+         "metadata": {"designer": {"x": 0, "y": 0, "name": name}}}
+    if filt:
+        m["filter"] = filt
+    return m
+
+terms_pdf_route = [
+    gql(100, q_amb_lookup, {"email": "{{1.email}}"}, "Find ambassador",
+        f("Signed terms", ("{{1.type}}", "text:equal", "ambassador_terms_pdf"))),
+    module(101, "Download the PDF (one-hour private link)", "http:MakeRequest", 4, {"authenticationType": "noAuth"},
+           {"url": "{{1.file_url}}", "method": "get", "parseResponse": False, "stopOnHttpError": True,
+            "allowRedirects": True, "shareCookies": False, "requestCompressedContent": True},
+           f("Found", ("{{100.body.data.a.items[1].id}}", "exist", None))),
+    module(102, "Attach to Signed terms", "monday:AddFileToFileColumnValueV2", 2, {"__IMTCONN__": CONN},
+           {"boardId": str(B_AMB), "itemId": "{{100.body.data.a.items[1].id}}", "columnId": "file_mm83gkaq",
+            "filename": "{{1.file_name}}", "data": "{{101.data}}"}),
+]
+
 blueprint = {
     "name": "MWP Shop · Events to monday (orders, products, support, reports)",
     "flow": [
@@ -304,7 +324,7 @@ blueprint = {
          "parameters": {"hook": HOOK, "maxResults": 1}, "mapper": {},
          "metadata": {"designer": {"x": 0, "y": 0}}},
         router(2, [order_route, refund_route, support_route, subscribe_route,
-                   product_route, approvals_route, weekly_route, payout_route, ambassador_route, account_route, downloaded_route, ambassador_status_route]),
+                   product_route, approvals_route, weekly_route, payout_route, ambassador_route, account_route, downloaded_route, ambassador_status_route, terms_pdf_route]),
     ],
     "metadata": {"version": 1, "scenario": {"roundtrips": 1, "maxErrors": 3, "autoCommit": True, "sequential": True,
                                             "confidential": False, "dataloss": False, "dlq": True}},

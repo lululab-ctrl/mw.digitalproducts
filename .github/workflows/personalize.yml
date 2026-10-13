@@ -1,6 +1,7 @@
 # ============================================================================
 # Personal copies. Stamps each buyer's (and beta member's) Presets and Field
-# Guides download with their name, email and licence ID (tools/personalize/).
+# Guides download with their name, email and licence ID (tools/personalize/),
+# and makes each ambassador's signed-terms PDF (attached in monday via Make).
 # Runs right away when a purchase, a beta join or a download asks for it (needs
 # the PERSONALIZE_TOKEN secret), once an hour as a backup, and by hand:
 # Actions → Personal copies → Run workflow. Only makes copies that are missing
@@ -57,4 +58,7 @@ jobs:
           pip install -q pypdf reportlab python-bidi requests
 
       - name: Make the copies
+        env:
+          MAKE_WEBHOOK_URL: ${{ secrets.MAKE_WEBHOOK_URL }}
+          MAKE_SHARED_SECRET: ${{ secrets.MAKE_SHARED_SECRET }}
         run: .github/scripts/run.sh "Personal copies" python3 tools/personalize/worker.py

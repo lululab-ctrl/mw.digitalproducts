@@ -536,6 +536,7 @@ const ambCols = [
   { label: "Name", value: (r) => r.customers?.name || "" },
   { label: "Email", value: (r) => r.customers?.email || "" },
   { label: "Instagram", value: (r) => (r.instagram ? "@" + r.instagram : "") },
+  { label: "Facebook", value: (r) => r.facebook || "" },
   { label: "Joined", value: (r) => shortDate(r.agreed_at) },
   { label: "Status", value: (r) => AMB_STATUS[r.status] || r.status,
     html: (r) => `<span class="status status--amb-${esc(r.status)}">${esc(AMB_STATUS[r.status] || r.status)}</span>${r.ended_at ? ` <span class="meta">${esc(shortDate(r.ended_at))}</span>` : ""}` },
@@ -548,7 +549,7 @@ let ambRows = [];
 async function loadAmbassadors() {
   const term = $("#amb-search").value.trim().toLowerCase();
   const { data, error } = await supabase.from("beta_members")
-    .select("id, instagram, agreed_at, status, ended_at, terms_version, customers(email, name)")
+    .select("id, instagram, facebook, agreed_at, status, ended_at, terms_version, customers(email, name)")
     .order("agreed_at", { ascending: false }).limit(500);
   check(error);
   ambRows = term ? data.filter((r) => [r.customers?.email, r.customers?.name, r.instagram].some((v) => (v || "").toLowerCase().includes(term))) : data;
