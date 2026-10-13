@@ -427,7 +427,7 @@ html .nav .wrap,html.nav-scrolled .nav .wrap{{height:80px;transition:none}}
 <div class="field"><label for="j-name">Name</label><input class="input" id="j-name" name="name" autocomplete="name" required></div>
 <div class="field"><label for="j-email">Email</label><input class="input" id="j-email" name="email" type="email" dir="ltr" autocomplete="email" required></div>
 <div class="field"><label for="j-ig">Instagram</label><input class="input" id="j-ig" name="instagram" dir="ltr" placeholder="@yourhandle" autocomplete="off"></div>
-<div class="field"><label for="j-pw">Choose a password</label><div class="pw"><input class="input" id="j-pw" name="password" type="password" autocomplete="new-password" minlength="8" required><button class="pw-eye" type="button" data-eye aria-label="Show password"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button></div><p class="pw-hint">At least 8 characters. You'll use it to sign in and download your tools anytime.</p></div>
+<div class="field"><label for="j-pw">Password</label><div class="pw"><input class="input" id="j-pw" name="password" type="password" autocomplete="new-password" minlength="8" required><button class="pw-eye" type="button" data-eye aria-label="Show password"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button></div><p class="pw-hint">At least 8 characters. You'll use it to sign in and download your tools anytime.</p></div>
 <div class="sig" id="sig" aria-live="polite">
 <div class="sig-in">
 <p class="sig-l">Signed by</p>
@@ -457,6 +457,7 @@ html .nav .wrap,html.nav-scrolled .nav .wrap{{height:80px;transition:none}}
 
 <script src="../assets/js/lib/nav.js" defer></script>
 <script type="module" src="../assets/js/pages/beta.js?v={ver()}"></script>
+<script>setTimeout(function(){{document.querySelectorAll(".reveal").forEach(function(e){{e.classList.add("on")}})}},1200)</script>
 </body>
 </html>
 """
