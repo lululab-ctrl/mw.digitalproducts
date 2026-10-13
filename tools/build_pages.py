@@ -349,10 +349,6 @@ page("account.html", "My downloads · MWP",
         </form>
       </div>
       <div id="signed-in" class="stack-lg" hidden>
-        <div class="glass who">
-          <div class="who-l"><span class="avatar" id="avatar" aria-hidden="true"></span><div><p>Signed in as</p><b id="who"></b></div></div>
-          <button class="btn btn--sm btn--ghost" id="sign-out" type="button">Sign out</button>
-        </div>
         <div class="library" id="library" aria-live="polite"></div>
         <div class="devices-box" id="devices" hidden></div>
         <p class="acct-note">Download links are created when you click and expire after 5 minutes. Trouble? <a class="link" href="support.html?topic=download">Contact support</a>.</p>

@@ -1,10 +1,11 @@
-// Header icons (cart + my downloads) and the cart drawer. Standalone: no imports, works on every shop page.
+// Header icons (account menu + cart) and the cart drawer. Standalone: no imports, works on every shop page.
 // Icons show no text; the label appears only on hover, keyboard focus, or when tapped/clicked.
 const KEY = "mwp_cart";
 const he = () => document.documentElement.lang === "he";
 const T = (en, hb) => (he() ? hb : en);
 
 const SVG = {
+  user: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20.5c1.4-3.6 4.3-5.5 7.5-5.5s6.1 1.9 7.5 5.5"/></svg>',
   cart: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h2l2.2 11.2a1.5 1.5 0 0 0 1.5 1.2h8.8a1.5 1.5 0 0 0 1.5-1.1L21 8H6.2"/><circle cx="9.5" cy="20" r="1.3"/><circle cx="17.5" cy="20" r="1.3"/></svg>',
   dl: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>',
   help: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.6 9.3a2.5 2.5 0 0 1 4.8.9c0 1.7-2.4 2.2-2.4 3.6"/><circle cx="12" cy="17.2" r=".6" fill="currentColor"/></svg>',
@@ -48,6 +49,22 @@ const CSS = `
 .cart-go{display:flex;align-items:center;justify-content:center;min-height:50px;border-radius:30px;border:0;background:linear-gradient(90deg,#E4AA7C,#F4AF56);color:#0A0908;font-weight:800;font-size:16px;;text-decoration:none;cursor:pointer}
 .cart-go[aria-disabled=true]{opacity:.45;pointer-events:none}
 .cart-note{margin:0;font-size:13px;color:#9CB1C2;text-align:center}
+
+.acct-menu{position:fixed;z-index:95;width:260px;padding:8px;border-radius:18px;background:rgba(20,18,16,.92);backdrop-filter:blur(18px) saturate(150%);-webkit-backdrop-filter:blur(18px) saturate(150%);border:1px solid rgba(254,251,241,.1);box-shadow:0 30px 70px -20px rgba(0,0,0,.8);color:#FEFBF1;opacity:0;transform:translateY(-6px) scale(.98);transform-origin:top right;pointer-events:none;transition:opacity .18s,transform .18s;font-family:"Google Sans",Heebo,system-ui,sans-serif}
+[dir=rtl] .acct-menu{transform-origin:top left;font-family:Heebo,"Google Sans",system-ui,sans-serif}
+.acct-menu.open{opacity:1;transform:none;pointer-events:auto}
+.acct-menu .who{display:flex;align-items:center;gap:12px;padding:12px 12px 14px;border-bottom:1px solid rgba(254,251,241,.08);margin-bottom:6px}
+.acct-menu .av{flex:none;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#E4AA7C,#F4AF56);color:#0A0908;font-weight:700;text-transform:uppercase}
+.acct-menu .av.out{background:rgba(254,251,241,.08);color:#CDD7DD}
+.acct-menu .who small{display:block;font-size:12px;color:#9CB1C2}
+.acct-menu .who b{display:block;max-width:170px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:14px}
+.acct-menu a,.acct-menu button.item{display:flex;align-items:center;gap:12px;width:100%;padding:11px 12px;border:0;border-radius:12px;background:none;color:#FEFBF1;font:500 14.5px/1.2 inherit;text-decoration:none;cursor:pointer;text-align:start}
+.acct-menu a:hover,.acct-menu button.item:hover{background:rgba(254,251,241,.07)}
+.acct-menu a svg,.acct-menu button.item svg{width:18px;height:18px;color:#F4AF56}
+.acct-menu .sep{height:1px;margin:6px 4px;background:rgba(254,251,241,.08)}
+.acct-menu button.item.out{color:#CDD7DD}
+html .acct-menu button.item{justify-content:flex-start!important;text-align:start!important;font-weight:500!important;font-size:14.5px!important;letter-spacing:0!important;text-transform:none!important;min-height:0!important;box-shadow:none!important}
+.nav-ico[aria-expanded=true] .tip{display:none}
 @media (max-width:900px){.site-header .nav-icons{margin-inline-start:auto}.site-header .nav-icons + .lang-toggle{margin-inline-start:0}}
 `;
 
@@ -133,7 +150,7 @@ function closeCart() {
 }
 
 // Pages live at the root or one folder down (presets/, panel/...); links need the right prefix.
-function base() { return document.querySelector("base") ? "" : (/\/(presets|panel|field-guides)\//.test(location.pathname) ? "../" : ""); }
+function base() { return document.querySelector("base") ? "" : (/\/(presets|panel|field-guides|beta)\//.test(location.pathname) ? "../" : ""); }
 
 function showTip(el) {
   el.classList.add("show-tip");
@@ -142,9 +159,63 @@ function showTip(el) {
 }
 
 export function navIconsInner() {
-  return `<a class="nav-ico" href="${base()}support.html" aria-label="${T("Help", "עזרה")}">${SVG.help}<span class="tip">${T("Help", "עזרה")}</span></a>
-    <a class="nav-ico" href="${base()}account.html" aria-label="${T("My downloads", "ההורדות שלי")}">${SVG.dl}<span class="tip">${T("My downloads", "ההורדות שלי")}</span></a>
+  return `<button class="nav-ico" type="button" data-account aria-label="${T("Account", "חשבון")}" aria-haspopup="menu" aria-expanded="false">${SVG.user}<span class="tip">${T("Account", "חשבון")}</span></button>
     <button class="nav-ico" type="button" data-cart aria-label="${T("Cart", "עגלה")}" aria-haspopup="dialog">${SVG.cart}<span class="count" hidden>0</span><span class="tip">${T("Cart", "עגלה")}</span></button>`;
+}
+
+// ---------------------------------------------------------------- account menu
+// Opens from the person icon: who's signed in, My downloads, Help, and sign in / sign out.
+// The sign-in check loads only when the menu is first opened, so pages stay light.
+let menu = null;
+async function accountUser() {
+  try { const api = await import("./api.js"); return { api, user: await api.currentUser() }; }
+  catch { return { api: null, user: null }; }
+}
+function menuHTML(user) {
+  const b = base();
+  const who = user
+    ? `<div class="who"><span class="av">${(user.email || "?")[0]}</span><div><small>${T("Signed in as", "מחוברים בתור")}</small><b>${user.email}</b></div></div>`
+    : `<div class="who"><span class="av out">${SVG.user}</span><div><small>${T("Not signed in", "לא מחוברים")}</small><b>${T("Your MWP account", "החשבון שלכם ב-MWP")}</b></div></div>`;
+  return `${who}
+    <a href="${b}account.html" role="menuitem">${SVG.dl}<span>${T("My downloads", "ההורדות שלי")}</span></a>
+    <a href="${b}support.html" role="menuitem">${SVG.help}<span>${T("Help", "עזרה")}</span></a>
+    <div class="sep"></div>
+    ${user ? `<button class="item out" type="button" role="menuitem" data-signout>${T("Sign out", "התנתקות")}</button>`
+           : `<a href="${b}account.html" role="menuitem"><span>${T("Sign in", "התחברות")}</span></a>`}`;
+}
+function placeMenu(btn) {
+  const r = btn.getBoundingClientRect();
+  const w = 260, rtl = document.documentElement.dir === "rtl";
+  let left = rtl ? r.left : r.right - w;
+  left = Math.max(12, Math.min(left, window.innerWidth - w - 12));
+  menu.style.top = `${r.bottom + 10}px`;
+  menu.style.left = `${left}px`;
+}
+function closeMenu() {
+  if (!menu) return;
+  menu.classList.remove("open");
+  document.querySelectorAll("[data-account]").forEach((b) => b.setAttribute("aria-expanded", "false"));
+}
+async function toggleMenu(btn) {
+  if (!menu) {
+    menu = document.createElement("div");
+    menu.className = "acct-menu"; menu.setAttribute("role", "menu"); menu.setAttribute("data-no-i18n", "");
+    document.body.appendChild(menu);
+    menu.addEventListener("click", async (e) => {
+      if (!e.target.closest("[data-signout]")) return;
+      const { api } = await accountUser();
+      if (api) await api.signOut();
+      closeMenu();
+      location.href = base() + "account.html";
+    });
+  }
+  if (menu.classList.contains("open")) return closeMenu();
+  menu.innerHTML = menuHTML(null);
+  placeMenu(btn);
+  menu.classList.add("open");
+  btn.setAttribute("aria-expanded", "true");
+  const { user } = await accountUser();
+  if (menu.classList.contains("open")) menu.innerHTML = menuHTML(user);
 }
 
 export function initCart() {
@@ -182,14 +253,26 @@ export function initCart() {
     </aside>`);
 
   // The label shows when the icon is tapped or clicked (and on hover / keyboard focus).
-  wrap.querySelectorAll(".nav-ico").forEach((el) => el.addEventListener("pointerdown", () => showTip(el)));
-  wrap.querySelector("[data-cart]").addEventListener("click", (e) => { showTip(e.currentTarget); openCart(); });
+  wrap.querySelectorAll(".nav-ico:not([data-account])").forEach((el) => el.addEventListener("pointerdown", () => showTip(el)));
+  wrap.querySelector("[data-cart]").addEventListener("click", (e) => { showTip(e.currentTarget); closeMenu(); openCart(); });
+  // Delegated, so it keeps working when a sales page re-renders its header.
+  document.addEventListener("click", (e) => {
+    const acc = e.target.closest("[data-account]");
+    if (acc) { e.preventDefault(); toggleMenu(acc); return; }
+    if (menu && menu.classList.contains("open") && !e.target.closest(".acct-menu")) closeMenu();
+  });
+  window.addEventListener("resize", closeMenu);
+  window.addEventListener("scroll", closeMenu, { passive: true });
   document.addEventListener("click", (e) => {
     if (e.target.closest("[data-close]")) closeCart();
     const rm = e.target.closest("[data-remove]");
     if (rm) removeFromCart(rm.getAttribute("data-remove"));
   });
-  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && document.documentElement.classList.contains("cart-open")) closeCart(); });
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "Escape") return;
+    if (document.documentElement.classList.contains("cart-open")) closeCart();
+    closeMenu();
+  });
   window.addEventListener("storage", (e) => { if (e.key === KEY) { memory = null; refresh(); } });
   refresh();
 }

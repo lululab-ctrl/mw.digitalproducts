@@ -12,6 +12,7 @@ PAGES = {
 }
 HELP = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.6 9.3a2.5 2.5 0 0 1 4.8.9c0 1.7-2.4 2.2-2.4 3.6"/><circle cx="12" cy="17.2" r=".6" fill="currentColor"/></svg>'
 DL = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>'
+USER = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20.5c1.4-3.6 4.3-5.5 7.5-5.5s6.1 1.9 7.5 5.5"/></svg>'
 CART = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h2l2.2 11.2a1.5 1.5 0 0 0 1.5 1.2h8.8a1.5 1.5 0 0 0 1.5-1.1L21 8H6.2"/><circle cx="9.5" cy="20" r="1.3"/><circle cx="17.5" cy="20" r="1.3"/></svg>'
 
 def navr(lang, btn=""):
@@ -22,8 +23,7 @@ def navr(lang, btn=""):
               '<div class="lang-toggle" role="group" aria-label="Language"><span class="on" aria-current="true">EN</span><a href="he.html" hreflang="he" lang="he">עב</a></div>')
     return (f'<div class="navr">'
             f'<div class="nav-icons">'
-            f'<a class="nav-ico" href="../support.html" aria-label="{t("Help", "עזרה")}">{HELP}<span class="tip">{t("Help", "עזרה")}</span></a>'
-            f'<a class="nav-ico" href="../account.html" aria-label="{t("My downloads", "ההורדות שלי")}">{DL}<span class="tip">{t("My downloads", "ההורדות שלי")}</span></a>'
+            f'<button class="nav-ico" type="button" data-account aria-label="{t("Account", "חשבון")}" aria-haspopup="menu" aria-expanded="false">{USER}<span class="tip">{t("Account", "חשבון")}</span></button>'
             f'<button class="nav-ico" type="button" data-cart aria-label="{t("Cart", "עגלה")}" aria-haspopup="dialog">{CART}<span class="count" hidden>0</span><span class="tip">{t("Cart", "עגלה")}</span></button>'
             f'</div>{toggle}{btn}</div>')
 

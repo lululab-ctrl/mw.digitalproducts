@@ -30,7 +30,7 @@ shop.mw.photography. A static site on GitHub Pages, with Supabase, Make.com and 
 - Joining gives that email MWP Presets, MWP Panel and the Field Guides, like a purchase (members are in the `beta_members` table). Revoke their entitlements in the admin to end access.
 
 ## Cart and header icons
-- `assets/js/lib/cart.js` adds the cart and My downloads icons to the header and runs the cart.
+- `assets/js/lib/cart.js` adds the two header icons on every page: Account (a menu with who is signed in, My downloads, Help and sign in / sign out) and Cart. The sales pages ship the same two icons from `tools/unify_pages.py`.
 
 ## Before pushing
 - Serve the site locally (`python3 -m http.server`) and check the changed pages in English and Hebrew, on desktop and phone widths.

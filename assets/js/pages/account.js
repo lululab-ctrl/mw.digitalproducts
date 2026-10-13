@@ -73,8 +73,7 @@ async function showDevices() {
 async function showLibrary(user) {
   signedOut.hidden = true;
   signedIn.hidden = false;
-  who.textContent = user.email;
-  const av = document.getElementById("avatar"); if (av) av.textContent = (user.email || "?")[0];
+  if (who) who.textContent = user.email;
   library.innerHTML = `<div class="skeleton" style="height:96px"></div>`;
   try {
     const items = await myLibrary();
@@ -141,7 +140,7 @@ form.addEventListener("submit", async (e) => {
   }
 });
 
-document.getElementById("sign-out").addEventListener("click", async () => {
+document.getElementById("sign-out")?.addEventListener("click", async () => {
   await signOut();
   location.reload();
 });
