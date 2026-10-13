@@ -6,7 +6,7 @@ older than the product's current file, it downloads the base zip once, stamps a 
 My downloads then serves that copy instead of the base file.
 
 Ambassadors read the Field Guides online only (view-only entitlements get no zip): guide_views() renders
-each guide version's pages once, privately, for the guide-view function and the reader page.
+each guide version's pages once, privately (guide-pages bucket), for the guide-view function and the reader page.
 
 Needs SUPABASE_URL and SUPABASE_SERVICE_KEY in the environment. Prints counts only, never emails.
 """
@@ -44,10 +44,10 @@ def download(path, dest):
                 f.write(chunk)
 
 
-def upload(path, src, content_type="application/zip"):
+def upload(path, src, content_type="application/zip", bucket="presets"):
     for attempt in range(3):
         with open(src, "rb") as f:
-            r = S.post(f"{URL}/storage/v1/object/presets/{path}", data=f, timeout=900,
+            r = S.post(f"{URL}/storage/v1/object/{bucket}/{path}", data=f, timeout=900,
                        headers={"content-type": content_type, "x-upsert": "true", "cache-control": "no-store"})
         if r.ok:
             return
@@ -57,9 +57,14 @@ def upload(path, src, content_type="application/zip"):
 
 
 def main():
-    failed = signed_terms()        # first: a new ambassador's page is waiting to download it
-    failed += guide_views()        # then the online guides (a reader may be waiting on them)
-    failed += personal_copies()
+    failed = 0
+    # Each part on its own: one failing never stops the others.
+    for step in (signed_terms, guide_views, personal_copies):   # in order of who may be waiting
+        try:
+            failed += step()
+        except Exception as err:
+            failed += 1
+            print(f"{step.__name__} failed: {type(err).__name__}: {str(err)[:300]}", flush=True)
     if failed:
         sys.exit(1)
 
@@ -158,7 +163,7 @@ def guide_views():
                         pages.append({"path": path, "w": pix.width, "h": pix.height})
                     # upload many pages at once: one by one, a long guide took many minutes
                     with ThreadPoolExecutor(max_workers=12) as pool:
-                        list(pool.map(lambda f: upload(f[0], f[1], "image/jpeg"), files))
+                        list(pool.map(lambda f: upload(f[0], f[1], "image/jpeg", "guide-pages"), files))
                     guides.append({"title": title, "pages": pages})
                     print(f"  {title}: {len(pages)} pages", flush=True)
             S.post(f"{URL}/rest/v1/guide_views", params={"on_conflict": "product_id"},
@@ -168,10 +173,10 @@ def guide_views():
             old = gv.get("version")
             if old:   # the pages of the version no longer shown
                 old_prefix = f"views/{p['id']}/{re.sub(r'[^A-Za-z0-9._-]', '-', old)}"
-                r = S.post(f"{URL}/storage/v1/object/list/presets", json={"prefix": old_prefix, "limit": 1000}, timeout=60)
+                r = S.post(f"{URL}/storage/v1/object/list/guide-pages", json={"prefix": old_prefix, "limit": 1000}, timeout=60)
                 names = [f"{old_prefix}/{o['name']}" for o in (r.json() if r.ok else [])]
                 if names:
-                    S.delete(f"{URL}/storage/v1/object/presets", json={"prefixes": names}, timeout=60)
+                    S.delete(f"{URL}/storage/v1/object/guide-pages", json={"prefixes": names}, timeout=60)
         except Exception as err:
             failed += 1
             print(f"  failed to render {p['slug']}: {type(err).__name__}: {str(err)[:200]}", flush=True)

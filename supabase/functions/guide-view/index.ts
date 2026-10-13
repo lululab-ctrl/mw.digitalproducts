@@ -43,7 +43,7 @@ Deno.serve(async (req) => {
   type Page = { path: string; w: number; h: number };
   const guides = (view.guides ?? []) as { title: string; pages: Page[] }[];
   const paths = guides.flatMap((g) => g.pages.map((p) => p.path));
-  const { data: signed, error } = await db.storage.from("presets").createSignedUrls(paths, LINK_SECONDS);
+  const { data: signed, error } = await db.storage.from("guide-pages").createSignedUrls(paths, LINK_SECONDS);
   if (error || !signed) { console.error(error); return fail(req, "Couldn't open the guides. Please try again.", 500); }
   const url = new Map(signed.map((s) => [s.path, s.signedUrl]));
 
