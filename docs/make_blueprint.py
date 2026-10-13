@@ -383,6 +383,24 @@ feedback_route = [
         "Tell Matan"),
 ]
 
+# ---------------------------------------------------------------- customer_deleted (deleted in Supabase → gone from monday)
+# Their rows on every shop board with people (found by email) go to monday's trash.
+q_person_rows = """query ($email: String!) {
+  c: items_page_by_column_values(board_id: %d, limit: 25, columns: [{column_id: "email_mm80mvf8", column_values: [$email]}]) { items { id } }
+  a: items_page_by_column_values(board_id: %d, limit: 25, columns: [{column_id: "email_mm8331he", column_values: [$email]}]) { items { id } }
+  t: items_page_by_column_values(board_id: %d, limit: 25, columns: [{column_id: "email_mm83cv73", column_values: [$email]}]) { items { id } }
+  p: items_page_by_column_values(board_id: %d, limit: 25, columns: [{column_id: "email", column_values: [$email]}]) { items { id } }
+  f: items_page_by_column_values(board_id: %d, limit: 50, columns: [{column_id: "email", column_values: [$email]}]) { items { id } }
+}""" % (B_CUS, B_AMB, B_TST, B_APP, B_FB)
+customer_deleted_route = [
+    gql(150, q_person_rows, {"email": "{{1.email}}"}, "Find their rows",
+        f("Customer deleted", ("{{1.type}}", "text:equal", "customer_deleted"))),
+    {"id": 151, "module": "builtin:BasicFeeder", "version": 1, "parameters": {},
+     "mapper": {"array": "{{merge(150.body.data.c.items; 150.body.data.a.items; 150.body.data.t.items; 150.body.data.p.items; 150.body.data.f.items)}}"},
+     "metadata": {"designer": {"x": 0, "y": 0, "name": "Each row"}}},
+    gql(152, "mutation ($id: ID!) { delete_item(item_id: $id) { id } }", {"id": "{{151.id}}"}, "Delete row"),
+]
+
 
 def module(mid, name, mod, version, parameters, mapper, filt=None):
     m = {"id": mid, "module": mod, "version": version, "parameters": parameters, "mapper": mapper,
@@ -411,7 +429,7 @@ blueprint = {
          "metadata": {"designer": {"x": 0, "y": 0}}},
         router(2, [order_route, refund_route, support_route, subscribe_route,
                    product_route, approvals_route, weekly_route, payout_route, ambassador_route, account_route, downloaded_route, ambassador_status_route, terms_pdf_route, tester_route,
-                   application_route, applications_request_route, application_decided_route, feedback_route]),
+                   application_route, applications_request_route, application_decided_route, feedback_route, customer_deleted_route]),
     ],
     "metadata": {"version": 1, "scenario": {"roundtrips": 1, "maxErrors": 3, "autoCommit": True, "sequential": True,
                                             "confidential": False, "dataloss": False, "dlq": True}},
