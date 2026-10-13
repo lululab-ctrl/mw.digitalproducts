@@ -2,6 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<script>(function(){try{
+if(sessionStorage.getItem("mwp_landed"))return;
+if(document.referrer&&new URL(document.referrer).origin===location.origin)return;
+for(var i=0;i<localStorage.length;i++){if(/^sb-.+-auth-token$/.test(localStorage.key(i))){
+var d=document.documentElement;d.style.visibility="hidden";
+setTimeout(function(){d.style.visibility=""},2500);return}}
+}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>MWP · Presets, guides and tools by Matan Wild</title>
 <meta name="description" content="Lightroom presets, a Photoshop plugin and editing guides from wildlife photographer Matan Wild. Instant download, secure checkout.">

@@ -20,6 +20,7 @@ IMG = "assets/pages/img/"
 import home_fx, home_story
 import sys as _s, os as _o; _s.path.insert(0, _o.path.dirname(__file__))
 from brand import NAV_CSS, FONTS
+from landing_guard import LANDING_GUARD   # no flash before signed-in ambassadors are sent to My downloads
 CHECK = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F2A541" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>'
 EXT = '<svg class="ext" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>'
 ARROW = '<svg class="arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>'
@@ -127,6 +128,7 @@ html = f'''<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
+{LANDING_GUARD}
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>MWP · Presets, guides and tools by Matan Wild</title>
 <meta name="description" content="Lightroom presets, a Photoshop plugin and editing guides from wildlife photographer Matan Wild. Instant download, secure checkout.">

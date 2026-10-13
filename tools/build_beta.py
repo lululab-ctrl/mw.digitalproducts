@@ -19,6 +19,7 @@ CHECK = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F4
 from ambassador_terms import TERMS_VERSION, TERMS_DATE, TERMS_INTRO, TERMS, TERMS_DATE_HE, TERMS_INTRO_HE, TERMS_HE   # Matan's text (shared with the PDF)
 
 import re as _re
+from landing_guard import LANDING_GUARD   # no flash before signed-in ambassadors are sent to My downloads
 
 # Small line icons for the eight chapters, in order.
 T_ICONS = [
@@ -343,6 +344,7 @@ html = f"""<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
+{LANDING_GUARD}
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>MWP Ambassador Program</title>
 <meta name="robots" content="noindex,nofollow">
