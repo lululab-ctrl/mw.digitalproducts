@@ -325,6 +325,8 @@ const HE = {
   "50 presets and 33 LUTs": "50 פריסטים ו־33 LUTs",
   "8 one-click effects and 11 looks": "8 אפקטים בלחיצה ו־11 לוקים",
   "4 guides, 137 lessons": "4 מדריכים, 137 שיעורים",
+  "Join our Ambassador Program.": "הצטרפו לתוכנית השגרירים שלנו.",
+  "Close": "סגירה",
   "Please agree to the Ambassador Program terms.": "נא לאשר את תנאי תוכנית השגרירים.",
   "Couldn't save your details. Please try again.": "לא הצלחנו לשמור את הפרטים. נסו שוב.",
   "Couldn't add the tools to your library. Please try again.": "לא הצלחנו להוסיף את הכלים לספרייה. נסו שוב.",

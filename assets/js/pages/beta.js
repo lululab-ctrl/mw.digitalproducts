@@ -22,38 +22,30 @@ if (!("IntersectionObserver" in window)) {
   els.forEach((e) => io.observe(e));
 }
 
-// ---------------------------------------------------------------- terms: chapters, reading progress
-const chapters = [...document.querySelectorAll(".t-sec")];
-const navLinks = new Map([...document.querySelectorAll(".t-nav a[data-t]")].map((a) => [a.dataset.t, a]));
-const prog = document.getElementById("t-prog");
-const bar = document.getElementById("t-bar");
-const read = new Set();
-function showProgress() {
-  const n = read.size, all = chapters.length;
-  if (prog) prog.textContent = n === all ? "All read · ready to accept" : `${n} of ${all} read`;
-  if (bar) bar.style.width = `${(n / all) * 100}%`;
+// ---------------------------------------------------------------- terms: chapters open and close
+const chapters = [...document.querySelectorAll(".ch")];
+const allBtn = document.getElementById("ch-all");
+function setOpen(ch, open) {
+  ch.classList.toggle("open", open);
+  ch.querySelector(".ch-b").setAttribute("aria-expanded", String(open));
 }
-function setActive(id) {
-  chapters.forEach((c) => c.classList.toggle("on", c.dataset.t === id));
-  navLinks.forEach((a, k) => a.classList.toggle("on", k === id));
-  const a = navLinks.get(id);   // keep the active chip in view on phones
-  if (a && a.parentElement.scrollWidth > a.parentElement.clientWidth) {
-    a.parentElement.scrollTo({ left: a.offsetLeft - 20, behavior: "smooth" });
-  }
+function syncAll() {
+  const allOpen = chapters.every((c) => c.classList.contains("open"));
+  if (allBtn) { allBtn.textContent = allOpen ? "Collapse all" : "Expand all"; allBtn.setAttribute("aria-expanded", String(allOpen)); }
 }
-if ("IntersectionObserver" in window && chapters.length) {
-  const seen = new IntersectionObserver((entries) => entries.forEach((e) => {
-    if (e.intersectionRatio >= 0.55 || (e.isIntersecting && e.boundingClientRect.height > innerHeight * 0.9)) {
-      const id = e.target.dataset.t;
-      if (!read.has(id)) { read.add(id); navLinks.get(id)?.classList.add("read"); showProgress(); }
-    }
-  }), { threshold: [0.2, 0.55] });
-  const focus = new IntersectionObserver((entries) => entries.forEach((e) => {
-    if (e.isIntersecting) setActive(e.target.dataset.t);
-  }), { rootMargin: "-45% 0px -50% 0px" });
-  chapters.forEach((c) => { seen.observe(c); focus.observe(c); });
-}
-showProgress();
+chapters.forEach((ch) => ch.querySelector(".ch-b").addEventListener("click", () => {
+  setOpen(ch, !ch.classList.contains("open")); syncAll();
+}));
+allBtn?.addEventListener("click", () => {
+  const open = !chapters.every((c) => c.classList.contains("open"));
+  chapters.forEach((c) => setOpen(c, open)); syncAll();
+});
+// a key fact opens its chapter
+document.querySelectorAll("[data-open]").forEach((a) => a.addEventListener("click", () => {
+  const ch = document.getElementById(`t${a.dataset.open}`);
+  if (ch) { setOpen(ch, true); syncAll(); }
+}));
+if (chapters[0]) setOpen(chapters[0], true);
 
 // ---------------------------------------------------------------- tap to copy the handle and hashtags
 const copied = document.createElement("div");
@@ -95,15 +87,24 @@ document.getElementById("join-form").addEventListener("input", showSignature);
 document.getElementById("join-form").addEventListener("change", showSignature);
 showSignature();
 
-// ---------------------------------------------------------------- step 1: accept the terms (nothing else is asked first)
+// ---------------------------------------------------------------- step 1: accept the terms; step 2 opens in a pop-up
 let agreed = false;
-document.getElementById("agree-btn").addEventListener("click", () => {
-  agreed = true;
-  document.getElementById("step-agree").hidden = true;
-  document.getElementById("step-details").hidden = false;
-  document.getElementById("acc").scrollIntoView({ behavior: "smooth", block: "start" });
-  setTimeout(() => document.getElementById("j-name").focus({ preventScroll: true }), 500);
-});
+const modal = document.getElementById("join-modal");
+let lastFocus = null;
+function openModal() {
+  lastFocus = document.activeElement;
+  modal.hidden = false;
+  document.documentElement.classList.add("modal-on");
+  setTimeout(() => (document.getElementById("join-done").hidden ? document.getElementById("j-name") : modal.querySelector(".modal-x")).focus(), 60);
+}
+function closeModal() {
+  modal.hidden = true;
+  document.documentElement.classList.remove("modal-on");
+  lastFocus?.focus?.({ preventScroll: true });
+}
+modal.addEventListener("click", (e) => { if (e.target.closest("[data-close]")) closeModal(); });
+document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !modal.hidden) closeModal(); });
+document.getElementById("agree-btn").addEventListener("click", () => { agreed = true; openModal(); });
 
 // ---------------------------------------------------------------- step 2: details, then the download link
 const form = document.getElementById("join-form");
