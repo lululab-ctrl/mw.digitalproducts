@@ -12,10 +12,11 @@ const library = document.getElementById("library");
 const who = document.getElementById("who");
 
 // Cover photos for the MWP products (used when a product has no cover uploaded in the admin).
+// Each with its focus point, so the crop always keeps the animal's head and body in frame.
 const COVERS = {
-  "mwp-presets": "assets/pages/img/c88e041b857fb964607aaec43ad1753d.jpg",
-  "mwp-panel": "assets/pages/img/8f730b9bb76b93ca707cae719a309479.jpg",
-  "mwp-field-guides": "assets/pages/img/0cf44582c4078749d18156eec10c90d3.jpg",
+  "mwp-presets": ["assets/pages/img/c88e041b857fb964607aaec43ad1753d.jpg", "45% 6%"],   // eagle: head and chest
+  "mwp-panel": ["assets/pages/img/8f730b9bb76b93ca707cae719a309479.jpg", "50% 40%"],     // tiger: face and stride
+  "mwp-field-guides": ["assets/pages/img/0cf44582c4078749d18156eec10c90d3.jpg", "62% 30%"], // lioness: face
 };
 const TAGS = { preset: "Lightroom presets", plugin: "Photoshop plugin", guide: "PDF field guides", bundle: "Bundle" };
 const DL_ICON = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>';
@@ -29,11 +30,11 @@ function libraryHTML(items) {
     </div>`;
   }
   return items.map(({ granted_at, products: p }, i) => {
-    const img = p.cover_path ? mediaUrl(p.cover_path, { width: 600 }) : COVERS[p.slug];
+    const [img, pos] = p.cover_path ? [mediaUrl(p.cover_path, { width: 600 }), "50% 40%"] : (COVERS[p.slug] || []);
     const count = countLabel(p);
     return `
     <article class="lib" style="--i:${i}">
-      <div class="ph">${img ? `<img src="${esc(img)}" alt="" loading="lazy">` : ""}</div>
+      <div class="ph">${img ? `<img src="${esc(img)}" alt="" loading="lazy" style="object-position:${pos}">` : ""}</div>
       <div>
         <p class="tg">${esc(TAGS[p.category] || "")}</p>
         <h3 class="nm" data-no-i18n>${esc(p.name)}${p.name_emphasis ? ` <span class="grad">${esc(p.name_emphasis)}</span>` : ""}</h3>

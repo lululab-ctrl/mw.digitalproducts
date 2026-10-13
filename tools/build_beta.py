@@ -15,11 +15,11 @@ CHECK = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F4
 LOCK = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.5" y="10.5" width="15" height="10" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg>'
 
 PRODUCTS = [
-    ("Lightroom presets", "MWP", "Presets", "c88e041b857fb964607aaec43ad1753d.jpg",
+    ("Lightroom presets", "MWP", "Presets", "c88e041b857fb964607aaec43ad1753d.jpg", "45% 6%",
      ["50 Lightroom presets, 12 adaptive", "50 mobile files and 33 LUTs", "Install guide for every program"]),
-    ("Photoshop plugin", "MWP", "Panel", "8f730b9bb76b93ca707cae719a309479.jpg",
+    ("Photoshop plugin", "MWP", "Panel", "8f730b9bb76b93ca707cae719a309479.jpg", "50% 40%",
      ["8 one-click effects", "11 looks and 4 painted lights", "User manual and install guide"]),
-    ("PDF field guides", "MWP", "Field Guides", "0cf44582c4078749d18156eec10c90d3.jpg",
+    ("PDF field guides", "MWP", "Field Guides", "0cf44582c4078749d18156eec10c90d3.jpg", "62% 30%",
      ["4 PDF guides, 137 lessons", "Composition, colour, light and planning", "English and Hebrew"]),
 ]
 
@@ -94,7 +94,7 @@ html.beta-open .in{display:block}
 .gift{position:relative;display:flex;flex-direction:column;border-radius:26px;overflow:hidden;background:linear-gradient(180deg,rgba(254,251,241,.055),rgba(254,251,241,.015));border:1px solid rgba(254,251,241,.08);box-shadow:0 40px 80px -50px rgba(0,0,0,.9);transition:transform .5s cubic-bezier(.2,.8,.2,1),border-color .4s}
 .gift:hover{transform:translateY(-6px);border-color:rgba(244,175,86,.35)}
 .gift .ph{aspect-ratio:4/3;overflow:hidden}
-.gift .ph img{width:100%;height:100%;object-fit:cover;object-position:50% 30%;transition:transform 1.2s cubic-bezier(.2,.7,.1,1)}
+.gift .ph img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s cubic-bezier(.2,.7,.1,1)}
 .gift:hover .ph img{transform:scale(1.05)}
 .gift .cb{padding:26px 26px 30px}
 .gift .tg{margin:0;font-size:11.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#9CB1C2}
@@ -133,10 +133,10 @@ html[lang=he] .kick,html[lang=he] .field label,html[lang=he] .gift .tg,html[lang
 """
 
 
-def gift(tag, first, last, img, points):
+def gift(tag, first, last, img, pos, points):
     lis = "".join(f"<li>{CHECK}<span>{p}</span></li>" for p in points)
     return f"""<article class="gift reveal">
-<div class="ph"><img src="{IMG}{img}" alt="" loading="lazy"></div>
+<div class="ph"><img src="{IMG}{img}" alt="" loading="lazy" style="object-position:{pos}"></div>
 <span class="free">Free for beta</span>
 <div class="cb"><p class="tg">{tag}</p><h3 class="nm" data-no-i18n>{first} <span class="grad">{last}</span></h3><ul>{lis}</ul></div>
 </article>"""
