@@ -472,6 +472,8 @@ const HE = {
   "Accepted · MWP Ambassador Program Terms of Use": "אושר · תנאי השימוש של תוכנית השגרירים של MWP",
   // Ambassador application (questionnaire) and tester code
   "Read the terms and apply": "לקריאת התנאים והגשת מועמדות",
+  "Apply now": "להגשת מועמדות",
+  "Ambassador Program · Application": "תוכנית השגרירים · טופס מועמדות",
   "Step 2 of 2 · About you": "שלב 2 מתוך 2 · קצת עליכם",
   "Let's get to": "בואו",
   "know you.": "נכיר.",
