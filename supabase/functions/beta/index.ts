@@ -16,9 +16,6 @@ const MAX_APPLICATIONS_PER_HOUR = 5;  // per IP
 
 // The questionnaire (same order and wording as the page). Answers are kept in English labels for the team.
 const QUESTIONS: [string, string, boolean][] = [   // [key, label, required]
-  ["phone", "Phone (WhatsApp)", true],
-  ["based", "Where are you based?", true],
-  ["language", "Do you prefer English or Hebrew?", true],
   ["platforms", "Other platforms they share on (Instagram and Facebook are above)", false],
   ["shoot", "What do you love to photograph?", true],
   ["years", "How long have you been photographing?", true],

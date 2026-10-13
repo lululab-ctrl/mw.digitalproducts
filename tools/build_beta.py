@@ -425,9 +425,6 @@ html .nav .wrap,html.nav-scrolled .nav .wrap{{height:80px;transition:none}}
 <h3 class="q-h">About you</h3>
 <div class="field"><label for="j-name">Your name</label><input class="input" id="j-name" name="name" autocomplete="name" required></div>
 <div class="field"><label for="j-email">Email</label><input class="input" id="j-email" name="email" type="email" dir="ltr" autocomplete="email" required></div>
-<div class="field"><label for="j-phone">Phone (WhatsApp)</label><input class="input" id="j-phone" name="phone" type="tel" dir="ltr" autocomplete="tel" required></div>
-<div class="field"><label for="j-based">Where are you based?</label><input class="input" id="j-based" name="based" autocomplete="address-level2" required></div>
-<fieldset class="field"><legend>Do you prefer English or Hebrew?</legend><div class="opts"><label class="opt"><input type="radio" name="language" value="English" required><span>English</span></label><label class="opt"><input type="radio" name="language" value="Hebrew"><span>Hebrew</span></label></div></fieldset>
 <div class="field"><label for="j-ig">Instagram</label><input class="input" id="j-ig" name="instagram" dir="ltr" placeholder="@yourhandle" autocomplete="off" required></div>
 <div class="field"><label for="j-fb">Facebook</label><input class="input" id="j-fb" name="facebook" dir="ltr" placeholder="Your name or profile link" autocomplete="off"></div>
 <div class="field"><label for="j-platforms">Any other platforms you share on?</label><input class="input" id="j-platforms" name="platforms" placeholder="TikTok, YouTube, blog…" autocomplete="off"></div>

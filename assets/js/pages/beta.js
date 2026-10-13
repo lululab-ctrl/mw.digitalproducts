@@ -126,7 +126,7 @@ betaStatus().then((r) => { if (r && r.open === false) showFull(); }).catch(() =>
 // answer (welcome with the tools, or a kind no) once they decide.
 const form = document.getElementById("join-form");
 const msg = document.getElementById("join-msg");
-const REQUIRED = ["phone", "based", "language", "shoot", "years", "role", "work", "software", "apps", "devices", "used_before", "why", "values", "sounds_good", "feedback"];
+const REQUIRED = ["shoot", "years", "role", "work", "software", "apps", "devices", "used_before", "why", "values", "sounds_good", "feedback"];
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
   const f = form.elements;
