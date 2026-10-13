@@ -12,6 +12,7 @@ const library = document.getElementById("library");
 const who = document.getElementById("who");
 
 function libraryHTML(items) {
+  items = items.filter((i) => i.products);   // a product that can't be shown is skipped, not fatal
   if (!items.length) {
     return `<div class="empty stack">
       <p>Nothing on this email yet.</p>
