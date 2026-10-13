@@ -224,8 +224,9 @@ def signed_terms():
     """A PDF of the terms for each acceptance that doesn't have one yet (or accepted again since), stored
     privately in documents/agreements/, then sent to Make to attach on the Shop Ambassadors row."""
     from terms_pdf import terms_pdf
+    from terms_pdf_he import terms_pdf_he
     hook = os.environ.get("MAKE_WEBHOOK_URL", "")
-    members = rest("beta_members", select="id,instagram,facebook,agreed_at,terms_version,terms_pdf_at,terms_pdf_made_at,customers(name,email)")
+    members = rest("beta_members", select="id,instagram,facebook,agreed_at,terms_version,terms_lang,terms_pdf_at,terms_pdf_made_at,customers(name,email)")
     todo = [m for m in members if (m.get("customers") or {}).get("email")
             and (not m.get("terms_pdf_at") or m["terms_pdf_at"] < (m.get("agreed_at") or ""))]
     print(f"{len(members)} ambassadors, {len(todo)} signed-terms PDFs to make", flush=True)
@@ -235,7 +236,8 @@ def signed_terms():
             try:
                 c = m["customers"]
                 out = os.path.join(tmp, "terms.pdf")
-                terms_pdf({**m, "name": (c.get("name") or "").strip() or c["email"], "email": c["email"]}, out)
+                make = terms_pdf_he if m.get("terms_lang") == "he" else terms_pdf   # the language they accepted in
+                make({**m, "name": (c.get("name") or "").strip() or c["email"], "email": c["email"]}, out)
                 path = f"agreements/{m['id']}.pdf"
                 with open(out, "rb") as f:
                     r = S.post(f"{URL}/storage/v1/object/documents/{path}", data=f, timeout=120,

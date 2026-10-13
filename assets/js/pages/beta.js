@@ -98,7 +98,7 @@ document.addEventListener("click", (e) => {
 // a key fact or a contents line jumps to its chapter inside the terms
 document.querySelectorAll("[data-open]").forEach((a) => a.addEventListener("click", (e) => {
   e.preventDefault();
-  document.getElementById(`t${a.dataset.open}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  document.getElementById(`${he() ? "h" : "t"}${a.dataset.open}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
 }));
 document.getElementById("agree-btn").addEventListener("click", () => {
   agreed = true;
@@ -141,6 +141,7 @@ form.addEventListener("submit", async (e) => {
     instagram: f.instagram.value.trim(),
     facebook: f.facebook.value.trim(),
     agree: agreed,
+    lang: he() ? "he" : "en",   // the terms they read; their signed copy comes in the same language
   };
   const password = f.password.value;
   msg.className = "msg err";

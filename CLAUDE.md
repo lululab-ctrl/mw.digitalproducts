@@ -15,9 +15,10 @@ shop.mw.photography. A static site on GitHub Pages, with Supabase, Make.com and 
 - Fonts: Google Sans for English, Heebo for Hebrew, on every page (`FONTS` in `tools/brand.py`, added by the build scripts). Don't introduce other typefaces.
 
 ## Language
-- English and Hebrew everywhere. Hebrew text comes from the `HE` dictionary in `assets/js/i18n.js`, keyed by the exact English text.
-- When you add or change English text on a page, add the matching Hebrew entry.
-- Mark product names `data-no-i18n` so they aren't translated.
+- English and Hebrew everywhere. Matan's rule: on the Hebrew site **everything** is Hebrew, names included. Only the header logo stays "MWP"; every other MWP is "אם־דבליו־פי". Product names: הפריסטים / הפאנל / מדריכי השטח של אם־דבליו־פי. App and company names are written in Hebrew too (פוטושופ, לייטרום, למון סקוויזי …). What stays in Latin letters: file types (PDF, RAW, LUT, JPEG, XMP, DNG, zip), keyboard shortcuts, the email address, the Instagram handle and hashtags, and the EN switch.
+- Hebrew text comes from the `HE` dictionary in `assets/js/i18n.js`, keyed by the exact English text. After that, the names list (`NAMES` in i18n.js, the same as `tools/he_names.py`) turns every name into Hebrew, on every element (including `data-no-i18n` ones). When you add or change English text on a page, add the matching Hebrew entry.
+- The Hebrew setting (`mwp_lang`) also sends visitors to Matan's Hebrew sales pages (`presets/he.html` …); `tools/unify_pages.py` adds that and runs `tools/sales_he.py` (names + `EXACT` translations) on those pages.
+- The Ambassador terms have a Hebrew version (`TERMS_HE` in `tools/ambassador_terms.py`, needs Matan's review). People who accept in Hebrew get a Hebrew signed copy (`terms_pdf_he.py`, `beta_members.terms_lang`).
 
 ## Prices on the home and sales pages
 - Every price spot is `<span data-price="slug">` and shows the price set for that product in the admin (`assets/js/lib/prices.js`, reading the `page_prices` view). English shows the dollar price, Hebrew the shekel price. With no price set, it shows $0.00 / ₪0.00.

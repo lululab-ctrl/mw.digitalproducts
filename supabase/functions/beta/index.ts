@@ -49,6 +49,7 @@ Deno.serve(async (req) => {
   const name = String(body.name ?? "").trim().slice(0, 80);
   // Facebook: a name or a profile link. No quotes, angle brackets or line breaks (it goes into monday and a PDF).
   const facebook = String(body.facebook ?? "").replace(/[\u0000-\u001f"\\<>]/g, "").trim().slice(0, 100);
+  const termsLang = body.lang === "he" ? "he" : "en";   // the language they read the terms in (their signed copy matches)
   const instagram = String(body.instagram ?? "").trim().replace(/^@/, "").replace(/[^A-Za-z0-9._]/g, "").slice(0, 60);
   if (!EMAIL_RE.test(email)) return fail(req, "Please enter a valid email.", 400);
   if (!name) return fail(req, "Please enter your name.", 400);
@@ -74,7 +75,8 @@ Deno.serve(async (req) => {
   const receipt = crypto.randomUUID().replace(/-/g, "") + crypto.randomUUID().replace(/-/g, "");
   const { error: mErr } = await db.from("beta_members").upsert(
     { customer_id: customer.id, instagram: instagram || null, facebook: facebook || null, ip_hash: ipHash,
-      agreed_at: agreedAt.toISOString(), terms_version: TERMS_VERSION, receipt_hash: await sha256Hex(receipt) },
+      agreed_at: agreedAt.toISOString(), terms_version: TERMS_VERSION, terms_lang: termsLang,
+      receipt_hash: await sha256Hex(receipt) },
     { onConflict: "customer_id" });
   if (mErr) {
     if (/ambassador_program_full/.test(mErr.message)) return fail(req, FULL, 409);   // filled up a moment ago
