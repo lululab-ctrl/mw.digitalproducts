@@ -515,11 +515,6 @@ page("account.html", "My downloads · MWP",
             <div class="field field--full"><label for="d-name">Full name</label><input class="input" id="d-name" name="name" type="text" autocomplete="name"></div>
             <div class="field"><label for="d-phone">Phone (optional)</label><input class="input" id="d-phone" name="phone" type="tel" autocomplete="tel" dir="ltr"></div>
             <div class="field"><label for="d-country">Country</label><input class="input" id="d-country" name="country" type="text" autocomplete="country-name"></div>
-            <div class="field field--full"><label for="d-address_line1">Address</label><input class="input" id="d-address_line1" name="address_line1" type="text" autocomplete="address-line1"></div>
-            <div class="field field--full"><label for="d-address_line2">Apartment, suite, etc. (optional)</label><input class="input" id="d-address_line2" name="address_line2" type="text" autocomplete="address-line2"></div>
-            <div class="field"><label for="d-city">City</label><input class="input" id="d-city" name="city" type="text" autocomplete="address-level2"></div>
-            <div class="field"><label for="d-region">State or region (optional)</label><input class="input" id="d-region" name="region" type="text" autocomplete="address-level1"></div>
-            <div class="field"><label for="d-postal_code">Postal code</label><input class="input" id="d-postal_code" name="postal_code" type="text" autocomplete="postal-code"></div>
             </div>
             <div class="details-actions"><button class="btn" type="submit">Save details</button><p class="form-status" role="status"></p></div>
           </form>

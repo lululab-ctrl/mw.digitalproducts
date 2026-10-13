@@ -91,13 +91,15 @@ async function showLibrary(user) {
 
 // ---------------------------------------------------------------- My details
 const detailsForm = document.getElementById("details-form");
-const DETAIL_KEYS = ["name", "phone", "country", "address_line1", "address_line2", "city", "region", "postal_code"];
+const DETAIL_KEYS = ["name", "phone", "country"];
+let savedProfile = null;   // the address isn't asked for any more; whatever is stored is sent back unchanged
 
 async function showDetails(user) {
   document.getElementById("d-email").value = user.email;
   const status = detailsForm.querySelector(".form-status");
   try {
     const profile = await myProfile();
+    savedProfile = profile;
     for (const k of DETAIL_KEYS) detailsForm.elements[k].value = profile?.[k] ?? "";
   } catch (err) {
     setStatus(status, err.message, "error");
@@ -120,7 +122,7 @@ detailsForm.addEventListener("submit", async (e) => {
   const btn = detailsForm.querySelector("button[type=submit]");
   setBusy(btn, true, "Saving…");
   try {
-    await saveMyProfile(values);
+    await saveMyProfile({ ...savedProfile, ...values });
     setStatus(status, "Your details are saved.", "ok");
   } catch (err) {
     setStatus(status, err.message, "error");
