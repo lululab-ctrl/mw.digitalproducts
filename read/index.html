@@ -73,7 +73,9 @@ html[dir=rtl] .rd-flip svg{transform:scaleX(-1)}
 .rd-viewer.fs{padding:0 12px 12px}
 .rd-viewer.fs .rd-bar{max-width:none;padding:10px 4px;margin:0 0 4px}
 .rd-viewer.fs .rd-pages{max-width:none;padding-bottom:12px}
-.rd-viewer.fs:not(.paged) .rd-page{width:min(100%,1200px);margin:0 auto}
+/* Scroll mode in full screen: every page fits the screen, and scrolling settles on a page */
+.rd-viewer.fs:not(.paged){scroll-snap-type:y proximity}
+.rd-viewer.fs:not(.paged) .rd-page{width:min(100%,calc((100dvh - 84px) * var(--ar,.7)));margin:0 auto;scroll-snap-align:start}
 .rd-viewer.fs.paged .rd-page{width:min(100%,calc((100dvh - 84px) * var(--ar,.7)))}
 html.rd-fs-on body{overflow:hidden}
 html[lang=he] .rd-kick{letter-spacing:.04em}
@@ -161,6 +163,6 @@ html[lang=he] body,html[lang=he] body *:not(svg):not(svg *),html body [lang=he],
     </div>
   </div>
 </footer>
-<script type="module" src="assets/js/pages/read.js?v=af91bf30"></script>
+<script type="module" src="assets/js/pages/read.js?v=3601c8ad"></script>
 </body>
 </html>
