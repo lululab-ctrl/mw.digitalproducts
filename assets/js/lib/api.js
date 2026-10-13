@@ -184,4 +184,6 @@ export const betaStatus = () => callFunction("beta", { action: "status" });
 // The ambassador's signed-terms PDF: { url } when ready, { preparing } while it's being made (202).
 export const signedTerms = (receipt) => callFunction("beta", { action: "signed_terms", ...(receipt ? { receipt } : {}) }, { auth: !receipt });
 export const guideView = () => callFunction("guide-view", {}, { auth: true });
+export const testerLink = (email, lang) => callFunction("tester", { action: "link", email, lang });
+export const testerMe = () => callFunction("tester", { action: "me" }, { auth: true });
 export const subscribe = (email, source = "free-sampler") => callFunction("subscribe", { email, source });

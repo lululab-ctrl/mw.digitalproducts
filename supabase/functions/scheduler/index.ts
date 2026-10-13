@@ -15,8 +15,10 @@
 //   account {user_id}  → a newly confirmed account goes to Shop Customers
 //   downloaded {entitlement_id} → first download of a bought product: order Delivery = Downloaded
 //   ambassador_status {member_id} → an ambassadorship ended in the admin: Shop Ambassadors status
+//   tester {tester_id, action}    → a tester added or removed in the admin: Shop Testers, and (added) their
+//                                   personal copies are started straight away
 // ============================================================================
-import { admin, notifyMake, plain } from "../_shared/http.ts";
+import { admin, notifyMake, plain, requestPersonalCopies } from "../_shared/http.ts";
 
 const SITE = Deno.env.get("SITE_URL") ?? "https://shop.mw.photography";
 const SELF = `${Deno.env.get("SUPABASE_URL")}/functions/v1/scheduler`;
@@ -57,6 +59,7 @@ Deno.serve(async (req) => {
       case "account": return reply(await account(db, String(body.user_id ?? "")));
       case "downloaded": return reply(await downloaded(db, String(body.entitlement_id ?? "")));
       case "ambassador_status": return reply(await ambassadorStatus(db, String(body.member_id ?? "")));
+      case "tester": return reply(await tester(db, String(body.tester_id ?? ""), String(body.action ?? "")));
       default: return reply({ error: `unknown job ${job}` }, 400);
     }
   } catch (err) {
@@ -293,6 +296,26 @@ async function ambassadorStatus(db: ReturnType<typeof admin>, memberId: string) 
     type: "ambassador_status", email,
     status_label: AMBASSADOR_LABEL[m.status] ?? "Active",
     ended_on: m.ended_at ? day(new Date(m.ended_at)) : "",
+  });
+  return { ok: true };
+}
+
+async function tester(db: Db, id: string, action: string) {
+  const { data: t, error } = await db.from("testers")
+    .select("added_at, removed_at, customers(name, email)").eq("id", id).maybeSingle();
+  if (error) throw error;
+  if (!t) return { skipped: "no such tester" };
+  // deno-lint-ignore no-explicit-any
+  const c: any = Array.isArray(t.customers) ? t.customers[0] : t.customers;
+  if (action === "added") await requestPersonalCopies();   // their stamped copies, ready before they sign in
+  await notifyMake("MAKE_WEBHOOK_URL", {
+    type: "tester",
+    status_label: t.removed_at ? "Removed" : "Active",
+    name: plain(c?.name || c?.email || ""),
+    email: c?.email ?? "",
+    added_on: day(new Date(t.added_at)),
+    removed_on: t.removed_at ? day(new Date(t.removed_at)) : "",
+    products: "MWP Presets, MWP Panel, MWP Field Guides",
   });
   return { ok: true };
 }

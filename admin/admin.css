@@ -108,3 +108,5 @@ input[type="file"]::file-selector-button:hover { border-color: var(--c-paper); }
 .status--amb-active { color: #7ad3a4; }
 .status--amb-ended { color: var(--c-paper-2); }
 .status--amb-ended_breach { color: #F2A0A0; }
+
+.tst-add{margin:4px 0 10px;flex-wrap:wrap;gap:8px}.tst-add .input{min-width:220px}

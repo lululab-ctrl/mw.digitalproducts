@@ -42,6 +42,7 @@
       <button type="button" data-tab="orders">Orders</button>
       <button type="button" data-tab="customers">Customers</button>
       <button type="button" data-tab="ambassadors">Ambassadors</button>
+      <button type="button" data-tab="testers">Testers</button>
       <button type="button" data-tab="support">Support <span class="pill" id="open-tickets" hidden></span></button>
     </nav>
     <div class="admin-side__foot">
@@ -215,6 +216,20 @@
       </header>
       <p class="meta amb-help">End: they keep their licence for life (terms, section 7). End (breach): their free access is removed; anything they bought stays. Either way, monday's Shop Ambassadors board updates automatically.</p>
       <div class="table-wrap"><table class="table" id="amb-table"></table></div>
+    </section>
+
+    <!-- Testers -->
+    <section data-panel="testers" hidden>
+      <header class="admin-head">
+        <h1 class="h3">Testers <span class="meta" id="tst-count"></span></h1>
+      </header>
+      <form class="row tst-add" id="tst-form" autocomplete="off">
+        <input class="input input--sm" name="name" placeholder="Name">
+        <input class="input input--sm" name="email" type="email" placeholder="Email" required>
+        <button class="btn btn--sm" type="submit">Approve tester</button>
+      </form>
+      <p class="meta amb-help">An approved tester gets MWP Presets, MWP Panel and the Field Guides as downloads (stamped with their name, Panel on 2 computers). Send them the page: shop.mw.photography/testers.html. They sign in with their email. 10 testers at most. Remove takes the free access away (anything they bought stays). monday's Shop Testers board updates automatically.</p>
+      <div class="table-wrap"><table class="table" id="tst-table"></table></div>
     </section>
 
     <!-- Support -->
