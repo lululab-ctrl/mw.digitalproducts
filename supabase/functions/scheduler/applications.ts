@@ -1,6 +1,6 @@
 // Ambassador applications: decisions made in monday.com come back to the shop.
 //
-// applications          → (cron, every 10 minutes) if any application is waiting, asks Make to read the
+// applications          → (cron, every 2 minutes; see FRESH_MS) if any application is waiting, asks Make to read the
 //                         Shop Ambassador Applications board and post it back here with a one-time nonce.
 // applicationsCallback  → for every waiting application whose Decision is now Approved or Declined:
 //                         Approved → the welcome email with a personal link to read and accept the terms
@@ -21,9 +21,19 @@ const COL_DECISION = "decision";
 // deno-lint-ignore no-explicit-any
 type Db = any;
 
+// Runs every 2 minutes. Each check costs 4 Make operations (plan: 10,000 a month), so it asks Make every
+// 2 minutes only while an application is fresh (arrived in the last 2 hours: decisions then go out within
+// 2 minutes); for older waiting applications, every 10 minutes as before.
+const FRESH_MS = 2 * 60 * 60 * 1000;
+
 export async function applications(db: Db, self: string) {
+  const { data: waiting, error: wErr } = await db.from("ambassador_applications")
+    .select("created_at").eq("status", "new").order("created_at", { ascending: false }).limit(1);
+  if (wErr) throw wErr;
+  if (!waiting?.length) return { skipped: "no applications waiting" };
+  const fresh = Date.now() - Date.parse(waiting[0].created_at) < FRESH_MS;
+  if (!fresh && new Date().getUTCMinutes() % 10 >= 2) return { skipped: "only older applications waiting: every 10 minutes" };
   const { count } = await db.from("ambassador_applications").select("id", { count: "exact", head: true }).eq("status", "new");
-  if (!count) return { skipped: "no applications waiting" };
   const nonce = crypto.randomUUID().replaceAll("-", "") + crypto.randomUUID().replaceAll("-", "");
   const { error } = await db.from("sync_nonces").insert({ nonce, purpose: "applications" });
   if (error) throw error;

@@ -17,7 +17,7 @@
 //   ambassador_status {member_id} → an ambassadorship ended in the admin: Shop Ambassadors status
 //   tester {tester_id, action}    → a tester added or removed in the admin: Shop Testers, and (added) their
 //                                   personal copies are started straight away
-//   applications       → every 10 minutes while applications wait: asks Make for the decisions on
+//   applications       → every 2 minutes while fresh applications wait (10 for older ones): asks Make for the decisions on
 //                        Shop Ambassador Applications (see applications.ts)
 //   applications_callback → Make returns that board: Approved → the person becomes an ambassador and gets the
 //                        welcome email; Declined → the decline email (both sent by Make)
