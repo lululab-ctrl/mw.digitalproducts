@@ -611,6 +611,17 @@ $("#tst-form").addEventListener("submit", async (e) => {
   toast("Approved. Their copies are being made, and monday is updated. Send them shop.mw.photography/testers/");
   loadTesters();
 });
+$("#tst-code-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const f = e.currentTarget;
+  const btn = f.querySelector("button");
+  setBusy(btn, true);
+  const { error } = await supabase.rpc("set_tester_code", { p_code: f.elements.code.value });
+  setBusy(btn, false);
+  if (error) { toast(error.message, { type: "error", timeout: 7000 }); return; }
+  f.reset();
+  toast("Tester code saved. The old code no longer works.");
+});
 $("#tst-table").addEventListener("click", async (e) => {
   const btn = e.target.closest("[data-remove-tester]");
   if (!btn) return;

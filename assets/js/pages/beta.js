@@ -1,9 +1,9 @@
-// MWP Ambassador Program page: open to anyone with the link (no password). Accepting the terms in the
-// join form gives the member's email MWP Presets, MWP Panel and the Field Guides, adds them to monday.com
-// (through the beta Edge Function and Make), and emails them a link to My downloads.
+// MWP Ambassador Program page: open to anyone with the link (no password). Step 1: read and accept the
+// terms. Step 2: a short questionnaire. The application goes to the team in monday.com (through the beta
+// Edge Function and Make); the shop gives the tools and emails the answer once they decide.
 import { initI18n } from "../i18n.js";
 import { initCart } from "../lib/cart.js";
-import { betaJoin, betaStatus, sendMagicLink, signedTerms, signUpWithPassword } from "../lib/api.js";
+import { betaApply, betaStatus } from "../lib/api.js";
 import { ambassadorLanding } from "../lib/landing.js";
 
 ambassadorLanding();   // already an ambassador and signed in: straight to My downloads
@@ -121,61 +121,66 @@ function showFull() {
 }
 betaStatus().then((r) => { if (r && r.open === false) showFull(); }).catch(() => { /* can't tell: leave it open, the server still checks */ });
 
-// ---------------------------------------------------------------- show / hide password
-document.addEventListener("click", (e) => {
-  const eye = e.target.closest("[data-eye]");
-  if (!eye) return;
-  const input = eye.parentElement.querySelector("input");
-  const on = input.type === "password";
-  input.type = on ? "text" : "password";
-  eye.setAttribute("aria-pressed", String(on));
-});
-
-// ---------------------------------------------------------------- step 2: details, then the download link
+// ---------------------------------------------------------------- step 2: the questionnaire, then "Thank you"
+// Nothing is given on the spot: the application goes to the team in monday.com, and the shop emails the
+// answer (welcome with the tools, or a kind no) once they decide.
 const form = document.getElementById("join-form");
 const msg = document.getElementById("join-msg");
+const REQUIRED = ["phone", "based", "language", "shoot", "years", "role", "work", "software", "apps", "devices", "used_before", "why", "values", "sounds_good", "feedback"];
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
   const f = form.elements;
+  const val = (n) => {
+    const el = f[n];
+    if (!el) return "";
+    if (el instanceof RadioNodeList || el.length > 1) {
+      const picked = [...form.querySelectorAll(`input[name="${n}"]:checked`)].map((x) => x.value);
+      return picked.join(", ");
+    }
+    return (el.value || "").trim();
+  };
+  const answers = {};
+  for (const n of [...REQUIRED, "platforms", "anything_else"]) answers[n] = val(n);
   const data = {
-    name: f.name.value.trim(),
-    email: f.email.value.trim().toLowerCase(),
-    instagram: f.instagram.value.trim(),
-    facebook: f.facebook.value.trim(),
+    name: val("name"),
+    email: val("email").toLowerCase(),
+    instagram: val("instagram"),
+    facebook: val("facebook"),
+    answers,
     agree: agreed,
     lang: he() ? "he" : "en",   // the terms they read; their signed copy comes in the same language
   };
-  const password = f.password.value;
   msg.className = "msg err";
-  if (!data.name) { msg.textContent = T("Please enter your name.", "נא למלא שם."); return; }
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(data.email)) { msg.textContent = T("Please enter a valid email.", "נא למלא מייל תקין."); return; }
-  if (password.length < 8) { f.password.focus(); msg.textContent = T("Your password needs at least 8 characters.", "הסיסמה צריכה לפחות 8 תווים."); return; }
+  if (!data.name) { f.name.focus(); msg.textContent = T("Please enter your name.", "נא למלא שם."); return; }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(data.email)) { f.email.focus(); msg.textContent = T("Please enter a valid email.", "נא למלא מייל תקין."); return; }
+  if (!data.instagram.replace(/^@+/, "")) { f.instagram.focus(); msg.textContent = T("Please enter your Instagram handle.", "נא למלא את שם המשתמש באינסטגרם."); return; }
+  const missing = REQUIRED.find((n) => !answers[n]);
+  if (missing) {
+    const el = form.querySelector(`[name="${missing}"]`);
+    el?.closest(".field")?.scrollIntoView({ behavior: "smooth", block: "center" });
+    if (el && el.type !== "radio" && el.type !== "checkbox") el.focus({ preventScroll: true });
+    msg.textContent = T("Please answer every question (only the last one is optional).", "נא לענות על כל השאלות (רק האחרונה אופציונלית).");
+    return;
+  }
   if (!data.agree) { msg.textContent = T("Please accept the Ambassador Program terms.", "נא לאשר את תנאי תוכנית השגרירים."); return; }   // can't happen: the form opens only after accepting
 
   const btn = form.querySelector("button[type=submit]");
   btn.disabled = true;
-  msg.className = "msg"; msg.textContent = T("Creating your account…", "יוצרים את החשבון…");
+  msg.className = "msg"; msg.textContent = T("Sending your application…", "שולחים את הבקשה…");
   try {
-    const joined = await betaJoin(data);   // the tools go to this email first (the password never goes to our server)
-    const r = await signUpWithPassword(data.email, password, { name: data.name, redirectPath: "/account/" });
-    const title = document.querySelector("#join-done h3");
+    const r = await betaApply(data);
+    const title = document.getElementById("done-h");
     const text = document.getElementById("done-text");
-    if (r === "signed-in") {
-      title.textContent = T("You're all set", "הכול מוכן");
-      text.textContent = T("Your account is ready and your tools are in it.", "החשבון מוכן והכלים כבר בתוכו.");
-    } else if (r === "exists") {
-      await sendMagicLink(data.email, "/account/").catch(() => {});
-      title.textContent = T("Your tools are in your account", "הכלים נמצאים בחשבון שלכם");
-      text.textContent = T(`${data.email} already has an MWP account, so we added the tools to it. Sign in with your password, or open the sign-in link we just emailed you.`,
-        `ל־${data.email} כבר יש חשבון MWP, אז הוספנו אליו את הכלים. התחברו עם הסיסמה, או פתחו את קישור הכניסה ששלחנו עכשיו במייל.`);
-    } else {
-      title.textContent = T("Confirm your email", "אשרו את המייל");
-      text.textContent = T(`We've sent a link to ${data.email}. Open it to confirm your account, and your tools will be waiting.`,
-        `שלחנו קישור אל ${data.email}. פתחו אותו כדי לאשר את החשבון, והכלים כבר יחכו לכם.`);
+    if (r?.already === "member") {
+      title.textContent = T("You're already an ambassador", "אתם כבר שגרירים");
+      text.textContent = T("Your tools are in My downloads. Sign in with this email.", "הכלים שלכם נמצאים בהורדות שלי. התחברו עם המייל הזה.");
+    } else if (r?.already === "waiting") {
+      title.textContent = T("We already have your application", "הבקשה שלכם כבר אצלנו");
+      text.textContent = T("We read every application personally, so it may take us a few days to get back to you.", "אנחנו קוראים כל טופס בעצמנו, אז ייתכן שייקח לנו כמה ימים לחזור אליכם.");
     }
     document.getElementById("step-details").hidden = true;
     document.getElementById("join-done").hidden = false;
-    if (joined?.receipt) downloadSignedTerms(joined.receipt);
+    msg.textContent = "";
   } catch (err) {
     msg.className = "msg err";
     msg.textContent = err.status === 429 ? T("Too many requests. Please wait a minute and try again.", "יותר מדי בקשות. המתינו דקה ונסו שוב.") : err.message;
@@ -184,41 +189,3 @@ form.addEventListener("submit", async (e) => {
     btn.disabled = false;
   }
 });
-
-// ---------------------------------------------------------------- their own signed copy of the terms
-// The PDF is made on our side a moment after joining; we check every 10 seconds and download it to
-// their computer as soon as it's ready. It also stays in My downloads.
-async function downloadSignedTerms(receipt) {
-  const state = document.getElementById("terms-copy-state");
-  const again = document.getElementById("terms-copy-btn");
-  const started = Date.now();
-  const fetchUrl = async () => {
-    while (Date.now() - started < 5 * 60000) {
-      try {
-        const r = await signedTerms(receipt);
-        if (r.url) return r.url;
-      } catch { /* try again in a moment */ }
-      await new Promise((ok) => setTimeout(ok, 10000));
-    }
-    return null;
-  };
-  const save = (url) => {
-    const f = document.createElement("iframe");   // downloads without leaving the page
-    f.hidden = true; f.src = url; document.body.append(f);
-    setTimeout(() => f.remove(), 60000);
-  };
-  const url = await fetchUrl();
-  if (!url) {
-    state.textContent = T("It's taking a little longer. You'll find it in My downloads in a few minutes.",
-      "זה לוקח קצת יותר זמן. תמצאו אותו בהורדות שלי בעוד כמה דקות.");
-    return;
-  }
-  save(url);
-  state.textContent = T("Downloaded to your computer. Keep it with your records.", "ירד למחשב שלכם. שמרו אותו אצלכם.");
-  again.hidden = false;
-  again.onclick = async () => {
-    again.disabled = true;
-    try { const r = await signedTerms(receipt); if (r.url) save(r.url); } catch { /* the copy in My downloads still works */ }
-    again.disabled = false;
-  };
-}

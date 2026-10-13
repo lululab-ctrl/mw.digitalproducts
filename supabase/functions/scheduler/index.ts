@@ -17,8 +17,13 @@
 //   ambassador_status {member_id} → an ambassadorship ended in the admin: Shop Ambassadors status
 //   tester {tester_id, action}    → a tester added or removed in the admin: Shop Testers, and (added) their
 //                                   personal copies are started straight away
+//   applications       → every 10 minutes while applications wait: asks Make for the decisions on
+//                        Shop Ambassador Applications (see applications.ts)
+//   applications_callback → Make returns that board: Approved → the person becomes an ambassador and gets the
+//                        welcome email; Declined → the decline email (both sent by Make)
 // ============================================================================
 import { admin, notifyMake, plain, requestPersonalCopies } from "../_shared/http.ts";
+import { applications, applicationsCallback } from "./applications.ts";
 
 const SITE = Deno.env.get("SITE_URL") ?? "https://shop.mw.photography";
 const SELF = `${Deno.env.get("SUPABASE_URL")}/functions/v1/scheduler`;
@@ -44,6 +49,10 @@ Deno.serve(async (req) => {
   if (job === "approvals_callback") {
     return reply(await approvalsCallback(db, body));
   }
+  if (job === "applications_callback") {
+    try { return reply(await applicationsCallback(db, body)); }
+    catch (err) { console.error(job, err); return reply({ error: "job failed" }, 500); }
+  }
 
   const key = req.headers.get("x-cron-key") ?? "";
   const { data: ok } = await db.rpc("check_cron_key", { p_key: key });
@@ -60,6 +69,7 @@ Deno.serve(async (req) => {
       case "downloaded": return reply(await downloaded(db, String(body.entitlement_id ?? "")));
       case "ambassador_status": return reply(await ambassadorStatus(db, String(body.member_id ?? "")));
       case "tester": return reply(await tester(db, String(body.tester_id ?? ""), String(body.action ?? "")));
+      case "applications": return reply(await applications(db, SELF));
       default: return reply({ error: `unknown job ${job}` }, 400);
     }
   } catch (err) {

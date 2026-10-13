@@ -1,5 +1,6 @@
 """Builds the Make blueprint for the MWP Digital Shop events scenario.
-Usage: python3 make_blueprint.py <monday_connection_id> > blueprint.json
+Usage: python3 make_blueprint.py <monday_connection_id> [<gmail_connection_id>] > blueprint.json
+(Without the Gmail connection, ambassador applications still sync, but no welcome / decline email is sent.)
 """
 import json, sys
 
@@ -319,6 +320,58 @@ tester_route = [
 ]
 
 
+
+# ---------------------------------------------------------------- ambassador applications (/beta/ questionnaire)
+# ambassador_application → a row on Shop Ambassador Applications (+ tells Matan).
+# applications_request   → (every 10 min while some wait) the board goes back to the shop's scheduler.
+# application_decided    → the shop acted on a decision: Shop result, and (with GMAIL) the email to the applicant.
+B_APP = 5105977396   # Shop Ambassador Applications
+GMAIL = int(sys.argv[2]) if len(sys.argv) > 2 else None   # Make's Gmail connection for contact@matanwildphotography.com
+app_cv = ('{"decision":{"label":"New"},"shop_result":{"label":"Waiting"},"email":{"email":"{{1.email}}","text":"{{1.email}}"},'
+          '"language":"{{1.language}}","instagram":"{{1.platforms}}","portfolio":"{{1.work}}","applied":{"date":"{{1.applied_on}}"},'
+          '"commitment":"{{1.sounds_good}}","feedback":"{{1.feedback}}","answers":{"text":"{{1.answers_text}}"},'
+          '"application_id":"{{1.application_id}}"}')
+application_route = [
+    gql(120, q_create % B_APP, {"name": "{{1.name}}", "group": "topics", "cv": app_cv}, "New application",
+        f("Application", ("{{1.type}}", "text:equal", "ambassador_application"))),
+    gql(121, "mutation ($id: ID!, $text: String!) { create_notification(user_id: %d, target_id: $id, text: $text, target_type: Project) { text } }" % MATAN,
+        {"id": "{{120.body.data.create_item.id}}",
+         "text": "New Ambassador Program application from {{1.name}}. Set Decision to Approved or Declined."},
+        "Tell Matan"),
+]
+q_applications = """query {
+  boards(ids: [%d]) { items_page(limit: 500) { items { column_values(ids: ["application_id", "decision"]) { id text } } } }
+}""" % B_APP
+applications_request_route = [
+    gql(125, q_applications, {}, "Read decisions", f("Applications request", ("{{1.type}}", "text:equal", "applications_request"))),
+    {"id": 126, "module": "json:TransformToJSON", "version": 1, "parameters": {},
+     "mapper": {"object": "{{125.body.data}}"}, "metadata": {"designer": {"x": 0, "y": 0, "name": "Board as JSON"}}},
+    {"id": 127, "module": "http:MakeRequest", "version": 4, "parameters": {"authenticationType": "noAuth"},
+     "mapper": {"url": "{{1.callback_url}}", "method": "post", "contentType": "json", "inputMethod": "jsonString",
+                "jsonStringBodyContent": '{"job":"applications_callback","nonce":"{{1.nonce}}","data":{{126.json}}}',
+                "parseResponse": True, "stopOnHttpError": True, "allowRedirects": True, "shareCookies": False,
+                "requestCompressedContent": True},
+     "metadata": {"designer": {"x": 0, "y": 0, "name": "Send decisions to the shop"}}},
+]
+q_app_lookup = """query ($id: String!) {
+  a: items_page_by_column_values(board_id: %d, limit: 1, columns: [{column_id: "application_id", column_values: [$id]}]) { items { id } }
+}""" % B_APP
+application_decided_route = [
+    gql(130, q_app_lookup, {"id": "{{1.application_id}}"}, "Find application",
+        f("Application decided", ("{{1.type}}", "text:equal", "application_decided"))),
+    gql(131, "mutation ($id: ID!, $cv: JSON!) { change_multiple_column_values(board_id: %d, item_id: $id, column_values: $cv) { id } }" % B_APP,
+        {"id": "{{130.body.data.a.items[1].id}}", "cv": '{"shop_result":{"label":"{{1.result}}"}}'}, "Shop result",
+        f("Found", ("{{130.body.data.a.items[1].id}}", "exist", None))),
+]
+if GMAIL:
+    application_decided_route.append(
+        {"id": 132, "module": "google-email:sendAnEmail", "version": 4, "parameters": {"account": GMAIL},
+         "mapper": {"to": ["{{1.email}}"], "subject": "{{1.subject}}", "bodyType": "rawHtml", "contentType": "html",
+                    "content": "{{1.body_html}}", "attachments": [], "cc": [], "bcc": []},
+         "filter": f("Email the applicant", ("{{1.send_email}}", "text:equal", "yes")),
+         "metadata": {"designer": {"x": 0, "y": 0, "name": "Email the applicant"}}})
+
+
 def module(mid, name, mod, version, parameters, mapper, filt=None):
     m = {"id": mid, "module": mod, "version": version, "parameters": parameters, "mapper": mapper,
          "metadata": {"designer": {"x": 0, "y": 0, "name": name}}}
@@ -345,7 +398,8 @@ blueprint = {
          "parameters": {"hook": HOOK, "maxResults": 1}, "mapper": {},
          "metadata": {"designer": {"x": 0, "y": 0}}},
         router(2, [order_route, refund_route, support_route, subscribe_route,
-                   product_route, approvals_route, weekly_route, payout_route, ambassador_route, account_route, downloaded_route, ambassador_status_route, terms_pdf_route, tester_route]),
+                   product_route, approvals_route, weekly_route, payout_route, ambassador_route, account_route, downloaded_route, ambassador_status_route, terms_pdf_route, tester_route,
+                   application_route, applications_request_route, application_decided_route]),
     ],
     "metadata": {"version": 1, "scenario": {"roundtrips": 1, "maxErrors": 3, "autoCommit": True, "sequential": True,
                                             "confidential": False, "dataloss": False, "dlq": True}},

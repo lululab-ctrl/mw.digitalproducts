@@ -195,11 +195,12 @@ export const requestDownload = (slug) => callFunction("get-download", { slug }, 
 export const panelDevices = () => callFunction("license", { action: "devices" }, { auth: true });
 export const removePanelDevice = (device_id) => callFunction("license", { action: "remove", device_id }, { auth: true });
 export const sendSupport = (form) => callFunction("support", form);
-export const betaJoin = (form) => callFunction("beta", { action: "join", ...form });
+export const betaApply = (form) => callFunction("beta", { action: "apply", ...form });
 export const betaStatus = () => callFunction("beta", { action: "status" });
 // The ambassador's signed-terms PDF: { url } when ready, { preparing } while it's being made (202).
 export const signedTerms = (receipt) => callFunction("beta", { action: "signed_terms", ...(receipt ? { receipt } : {}) }, { auth: !receipt });
 export const guideView = () => callFunction("guide-view", {}, { auth: true });
 export const testerLink = (email, lang) => callFunction("tester", { action: "link", email, lang });
+export const testerJoin = (form) => callFunction("tester", { action: "join", ...form });
 export const testerMe = () => callFunction("tester", { action: "me" }, { auth: true });
 export const subscribe = (email, source = "free-sampler") => callFunction("subscribe", { email, source });

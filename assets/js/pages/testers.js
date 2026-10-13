@@ -1,8 +1,9 @@
-// Testers page (shop.mw.photography/testers/), shared by link only. Approved testers (at most 10, added
-// in the admin) sign in with a one-time email link and download MWP Presets, MWP Panel and the Field Guides.
+// Testers page (shop.mw.photography/testers/), shared by link only. People with the tester code (set in the
+// admin) join on the spot; testers (at most 10) sign in with a one-time email link and download MWP Presets,
+// MWP Panel and the Field Guides.
 // Same protection as buyers: get-download gives stamped personal copies on 5-minute links, with a daily limit.
 import { initChrome, toast } from "../lib/ui.js";
-import { currentUser, signOut, requestDownload, testerLink, testerMe, esc } from "../lib/api.js";
+import { currentUser, signOut, requestDownload, testerJoin, testerLink, testerMe, esc } from "../lib/api.js";
 import { EMAIL_RE, setBusy, setStatus } from "./shared-forms.js";
 
 // a sign-in link sent from the Hebrew page brings them back in Hebrew
@@ -47,12 +48,23 @@ $("t-form").addEventListener("submit", async (e) => {
   e.preventDefault();
   const form = e.currentTarget;
   const email = form.elements.email.value.trim().toLowerCase();
+  const name = form.elements.name.value.trim();
+  const code = form.elements.code.value.trim();
   const status = form.querySelector(".form-status");
   if (!EMAIL_RE.test(email)) { setStatus(status, T("Please enter a valid email.", "נא למלא מייל תקין."), "error"); return; }
+  if (code && !name) { setStatus(status, T("Please enter your name.", "נא למלא שם."), "error"); return; }
   const btn = form.querySelector("button[type=submit]");
   setBusy(btn, true, T("Sending…", "שולחים…"));
   try {
-    await testerLink(email, he() ? "he" : "en");
+    const lang = he() ? "he" : "en";
+    if (code) {
+      // the code makes them a tester now; the sign-in link opens their downloads
+      await testerJoin({ name, email, code, lang });
+      $("t-sent-text").textContent = T("You're in. We've emailed you a sign-in link: open it on this device and your downloads are ready.",
+        "נכנסתם. שלחנו לכם במייל קישור כניסה: פתחו אותו במכשיר הזה וההורדות שלכם מוכנות.");
+    } else {
+      await testerLink(email, lang);
+    }
     form.hidden = true; $("t-sent").hidden = false;
   } catch (err) {
     setStatus(status, err.message, "error");

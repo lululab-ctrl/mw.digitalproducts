@@ -1,12 +1,13 @@
 // ============================================================================
 // tester — the testers page (shop.mw.photography/testers/), shared by link only.
+//   join { name, email, code, lang } → right tester code: they become a tester now and get a sign-in link.
 //   link { email, lang } → if this email is an approved tester, emails them a one-time sign-in link back
 //                    to the page. The answer is the same either way (it doesn't reveal who's a tester).
 //   me (signed in) → { tester, name, products } so the page can show their downloads.
 // Testers are approved in the shop admin (at most 10). Their downloads go through get-download like
 // everyone's: stamped personal copies, 5-minute links, a daily limit; MWP Panel needs its licence sign-in.
 // ============================================================================
-import { admin, clientIp, cors, EMAIL_RE, fail, json, sha256Hex } from "../_shared/http.ts";
+import { admin, clientIp, cors, EMAIL_RE, fail, json, safeEqual, sha256Hex } from "../_shared/http.ts";
 
 const SITE = Deno.env.get("SITE_URL") ?? "https://shop.mw.photography";
 const MAX_LINKS_PER_HOUR = 5;   // per IP
@@ -38,6 +39,37 @@ Deno.serve(async (req) => {
       const { error } = await db.auth.signInWithOtp({ email, options: { emailRedirectTo: `${SITE}/testers/${lang === "he" ? "?lang=he" : ""}`, shouldCreateUser: true } });
       if (error) { console.error("tester link", error); return fail(req, "Couldn't send the link. Please try again in a minute.", 500); }
     }
+    return json(req, { ok: true });
+  }
+
+  // join { name, email, code, lang } → with the tester code Matan set in the admin, the email becomes a tester
+  // straight away (same as add_tester; 10 at most) and gets a sign-in link. Tries are limited per IP.
+  if (body.action === "join") {
+    const email = String(body.email ?? "").trim().toLowerCase();
+    const name = String(body.name ?? "").replace(/[\u0000-\u001f"\\<>]/g, "").trim().slice(0, 80);
+    const code = String(body.code ?? "").trim().toUpperCase();
+    if (!name) return fail(req, "Please enter your name.", 400);
+    if (!EMAIL_RE.test(email)) return fail(req, "Please enter a valid email.", 400);
+    if (!code) return fail(req, "Please enter your tester code.", 400);
+    const salt = Deno.env.get("IP_HASH_SALT") ?? "";
+    const ipHash = clientIp(req) ? await sha256Hex(salt + clientIp(req)) : null;
+    if (ipHash) {
+      const hourAgo = new Date(Date.now() - 3600 * 1000).toISOString();
+      const { count } = await db.from("beta_attempts").select("id", { count: "exact", head: true })
+        .eq("ip_hash", ipHash).gte("created_at", hourAgo);
+      if ((count ?? 0) >= MAX_LINKS_PER_HOUR) return fail(req, "Too many tries. Please wait an hour and try again.", 429);
+      await db.from("beta_attempts").insert({ ip_hash: ipHash });
+    }
+    const { data: row } = await db.from("tester_code").select("code_hash").maybeSingle();
+    if (!row || !safeEqual(await sha256Hex(code), row.code_hash)) return fail(req, "That tester code isn't right.", 403);
+    const { error: tErr } = await db.rpc("add_tester_by_code", { p_email: email, p_name: name });
+    if (tErr) {
+      if (/tester_program_full/.test(tErr.message)) return fail(req, "The testers group is full right now. Please contact us.", 409);
+      console.error("tester join", tErr); return fail(req, "Couldn't add you. Please try again.", 500);
+    }
+    const lang = body.lang === "he" ? "he" : "en";
+    const { error } = await db.auth.signInWithOtp({ email, options: { emailRedirectTo: `${SITE}/testers/${lang === "he" ? "?lang=he" : ""}`, shouldCreateUser: true } });
+    if (error) { console.error("tester link", error); return fail(req, "You're in, but the sign-in link didn't send. Please try again in a minute.", 500); }
     return json(req, { ok: true });
   }
 
