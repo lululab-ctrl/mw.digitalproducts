@@ -159,8 +159,8 @@ function showTip(el) {
 }
 
 export function navIconsInner() {
-  return `<button class="nav-ico" type="button" data-account aria-label="${T("Account", "חשבון")}" aria-haspopup="menu" aria-expanded="false">${SVG.user}<span class="tip">${T("Account", "חשבון")}</span></button>
-    <button class="nav-ico" type="button" data-cart aria-label="${T("Cart", "עגלה")}" aria-haspopup="dialog">${SVG.cart}<span class="count" hidden>0</span><span class="tip">${T("Cart", "עגלה")}</span></button>`;
+  return `<button class="nav-ico" type="button" data-cart aria-label="${T("Cart", "עגלה")}" aria-haspopup="dialog">${SVG.cart}<span class="count" hidden>0</span><span class="tip">${T("Cart", "עגלה")}</span></button>
+    <button class="nav-ico" type="button" data-account aria-label="${T("Account", "חשבון")}" aria-haspopup="menu" aria-expanded="false">${SVG.user}<span class="tip">${T("Account", "חשבון")}</span></button>`;
 }
 
 // ---------------------------------------------------------------- account menu
