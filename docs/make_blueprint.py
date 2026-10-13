@@ -284,6 +284,19 @@ downloaded_route = [
         f("Order found", ("{{80.body.data.o.items[1].id}}", "exist", None))),
 ]
 
+# ---------------------------------------------------------------- ambassador_status (ended in the shop admin)
+ambassador_status_route = [
+    gql(90, q_amb_lookup, {"email": "{{1.email}}"}, "Find ambassador",
+        f("Ambassador status", ("{{1.type}}", "text:equal", "ambassador_status"))),
+    gql(91, """mutation ($id: ID!, $cv: JSON!, $note: String!) {
+  c: change_multiple_column_values(board_id: %d, item_id: $id, column_values: $cv) { id }
+  u: create_update(item_id: $id, body: $note) { id }
+}""" % B_AMB, {"id": "{{90.body.data.a.items[1].id}}",
+               "cv": '{"color_mm8391jm":{"label":"{{1.status_label}}"},"date_mm83s7ad":{"date":"{{1.ended_on}}"}}',
+               "note": "Ambassadorship set to {{1.status_label}} on {{1.ended_on}} in the shop admin."},
+        "Update status", f("Found", ("{{90.body.data.a.items[1].id}}", "exist", None))),
+]
+
 blueprint = {
     "name": "MWP Shop · Events to monday (orders, products, support, reports)",
     "flow": [
@@ -291,7 +304,7 @@ blueprint = {
          "parameters": {"hook": HOOK, "maxResults": 1}, "mapper": {},
          "metadata": {"designer": {"x": 0, "y": 0}}},
         router(2, [order_route, refund_route, support_route, subscribe_route,
-                   product_route, approvals_route, weekly_route, payout_route, ambassador_route, account_route, downloaded_route]),
+                   product_route, approvals_route, weekly_route, payout_route, ambassador_route, account_route, downloaded_route, ambassador_status_route]),
     ],
     "metadata": {"version": 1, "scenario": {"roundtrips": 1, "maxErrors": 3, "autoCommit": True, "sequential": True,
                                             "confidential": False, "dataloss": False, "dlq": True}},
