@@ -187,6 +187,26 @@
         "products": "text_mm833w4f",
         "notes": "long_text_mm83kpyx"
       }
+    },
+    "ambassador_applications": {
+      "id": 5105977396,
+      "name": "Shop Ambassador Applications",
+      "groups": {
+        "applications": "topics"
+      },
+      "columns": {
+        "decision": "decision",
+        "shop_result": "shop_result",
+        "email": "email",
+        "language": "language",
+        "instagram_and_platforms": "instagram",
+        "their_work": "portfolio",
+        "applied": "applied",
+        "sounds_good": "commitment",
+        "feedback": "feedback",
+        "all_answers": "answers",
+        "application_id": "application_id"
+      }
     }
   },
   "make": {
