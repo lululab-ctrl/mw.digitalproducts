@@ -326,7 +326,7 @@ tester_route = [
 # applications_request   → (every 10 min while some wait) the board goes back to the shop's scheduler.
 # application_decided    → the shop acted on a decision: Shop result, and (with GMAIL) the email to the applicant.
 B_APP = 5105977396   # Shop Ambassador Applications
-GMAIL = int(sys.argv[2]) if len(sys.argv) > 2 else None   # Make's Gmail connection for contact@matanwildphotography.com
+GMAIL = int(sys.argv[2]) if len(sys.argv) > 2 else None   # Make's Gmail connection for contact@matanwildphotography.com (11893994)
 app_cv = ('{"decision":{"label":"New"},"shop_result":{"label":"Waiting"},"email":{"email":"{{1.email}}","text":"{{1.email}}"},'
           '"language":"{{1.language}}","instagram":"{{1.platforms}}","portfolio":"{{1.work}}","applied":{"date":"{{1.applied_on}}"},'
           '"commitment":"{{1.sounds_good}}","feedback":"{{1.feedback}}","answers":{"text":"{{1.answers_text}}"},'
@@ -365,9 +365,8 @@ application_decided_route = [
 ]
 if GMAIL:
     application_decided_route.append(
-        {"id": 132, "module": "google-email:sendAnEmail", "version": 4, "parameters": {"account": GMAIL},
-         "mapper": {"to": ["{{1.email}}"], "subject": "{{1.subject}}", "bodyType": "rawHtml", "contentType": "html",
-                    "content": "{{1.body_html}}", "attachments": [], "cc": [], "bcc": []},
+        {"id": 132, "module": "google-email:sendAnEmail", "version": 4, "parameters": {"__IMTCONN__": GMAIL},
+         "mapper": {"to": ["{{1.email}}"], "subject": "{{1.subject}}", "bodyType": "rawHtml", "content": "{{1.body_html}}"},
          "filter": f("Email the applicant", ("{{1.send_email}}", "text:equal", "yes")),
          "metadata": {"designer": {"x": 0, "y": 0, "name": "Email the applicant"}}})
 
