@@ -84,10 +84,11 @@ if (accDate) accDate.textContent = today;
 function showSignature() {
   const f = document.getElementById("join-form").elements;
   const name = f.name.value.trim();
-  const ig = f.instagram.value.trim().replace(/^@+/, "");
+  const ig = f.instagram.value.trim().replace(/^@+/, "").replace(/[^A-Za-z0-9._]/g, "");
   sigName.textContent = name || T("Your name", "השם שלכם");
   sig.classList.toggle("typed", Boolean(name));
-  sigMeta.textContent = [ig && `@${ig}`, today].filter(Boolean).join(" · ");
+  // each piece isolated, so a handle and a Hebrew date don't run into each other
+  sigMeta.innerHTML = [ig && `<bdi dir="ltr">@${ig}</bdi>`, `<bdi>${today}</bdi>`].filter(Boolean).join(" · ");
   sig.classList.toggle("signed", Boolean(name));
 }
 document.getElementById("join-form").addEventListener("input", showSignature);

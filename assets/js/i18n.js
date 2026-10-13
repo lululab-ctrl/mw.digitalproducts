@@ -320,6 +320,8 @@ const HE = {
   "Terms accepted": "התנאים אושרו",
   "Get my tools": "קבלת הכלים",
   "Then, in Photoshop, open MWP Panel and sign in with the same email.": "אחר כך, בפוטושופ, פותחים את MWP Panel ומתחברים עם אותו מייל.",
+  "Signed by": "נחתם על ידי",
+  "Accepted · MWP Ambassador Program Terms of Use": "אושר · תנאי השימוש של תוכנית השגרירים של MWP",
   "Please agree to the Ambassador Program terms.": "נא לאשר את תנאי תוכנית השגרירים.",
   "Couldn't save your details. Please try again.": "לא הצלחנו לשמור את הפרטים. נסו שוב.",
   "Couldn't add the tools to your library. Please try again.": "לא הצלחנו להוסיף את הכלים לספרייה. נסו שוב.",

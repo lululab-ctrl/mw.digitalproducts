@@ -156,17 +156,30 @@ html[dir=rtl] .input[dir=ltr]{text-align:right}
 .acc-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:4px}
 .acc-head .kick{margin:0}
 .acc-date{font-size:13px;color:#9CB1C2}
-.sig{position:relative;padding:18px 18px 16px;border-radius:16px;border:1px dashed rgba(254,251,241,.18);background:rgba(10,9,8,.35);transition:border-color .4s,background .4s}
-.sig-l{display:block;font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#7E8A93}
-.sig-name{position:relative;display:inline-block;margin-top:8px;font-size:26px;font-style:italic;font-weight:300;letter-spacing:-.01em;color:#6f7a82;transition:color .3s}
-.sig-name::after{content:"";position:absolute;left:0;right:0;bottom:-4px;height:2px;border-radius:2px;background:linear-gradient(90deg,#E4AA7C,#F4AF56);transform:scaleX(0);transform-origin:left;transition:transform .9s cubic-bezier(.2,.8,.2,1)}
-html[dir=rtl] .sig-name::after{transform-origin:right}
-.sig.typed .sig-name{color:#FEFBF1}
-.sig-meta{display:block;margin-top:10px;font-size:13px;color:#9CB1C2;min-height:18px}
-.sig .stamp{position:absolute;top:14px;inset-inline-end:14px;padding:5px 11px;border-radius:64px;border:1px solid rgba(244,175,86,.6);color:#F4AF56;font-size:11px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;opacity:0;transform:rotate(-8deg) scale(1.4);transition:all .45s cubic-bezier(.2,.8,.2,1)}
-.sig.signed{border-style:solid;border-color:rgba(244,175,86,.45);background:rgba(244,175,86,.05)}
-.sig.signed .sig-name::after{transform:scaleX(1)}
-.sig.signed .stamp{opacity:1;transform:rotate(-8deg) scale(1)}
+.sig{position:relative;padding:7px;border-radius:20px;background:linear-gradient(145deg,rgba(244,175,86,.38),rgba(254,251,241,.06) 35%,rgba(254,251,241,.04) 65%,rgba(228,170,124,.3));box-shadow:0 30px 60px -36px rgba(0,0,0,.9);transition:box-shadow .6s}
+.sig-in{position:relative;padding:26px 30px 22px;border-radius:14px;background:radial-gradient(120% 90% at 0% 0%,rgba(244,175,86,.10),transparent 60%),linear-gradient(180deg,#141210,#0d0c0b);box-shadow:inset 0 0 0 1px rgba(244,175,86,.16);overflow:hidden}
+.sig-in::after{content:"";position:absolute;inset:-40% -60%;background:linear-gradient(105deg,transparent 42%,rgba(254,251,241,.07) 50%,transparent 58%);transform:translateX(-60%);pointer-events:none}
+.sig.signed .sig-in::after{animation:sheen 1.6s cubic-bezier(.2,.7,.1,1) .25s both}
+@keyframes sheen{to{transform:translateX(60%)}}
+.sig-l{margin:0;font-size:10.5px;font-weight:700;letter-spacing:.32em;text-transform:uppercase;color:#9CB1C2}
+.sig-name{margin:14px 0 0;min-height:1.15em;font-size:clamp(30px,3vw,38px);font-weight:300;line-height:1.1;letter-spacing:-.025em;color:rgba(254,251,241,.22);transition:color .4s;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sig.typed .sig-name{background:linear-gradient(90deg,#FEFBF1 0%,#F8D29C 60%,#F4AF56 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+html[dir=rtl] .sig.typed .sig-name{background:linear-gradient(270deg,#FEFBF1 0%,#F8D29C 60%,#F4AF56 100%);-webkit-background-clip:text;background-clip:text}
+.sig-rule{position:relative;display:block;height:1px;margin-top:12px;background:rgba(254,251,241,.12)}
+.sig-rule::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#F4AF56,rgba(244,175,86,.15));transform:scaleX(0);transform-origin:left;transition:transform 1.1s cubic-bezier(.2,.8,.2,1)}
+html[dir=rtl] .sig-rule::after{background:linear-gradient(270deg,#F4AF56,rgba(244,175,86,.15));transform-origin:right}
+.sig.typed .sig-rule::after{transform:scaleX(1)}
+.sig-meta{margin:12px 0 0;min-height:18px;font-size:13px;letter-spacing:.02em;color:#AEB9C1}
+.sig-what{margin:4px 0 0;font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#6f7a82}
+.sig-seal{position:absolute;top:22px;inset-inline-end:24px;display:grid;place-items:center;width:62px;height:62px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#2a2219,#0d0c0b 70%);box-shadow:0 0 0 1px rgba(244,175,86,.55),0 0 0 5px rgba(13,12,11,.9),0 0 0 6px rgba(244,175,86,.25),0 12px 30px -8px rgba(244,175,86,.35);opacity:.25;transform:scale(.85) rotate(-14deg);filter:grayscale(1);transition:all .8s cubic-bezier(.2,.8,.2,1)}
+.sig-seal img{width:34px;height:34px;object-fit:contain;opacity:.95}
+.sig-seal i{position:absolute;bottom:-2px;inset-inline-end:-2px;display:grid;place-items:center;width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,#E4AA7C,#F4AF56);color:#0A0908;box-shadow:0 0 0 3px #0d0c0b;transform:scale(0);transition:transform .5s cubic-bezier(.3,1.6,.5,1) .35s}
+.sig.signed .sig-seal{opacity:1;transform:none;filter:none}
+.sig.signed .sig-seal i{transform:scale(1)}
+.sig.signed{box-shadow:0 30px 70px -30px rgba(244,175,86,.35)}
+.sig .sig-in{padding-inline-end:104px}
+html[lang=he] .sig-l,html[lang=he] .sig-what{letter-spacing:.06em}
+@media (max-width:600px){.sig-in{padding:22px 20px 18px}.sig .sig-in{padding-inline-end:84px}.sig-seal{width:52px;height:52px;top:18px;inset-inline-end:18px}.sig-seal img{width:28px;height:28px}}
 @media (max-width:1100px){.facts{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media (max-width:900px){
  .t-layout{grid-template-columns:minmax(0,1fr);gap:20px;margin-top:40px}
@@ -322,7 +335,16 @@ html[lang=he] body,html[lang=he] body *:not(svg):not(svg *),html body [lang=he],
 <div class="field"><label for="j-name">Name</label><input class="input" id="j-name" name="name" autocomplete="name" required></div>
 <div class="field"><label for="j-email">Email</label><input class="input" id="j-email" name="email" type="email" dir="ltr" autocomplete="email" required></div>
 <div class="field"><label for="j-ig">Instagram</label><input class="input" id="j-ig" name="instagram" dir="ltr" placeholder="@yourhandle" autocomplete="off"></div>
-<div class="sig signed" id="sig" aria-live="polite"><span class="stamp">I agree</span><span class="sig-l">Signature</span><span class="sig-name" id="sig-name">Your name</span><span class="sig-meta" id="sig-meta"></span></div>
+<div class="sig" id="sig" aria-live="polite">
+<div class="sig-in">
+<p class="sig-l">Signed by</p>
+<p class="sig-name" id="sig-name">Your name</p>
+<span class="sig-rule" aria-hidden="true"></span>
+<p class="sig-meta"><span id="sig-meta"></span></p>
+<p class="sig-what">Accepted · MWP Ambassador Program Terms of Use</p>
+</div>
+<span class="sig-seal" aria-hidden="true"><img src="../assets/pages/img/2dd3356528167ddf9a64c0c7301c8aa3.png" alt=""><i><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></i></span>
+</div>
 <button class="btn" type="submit">Get my tools</button>
 <p class="msg" id="join-msg" role="status"></p>
 </form>
