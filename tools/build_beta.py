@@ -86,7 +86,7 @@ T_SECTIONS_HE, T_TOC_HE = sections(TERMS_HE, True), toc(TERMS_HE, True)
 FACTS = [
     ("Lifetime", "licence, with every future update", 1),
     ("2", "devices, for you only", 1),
-    ("3 + 1", "posts and a reel a month, first 3 months", 2),
+    ("3", "posts a month, plus an optional reel, first 3 months", 2),
     ("12", "months, renewable", 7),
 ]
 FACTS_HTML = "".join(f'<a class="fact" href="#t{t}" data-open="{t}"><b>{v}</b><span>{label}</span></a>' for v, label, t in FACTS)

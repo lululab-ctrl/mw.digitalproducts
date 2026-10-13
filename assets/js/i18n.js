@@ -447,7 +447,7 @@ const HE = {
   "Lifetime": "לכל החיים",
   "licence, with every future update": "רישיון, כולל כל עדכון עתידי",
   "devices, for you only": "מכשירים, רק בשבילכם",
-  "posts and a reel a month, first 3 months": "פוסטים ורילס בחודש, ב־3 החודשים הראשונים",
+  "posts a month, plus an optional reel, first 3 months": "פוסטים בחודש, ועוד רילס אם תרצו, ב־3 החודשים הראשונים",
   "story a week, first 3 months": "סטורי בשבוע, ב־3 החודשים הראשונים",
   "your copyright, always": "זכויות היוצרים שלכם, תמיד",
   "months, renewable": "חודשים, עם אפשרות לחידוש",

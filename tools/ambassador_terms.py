@@ -4,7 +4,7 @@ Change the wording only with Matan's OK, and when you do, bump TERMS_VERSION her
 supabase/functions/beta/index.ts (each acceptance records the version).
 Blocks: ("p", html) a paragraph, ("ul", [html, ...]) a list. Only <strong> and <a> tags are used."""
 
-TERMS_VERSION = "2026-10-13.4"   # .2: the Field Guides are included; Facebook page is MW Photo Tours. .3: guides are read online. .4: Hebrew text writes MWP in Latin letters
+TERMS_VERSION = "2026-10-13.5"   # .5: the monthly reel is optional. .2: the Field Guides are included; Facebook page is MW Photo Tours. .3: guides are read online. .4: Hebrew text writes MWP in Latin letters
 
 TERMS_DATE = "Oct 13, 2026"
 TERMS_INTRO = [
@@ -24,7 +24,7 @@ TERMS = [
                 "Post feed posts, reels, stories and carousels about your workflow",
                 "Create Instagram collaborative posts with @mw_phototours",
                 "Write about your honest experience: reviews, blog posts, newsletters, YouTube"]),
-        ("p", "<strong>What we ask in return:</strong> during your first 3 months, at least 3 posts and 1 reel per month, plus at least 1 story per week, all tagging MWP as described in section 3. After that, for the rest of the year, simply tag and mention us whenever you use the tools and are happy with the results. These are minimums: if you love the results, we'd love to see you share more of everything. Your opinions are your own. We never ask for a positive review, only an honest one."),
+        ("p", "<strong>What we ask in return:</strong> during your first 3 months, at least 3 posts and 1 optional reel per month, plus at least 1 story per week, all tagging MWP as described in section 3. After that, for the rest of the year, simply tag and mention us whenever you use the tools and are happy with the results. These are minimums: if you love the results, we'd love to see you share more of everything. Your opinions are your own. We never ask for a positive review, only an honest one."),
     ]),
     ("Tagging and disclosure", [
         ("p", "When you publish work made with the panel or presets:"),
@@ -94,7 +94,7 @@ TERMS_HE = [
                 "לפרסם פוסטים, רילס, סטוריז וקרוסלות על תהליך העבודה שלכם",
                 "ליצור פוסטים משותפים באינסטגרם עם @mw_phototours",
                 "לכתוב על החוויה הכנה שלכם: ביקורות, פוסטים בבלוג, ניוזלטרים, יוטיוב"]),
-        ("p", "<strong>מה אנחנו מבקשים בתמורה:</strong> בשלושת החודשים הראשונים, לפחות 3 פוסטים ורילס אחד בחודש, ועוד לפחות סטורי אחד בשבוע, כולם עם תיוג של MWP כמתואר בסעיף 3. אחר כך, לשאר השנה, פשוט מתייגים ומזכירים אותנו בכל פעם שמשתמשים בכלים ומרוצים מהתוצאה. אלה המינימום: אם אתם אוהבים את התוצאות, נשמח לראות אתכם משתפים עוד מכל דבר. הדעות שלכם הן שלכם. אנחנו אף פעם לא מבקשים ביקורת חיובית, רק כנה."),
+        ("p", "<strong>מה אנחנו מבקשים בתמורה:</strong> בשלושת החודשים הראשונים, לפחות 3 פוסטים בחודש ורילס אחד אם תרצו, ועוד לפחות סטורי אחד בשבוע, כולם עם תיוג של MWP כמתואר בסעיף 3. אחר כך, לשאר השנה, פשוט מתייגים ומזכירים אותנו בכל פעם שמשתמשים בכלים ומרוצים מהתוצאה. אלה המינימום: אם אתם אוהבים את התוצאות, נשמח לראות אתכם משתפים עוד מכל דבר. הדעות שלכם הן שלכם. אנחנו אף פעם לא מבקשים ביקורת חיובית, רק כנה."),
     ]),
     ("תיוג וגילוי נאות", [
         ("p", "כשאתם מפרסמים עבודה שנעשתה עם הפאנל או הפריסטים:"),
