@@ -1,19 +1,26 @@
 // Ambassadors who are signed in start at My downloads when they come back to the site.
 // Only when they arrive (a new visit, not when they click around the site), so the home page is still
 // one click away. An ambassador is someone whose Field Guides are read-only (entitlements.view_only).
+// A small script in the page's <head> (tools/landing_guard.py) keeps the page invisible while we check,
+// so a signed-in ambassador never sees it flash before the jump; show() brings it back otherwise.
 import { supabase, currentUser } from "./api.js";
+
+const show = () => { document.documentElement.style.visibility = ""; };
 
 export async function ambassadorLanding() {
   try {
-    if (sessionStorage.getItem("mwp_landed")) return;   // once per visit
+    if (sessionStorage.getItem("mwp_landed")) return show();   // once per visit
     sessionStorage.setItem("mwp_landed", "1");
-  } catch { return; }
+  } catch { return show(); }
   try {
-    if (document.referrer && new URL(document.referrer).origin === location.origin) return;   // moving around the site
+    if (document.referrer && new URL(document.referrer).origin === location.origin) return show();   // moving around the site
   } catch { /* odd referrer: treat as arriving */ }
-  if (!supabase) return;
-  const user = await currentUser().catch(() => null);
-  if (!user) return;
-  const { data } = await supabase.from("entitlements").select("id").eq("view_only", true).is("revoked_at", null).limit(1);
-  if (data && data.length) location.replace("/account/");
+  if (!supabase) return show();
+  try {
+    const user = await currentUser().catch(() => null);
+    if (!user) return show();
+    const { data } = await supabase.from("entitlements").select("id").eq("view_only", true).is("revoked_at", null).limit(1);
+    if (data && data.length) { location.replace("/account/"); return; }
+  } catch { /* show the page */ }
+  show();
 }
