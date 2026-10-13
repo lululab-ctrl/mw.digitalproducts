@@ -82,6 +82,76 @@ const HE = {
   "Send me the presets": "שלחו לי את הפריסטים",
   "Email me the free presets and occasional news. Unsubscribe anytime.": "שלחו לי את הפריסטים החינמיים ועדכונים מדי פעם. אפשר להסיר את עצמי בכל רגע.",
   "Questions": "שאלות",
+  "@yourhandle": "@שם_המשתמש",
+  "Copy": "העתקה",
+  "Composition": "קומפוזיציה",
+  "Colour": "צבע",
+  "Light": "אור",
+  "Planning": "תכנון",
+  "Library": "ספרייה",
+  "Develop": "פיתוח",
+  "Map": "מפה",
+  "Book": "ספר",
+  "Slideshow": "מצגת",
+  "Print": "הדפסה",
+  "Web": "רשת",
+  "Navigator": "ניווט",
+  "MWP 1 Signature": "אם־דבליו־פי 1 חתימה",
+  "MWP 2 Light & Scene": "אם־דבליו־פי 2 אור וסצנה",
+  "MWP 3 Mono": "אם־דבליו־פי 3 מונו",
+  "MWP 4 Adaptive": "אם־דבליו־פי 4 אדפטיבי",
+  "MWP 5 Tools": "אם־דבליו־פי 5 כלים",
+  "Basic": "בסיסי",
+  "Treatment": "טיפול",
+  "Color": "צבע",
+  "Black & White": "שחור-לבן",
+  "Temp": "טמפרטורה",
+  "Tint": "גוון",
+  "Tone": "טון",
+  "Exposure": "חשיפה",
+  "Contrast": "ניגודיות",
+  "Highlights": "הבהרות",
+  "Shadows": "צללים",
+  "Whites": "לבנים",
+  "Blacks": "שחורים",
+  "Presence": "נוכחות",
+  "Texture": "מרקם",
+  "Clarity": "חדות",
+  "Dehaze": "הסרת אובך",
+  "Vibrance": "חיוניות",
+  "Saturation": "רוויה",
+  "File": "קובץ",
+  "Image": "תמונה",
+  "Layer": "שכבה",
+  "Select": "בחירה",
+  "Filter": "מסנן",
+  "View": "תצוגה",
+  "Plugins": "תוספים",
+  "Window": "חלון",
+  "photo.psd @ 33%": "תמונה.psd @ 33%",
+  "Layers": "שכבות",
+  "Channels": "ערוצים",
+  "Paths": "נתיבים",
+  "Subject · Pop": "נושא · הבלטה",
+  "Background": "רקע",
+  "Panel": "פאנל",
+  "Presets + Panel": "פריסטים + פאנל",
+  "The first products are being prepared. Check back soon.": "המוצרים הראשונים בהכנה. חזרו בקרוב.",
+  "Terms, licence, refunds and privacy · MWP": "תנאים, רישיון, החזרים ופרטיות · MWP",
+  "Terms of sale, licence, refund policy and privacy notice for MWP.": "תנאי מכירה, רישיון, מדיניות החזרים והודעת פרטיות של MWP.",
+  "When you buy a product you get a personal, non-transferable licence to use it in your own work and in work you do for clients.": "כשקונים מוצר מקבלים רישיון אישי שאינו ניתן להעברה, לשימוש בעבודות שלכם ובעבודות שאתם עושים ללקוחות.",
+  "Allowed: personal work, client work, social media, prints and publications you create.": "מותר: עבודות אישיות, עבודות ללקוחות, רשתות חברתיות, הדפסות ופרסומים שאתם יוצרים.",
+  "Not allowed: sharing, reselling, giving away or repackaging the files, alone or bundled with other products.": "אסור: לשתף, למכור הלאה, למסור או לארוז מחדש את הקבצים, לבד או בחבילה עם מוצרים אחרים.",
+  "Sample photographs in our products and on this site remain the property of Matan Wild Photography and may not be used without written permission.": "צילומי הדוגמה במוצרים ובאתר הזה נשארים בבעלות Matan Wild Photography, ואין להשתמש בהם בלי אישור בכתב.",
+  "Our products are digital files delivered instantly. If a product doesn't work for you, write to": "המוצרים שלנו הם קבצים דיגיטליים שנמסרים מיד. אם מוצר לא עובד לכם, כתבו ל",
+  "within 14 days of purchase. We'll help you get it working, and if we can't, we'll refund you. Refunded orders lose access to the files.": "תוך 14 יום מהרכישה. נעזור לכם להפעיל אותו, ואם לא נצליח, נחזיר לכם את הכסף. הזמנה שהוחזרה מאבדת את הגישה לקבצים.",
+  "Terms of sale": "תנאי מכירה",
+  "Orders are processed by our online reseller, Lemon Squeezy, which is the merchant of record and handles payment, invoicing and sales tax. Prices are shown in the currency listed on each product page. You'll receive a receipt by email after every purchase.": "ההזמנות מעובדות על ידי המשווק המקוון שלנו, Lemon Squeezy, שהוא המוכר הרשמי ומטפל בתשלום, בחשבוניות ובמס. המחירים מוצגים במטבע שמופיע בכל עמוד מוצר. אחרי כל רכישה תקבלו קבלה במייל.",
+  "Products you buy include free updates to that product. We may add, change or retire products at any time; anything you've already bought stays in your downloads.": "מוצרים שקניתם כוללים עדכונים חינם לאותו מוצר. אנחנו עשויים להוסיף, לשנות או להפסיק מוצרים בכל עת; כל מה שכבר קניתם נשאר בהורדות שלכם.",
+  "We collect only what we need to sell and deliver your products: your name, email, country and what you bought. Payment details are handled by the checkout provider and never reach us.": "אנחנו אוספים רק את מה שצריך כדי למכור ולמסור לכם את המוצרים: שם, מייל, מדינה ומה קניתם. פרטי התשלום מטופלים אצל ספק התשלום ולא מגיעים אלינו.",
+  "We use your email to deliver your files, answer support requests and, if you agreed, send occasional news and new releases. You can unsubscribe from any email.": "אנחנו משתמשים במייל שלכם כדי לשלוח את הקבצים, לענות לפניות תמיכה, ואם הסכמתם, לשלוח מדי פעם חדשות ומוצרים חדשים. אפשר להסיר את עצמכם מכל מייל.",
+  "Our service providers: Supabase (database, sign-in and file storage), Lemon Squeezy (checkout), MailerLite (email), Make.com and monday.com (order handling). To see, correct or delete your data, write to support.": "נותני השירות שלנו: Supabase (מסד נתונים, התחברות ואחסון קבצים), Lemon Squeezy (תשלום), MailerLite (מייל), Make.com ו-monday.com (טיפול בהזמנות). כדי לראות, לתקן או למחוק את המידע שלכם, כתבו לתמיכה.",
+  "Read the MWP Field Guides online.": "קריאה אונליין במדריכי השטח של MWP.",
   "Your signed copy of the terms": "העותק החתום שלכם של התנאים",
   "Preparing your PDF…": "מכינים את ה־PDF שלכם…",
   "Download again": "להוריד שוב",
@@ -92,7 +162,7 @@ const HE = {
   "Your guides, page by page. They're for your eyes only.": "המדריכים שלכם, עמוד אחר עמוד. הם לעיניכם בלבד.",
   "Field Guides · Read online · MWP": "מדריכי שטח · קריאה אונליין · MWP",
   "Do they work in Photoshop (Beta)?": "האם הם עובדים ב־Photoshop (Beta)?",
-  "Yes. MWP Panel installs in both Photoshop and Photoshop (Beta), and one computer counts once even if you use both. The presets live in Camera Raw, which both apps share. The LUTs load in either app from Color Lookup, then Load 3D LUT.": "כן. MWP Panel מותקן גם ב־Photoshop וגם ב־Photoshop (Beta), ומחשב אחד נספר פעם אחת גם אם משתמשים בשניהם. הפריסטים יושבים ב־Camera Raw, שמשותף לשתי האפליקציות. את ה־LUTs טוענים בכל אחת מהן דרך Color Lookup ואז Load 3D LUT.",
+  "Yes. MWP Panel installs in both Photoshop and Photoshop (Beta), and one computer counts once even if you use both. The presets live in Camera Raw, which both apps share. The LUTs load in either app from Color Lookup, then Load 3D LUT.": "כן. MWP Panel מותקן גם ב־Photoshop וגם ב־Photoshop (Beta), ומחשב אחד נספר פעם אחת גם אם משתמשים בשניהם. הפריסטים יושבים ב־Camera Raw, שמשותף לשתי האפליקציות. את קובצי ה-LUT טוענים בכל אחת מהן דרך שכבת התאמה של חיפוש צבע, ואז טעינת LUT תלת־ממדי.",
   "Which programs do the products work with?": "עם אילו תוכנות המוצרים עובדים?",
   "Every product page lists what it works with under \"Works with\". Presets work in Lightroom Classic, Lightroom and Photoshop's Camera Raw; the plugin and the guides state their own requirements.":
     "בכל עמוד מוצר מופיע תחת \"עובד עם\" עם מה הוא עובד. הפריסטים עובדים ב-Lightroom Classic, ב-Lightroom וב-Camera Raw של פוטושופ. לפלאגין ולמדריכים יש דרישות משלהם, שמפורטות בעמוד שלהם.",
@@ -499,7 +569,7 @@ const HE = {
   "MWP Field Guides teach what happens before the click: composition, colour, light and planning, in 4 PDF guides in English and Hebrew. The presets and the Panel carry it on into the edit, in the same look.": "מדריכי השטח של MWP מלמדים מה קורה לפני הקליק: קומפוזיציה, צבע, אור ותכנון, ב-4 מדריכי PDF בעברית ובאנגלית. הפריסטים והפאנל ממשיכים מאותה נקודה אל העריכה, באותו מראה.",
   "Edit in Lightroom": "עורכים בלייטרום",
   "Get the presets": "לפריסטים",
-  "Presets + Field Guides": "Presets + מדריכי השטח",
+  "Presets + Field Guides": "פריסטים + מדריכי השטח",
   "Shoot it, then edit it": "מצלמים, ואז עורכים",
   "MWP Presets: 50 presets and 33 LUTs": "MWP Presets: ‏50 פריסטים ו-33 קובצי LUT",
   "MWP Field Guides: 4 PDF guides, 137 lessons": "מדריכי השטח: 4 מדריכי PDF, ‏137 שיעורים",
@@ -547,21 +617,106 @@ function translate(text) {
   return lead + out + trail;
 }
 
-const ATTRS = ["placeholder", "aria-label", "title"];
+
+// Names in Hebrew (Matan: everything in Hebrew; the header logo stays MWP). Same list as tools/he_names.py.
+const NAMES = [
+  ["MWP - PS Panel", "הפאנל של אם־דבליו־פי"],
+  ["MWP - Signature Preset Pack", "הפריסטים של אם־דבליו־פי"],
+  ["MWP Field Guides", "מדריכי השטח של אם־דבליו־פי"],
+  ["MWP FIELD GUIDES", "מדריכי השטח של אם־דבליו־פי"],
+  ["MWP Field Guide", "מדריך השטח של אם־דבליו־פי"],
+  ["MWP FIELD GUIDE", "מדריך השטח של אם־דבליו־פי"],
+  ["MWP Presets", "הפריסטים של אם־דבליו־פי"],
+  ["MWP PRESETS", "הפריסטים של אם־דבליו־פי"],
+  ["MWP Panel", "הפאנל של אם־דבליו־פי"],
+  ["MWP PANEL", "הפאנל של אם־דבליו־פי"],
+  ["MW Photo Tours", "אם־דבליו פוטו טורס"],
+  ["MW PHOTO TOURS", "אם־דבליו פוטו טורס"],
+  ["Matan Wild Photography", "מתן וויילד צילום"],
+  ["Matan Wild", "מתן וויילד"],
+  ["Lemon Squeezy", "למון סקוויזי"],
+  ["Photoshop (Beta)", "פוטושופ (בטא)"],
+  ["Photoshop", "פוטושופ"],
+  ["PHOTOSHOP", "פוטושופ"],
+  ["Lightroom Classic", "לייטרום קלאסיק"],
+  ["Lightroom Mobile", "לייטרום מובייל"],
+  ["Lightroom", "לייטרום"],
+  ["LIGHTROOM", "לייטרום"],
+  ["Camera Raw", "קאמרה ראו"],
+  ["Premiere Pro", "פרמייר פרו"],
+  ["DaVinci Resolve", "דה־וינצ׳י ריזולב"],
+  ["Final Cut Pro", "פיינל קאט פרו"],
+  ["Adobe", "אדובי"],
+  ["Windows", "ווינדוס"],
+  ["Mac", "מק"],
+  ["Instagram", "אינסטגרם"],
+  ["Facebook", "פייסבוק"],
+  ["WhatsApp", "וואטסאפ"],
+  ["YouTube", "יוטיוב"],
+  ["Supabase", "סופאבייס"],
+  ["MailerLite", "מיילרלייט"],
+  ["Make.com", "מייק"],
+  ["monday.com", "מאנדיי"],
+  ["MWP", "אם־דבליו־פי"],
+].map(([en, he]) => [new RegExp("(?<![A-Za-z0-9@._/])" + en.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "(?![A-Za-z0-9])", "g"), he]);
+// "ל-Lightroom" → "ללייטרום": a one-letter Hebrew prefix joins the now-Hebrew word.
+const PREFIX = /(?<![\u05D0-\u05EA])(ו?[בלכמשה]|ו)[-־](?=[\u05D0-\u05EA])/g;
+function names(text) {
+  let out = text;
+  for (const [re, he] of NAMES) out = out.replace(re, he);
+  if (out === text) return text;
+  return out.replace(PREFIX, (m, p, i, all) => p + (p.endsWith("ו") && all[i + m.length] === "ו" ? "־" : ""));
+}
+
+const ATTRS = ["placeholder", "aria-label", "title", "alt"];
 const SKIP = new Set(["SCRIPT", "STYLE", "NOSCRIPT", "CODE", "TEXTAREA"]);
+
+// Hebrew for one piece of text: the sentence translation if there is one, then every name in Hebrew.
+// Everything on the Hebrew site is Hebrew (Matan); only the header logo stays MWP.
+function hebrew(text) {
+  const t = translate(text);
+  return names(t === null ? text : t);
+}
+
+// A product name split over two elements ("MWP" + <span class="grad">Presets</span>) becomes
+// "הפריסטים של" + <span class="grad">אם־דבליו־פי</span>, so the gold stays on the name.
+const MWP_HE = "אם־דבליו־פי";
+function productName(el) {
+  // only a short name: some text plus one gold <span class="grad"> word, nothing else inside
+  const g = el.children && el.children.length === 1 ? el.children[0] : null;
+  if (!g || !g.classList.contains("grad") || g.children.length || el.textContent.length > 60) return false;
+  const full = el.textContent.replace(/\s+/g, " ").trim();
+  const he = names(full);
+  if (he === full || !he.endsWith(MWP_HE)) return false;
+  const lead = he.slice(0, -MWP_HE.length);
+  const grad = el.querySelector(".grad");
+  el.textContent = lead;
+  grad.textContent = MWP_HE;
+  el.append(grad);
+  return true;
+}
 
 function walk(root) {
   if (root.nodeType === 3) {
-    const t = translate(root.nodeValue);
-    if (t !== null && t !== root.nodeValue) root.nodeValue = t;
+    const el = root.parentElement;
+    if (!el || el.closest(".brand, .site-brand, script, style, .only-en")) return;
+    const t = hebrew(root.nodeValue);
+    if (t !== root.nodeValue) root.nodeValue = t;
     return;
   }
   if (root.nodeType !== 1 && root.nodeType !== 11) return;
   if (root.nodeType === 1) {
-    if (SKIP.has(root.tagName) || root.closest("[data-no-i18n], .prose--legal")) return;
+    if (SKIP.has(root.tagName)) return;
+    if (root.closest(".brand")) {   // the logo: MWP stays, its label is translated
+      const v = root.getAttribute("aria-label"); const t = v && translate(v);
+      if (t) root.setAttribute("aria-label", t.trim());
+      return;
+    }
+    if (root.closest(".only-en")) return;   // the English copy, hidden on the Hebrew site
+    if (productName(root)) return;
     for (const a of ATTRS) {
       const v = root.getAttribute(a);
-      if (v) { const t = translate(v); if (t !== null) root.setAttribute(a, t.trim()); }
+      if (v) { const t = hebrew(v).trim(); if (t !== v) root.setAttribute(a, t); }
     }
     if (root.tagName === "A") {
       const href = root.getAttribute("href") || "";
@@ -603,7 +758,9 @@ export function initI18n() {
     l.href = "https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap";
     document.head.appendChild(l);
   }
-  const t = translate(document.title); if (t) document.title = t.trim();
+  document.title = hebrew(document.title).trim();
+  const desc = document.querySelector('meta[name="description"]');
+  if (desc) desc.content = hebrew(desc.content).trim();
   walk(document.body);
   new MutationObserver((records) => {
     for (const r of records) {

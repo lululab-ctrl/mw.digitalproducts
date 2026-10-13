@@ -16,7 +16,7 @@ CHECK = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F4
 
 
 
-from ambassador_terms import TERMS_VERSION, TERMS_DATE, TERMS_INTRO, TERMS   # Matan's text (shared with the PDF)
+from ambassador_terms import TERMS_VERSION, TERMS_DATE, TERMS_INTRO, TERMS, TERMS_DATE_HE, TERMS_INTRO_HE, TERMS_HE   # Matan's text (shared with the PDF)
 
 import re as _re
 
@@ -42,32 +42,44 @@ FACEBOOK = "https://www.facebook.com/p/MW-Photo-Tours-61580936126537/"
 OUT = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>'
 
 
-def chips(html):
+def chips(html, he=False):
     """@mw_phototours and MW Photo Tours link to the Instagram and Facebook pages; the hashtags are tap-to-copy chips.
     (The words themselves stay exactly as written.)"""
-    html = html.replace("@mw_phototours", f'<a class="cp" href="{INSTAGRAM}" target="_blank" rel="noopener">mw_phototours{OUT}</a>')
+    html = html.replace("@mw_phototours", f'<a class="cp" href="{INSTAGRAM}" target="_blank" rel="noopener" dir="ltr">mw_phototours{OUT}</a>')
     html = html.replace("MW Photo Tours on Facebook", f'<a class="cp" href="{FACEBOOK}" target="_blank" rel="noopener">MW Photo Tours{OUT}</a> on Facebook')
+    html = html.replace("את אם־דבליו פוטו טורס בפייסבוק", f'את <a class="cp" href="{FACEBOOK}" target="_blank" rel="noopener">אם־דבליו פוטו טורס{OUT}</a> בפייסבוק')
+    copy = "העתקה" if he else "Copy"
     return _re.sub(r"(#mwppanel|#mwppresets|#jointhewildsideofphotography)",
-                   lambda m: f'<button type="button" class="cp" data-copy="{m.group(1)}" title="Copy">{m.group(1)}{COPY}</button>', html)
+                   lambda m: f'<button type="button" class="cp" data-copy="{m.group(1)}" title="{copy}" dir="ltr">{m.group(1)}{COPY}</button>', html)
 
 
-def terms_block(kind, body, chapter):
+def terms_block(kind, body, chapter, he=False):
     if kind == "ul":
         cls, mark = {2: ("ok", TICK), 6: ("no", CROSS)}.get(chapter, ("", ""))
-        return f'<ul class="{cls}">' + "".join(f"<li>{mark}<span>{chips(i)}</span></li>" for i in body) + "</ul>"
-    return f"<p>{chips(body)}</p>"
+        return f'<ul class="{cls}">' + "".join(f"<li>{mark}<span>{chips(i, he)}</span></li>" for i in body) + "</ul>"
+    return f"<p>{chips(body, he)}</p>"
 
 
 PLUS = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>'
 
 # The terms as one document to read through: every chapter shown, with a contents list at the top.
-T_SECTIONS = "".join(
-    f'<section class="ch doc" id="t{i}" data-t="{i}">'
-    f'<h3 class="doc-h"><span class="num">{i:02d}</span><span class="ttl">{title}</span></h3>'
-    f'<div class="ch-in">{"".join(terms_block(k, body, i) for k, body in blocks)}</div></section>'
-    for i, (title, blocks) in enumerate(TERMS, 1))
-T_TOC = "".join(f'<li><a href="#t{i}" data-open="{i}"><span class="num">{i:02d}</span>{title}</a></li>'
-                for i, (title, _) in enumerate(TERMS, 1))
+def sections(terms, he=False):
+    k = "h" if he else "t"   # each language has its own chapter ids (h1… / t1…)
+    return "".join(
+        f'<section class="ch doc" id="{k}{i}" data-t="{i}">'
+        f'<h3 class="doc-h"><span class="num">{i:02d}</span><span class="ttl">{title}</span></h3>'
+        f'<div class="ch-in">{"".join(terms_block(kind, body, i, he) for kind, body in blocks)}</div></section>'
+        for i, (title, blocks) in enumerate(terms, 1))
+
+
+def toc(terms, he=False):
+    k = "h" if he else "t"
+    return "".join(f'<li><a href="#{k}{i}" data-open="{i}"><span class="num">{i:02d}</span>{title}</a></li>'
+                   for i, (title, _) in enumerate(terms, 1))
+
+
+T_SECTIONS, T_TOC = sections(TERMS), toc(TERMS)
+T_SECTIONS_HE, T_TOC_HE = sections(TERMS_HE, True), toc(TERMS_HE, True)
 
 # The terms at a glance (our summary, not part of Matan's text). Each opens the chapter it comes from.
 FACTS = [
@@ -157,8 +169,10 @@ html[dir=rtl] .top .shade{background:linear-gradient(180deg,rgba(10,9,8,.55) 0%,
 .sh-title{margin:20px 0 0;font-size:clamp(34px,4.2vw,56px);font-weight:400;line-height:1.08;letter-spacing:-.015em}
 .sh-title .grad{font-weight:600}
 .sh-meta{margin:14px 0 0;font-size:14px;color:#8C979F}
-.he-note{display:none;margin:10px 0 0;font-size:14px;color:#9CB1C2}
-html[lang=he] .he-note{display:block}
+html[lang=he] .only-en,html:not([lang=he]) .only-he{display:none!important}
+.only-he.sh-body{font-family:Heebo,"Google Sans",sans-serif}
+html[dir=rtl] .doc-h,html[dir=rtl] .toc a{text-align:right}
+.only-he .ch.doc .ch-in{padding-left:0;padding-right:52px}
 .facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin:40px 64px 0;border-top:1px solid rgba(254,251,241,.08);border-bottom:1px solid rgba(254,251,241,.08)}
 .fact{display:flex;flex-direction:column;align-items:center;gap:6px;padding:24px 14px;text-align:center;text-decoration:none;transition:background .3s}
 .fact+.fact{border-inline-start:1px solid rgba(254,251,241,.08)}
@@ -283,7 +297,7 @@ html[dir=rtl] .sig-rule::after{background:linear-gradient(270deg,#F4AF56,rgba(24
 html[lang=he] .sig-l,html[lang=he] .sig-what{letter-spacing:.06em}
 @media (max-width:600px){.sig-in{padding:22px 20px 18px}.sig .sig-in{padding-inline-end:84px}.sig-seal{width:52px;height:52px;top:18px;inset-inline-end:18px}.sig-seal img{width:28px;height:28px}}
 @media (max-width:760px){
- .toc ol{grid-template-columns:1fr}.toc{padding:18px}.doc-h{grid-template-columns:40px minmax(0,1fr)}.doc-h .ttl{font-size:19px}.ch.doc .ch-in{padding-left:0}
+ .only-he .ch.doc .ch-in{padding-right:0}.toc ol{grid-template-columns:1fr}.toc{padding:18px}.doc-h{grid-template-columns:40px minmax(0,1fr)}.doc-h .ttl{font-size:19px}.ch.doc .ch-in{padding-left:0}
  .modal.modal-terms{padding:10px 10px 0}.modal-terms .modal-sheet{min-height:calc(100svh - 10px)}.sh-bar{padding:14px 16px;flex-direction:column;align-items:stretch;text-align:center;gap:10px}.sh-bar-b{flex-direction:column-reverse}.sh-bar .btn{width:100%;min-height:48px}
  .sh-head{padding:40px 22px 0}.facts{grid-template-columns:repeat(2,minmax(0,1fr));margin:30px 22px 0}
  .fact:nth-child(3){border-inline-start:0}.fact:nth-child(n+3){border-top:1px solid rgba(254,251,241,.08)}
@@ -361,14 +375,19 @@ html .nav .wrap,html.nav-scrolled .nav .wrap{{height:80px;transition:none}}
 <header class="sh-head">
 <div class="sh-brand"><img src="{IMG}{LOGO}" alt=""><p class="kick">MWP Ambassador Program</p></div>
 <h2 class="sh-title" id="terms-h">Terms of <span class="grad">Use.</span></h2>
-<p class="sh-meta" data-no-i18n>{TERMS_DATE} · @Matan Wild</p>
-<p class="he-note" lang="he" dir="rtl" data-no-i18n>התנאים זמינים כרגע באנגלית.</p>
+<p class="sh-meta only-en" data-no-i18n>{TERMS_DATE} · Matan Wild</p>
+<p class="sh-meta only-he" lang="he" dir="rtl" data-no-i18n>{TERMS_DATE_HE} · מתן וויילד</p>
 </header>
 <div class="facts">{FACTS_HTML}</div>
-<div class="sh-body" lang="en" dir="ltr" data-no-i18n>
+<div class="sh-body only-en" lang="en" dir="ltr" data-no-i18n>
 <div class="t-intro"><p>{TERMS_INTRO[0]}</p><p class="agree">{TERMS_INTRO[1]}</p></div>
 <nav class="toc" aria-label="Contents"><p>Contents</p><ol>{T_TOC}</ol></nav>
 {T_SECTIONS}
+</div>
+<div class="sh-body only-he" lang="he" dir="rtl" data-no-i18n>
+<div class="t-intro"><p>{TERMS_INTRO_HE[0]}</p><p class="agree">{TERMS_INTRO_HE[1]}</p></div>
+<nav class="toc" aria-label="תוכן העניינים"><p>תוכן העניינים</p><ol>{T_TOC_HE}</ol></nav>
+{T_SECTIONS_HE}
 </div>
 <div class="sh-bar">
 <p>By accepting, you agree to these terms.</p>

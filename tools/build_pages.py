@@ -560,7 +560,7 @@ page("legal.html", "Terms, licence, refunds and privacy · MWP",
       <p class="meta">Last updated <span data-year>2026</span></p>
     </div>
   </section>
-  <section class="section--tight" data-no-i18n lang="en" dir="ltr">
+  <section class="section--tight">
     <div class="container container--text prose">
       <h2 id="licence">Licence</h2>
       <p>When you buy a product you get a personal, non-transferable licence to use it in your own work and in work you do for clients.</p>
