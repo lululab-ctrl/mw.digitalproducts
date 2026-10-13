@@ -356,6 +356,8 @@ const HE = {
   "To join, read and accept the MWP Ambassador Program Terms of Use. Then you'll fill in your details and get your tools.": "כדי להצטרף, קראו ואשרו את תנאי השימוש של תוכנית השגרירים של MWP. אחר כך תמלאו פרטים ותקבלו את הכלים.",
   "Terms of": "תנאי",
   "Use.": "שימוש.",
+  "The Ambassador Program is full. Thank you for your interest.": "תוכנית השגרירים מלאה. תודה על ההתעניינות.",
+  "Couldn't check the program. Please try again.": "לא הצלחנו לבדוק את התוכנית. נסו שוב.",
   "Please agree to the Ambassador Program terms.": "נא לאשר את תנאי תוכנית השגרירים.",
   "Couldn't save your details. Please try again.": "לא הצלחנו לשמור את הפרטים. נסו שוב.",
   "Couldn't add the tools to your library. Please try again.": "לא הצלחנו להוסיף את הכלים לספרייה. נסו שוב.",

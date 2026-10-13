@@ -180,4 +180,5 @@ export const panelDevices = () => callFunction("license", { action: "devices" },
 export const removePanelDevice = (device_id) => callFunction("license", { action: "remove", device_id }, { auth: true });
 export const sendSupport = (form) => callFunction("support", form);
 export const betaJoin = (form) => callFunction("beta", { action: "join", ...form });
+export const betaStatus = () => callFunction("beta", { action: "status" });
 export const subscribe = (email, source = "free-sampler") => callFunction("subscribe", { email, source });
