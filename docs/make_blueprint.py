@@ -370,6 +370,19 @@ if GMAIL:
          "filter": f("Email the applicant", ("{{1.send_email}}", "text:equal", "yes")),
          "metadata": {"designer": {"x": 0, "y": 0, "name": "Email the applicant"}}})
 
+# ---------------------------------------------------------------- feedback (ambassadors and testers, from My downloads)
+B_FB = 5105987095   # Shop Feedback
+fb_cv = ('{"status":{"label":"New"},"kind":{"label":"{{1.kind}}"},"product":"{{1.product}}","from_role":"{{1.from_role}}",'
+         '"email":{"email":"{{1.email}}","text":"{{1.email}}"},"sent":{"date":"{{1.sent_on}}"},'
+         '"message":{"text":"{{1.message}}"},"setup":"{{1.setup}}"}')
+feedback_route = [
+    gql(140, q_create % B_FB, {"name": "{{1.kind}} · {{1.product}} · {{1.name}}", "group": "topics", "cv": fb_cv}, "New feedback",
+        f("Feedback", ("{{1.type}}", "text:equal", "feedback"))),
+    gql(141, "mutation ($id: ID!, $text: String!) { create_notification(user_id: %d, target_id: $id, text: $text, target_type: Project) { text } }" % MATAN,
+        {"id": "{{140.body.data.create_item.id}}", "text": "{{1.kind}} from {{1.name}} ({{1.from_role}}) about {{1.product}}."},
+        "Tell Matan"),
+]
+
 
 def module(mid, name, mod, version, parameters, mapper, filt=None):
     m = {"id": mid, "module": mod, "version": version, "parameters": parameters, "mapper": mapper,
@@ -398,7 +411,7 @@ blueprint = {
          "metadata": {"designer": {"x": 0, "y": 0}}},
         router(2, [order_route, refund_route, support_route, subscribe_route,
                    product_route, approvals_route, weekly_route, payout_route, ambassador_route, account_route, downloaded_route, ambassador_status_route, terms_pdf_route, tester_route,
-                   application_route, applications_request_route, application_decided_route]),
+                   application_route, applications_request_route, application_decided_route, feedback_route]),
     ],
     "metadata": {"version": 1, "scenario": {"roundtrips": 1, "maxErrors": 3, "autoCommit": True, "sequential": True,
                                             "confidential": False, "dataloss": False, "dlq": True}},

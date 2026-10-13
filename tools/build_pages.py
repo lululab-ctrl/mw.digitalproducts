@@ -354,6 +354,7 @@ a.dl{text-decoration:none}
 .details-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
 .details-grid .field--full{grid-column:1/-1}
 .details-box .input[readonly]{color:#9CB1C2;background:transparent}
+#feedback textarea.input{height:auto;min-height:130px;padding:14px 16px;line-height:1.5;resize:vertical}
 .details-actions{display:flex;align-items:center;flex-wrap:wrap;gap:12px 18px}
 .details-actions .form-status{margin:0}
 @media (max-width:820px){.details-box{padding:22px}.details-grid{grid-template-columns:minmax(0,1fr)}}
@@ -504,6 +505,18 @@ page("account.html", "My downloads · MWP",
           <div><h2 class="h3">Your Ambassador Program terms</h2>
           <p class="meta">The signed copy of the terms you accepted, as a PDF.</p></div>
           <button class="btn btn--ghost btn--sm" type="button" id="terms-dl">Download PDF</button>
+        </section>
+        <section class="details-box" id="feedback" aria-labelledby="fb-h" hidden>
+          <div><h2 class="h3" id="fb-h">Send us feedback</h2>
+          <p class="meta">Found a bug, have an idea, or something to report? It goes straight to our team.</p></div>
+          <form class="form" id="feedback-form" novalidate>
+            <div class="details-grid">
+            <div class="field"><label for="fb-kind">Type</label><select class="input" id="fb-kind" name="kind"><option value="Bug">Bug</option><option value="Recommendation">Recommendation</option><option value="Report">Report</option><option value="Other">Other</option></select></div>
+            <div class="field"><label for="fb-product">About</label><select class="input" id="fb-product" name="product"><option value="MWP Presets">MWP Presets</option><option value="MWP Panel">MWP Panel</option><option value="MWP Field Guides">MWP Field Guides</option><option value="General">General</option></select></div>
+            <div class="field field--full"><label for="fb-message">Your message</label><textarea class="input" id="fb-message" name="message" rows="5" placeholder="What happened, and what did you expect? Steps to reproduce help a lot."></textarea></div>
+            </div>
+            <div class="details-actions"><button class="btn" type="submit">Send feedback</button><p class="form-status" role="status"></p></div>
+          </form>
         </section>
         <section class="details-box" id="details" aria-labelledby="details-h">
           <div><h2 class="h3" id="details-h">My details</h2>
