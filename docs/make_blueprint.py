@@ -236,11 +236,11 @@ q_amb_lookup = """query ($email: String!) {
   a: items_page_by_column_values(board_id: %d, limit: 1, columns: [{column_id: "email_mm8331he", column_values: [$email]}]) { items { id } }
 }""" % B_AMB
 amb_cv = ('{"color_mm8391jm":{"label":"Active"},"email_mm8331he":{"email":"{{1.email}}","text":"{{1.email}}"},'
-          '"text_mm83z0v6":"' + clean("1.instagram") + '",'
+          '"text_mm83z0v6":"{{1.instagram}}",'
           '"date_mm83z07a":{"date":"{{1.agreed_on}}"},"date_mm83mwfv":{"date":"{{1.first_months_end}}"},'
           '"date_mm83s7ad":{"date":"{{1.ends_on}}"},"color_mm835th0":{"label":"Not checked"},'
           '"text_mm831gvm":"{{1.terms_version}}","text_mm837ysb":"{{1.products}}"}')
-amb_update_cv = ('{"text_mm83z0v6":"' + clean("1.instagram") + '","text_mm831gvm":"{{1.terms_version}}",'
+amb_update_cv = ('{"text_mm83z0v6":"{{1.instagram}}","text_mm831gvm":"{{1.terms_version}}",'
                  '"text_mm837ysb":"{{1.products}}"}')
 ambassador_route = [
     gql(60, q_amb_lookup, {"email": "{{1.email}}"}, "Find ambassador",
