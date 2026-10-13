@@ -22,7 +22,7 @@ def navr(lang, btn=""):
     # the choice is remembered (mwp_lang), so the rest of the site follows it
     toggle = ('<div class="lang-toggle" role="group" aria-label="שפה"><a href="./" hreflang="en" lang="en" onclick="try{localStorage.setItem(\'mwp_lang\',\'en\')}catch(e){}">EN</a><span class="on" aria-current="true" lang="he">עב</span></div>'
               if he else
-              '<div class="lang-toggle" role="group" aria-label="Language"><span class="on" aria-current="true">EN</span><a href="he.html" hreflang="he" lang="he" onclick="try{localStorage.setItem(\'mwp_lang\',\'he\')}catch(e){}">עב</a></div>')
+              '<div class="lang-toggle" role="group" aria-label="Language"><span class="on" aria-current="true">EN</span><a href="he/" hreflang="he" lang="he" onclick="try{localStorage.setItem(\'mwp_lang\',\'he\')}catch(e){}">עב</a></div>')
     return (f'<div class="navr">'
             f'<div class="nav-icons">'
             f'<button class="nav-ico" type="button" data-cart aria-label="{t("Cart", "עגלה")}" aria-haspopup="dialog">{CART}<span class="count" hidden>0</span><span class="tip">{t("Cart", "עגלה")}</span></button>'
@@ -95,7 +95,7 @@ for path, lang in PAGES.items():
         s = s.replace("</body>", PRICE_JS + "\n</body>", 1)
     # Follow the site's language: Hebrew visitors get Matan's Hebrew page, and opening a page sets the language.
     s = re.sub(r'<script id="mwp-lang">.*?</script>\n?', '', s, flags=re.S)
-    LANG_JS = ('<script id="mwp-lang">try{if(localStorage.getItem("mwp_lang")==="he")location.replace("he.html"+location.search+location.hash)}catch(e){}</script>'
+    LANG_JS = ('<script id="mwp-lang">try{if(localStorage.getItem("mwp_lang")==="he")location.replace("he/"+location.search+location.hash)}catch(e){}</script>'
                if lang == "en" else
                '<script id="mwp-lang">try{localStorage.setItem("mwp_lang","he")}catch(e){}</script>')
     s = re.sub(r"(<head[^>]*>)", lambda m: m.group(1) + "\n" + LANG_JS, s, count=1)
@@ -108,4 +108,10 @@ for path, lang in PAGES.items():
     if lang == "he":   # every word in Hebrew, names too (tools/he_names.py, tools/sales_he.py)
         s = hebrew(s)
     open(path, "w", encoding="utf-8").write(s)
+    if lang == "he":   # the Hebrew page at a clean address too: /presets/he/ (he.html keeps working)
+        folder = path.split("/")[0]
+        os.makedirs(f"{folder}/he", exist_ok=True)
+        open(f"{folder}/he/index.html", "w", encoding="utf-8").write(
+            re.sub(r"(<head[^>]*>)", lambda m: m.group(1) + f'\n<base href="/{folder}/">', s, count=1)
+            .replace('href="#', f'href="/{folder}/he/#'))   # in-page links stay on this page
     print("unified", path)

@@ -28,7 +28,7 @@ function libraryHTML(items) {
   if (!items.length) {
     return `<div class="glass lib-empty stack">
       <p>Nothing on this email yet.</p>
-      <p class="meta">Bought with a different email? Sign out and use that one, or <a class="link" href="support.html">contact support</a> with your order number.</p>
+      <p class="meta">Bought with a different email? Sign out and use that one, or <a class="link" href="/support/">contact support</a> with your order number.</p>
     </div>`;
   }
   return items.map(({ granted_at, view_only: viewOnly, products: p }, i) => {
@@ -43,7 +43,7 @@ function libraryHTML(items) {
         <div class="chips"><span>Version ${esc(p.version)}</span>${count ? `<span>${esc(count)}</span>` : ""}<span>Added ${shortDate(granted_at)}</span></div>
       </div>
       ${viewOnly
-        ? `<a class="dl" href="read.html">${READ_ICON}<span>Read online</span></a>`
+        ? `<a class="dl" href="/read/">${READ_ICON}<span>Read online</span></a>`
         : `<button class="dl" type="button" data-download="${esc(p.slug)}">${DL_ICON}<span>Download</span></button>`}
     </article>`;
   }).join("");
@@ -233,7 +233,7 @@ async function run(form, fn) {
   } finally { setBusy(btn, false); }
 }
 // After an emailed link, come back to the same place (checkout, for example).
-const backPath = (extra = "") => `/account.html${next ? `?next=${encodeURIComponent(next)}` : ""}${extra}`;
+const backPath = (extra = "") => `/account/${next ? `?next=${encodeURIComponent(next)}` : ""}${extra}`;
 
 document.getElementById("signin-form").addEventListener("submit", (e) => {
   e.preventDefault();

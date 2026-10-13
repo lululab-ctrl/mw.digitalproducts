@@ -23,7 +23,7 @@ def head(title, desc, path, extra=""):
   <title>{title}</title>
   <meta name="description" content="{desc}">
   <meta name="theme-color" content="#0A0908">
-  <link rel="canonical" href="{SITE}/{path}">
+  <link rel="canonical" href="{SITE}/{path[:-5] + "/" if path.endswith(".html") else path}">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="MWP">
   <meta property="og:title" content="{title}">
@@ -49,11 +49,11 @@ HEADER = f"""<body>
 </div>
 <header class="site-header">
   <div class="container">
-    <a class="brand" href="index.html" aria-label="MWP, home">MWP</a>
+    <a class="brand" href="/" aria-label="MWP, home">MWP</a>
     <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Menu"><span></span><span></span></button>
     <nav class="nav" id="site-nav" aria-label="Main">
       <div class="nav__links">
-        <a href="shop.html">All products</a>
+        <a href="/shop/">All products</a>
         <a href="presets/">Presets</a>
         <a href="panel/">Plugin</a>
         <a href="field-guides/">Guides &amp; PDFs</a>
@@ -71,27 +71,27 @@ FOOTER = f"""<footer class="site-footer">
   <div class="container">
     <div class="site-footer__top">
       <div class="stack">
-        <a class="brand" href="index.html">MWP</a>
+        <a class="brand" href="/">MWP</a>
         <p class="muted" style="max-width:34ch">Editing tools and guides from wildlife photographer Matan Wild.</p>
       </div>
       <div>
         <h3>Shop</h3>
         <ul role="list">
-          <li><a href="shop.html">All products</a></li>
+          <li><a href="/shop/">All products</a></li>
           <li><a href="presets/">Presets</a></li>
           <li><a href="panel/">Plugin</a></li>
           <li><a href="field-guides/">Guides &amp; PDFs</a></li>
-          <li><a href="shop.html?cat=bundle">Bundles</a></li>
+          <li><a href="/shop/?cat=bundle">Bundles</a></li>
         </ul>
       </div>
       <div>
         <h3>Help</h3>
         <ul role="list">
-          <li><a href="account.html">My downloads</a></li>
-          <li><a href="support.html">Contact support</a></li>
-          <li><a href="index.html#faq">Questions</a></li>
-          <li><a href="legal.html#refunds">Refunds</a></li>
-          <li><a href="legal.html#licence">Licence</a></li>
+          <li><a href="/account/">My downloads</a></li>
+          <li><a href="/support/">Contact support</a></li>
+          <li><a href="/#faq">Questions</a></li>
+          <li><a href="/legal/#refunds">Refunds</a></li>
+          <li><a href="/legal/#licence">Licence</a></li>
         </ul>
       </div>
       <div>
@@ -105,7 +105,7 @@ FOOTER = f"""<footer class="site-footer">
     </div>
     <div class="site-footer__bottom">
       <p class="meta">© <span data-year>2026</span> Matan Wild Photography</p>
-      <p class="meta pay-note">{ICON['lock']}Payments processed securely by Lemon Squeezy · <a href="legal.html#terms">Terms</a> · <a href="legal.html#privacy">Privacy</a></p>
+      <p class="meta pay-note">{ICON['lock']}Payments processed securely by Lemon Squeezy · <a href="/legal/#terms">Terms</a> · <a href="/legal/#privacy">Privacy</a></p>
     </div>
   </div>
 </footer>"""
@@ -133,6 +133,14 @@ def page(name, title, desc, body, script, extra_head="", announce=True):
 </html>
 """
     open(os.path.join(ROOT, name), "w").write(html)
+    # The same page at a clean address (shop.mw.photography/account/ …). The .html address keeps working
+    # for links already sent. <base href="/"> makes its relative links resolve from the site root.
+    if name not in ("index.html", "404.html"):
+        folder = os.path.join(ROOT, name[:-5])
+        os.makedirs(folder, exist_ok=True)
+        clean = html.replace('<meta charset="utf-8">', '<meta charset="utf-8">\n  <base href="/">', 1)
+        clean = clean.replace('href="#', f'href="/{name[:-5]}/#')   # in-page links stay on this page
+        open(os.path.join(folder, "index.html"), "w").write(clean)
 
 SAMPLER_FORM = """<form class="stack" id="sampler-form" data-source="free-sampler" novalidate>
             <label class="visually-hidden" for="sampler-email">Email address</label>
@@ -162,11 +170,11 @@ page("index.html",
           <button class="btn btn--sm btn--dark" type="submit">Search</button>
         </form>
         <div class="quick-cats" aria-label="Popular searches">
-          <a class="chip" href="shop.html?q=snow">Snow</a>
-          <a class="chip" href="shop.html?q=forest">Forest light</a>
-          <a class="chip" href="shop.html?q=birds">Birds</a>
-          <a class="chip" href="shop.html?q=safari">Safari</a>
-          <a class="chip" href="shop.html?q=black%20and%20white">Black and white</a>
+          <a class="chip" href="/shop/?q=snow">Snow</a>
+          <a class="chip" href="/shop/?q=forest">Forest light</a>
+          <a class="chip" href="/shop/?q=birds">Birds</a>
+          <a class="chip" href="/shop/?q=safari">Safari</a>
+          <a class="chip" href="/shop/?q=black%20and%20white">Black and white</a>
         </div>
       </div>
     </div>
@@ -183,7 +191,7 @@ page("index.html",
     <div class="container">
       <div class="section-head">
         <div><h2 class="h2" id="featured-title">New and featured</h2></div>
-        <a class="btn btn--ghost btn--sm" href="shop.html">View all products</a>
+        <a class="btn btn--ghost btn--sm" href="/shop/">View all products</a>
       </div>
       <div class="grid grid--3" id="featured-grid" aria-live="polite"></div>
     </div>
@@ -229,10 +237,10 @@ page("index.html",
       <h2 class="h2" id="faq-title" style="margin-bottom:var(--s-5)">Questions</h2>
       <div class="faq">
         <details><summary>Which programs do the products work with?</summary><div>Every product page lists what it works with under "Works with". Presets work in Lightroom Classic, Lightroom and Photoshop's Camera Raw; the plugin and the guides state their own requirements.</div></details>
-        <details><summary>How do I get my files after paying?</summary><div>You get an email straight away. Open <a class="link" href="account.html">My downloads</a>, enter the email you paid with, and click the sign-in link we send. Everything you bought is there.</div></details>
+        <details><summary>How do I get my files after paying?</summary><div>You get an email straight away. Open <a class="link" href="/account/">My downloads</a>, enter the email you paid with, and click the sign-in link we send. Everything you bought is there.</div></details>
         <details><summary>Can I download again later?</summary><div>Yes. Sign in to My downloads any time, including for future updates to products you own.</div></details>
         <details><summary>Do I need an account?</summary><div>No password to create. Your purchases are tied to your email, and you sign in with a one-time link.</div></details>
-        <details><summary>What if something doesn't work for me?</summary><div>Write to <a class="link" href="support.html">support</a> and we'll help. Our <a class="link" href="legal.html#refunds">refund policy</a> has the details.</div></details>
+        <details><summary>What if something doesn't work for me?</summary><div>Write to <a class="link" href="/support/">support</a> and we'll help. Our <a class="link" href="/legal/#refunds">refund policy</a> has the details.</div></details>
       </div>
     </div>
   </section>""", "home.js")
@@ -270,7 +278,7 @@ page("shop.html", "All products · MWP",
 
 page("product.html", "MWP",
  "A digital product by Matan Wild for Lightroom and Photoshop.",
- """  <div class="container"><nav class="crumbs" id="crumbs" aria-label="Breadcrumb"><a href="shop.html">Shop</a></nav></div>
+ """  <div class="container"><nav class="crumbs" id="crumbs" aria-label="Breadcrumb"><a href="/shop/">Shop</a></nav></div>
   <section class="section--tight" style="padding-top:var(--s-5)">
     <div class="container" id="product-root" aria-live="polite">
       <div class="product-layout" aria-hidden="true">
@@ -478,7 +486,7 @@ page("account.html", "My downloads · MWP",
           <p class="meta">The signed copy of the terms you accepted, as a PDF.</p></div>
           <button class="btn btn--ghost btn--sm" type="button" id="terms-dl">Download PDF</button>
         </section>
-        <p class="acct-note">Download links are created when you click and expire after 5 minutes. Trouble? <a class="link" href="support.html?topic=download">Contact support</a>.</p>
+        <p class="acct-note">Download links are created when you click and expire after 5 minutes. Trouble? <a class="link" href="/support/?topic=download">Contact support</a>.</p>
       </div>
     </div>
   </section>""", "account.js", extra_head='\n  <meta name="robots" content="noindex">' + ACCOUNT_CSS)
@@ -535,7 +543,7 @@ page("testers.html", "Testers · MWP",
           <div><h2 class="h3">MWP Panel</h2>
           <p class="meta">In Photoshop, open MWP Panel and sign in with this email. It works on up to 2 computers.</p></div>
         </div>
-        <p class="acct-note">Your copies are made for you and carry your name. Please don't share them. Download links work for 5 minutes. Trouble? <a class="link" href="support.html">Contact support</a>.</p>
+        <p class="acct-note">Your copies are made for you and carry your name. Please don't share them. Download links work for 5 minutes. Trouble? <a class="link" href="/support/">Contact support</a>.</p>
       </div>
     </div>
   </section>""", "testers.js", extra_head='\n  <meta name="robots" content="noindex">' + ACCOUNT_CSS + "<style>.t-hi{margin:0;font-size:18px;color:#CDD7DD}</style>")
@@ -582,8 +590,8 @@ page("thank-you.html", "Thank you · MWP", "Your order is confirmed.",
         <p class="lead">Your files are ready in My downloads. We've also emailed you a link<span id="sent-to-wrap" hidden> at <b id="sent-to"></b></span>.</p>
       </div>
       <div class="row">
-        <a class="btn" id="to-downloads" href="account.html">Go to my downloads</a>
-        <a class="btn btn--ghost" href="index.html#faq">Installation help</a>
+        <a class="btn" id="to-downloads" href="/account/">Go to my downloads</a>
+        <a class="btn btn--ghost" href="/#faq">Installation help</a>
       </div>
       <ol class="steps">
         <li class="step"><span class="step__num">1</span><p class="step__title">Sign in</p><p class="muted">With the email you paid with.</p></li>
@@ -613,7 +621,7 @@ page("legal.html", "Terms, licence, refunds and privacy · MWP",
       <p>Sample photographs in our products and on this site remain the property of Matan Wild Photography and may not be used without written permission.</p>
 
       <h2 id="refunds">Refunds</h2>
-      <p>Our products are digital files delivered instantly. If a product doesn't work for you, write to <a href="support.html?topic=refund">support</a> within 14 days of purchase. We'll help you get it working, and if we can't, we'll refund you. Refunded orders lose access to the files.</p>
+      <p>Our products are digital files delivered instantly. If a product doesn't work for you, write to <a href="/support/?topic=refund">support</a> within 14 days of purchase. We'll help you get it working, and if we can't, we'll refund you. Refunded orders lose access to the files.</p>
 
       <h2 id="terms">Terms of sale</h2>
       <p>Orders are processed by our online reseller, Lemon Squeezy, which is the merchant of record and handles payment, invoicing and sales tax. Prices are shown in the currency listed on each product page. You'll receive a receipt by email after every purchase.</p>
@@ -633,7 +641,7 @@ page("404.html", "Page not found · MWP", "This page doesn't exist.",
         <h1 class="display">This page doesn't exist.</h1>
         <p class="lead">The link may be old or mistyped. Everything in the shop is one click away.</p>
       </div>
-      <div class="row"><a class="btn" href="shop.html">Browse all products</a><a class="btn btn--ghost" href="index.html">Home</a></div>
+      <div class="row"><a class="btn" href="/shop/">Browse all products</a><a class="btn btn--ghost" href="/">Home</a></div>
     </div>
   </section>""", "static.js")
 print("pages written")

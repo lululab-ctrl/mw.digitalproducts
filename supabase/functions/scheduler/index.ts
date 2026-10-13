@@ -88,7 +88,7 @@ async function product(db: Db, id: string) {
     variant_id: p.checkout_variant_id ?? "",
     is_active: p.is_active,
     status_label: p.is_active ? "Live" : "Awaiting approval",
-    shop_url: `${SITE}/product.html?p=${encodeURIComponent(p.slug)}`,
+    shop_url: `${SITE}/product/?p=${encodeURIComponent(p.slug)}`,
   });
   return { ok: true };
 }

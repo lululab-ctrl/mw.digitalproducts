@@ -15,5 +15,5 @@ export async function ambassadorLanding() {
   const user = await currentUser().catch(() => null);
   if (!user) return;
   const { data } = await supabase.from("entitlements").select("id").eq("view_only", true).is("revoked_at", null).limit(1);
-  if (data && data.length) location.replace("/account.html");
+  if (data && data.length) location.replace("/account/");
 }

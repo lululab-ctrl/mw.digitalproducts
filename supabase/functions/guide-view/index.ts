@@ -1,5 +1,5 @@
 // ============================================================================
-// guide-view — the Field Guides, to read online (shop.mw.photography/read.html).
+// guide-view — the Field Guides, to read online (shop.mw.photography/read/).
 // Ambassadors can only read the guides this way (their copy can't be downloaded);
 // buyers can read online too. Called with the reader's Supabase session token.
 // Returns each guide's pages as 10-minute private links, and the line the reader

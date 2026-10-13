@@ -101,7 +101,7 @@ export async function currentUser() {
   return data.user ?? null;
 }
 
-export async function sendMagicLink(email, redirectPath = "/account.html") {
+export async function sendMagicLink(email, redirectPath = "/account/") {
   const { error } = await requireClient().auth.signInWithOtp({
     email: email.trim().toLowerCase(),
     options: { emailRedirectTo: `${CONFIG.SITE_URL}${redirectPath}`, shouldCreateUser: true },
@@ -120,7 +120,7 @@ export async function signInWithPassword(email, password) {
 }
 
 /** Creates the account. Returns "signed-in", "confirm" (check your inbox) or "exists" (email already has an account). */
-export async function signUpWithPassword(email, password, { name = "", redirectPath = "/account.html" } = {}) {
+export async function signUpWithPassword(email, password, { name = "", redirectPath = "/account/" } = {}) {
   const { data, error } = await requireClient().auth.signUp({
     email: email.trim().toLowerCase(), password,
     options: { emailRedirectTo: back(redirectPath), data: name ? { name } : {} },
@@ -134,7 +134,7 @@ export async function signUpWithPassword(email, password, { name = "", redirectP
   return "confirm";
 }
 
-export async function sendPasswordReset(email, redirectPath = "/account.html?reset=1") {
+export async function sendPasswordReset(email, redirectPath = "/account/?reset=1") {
   const { error } = await requireClient().auth.resetPasswordForEmail(email.trim().toLowerCase(), { redirectTo: back(redirectPath) });
   if (error) throw new ApiError(error.message, error.status);
 }
