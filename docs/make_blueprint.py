@@ -260,6 +260,30 @@ ambassador_route = [
     ]),
 ]
 
+# ---------------------------------------------------------------- account (new confirmed account → Shop Customers)
+q_cust_by_email = """query ($email: String!) {
+  cust: items_page_by_column_values(board_id: %d, limit: 1, columns: [{column_id: "email_mm80mvf8", column_values: [$email]}]) { items { id } }
+}""" % B_CUS
+account_cv = ('{"email_mm80mvf8":{"email":"{{1.email}}","text":"{{1.email}}"},"color_mm801rf2":{"label":"Not subscribed"},'
+              '"dropdown_mm80egg7":{"labels":["{{1.source}}"]},"long_text_mm80s2st":{"text":"Account created {{1.joined_on}}"}}')
+account_route = [
+    gql(70, q_cust_by_email, {"email": "{{1.email}}"}, "Find customer", f("Account", ("{{1.type}}", "text:equal", "account"))),
+    gql(72, """mutation ($name: String!, $cv: JSON!) {
+  c: create_item(board_id: %d, group_id: "topics", item_name: $name, column_values: $cv, create_labels_if_missing: true) { id }
+}""" % B_CUS, {"name": "{{1.name}}", "cv": account_cv}, "New customer (account)",
+        f("Not on the board yet", ("{{70.body.data.cust.items[1].id}}", "notexist", None))),
+]
+
+# ---------------------------------------------------------------- downloaded (first download → order Delivery)
+downloaded_route = [
+    gql(80, """query ($id: String!) {
+  o: items_page_by_column_values(board_id: %d, limit: 1, columns: [{column_id: "text_mm806h06", column_values: [$id]}]) { items { id } }
+}""" % B_ORD, {"id": "{{1.checkout_order_id}}"}, "Find order", f("Downloaded", ("{{1.type}}", "text:equal", "downloaded"))),
+    gql(81, "mutation ($id: ID!, $cv: JSON!) { change_multiple_column_values(board_id: %d, item_id: $id, column_values: $cv) { id } }" % B_ORD,
+        {"id": "{{80.body.data.o.items[1].id}}", "cv": '{"color_mm80ztk6":{"label":"Downloaded"}}'}, "Delivery: Downloaded",
+        f("Order found", ("{{80.body.data.o.items[1].id}}", "exist", None))),
+]
+
 blueprint = {
     "name": "MWP Shop · Events to monday (orders, products, support, reports)",
     "flow": [
@@ -267,7 +291,7 @@ blueprint = {
          "parameters": {"hook": HOOK, "maxResults": 1}, "mapper": {},
          "metadata": {"designer": {"x": 0, "y": 0}}},
         router(2, [order_route, refund_route, support_route, subscribe_route,
-                   product_route, approvals_route, weekly_route, payout_route, ambassador_route]),
+                   product_route, approvals_route, weekly_route, payout_route, ambassador_route, account_route, downloaded_route]),
     ],
     "metadata": {"version": 1, "scenario": {"roundtrips": 1, "maxErrors": 3, "autoCommit": True, "sequential": True,
                                             "confidential": False, "dataloss": False, "dlq": True}},

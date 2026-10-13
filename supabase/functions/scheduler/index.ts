@@ -12,6 +12,8 @@
 //                        products go live in the shop, Retired ones come down
 //   weekly_summary     → last 7 days of sales for Shop Reports
 //   month_close        → last month's totals for Shop Payouts, one per currency
+//   account {user_id}  → a newly confirmed account goes to Shop Customers
+//   downloaded {entitlement_id} → first download of a bought product: order Delivery = Downloaded
 // ============================================================================
 import { admin, notifyMake, plain } from "../_shared/http.ts";
 
@@ -51,6 +53,8 @@ Deno.serve(async (req) => {
       case "approvals": return reply(await approvals(db));
       case "weekly_summary": return reply(await weeklySummary(db));
       case "month_close": return reply(await monthClose(db));
+      case "account": return reply(await account(db, String(body.user_id ?? "")));
+      case "downloaded": return reply(await downloaded(db, String(body.entitlement_id ?? "")));
       default: return reply({ error: `unknown job ${job}` }, 400);
     }
   } catch (err) {
@@ -238,4 +242,40 @@ async function monthClose(db: Db) {
     });
   }
   return { ok: true, orders: orders.length, currencies: byCurrency.size };
+}
+
+// ---------------------------------------------------------------- new account → Shop Customers
+async function account(db: ReturnType<typeof admin>, userId: string) {
+  if (!userId) return { skipped: "no user" };
+  const { data, error } = await db.auth.admin.getUserById(userId);
+  const user = data?.user;
+  if (error || !user?.email) return { skipped: "unknown user" };
+  const email = user.email.toLowerCase();
+  const { data: customer } = await db.from("customers").select("name, beta_members(id)").eq("email", email).maybeSingle();
+  const ambassador = Boolean(customer && (Array.isArray(customer.beta_members) ? customer.beta_members.length : customer.beta_members));
+  const name = String(customer?.name || user.user_metadata?.name || "").trim();
+  await notifyMake("MAKE_WEBHOOK_URL", {
+    type: "account", email, name: name || email,
+    source: ambassador ? "Ambassador program" : "Account",
+    joined_on: day(new Date(user.email_confirmed_at ?? user.created_at)),
+  });
+  return { ok: true };
+}
+
+// ---------------------------------------------------------------- first download → order Delivery
+async function downloaded(db: ReturnType<typeof admin>, entitlementId: string) {
+  if (!entitlementId) return { skipped: "no entitlement" };
+  const { data: ent } = await db.from("entitlements").select("customer_id, product_id").eq("id", entitlementId).maybeSingle();
+  if (!ent) return { skipped: "unknown entitlement" };
+  // The paid order this product came from (a bundle counts too). Free access (ambassadors) has none.
+  const { data: rows } = await db.from("orders")
+    .select("checkout_order_id, created_at, order_items!inner(product_id)")
+    .eq("customer_id", ent.customer_id).eq("status", "paid")
+    .order("created_at", { ascending: false }).limit(20);
+  // Bundles list the bundle, not each product in it: then it's their latest paid order.
+  const match = (rows ?? []).find((o: any) => (o.order_items ?? []).some((i: any) => i.product_id === ent.product_id))
+    ?? (rows ?? [])[0];
+  if (!match) return { skipped: "no paid order" };
+  await notifyMake("MAKE_WEBHOOK_URL", { type: "downloaded", checkout_order_id: match.checkout_order_id });
+  return { ok: true };
 }
