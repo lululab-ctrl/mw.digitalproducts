@@ -148,7 +148,13 @@ function toggleFull() {
   if (!req) { setFull(true); return; }   // iPhone: no real full screen for pages, so fill the window instead
   try {
     const r = req.call(v);               // fullscreenchange then turns the full-screen layout on
-    if (r && r.catch) r.catch(() => setFull(true));
+    if (r && r.then) {
+      // Refused: fill the window instead. Some browsers (in-app and embedded ones) never answer at all,
+      // so after a second without full screen, fill the window too.
+      let answered = false;
+      r.then(() => { answered = true; }, () => { answered = true; setFull(true); });
+      setTimeout(() => { if (!answered && !document.fullscreenElement && !isFull()) setFull(true); }, 1000);
+    }
   } catch { setFull(true); }
 }
 const isFull = () => Boolean(viewer()?.classList.contains("fs"));
