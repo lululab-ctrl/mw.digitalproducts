@@ -4,7 +4,9 @@
 import { initI18n } from "../i18n.js";
 import { initCart } from "../lib/cart.js";
 import { betaJoin, betaStatus, sendMagicLink, signedTerms, signUpWithPassword } from "../lib/api.js";
+import { ambassadorLanding } from "../lib/landing.js";
 
+ambassadorLanding();   // already an ambassador and signed in: straight to My downloads
 initI18n();
 initCart();
 
