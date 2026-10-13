@@ -41,6 +41,7 @@
       <button type="button" data-tab="products">Products</button>
       <button type="button" data-tab="orders">Orders</button>
       <button type="button" data-tab="customers">Customers</button>
+      <button type="button" data-tab="ambassadors">Ambassadors</button>
       <button type="button" data-tab="support">Support <span class="pill" id="open-tickets" hidden></span></button>
     </nav>
     <div class="admin-side__foot">
@@ -201,6 +202,19 @@
         </div>
       </header>
       <div class="table-wrap"><table class="table" id="customers-table"></table></div>
+    </section>
+
+    <!-- Ambassadors -->
+    <section data-panel="ambassadors" hidden>
+      <header class="admin-head">
+        <h1 class="h3">Ambassadors <span class="meta" id="amb-count"></span></h1>
+        <div class="row">
+          <input class="input input--sm" type="search" id="amb-search" placeholder="Search email, name or Instagram">
+          <button class="btn btn--sm btn--ghost" id="amb-csv" type="button">Export CSV</button>
+        </div>
+      </header>
+      <p class="meta amb-help">End: they keep their licence for life (terms, section 7). End (breach): their free access is removed; anything they bought stays. Either way, monday's Shop Ambassadors board updates automatically.</p>
+      <div class="table-wrap"><table class="table" id="amb-table"></table></div>
     </section>
 
     <!-- Support -->

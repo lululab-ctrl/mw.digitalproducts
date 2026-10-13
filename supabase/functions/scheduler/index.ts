@@ -14,6 +14,7 @@
 //   month_close        → last month's totals for Shop Payouts, one per currency
 //   account {user_id}  → a newly confirmed account goes to Shop Customers
 //   downloaded {entitlement_id} → first download of a bought product: order Delivery = Downloaded
+//   ambassador_status {member_id} → an ambassadorship ended in the admin: Shop Ambassadors status
 // ============================================================================
 import { admin, notifyMake, plain } from "../_shared/http.ts";
 
@@ -55,6 +56,7 @@ Deno.serve(async (req) => {
       case "month_close": return reply(await monthClose(db));
       case "account": return reply(await account(db, String(body.user_id ?? "")));
       case "downloaded": return reply(await downloaded(db, String(body.entitlement_id ?? "")));
+      case "ambassador_status": return reply(await ambassadorStatus(db, String(body.member_id ?? "")));
       default: return reply({ error: `unknown job ${job}` }, 400);
     }
   } catch (err) {
@@ -277,5 +279,20 @@ async function downloaded(db: ReturnType<typeof admin>, entitlementId: string) {
     ?? (rows ?? [])[0];
   if (!match) return { skipped: "no paid order" };
   await notifyMake("MAKE_WEBHOOK_URL", { type: "downloaded", checkout_order_id: match.checkout_order_id });
+  return { ok: true };
+}
+
+// ---------------------------------------------------------------- ambassador ended → Shop Ambassadors
+const AMBASSADOR_LABEL: Record<string, string> = { active: "Active", ended: "Ended", ended_breach: "Ended, breach" };
+async function ambassadorStatus(db: ReturnType<typeof admin>, memberId: string) {
+  if (!memberId) return { skipped: "no member" };
+  const { data: m } = await db.from("beta_members").select("status, ended_at, customers(email)").eq("id", memberId).maybeSingle();
+  const email = (m?.customers as any)?.email;
+  if (!m || !email) return { skipped: "unknown member" };
+  await notifyMake("MAKE_WEBHOOK_URL", {
+    type: "ambassador_status", email,
+    status_label: AMBASSADOR_LABEL[m.status] ?? "Active",
+    ended_on: m.ended_at ? day(new Date(m.ended_at)) : "",
+  });
   return { ok: true };
 }

@@ -64,7 +64,7 @@ supabase?.auth.onAuthStateChange((event, session) => {
 $("#admin-signout").addEventListener("click", async () => { await supabase.auth.signOut(); location.reload(); });
 
 // ---------------------------------------------------------------- navigation
-const loaders = { overview: loadOverview, products: loadProducts, orders: loadOrders, customers: loadCustomers, support: loadTickets };
+const loaders = { overview: loadOverview, products: loadProducts, orders: loadOrders, customers: loadCustomers, ambassadors: loadAmbassadors, support: loadTickets };
 
 function show(tab) {
   $$("[data-panel]").forEach((p) => { p.hidden = p.dataset.panel !== tab; });
@@ -529,6 +529,51 @@ async function loadCustomers() {
 }
 $("#customers-search").addEventListener("input", debounce(loadCustomers));
 $("#customers-csv").addEventListener("click", () => downloadCsv("customers", customerCols, customerRows));
+
+// ---------------------------------------------------------------- ambassadors
+const AMB_STATUS = { active: "Active", ended: "Ended", ended_breach: "Ended, breach" };
+const ambCols = [
+  { label: "Name", value: (r) => r.customers?.name || "" },
+  { label: "Email", value: (r) => r.customers?.email || "" },
+  { label: "Instagram", value: (r) => (r.instagram ? "@" + r.instagram : "") },
+  { label: "Joined", value: (r) => shortDate(r.agreed_at) },
+  { label: "Status", value: (r) => AMB_STATUS[r.status] || r.status,
+    html: (r) => `<span class="status status--amb-${esc(r.status)}">${esc(AMB_STATUS[r.status] || r.status)}</span>${r.ended_at ? ` <span class="meta">${esc(shortDate(r.ended_at))}</span>` : ""}` },
+  { label: "", value: () => "",
+    html: (r) => r.status === "active"
+      ? `<div class="row amb-acts"><button class="btn btn--sm btn--ghost" type="button" data-end="${esc(r.id)}">End</button><button class="btn btn--sm btn--ghost amb-breach" type="button" data-end="${esc(r.id)}" data-breach>End (breach)</button></div>`
+      : "" },
+];
+let ambRows = [];
+async function loadAmbassadors() {
+  const term = $("#amb-search").value.trim().toLowerCase();
+  const { data, error } = await supabase.from("beta_members")
+    .select("id, instagram, agreed_at, status, ended_at, terms_version, customers(email, name)")
+    .order("agreed_at", { ascending: false }).limit(500);
+  check(error);
+  ambRows = term ? data.filter((r) => [r.customers?.email, r.customers?.name, r.instagram].some((v) => (v || "").toLowerCase().includes(term))) : data;
+  const active = data.filter((r) => r.status === "active").length;
+  $("#amb-count").textContent = `${active} active · ${data.length} of 26 places used`;
+  $("#amb-table").innerHTML = tableHTML(ambCols, ambRows);
+}
+$("#amb-search").addEventListener("input", debounce(loadAmbassadors));
+$("#amb-csv").addEventListener("click", () => downloadCsv("ambassadors", ambCols.filter((c) => c.label), ambRows));
+$("#amb-table").addEventListener("click", async (e) => {
+  const btn = e.target.closest("[data-end]");
+  if (!btn) return;
+  const breach = btn.hasAttribute("data-breach");
+  const row = ambRows.find((r) => r.id === btn.dataset.end);
+  const who = row?.customers?.name || row?.customers?.email || "this ambassador";
+  const ok = window.confirm(breach
+    ? `End ${who}'s ambassadorship for a breach of the terms?\n\nTheir free access to the tools is removed now. Anything they bought stays. monday will be updated.`
+    : `End ${who}'s ambassadorship?\n\nThey keep their licence for life, as the terms say. monday will be updated.`);
+  if (!ok) return;
+  setBusy(btn, true);
+  const { error } = await supabase.rpc("end_ambassador", { p_member: btn.dataset.end, p_breach: breach });
+  if (error) { toast(error.message, { type: "error", timeout: 7000 }); setBusy(btn, false); return; }
+  toast(breach ? "Ended for breach. Their free access is removed and monday is updated." : "Ended. They keep their licence, and monday is updated.");
+  loadAmbassadors();
+});
 
 // ---------------------------------------------------------------- support
 let ticketFilter = "open";
