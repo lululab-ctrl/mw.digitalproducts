@@ -99,17 +99,60 @@ TERMS = [
 ]
 
 
-def terms_block(kind, body):
+import re as _re
+
+# Small line icons for the eight chapters, in order.
+T_ICONS = [
+    '<path d="M12 3l7 3v5c0 4.4-3 8.3-7 9.5C8 19.3 5 15.4 5 11V6z"/><path d="M9 12l2 2 4-4"/>',            # licence
+    '<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>',                              # create
+    '<path d="M9 4 7 20M17 4l-2 16M4 9h16M3 15h16"/>',                                                     # tags
+    '<rect x="3.5" y="4.5" width="17" height="15" rx="2.5"/><path d="m4 16 5-5 4 4 3-3 4 4"/><circle cx="15.5" cy="9" r="1.4"/>',  # content
+    '<path d="M4 5h16v10H9l-5 4z"/><path d="M8 9h8M8 12h5"/>',                                             # feedback
+    '<circle cx="12" cy="12" r="8.5"/><path d="m6 6 12 12"/>',                                            # not allowed
+    '<rect x="4" y="5" width="16" height="15" rx="2.5"/><path d="M4 10h16M9 3v4M15 3v4"/>',                # duration
+    '<path d="M12 4v16M5 8h14M7 8l-3 7h6zM17 8l-3 7h6z"/>',                                                # general
+]
+SVG = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{}</svg>'
+TICK = '<svg class="mk" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>'
+CROSS = '<svg class="mk" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>'
+COPY = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></svg>'
+
+
+def chips(html):
+    """The handle and hashtags become tap-to-copy chips (the words themselves stay exactly as written)."""
+    return _re.sub(r"(@mw_phototours|#mwppanel|#mwppresets|#jointhewildsideofphotography)",
+                   lambda m: f'<button type="button" class="cp" data-copy="{m.group(1)}" title="Copy">{m.group(1)}{COPY}</button>', html)
+
+
+def terms_block(kind, body, chapter):
     if kind == "ul":
-        return "<ul>" + "".join(f"<li>{i}</li>" for i in body) + "</ul>"
-    return f"<p>{body}</p>"
+        cls, mark = {2: ("ok", TICK), 6: ("no", CROSS)}.get(chapter, ("", ""))
+        return f'<ul class="{cls}">' + "".join(f"<li>{mark}<span>{chips(i)}</span></li>" for i in body) + "</ul>"
+    return f"<p>{chips(body)}</p>"
 
 
-TERMS_HTML = (
-    f'<p class="t-by">{TERMS_DATE} · Matan Wild</p>'
-    + '<div class="t-intro">' + "".join(f"<p>{t}</p>" for t in TERMS_INTRO) + "</div>"
-    + "".join(f'<section><span class="n">{i}.</span><div><h3>{title}</h3>{"".join(terms_block(*b) for b in blocks)}</div></section>'
-              for i, (title, blocks) in enumerate(TERMS, 1)))
+T_NAV = "".join(
+    f'<a href="#t{i}" data-t="{i}"><span class="dot"><b>{i}</b>{TICK}</span><span class="tt">{title}</span></a>'
+    for i, (title, _) in enumerate(TERMS, 1))
+
+T_SECTIONS = "".join(
+    f'<article class="t-sec" id="t{i}" data-t="{i}"><header><span class="ic">{SVG.format(T_ICONS[i - 1])}</span>'
+    f'<span class="num">{i:02d}</span><h3>{title}</h3></header>'
+    f'<div class="tb">{"".join(terms_block(k, body, i) for k, body in blocks)}</div></article>'
+    for i, (title, blocks) in enumerate(TERMS, 1))
+
+# The terms at a glance: each fact jumps to the chapter it comes from.
+FACTS = [
+    ("Lifetime", "licence, with every future update", 1),
+    ("2", "devices, for you only", 1),
+    ("3 + 1", "posts and a reel a month, first 3 months", 2),
+    ("1", "story a week, first 3 months", 2),
+    ("100%", "your copyright, always", 4),
+    ("12", "months, renewable", 7),
+]
+FACTS_HTML = "".join(
+    f'<a class="fact reveal" style="--d:{n * .05:.2f}s" href="#t{t}"><b>{v}</b><span>{label}</span></a>'
+    for n, (v, label, t) in enumerate(FACTS))
 
 
 CSS = """
@@ -192,23 +235,95 @@ html[dir=rtl] .input[dir=ltr]{text-align:right}
 .done h3{margin:22px 0 0;font-size:30px;font-weight:400;letter-spacing:-.02em}
 .done p{margin:14px auto 0;max-width:420px;font-size:16px;line-height:1.6;color:#CDD7DD}
 .done .btn{margin-top:26px;width:auto}
-.terms-box{margin-top:48px;border-radius:26px;background:linear-gradient(180deg,rgba(254,251,241,.05),rgba(254,251,241,.015));border:1px solid rgba(254,251,241,.1);box-shadow:0 40px 80px -50px rgba(0,0,0,.9);overflow:hidden}
-.terms-scroll{max-height:560px;overflow:auto;padding:36px 40px 20px;scrollbar-width:thin;scrollbar-color:rgba(244,175,86,.45) transparent;-webkit-mask-image:linear-gradient(180deg,#000 92%,transparent);mask-image:linear-gradient(180deg,#000 92%,transparent)}
-.terms-scroll:focus-visible{outline:2px solid rgba(244,175,86,.6);outline-offset:-4px}
+.facts{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;margin-top:44px}
+.fact{display:flex;flex-direction:column;gap:6px;padding:20px 18px;border-radius:20px;text-decoration:none;background:linear-gradient(180deg,rgba(254,251,241,.06),rgba(254,251,241,.015));border:1px solid rgba(254,251,241,.09);transition:transform .45s cubic-bezier(.2,.8,.2,1),border-color .3s,background .3s}
+.fact:hover{transform:translateY(-4px);border-color:rgba(244,175,86,.45);background:linear-gradient(180deg,rgba(244,175,86,.1),rgba(254,251,241,.02))}
+.fact b{font-size:28px;font-weight:500;letter-spacing:-.02em;background:linear-gradient(90deg,#E4AA7C,#F4AF56 55%,#F8D29C);-webkit-background-clip:text;background-clip:text;color:transparent}
+.fact span{font-size:13px;line-height:1.45;color:#9CB1C2}
+.t-layout{display:grid;grid-template-columns:250px minmax(0,1fr);gap:56px;align-items:start;margin-top:64px}
+.t-nav{position:sticky;top:100px;display:flex;flex-direction:column;gap:4px}
+.t-nav .prog{margin:0 0 14px;font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#9CB1C2}
+.t-nav .bar{height:3px;border-radius:3px;background:rgba(254,251,241,.08);overflow:hidden;margin:-4px 0 18px}
+.t-nav .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#E4AA7C,#F4AF56);box-shadow:0 0 12px rgba(244,175,86,.6);transition:width .6s cubic-bezier(.2,.8,.2,1)}
+.t-nav a{display:flex;align-items:center;gap:12px;padding:9px 12px;border-radius:12px;font-size:14px;line-height:1.35;color:#7E8A93;text-decoration:none;transition:color .25s,background .25s}
+.t-nav a:hover{color:#FEFBF1;background:rgba(254,251,241,.04)}
+.t-nav a.on{color:#FEFBF1;background:rgba(244,175,86,.08)}
+.t-nav .dot{position:relative;flex:none;display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;border:1px solid rgba(254,251,241,.16);font-size:11.5px;font-weight:700;color:inherit;transition:all .35s}
+.t-nav .dot .mk{position:absolute;opacity:0;transform:scale(.4);transition:all .35s cubic-bezier(.2,.8,.2,1)}
+.t-nav a.on .dot{border-color:#F4AF56;color:#F4AF56}
+.t-nav a.read .dot{background:linear-gradient(135deg,#E4AA7C,#F4AF56);border-color:transparent;color:#0A0908}
+.t-nav a.read .dot b{opacity:0}
+.t-nav a.read .dot .mk{opacity:1;transform:none}
+.t-nav .go{margin-top:18px;align-self:flex-start}
+.t-nav a.btn{min-height:48px;padding:0 26px;border-radius:64px;color:#0A0908;font-size:15px;font-weight:700;background:linear-gradient(90deg,#E4AA7C,#F4AF56)}
+.t-nav a.btn:hover{color:#0A0908;background:linear-gradient(90deg,#E4AA7C,#F4AF56)}
+.t-doc{min-width:0}
 .t-by{margin:0;font-size:13px;color:#7E8A93;letter-spacing:.04em}
-.t-intro p{margin:14px 0 0;font-size:16.5px;line-height:1.7;color:#CDD7DD}
-.t-intro p+p{color:#F4AF56;font-weight:600}
-.terms-box section{display:grid;grid-template-columns:44px minmax(0,1fr);gap:6px;padding:28px 0;border-top:1px solid rgba(254,251,241,.08);margin-top:24px}
-.terms-box section+section{margin-top:0}
-.terms-box .n{font-size:15px;font-weight:700;color:#F4AF56;font-variant-numeric:tabular-nums;padding-top:2px}
-.terms-box h3{margin:0;font-size:20px;font-weight:500;letter-spacing:-.01em}
-.terms-box section p{margin:12px 0 0;font-size:15.5px;line-height:1.7;color:#AEB9C1}
-.terms-box strong{color:#FEFBF1;font-weight:600}
-.terms-box a{color:#F4AF56}
-.terms-box ul{list-style:none;margin:14px 0 0;padding:0;display:flex;flex-direction:column;gap:9px}
-.terms-box li{position:relative;padding-left:20px;font-size:15.5px;line-height:1.6;color:#CDD7DD}
-.terms-box li::before{content:"";position:absolute;left:2px;top:.62em;width:6px;height:6px;border-radius:50%;background:#F4AF56;box-shadow:0 0 10px rgba(244,175,86,.5)}
-.terms-foot{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 40px;border-top:1px solid rgba(254,251,241,.08);font-size:14px;color:#9CB1C2}
+.t-intro{position:relative;padding:34px 36px;border-radius:26px;background:radial-gradient(120% 140% at 0% 0%,rgba(244,175,86,.12),transparent 55%),linear-gradient(180deg,rgba(254,251,241,.06),rgba(254,251,241,.015));border:1px solid rgba(244,175,86,.22)}
+.t-intro p{margin:14px 0 0;font-size:17px;line-height:1.72;color:#E3E9EC}
+.t-intro p.agree{display:inline-flex;align-items:center;gap:10px;margin-top:20px;padding:8px 16px;border-radius:64px;background:rgba(244,175,86,.1);border:1px solid rgba(244,175,86,.35);color:#F4AF56;font-size:14.5px;font-weight:600}
+.t-sec{margin-top:18px;padding:30px 34px 32px;border-radius:24px;background:linear-gradient(180deg,rgba(254,251,241,.045),rgba(254,251,241,.012));border:1px solid rgba(254,251,241,.08);scroll-margin-top:96px;transition:border-color .5s,box-shadow .5s,transform .5s}
+.t-sec.on{border-color:rgba(244,175,86,.32);box-shadow:0 30px 70px -40px rgba(244,175,86,.25)}
+.t-sec header{display:flex;align-items:center;gap:14px}
+.t-sec .ic{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:14px;color:#F4AF56;background:rgba(244,175,86,.1);box-shadow:inset 0 0 0 1px rgba(244,175,86,.28)}
+.t-sec .num{font-size:13px;font-weight:700;color:#F4AF56;font-variant-numeric:tabular-nums;letter-spacing:.08em}
+.t-sec h3{margin:0;font-size:23px;font-weight:500;letter-spacing:-.015em}
+.t-sec .tb{padding-left:58px}
+.t-sec p{margin:14px 0 0;font-size:16px;line-height:1.72;color:#AEB9C1}
+.t-sec strong{color:#FEFBF1;font-weight:600}
+.t-sec a{color:#F4AF56}
+.t-sec ul{list-style:none;margin:16px 0 0;padding:0;display:flex;flex-direction:column;gap:10px}
+.t-sec li{position:relative;display:flex;gap:12px;align-items:flex-start;font-size:16px;line-height:1.6;color:#CDD7DD}
+.t-sec ul:not(.ok):not(.no) li::before{content:"";flex:none;width:6px;height:6px;margin:.6em 6px 0 4px;border-radius:50%;background:#F4AF56;box-shadow:0 0 10px rgba(244,175,86,.5)}
+.t-sec li .mk{flex:none;width:22px;height:22px;padding:4px;margin-top:1px;border-radius:50%}
+.t-sec ul.ok li .mk{color:#F4AF56;background:rgba(244,175,86,.12);box-shadow:inset 0 0 0 1px rgba(244,175,86,.3)}
+.t-sec ul.no li .mk{color:#F2A0A0;background:rgba(242,160,160,.1);box-shadow:inset 0 0 0 1px rgba(242,160,160,.3)}
+.cp{display:inline-flex;align-items:center;gap:6px;margin:2px 1px;padding:2px 10px;border-radius:64px;border:1px solid rgba(244,175,86,.4);background:rgba(244,175,86,.08);color:#F4AF56;font:inherit;font-size:.92em;font-weight:600;cursor:pointer;vertical-align:baseline;transition:background .25s,transform .2s}
+.cp:hover{background:rgba(244,175,86,.18)}
+.cp:active{transform:scale(.96)}
+.cp svg{opacity:.7}
+.cp.done{background:#F4AF56;color:#0A0908}
+.copied{position:fixed;left:50%;bottom:28px;z-index:60;transform:translate(-50%,20px);opacity:0;padding:10px 18px;border-radius:64px;background:#FEFBF1;color:#0A0908;font-size:14px;font-weight:600;pointer-events:none;transition:all .35s cubic-bezier(.2,.8,.2,1)}
+.copied.show{opacity:1;transform:translate(-50%,0)}
+.accept{padding-top:40px}
+.acc{max-width:640px;margin:0 auto;scroll-margin-top:96px;padding:48px 48px 44px;text-align:center}
+.acc .kick{margin-top:20px}
+.acc .h2{font-size:clamp(30px,3.4vw,44px)}
+.acc .lead{margin:16px auto 0;font-size:16.5px}
+.acc-actions{display:flex;flex-direction:column;align-items:center;gap:18px;margin-top:32px}
+.acc-actions .btn{min-width:min(100%,340px)}
+.acc-step{animation:stepin .7s cubic-bezier(.16,1,.3,1) both}
+@keyframes stepin{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+#step-details .kick{margin-top:0}
+#join-form{display:flex;flex-direction:column;gap:18px;margin-top:30px;text-align:start}
+#join-form .btn{width:100%;margin-top:4px}
+.acc-ok{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#F4AF56}
+.acc-ok::before{content:"";width:8px;height:8px;border-radius:50%;background:#F4AF56;box-shadow:0 0 10px #F4AF56}
+.meta-note{font-size:14.5px!important;color:#9CB1C2!important}
+.acc-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:4px}
+.acc-head .kick{margin:0}
+.acc-date{font-size:13px;color:#9CB1C2}
+.sig{position:relative;padding:18px 18px 16px;border-radius:16px;border:1px dashed rgba(254,251,241,.18);background:rgba(10,9,8,.35);transition:border-color .4s,background .4s}
+.sig-l{display:block;font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#7E8A93}
+.sig-name{position:relative;display:inline-block;margin-top:8px;font-size:26px;font-style:italic;font-weight:300;letter-spacing:-.01em;color:#6f7a82;transition:color .3s}
+.sig-name::after{content:"";position:absolute;left:0;right:0;bottom:-4px;height:2px;border-radius:2px;background:linear-gradient(90deg,#E4AA7C,#F4AF56);transform:scaleX(0);transform-origin:left;transition:transform .9s cubic-bezier(.2,.8,.2,1)}
+html[dir=rtl] .sig-name::after{transform-origin:right}
+.sig.typed .sig-name{color:#FEFBF1}
+.sig-meta{display:block;margin-top:10px;font-size:13px;color:#9CB1C2;min-height:18px}
+.sig .stamp{position:absolute;top:14px;inset-inline-end:14px;padding:5px 11px;border-radius:64px;border:1px solid rgba(244,175,86,.6);color:#F4AF56;font-size:11px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;opacity:0;transform:rotate(-8deg) scale(1.4);transition:all .45s cubic-bezier(.2,.8,.2,1)}
+.sig.signed{border-style:solid;border-color:rgba(244,175,86,.45);background:rgba(244,175,86,.05)}
+.sig.signed .sig-name::after{transform:scaleX(1)}
+.sig.signed .stamp{opacity:1;transform:rotate(-8deg) scale(1)}
+@media (max-width:1100px){.facts{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:900px){
+ .t-layout{grid-template-columns:minmax(0,1fr);gap:20px;margin-top:40px}
+ .t-nav{top:64px;z-index:5;flex-direction:row;gap:6px;overflow-x:auto;margin:0 -20px;padding:12px 20px;background:rgba(10,9,8,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(254,251,241,.06);scrollbar-width:none}
+ .t-nav::-webkit-scrollbar{display:none}
+ .t-nav .prog,.t-nav .bar,.t-nav .go{display:none}
+ .t-nav a{flex:none;padding:6px 12px 6px 6px;border:1px solid rgba(254,251,241,.1);border-radius:64px;font-size:13px;white-space:nowrap}
+ .t-nav a .tt{max-width:150px;overflow:hidden;text-overflow:ellipsis}
+}
+@media (max-width:600px){.facts{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.fact{padding:16px 14px}.fact b{font-size:24px}.t-intro{padding:24px 20px}.t-intro p{font-size:16px}.t-sec{padding:22px 18px 24px;border-radius:20px}.t-sec .tb{padding-left:0}.t-sec h3{font-size:20px}.t-sec .ic{width:38px;height:38px;border-radius:12px}}
 .he-note{display:none;margin:16px 0 0;font-size:15px;color:#9CB1C2}
 html[lang=he] .he-note{display:block}
 .link-gold{color:#F4AF56;text-decoration:underline;text-decoration-color:rgba(244,175,86,.4);text-underline-offset:3px}
@@ -216,7 +331,7 @@ html[lang=he] .he-note{display:block}
 .foot{padding:56px 0 70px;border-top:1px solid rgba(254,251,241,.06);font-size:13px;color:#7E8A93;text-align:center}
 html[lang=he] .kick,html[lang=he] .field label,html[lang=he] .gift .tg,html[lang=he] .badge,html[lang=he] .free{letter-spacing:.04em}
 @media (max-width:980px){.gifts{grid-template-columns:minmax(0,1fr);max-width:520px}.join{grid-template-columns:minmax(0,1fr);gap:40px}.asks{grid-template-columns:minmax(0,1fr)}.ask:nth-child(odd){border-inline-end:0}.ask:nth-child(even){padding-inline-start:0}}
-@media (max-width:600px){.wrap{padding:0 20px}.glass{padding:34px 22px 28px;border-radius:22px}.top{margin-top:-64px;padding:150px 0 80px}.sec{padding:80px 0}.ask{grid-template-columns:48px 1fr;padding-inline-end:0}.join .glass{padding:28px 20px}.terms-scroll{padding:26px 20px 14px;max-height:480px}.terms-box section{grid-template-columns:32px minmax(0,1fr)}.terms-foot{padding:16px 20px;flex-direction:column;align-items:flex-start}}
+@media (max-width:600px){.wrap{padding:0 20px}.glass{padding:34px 22px 28px;border-radius:22px}.top{margin-top:-64px;padding:150px 0 80px}.sec{padding:80px 0}.ask{grid-template-columns:48px 1fr;padding-inline-end:0}.acc{padding:34px 22px 30px}}
 @media (prefers-reduced-motion:reduce){.bg,.glass{animation:none}.reveal{opacity:1;transform:none;transition:none}}
 """
 
@@ -267,7 +382,7 @@ html = f"""<!doctype html>
 <span class="badge reveal">MWP Ambassador Program</span>
 <h1 class="h1 reveal" style="--d:.08s">Create with MWP. <span class="grad">On us.</span></h1>
 <p class="lead reveal" style="--d:.16s">A small group of selected photographers gets MWP Presets, MWP Panel and the Field Guides free. In return, create with them, share your work and tell us what you think.</p>
-<p class="reveal" style="--d:.24s;margin-top:34px"><a class="btn" href="#join">Join the program</a></p>
+<p class="reveal" style="--d:.24s;margin-top:34px"><a class="btn" href="#terms">Read the terms</a></p>
 </div>
 </section>
 
@@ -289,37 +404,58 @@ html = f"""<!doctype html>
 <div class="wrap">
 <div class="head reveal"><p class="kick">The terms</p><h2 class="h2">Ambassador Program <span class="grad">Terms of Use.</span></h2>
 <p class="he-note" lang="he" dir="rtl" data-no-i18n>התנאים זמינים כרגע באנגלית.</p></div>
-<div class="terms-box reveal">
-<div class="terms-scroll" tabindex="0" role="region" aria-label="Terms of Use" lang="en" dir="ltr" data-no-i18n>{TERMS_HTML}</div>
-<div class="terms-foot"><span>Read them through, then accept them below.</span><a class="link-gold" href="#join">Join the program</a></div>
+<div class="facts">{FACTS_HTML}</div>
+<div class="t-layout" lang="en" dir="ltr">
+<nav class="t-nav" aria-label="Chapters" data-no-i18n>
+<p class="prog" id="t-prog">0 of {len(TERMS)} read</p>
+<div class="bar"><i id="t-bar"></i></div>
+{T_NAV}
+<a class="btn go" href="#join">Accept and join</a>
+</nav>
+<div class="t-doc" data-no-i18n>
+<div class="t-intro reveal">
+<p class="t-by">{TERMS_DATE} · @Matan Wild</p>
+<p>{TERMS_INTRO[0]}</p>
+<p class="agree">{TERMS_INTRO[1]}</p>
+</div>
+{T_SECTIONS}
+</div>
 </div>
 </div>
 </section>
 
-<section class="sec" id="join">
-<div class="wrap join">
-<div class="reveal">
-<p class="kick">Join</p>
-<h2 class="h2">Your tools, <span class="grad">in two minutes.</span></h2>
-<ol class="steps">
-<li><span class="n">1</span><span>Fill in your details and accept the terms.</span></li>
-<li><span class="n">2</span><span>We email you a link. Open it to download all three tools.</span></li>
-<li><span class="n">3</span><span>In Photoshop, open MWP Panel and sign in with the same email.</span></li>
-</ol>
+<section class="sec accept" id="join">
+<div class="wrap">
+<div class="acc glass reveal" id="acc">
+<div class="acc-step" id="step-agree">
+<span class="seal"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.4-3 8.3-7 9.5C8 19.3 5 15.4 5 11V6z"/><path d="M9 12l2 2 4-4"/></svg></span>
+<p class="kick">Step 1 of 2 · Acceptance</p>
+<h2 class="h2">Do you accept <span class="grad">the terms?</span></h2>
+<p class="lead">To join, accept the MWP Ambassador Program Terms of Use above. Then you'll fill in your details and get your tools.</p>
+<div class="acc-actions">
+<button class="btn" type="button" id="agree-btn">I've read and accept the terms</button>
+<a class="link-gold" href="#terms">Read the terms</a>
 </div>
-<div class="glass reveal" style="--d:.1s">
+</div>
+<div class="acc-step" id="step-details" hidden>
+<p class="kick">Step 2 of 2 · Your details</p>
+<h2 class="h2">You're <span class="grad">in.</span></h2>
+<p class="lead">Tell us who you are. We'll email you a link to download your tools.</p>
 <form id="join-form" novalidate>
+<div class="acc-head"><span class="acc-ok">Terms accepted</span><span class="acc-date" id="acc-date"></span></div>
 <div class="field"><label for="j-name">Name</label><input class="input" id="j-name" name="name" autocomplete="name" required></div>
 <div class="field"><label for="j-email">Email</label><input class="input" id="j-email" name="email" type="email" dir="ltr" autocomplete="email" required></div>
 <div class="field"><label for="j-ig">Instagram</label><input class="input" id="j-ig" name="instagram" dir="ltr" placeholder="@yourhandle" autocomplete="off"></div>
-<label class="check"><input type="checkbox" name="agree" required><span>I've read and accept the <a class="link-gold" href="#terms">MWP Ambassador Program Terms of Use</a>.</span></label>
-<button class="btn" type="submit">Join the program</button>
+<div class="sig signed" id="sig" aria-live="polite"><span class="stamp">I agree</span><span class="sig-l">Signature</span><span class="sig-name" id="sig-name">Your name</span><span class="sig-meta" id="sig-meta"></span></div>
+<button class="btn" type="submit">Get my tools</button>
 <p class="msg" id="join-msg" role="status"></p>
 </form>
+</div>
 <div class="done" id="join-done" hidden>
 <span class="seal"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span>
 <h3>Check your inbox</h3>
 <p id="done-text">We've sent you a link. Open it to download your tools.</p>
+<p class="meta-note">Then, in Photoshop, open MWP Panel and sign in with the same email.</p>
 <a class="btn" href="/account.html">Go to My downloads</a>
 </div>
 </div>
