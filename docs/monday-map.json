@@ -153,6 +153,25 @@
         "open_tickets": "numeric_mm812e2w",
         "best_seller": "text_mm81rfmv"
       }
+    },
+    "ambassadors": {
+      "id": 5105939043,
+      "name": "Shop Ambassadors",
+      "groups": {
+        "ambassadors": "topics"
+      },
+      "columns": {
+        "status": "color_mm8391jm",
+        "email": "email_mm8331he",
+        "instagram": "text_mm83z0v6",
+        "accepted_terms": "date_mm83z07a",
+        "first_3_months_end": "date_mm83mwfv",
+        "program_ends": "date_mm83s7ad",
+        "content": "color_mm835th0",
+        "terms_version": "text_mm831gvm",
+        "products": "text_mm837ysb",
+        "notes": "long_text_mm83y19w"
+      }
     }
   },
   "make": {
