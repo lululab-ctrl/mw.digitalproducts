@@ -94,3 +94,21 @@ export async function notifyMake(envName: string, payload: Record<string, unknow
     return false;
   }
 }
+
+/**
+ * Asks the "Personal copies" GitHub workflow to run now, so a new buyer's personal files are made
+ * within a minute or two. Optional: without PERSONALIZE_TOKEN the workflow still runs on its
+ * own schedule every few minutes. Never throws.
+ */
+export async function requestPersonalCopies(): Promise<void> {
+  const token = Deno.env.get("PERSONALIZE_TOKEN"), repo = Deno.env.get("PERSONALIZE_REPO");
+  if (!token || !repo) return;
+  try {
+    await fetch(`https://api.github.com/repos/${repo}/dispatches`, {
+      method: "POST",
+      headers: { authorization: `Bearer ${token}`, accept: "application/vnd.github+json", "content-type": "application/json" },
+      body: JSON.stringify({ event_type: "personalize" }),
+      signal: AbortSignal.timeout(6000),
+    });
+  } catch (err) { console.error("personal copies dispatch failed", err); }
+}

@@ -29,6 +29,12 @@ shop.mw.photography. A static site on GitHub Pages, with Supabase, Make.com and 
 - The password is checked only by the `beta` Edge Function (stored there as a salted hash; wrong guesses are rate-limited). To change it, generate a new PBKDF2 hash and update `supabase/functions/beta/index.ts`.
 - Joining gives that email MWP Presets, MWP Panel and the Field Guides, like a purchase (members are in the `beta_members` table). Revoke their entitlements in the admin to end access.
 
+## Personal copies (Presets and Field Guides)
+- Each buyer and beta member downloads their own marked copy: their name, email and licence ID on every PDF page, and in a comment inside every .xmp and .cube file (`tools/personalize/personalize.py`).
+- The "Personal copies" workflow (`.github/workflows/personalize.yml`, `tools/personalize/worker.py`) makes missing or outdated copies into `presets/personal/<entitlement>/` and records them in `personal_files`. Until a copy exists, `get-download` answers 202 "preparing" and My downloads waits for it.
+- It runs instantly when the `PERSONALIZE_TOKEN` secret is set (a GitHub token that can trigger this repo's workflows), otherwise hourly. Uploading a new version of a product file makes everyone's copy again.
+- MWP Panel isn't stamped; its licence sign-in protects it.
+
 ## Cart and header icons
 - `assets/js/lib/cart.js` adds the two header icons on every page: Account (a menu with who is signed in, My downloads, Help and sign in / sign out) and Cart. The sales pages ship the same two icons from `tools/unify_pages.py`.
 
