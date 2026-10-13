@@ -248,6 +248,11 @@ const HE = {
   "Browse all products": "לכל המוצרים",
   "Home": "דף הבית",
   // home: interactive shop
+  // My downloads (drafts for Matan)
+  "Your library": "הספרייה שלכם",
+  "Everything you own, ready to download. New versions appear here at no cost.": "כל מה שבבעלותכם, מוכן להורדה. גרסאות חדשות מופיעות כאן ללא עלות.",
+  "My": "ההורדות",
+  "downloads": "שלי",
   // beta page (drafts for Matan)
   "MWP Beta · Early access": "MWP בטא · גישה מוקדמת",
   "MWP · Beta": "MWP · בטא",
@@ -442,6 +447,8 @@ const PATTERNS = [
   [/^We've sent a sign-in link to (.+)\. Open it on this device\.$/, (m) => `שלחנו קישור כניסה אל ${m[1]}. פתחו אותו במכשיר הזה.`],
   [/^Nothing matches "(.*)" here\.$/, (m) => `אין תוצאות עבור "${m[1]}" כאן.`],
   [/^Nothing matches here\.$/, () => "אין כאן תוצאות."],
+  [/^Version (.+)$/, (m) => `גרסה ${m[1]}`],
+  [/^Added (.+)$/, (m) => `נוסף ${m[1]}`],
   [/^Last used (.+)$/, (m) => `שימוש אחרון: ${m[1]}`],
   [/^Your licence is personal: Panel works when you sign in to it with this email\. You can use it on up to (\d+) computers at a time\. Changed computer\? Remove the old one here\.$/,
     (m) => `הרישיון אישי: הפאנל עובד כשמתחברים אליו עם המייל הזה. אפשר להשתמש בו בעד ${m[1]} מחשבים בו־זמנית. החלפתם מחשב? הסירו את הישן כאן.`],

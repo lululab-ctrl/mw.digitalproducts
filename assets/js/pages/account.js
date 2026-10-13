@@ -11,23 +11,37 @@ const signedIn = document.getElementById("signed-in");
 const library = document.getElementById("library");
 const who = document.getElementById("who");
 
+// Cover photos for the MWP products (used when a product has no cover uploaded in the admin).
+const COVERS = {
+  "mwp-presets": "assets/pages/img/c88e041b857fb964607aaec43ad1753d.jpg",
+  "mwp-panel": "assets/pages/img/8f730b9bb76b93ca707cae719a309479.jpg",
+  "mwp-field-guides": "assets/pages/img/0cf44582c4078749d18156eec10c90d3.jpg",
+};
+const TAGS = { preset: "Lightroom presets", plugin: "Photoshop plugin", guide: "PDF field guides", bundle: "Bundle" };
+const DL_ICON = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>';
+
 function libraryHTML(items) {
   items = items.filter((i) => i.products);   // a product that can't be shown is skipped, not fatal
   if (!items.length) {
-    return `<div class="empty stack">
+    return `<div class="glass lib-empty stack">
       <p>Nothing on this email yet.</p>
       <p class="meta">Bought with a different email? Sign out and use that one, or <a class="link" href="support.html">contact support</a> with your order number.</p>
     </div>`;
   }
-  return items.map(({ id, granted_at, products: p }) => `
-    <article class="library-item">
-      ${p.cover_path ? `<img src="${esc(mediaUrl(p.cover_path, { width: 240 }))}" alt="" loading="lazy">` : `<span class="thumb" aria-hidden="true"></span>`}
+  return items.map(({ granted_at, products: p }, i) => {
+    const img = p.cover_path ? mediaUrl(p.cover_path, { width: 600 }) : COVERS[p.slug];
+    const count = countLabel(p);
+    return `
+    <article class="lib" style="--i:${i}">
+      <div class="ph">${img ? `<img src="${esc(img)}" alt="" loading="lazy">` : ""}</div>
       <div>
-        <h3 class="library-item__title" data-no-i18n>${esc(p.name)}${p.name_emphasis ? " " + esc(p.name_emphasis) : ""}</h3>
-        <p class="meta">Version ${esc(p.version)}${countLabel(p) ? `, ${esc(countLabel(p))}` : ""}. Added ${shortDate(granted_at)}</p>
+        <p class="tg">${esc(TAGS[p.category] || "")}</p>
+        <h3 class="nm" data-no-i18n>${esc(p.name)}${p.name_emphasis ? ` <span class="grad">${esc(p.name_emphasis)}</span>` : ""}</h3>
+        <div class="chips"><span>Version ${esc(p.version)}</span>${count ? `<span>${esc(count)}</span>` : ""}<span>Added ${shortDate(granted_at)}</span></div>
       </div>
-      <button class="btn btn--sm" type="button" data-download="${esc(p.slug)}">Download .zip</button>
-    </article>`).join("");
+      <button class="dl" type="button" data-download="${esc(p.slug)}">${DL_ICON}<span>Download</span></button>
+    </article>`;
+  }).join("");
 }
 
 // MWP Panel works only for the buyer: each computer they sign in on is listed here, and they can
@@ -59,6 +73,7 @@ async function showLibrary(user) {
   signedOut.hidden = true;
   signedIn.hidden = false;
   who.textContent = user.email;
+  const av = document.getElementById("avatar"); if (av) av.textContent = (user.email || "?")[0];
   library.innerHTML = `<div class="skeleton" style="height:96px"></div>`;
   try {
     const items = await myLibrary();
@@ -85,7 +100,10 @@ document.addEventListener("click", async (e) => {
 library.addEventListener("click", async (e) => {
   const btn = e.target.closest("[data-download]");
   if (!btn) return;
-  setBusy(btn, true, "Preparing…");
+  const label = btn.querySelector("span");
+  const was = label ? label.textContent : "";
+  const busy = (on) => { btn.disabled = on; btn.setAttribute("aria-busy", String(on)); if (label) label.textContent = on ? (document.documentElement.lang === "he" ? "מכינים…" : "Preparing…") : was; };
+  busy(true);
   try {
     const { url } = await requestDownload(btn.dataset.download);
     // A same-tab navigation to a Content-Disposition: attachment URL downloads without leaving the page.
@@ -94,7 +112,7 @@ library.addEventListener("click", async (e) => {
   } catch (err) {
     toast(err.message, { type: "error", timeout: 7000 });
   } finally {
-    setTimeout(() => setBusy(btn, false), 1200);
+    setTimeout(() => busy(false), 1200);
   }
 });
 

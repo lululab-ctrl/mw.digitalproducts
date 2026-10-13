@@ -268,16 +268,64 @@ page("product.html", "MWP",
     </div>
   </section>""", "product.js")
 
+ACCOUNT_CSS = """
+<style id="acct">
+.acct-hero{position:relative;overflow:hidden;padding:clamp(90px,12vw,150px) 0 clamp(70px,8vw,110px)}
+.acct-hero .bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.5;transform:scale(1.05);animation:acbg 2.4s cubic-bezier(.2,.7,.1,1) both}
+@keyframes acbg{to{transform:none}}
+.acct-hero .shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,9,8,.55),rgba(10,9,8,.7) 50%,#0A0908)}
+.acct-hero .container{position:relative}
+.acct-kick{margin:0;font-size:12px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:#9CB1C2}
+.acct-h1{margin:16px 0 0;font-size:clamp(48px,7vw,104px);line-height:.98;font-weight:400;letter-spacing:-.04em}
+.grad{background:linear-gradient(90deg,#E4AA7C 0%,#F4AF56 55%,#F8D29C 100%);-webkit-background-clip:text;background-clip:text;color:transparent;font-weight:600}
+.acct-lead{margin:20px 0 0;max-width:520px;font-size:18px;line-height:1.6;color:#CDD7DD}
+.acct{padding-bottom:110px}
+.glass{position:relative;border-radius:24px;background:linear-gradient(180deg,rgba(254,251,241,.06),rgba(254,251,241,.015));border:1px solid rgba(254,251,241,.1);box-shadow:0 50px 100px -50px rgba(0,0,0,.9),inset 0 1px 0 rgba(254,251,241,.07)}
+.glass::before{content:"";position:absolute;top:0;left:12%;right:12%;height:1px;background:linear-gradient(90deg,transparent,rgba(244,175,86,.55),transparent)}
+#signed-out.glass{padding:40px;max-width:560px}
+.who{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:18px 22px}
+.who-l{display:flex;align-items:center;gap:14px;min-width:0}
+.avatar{flex:none;display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#E4AA7C,#F4AF56);color:#0A0908;font-weight:700;font-size:18px;text-transform:uppercase}
+.who p{margin:0;font-size:13px;color:#9CB1C2}.who b{display:block;font-size:16px;color:#FEFBF1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.library{display:flex;flex-direction:column;gap:18px}
+.lib{position:relative;display:grid;grid-template-columns:240px minmax(0,1fr) auto;align-items:center;gap:30px;padding:16px 26px 16px 16px;border-radius:24px;background:linear-gradient(180deg,rgba(254,251,241,.05),rgba(254,251,241,.015));border:1px solid rgba(254,251,241,.08);transition:transform .5s cubic-bezier(.2,.8,.2,1),border-color .4s,box-shadow .5s;opacity:0;transform:translateY(20px);animation:libin .9s cubic-bezier(.16,1,.3,1) forwards;animation-delay:calc(var(--i,0) * .1s)}
+@keyframes libin{to{opacity:1;transform:none}}
+.lib:hover{transform:translateY(-4px);border-color:rgba(244,175,86,.35);box-shadow:0 40px 80px -40px rgba(244,175,86,.25)}
+.lib .ph{aspect-ratio:3/2;border-radius:16px;overflow:hidden;background:#1b1916}
+.lib .ph img{width:100%;height:100%;object-fit:cover;object-position:50% 30%;transition:transform 1.2s cubic-bezier(.2,.7,.1,1)}
+.lib:hover .ph img{transform:scale(1.06)}
+.lib .tg{margin:0;font-size:11.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#9CB1C2}
+.lib .nm{margin:8px 0 0;font-size:clamp(24px,2.4vw,32px);font-weight:400;letter-spacing:-.02em;line-height:1.1}
+.acct .container--text,.acct-hero .container--text{max-width:980px}
+.lib .chips{display:flex;flex-direction:row;flex-wrap:wrap;align-items:center;gap:8px;margin-top:14px}
+.lib .chips span{display:inline-block;width:auto;padding:5px 11px;border-radius:64px;border:1px solid rgba(254,251,241,.12);font-size:12.5px;color:#AEB9C1}
+.dl{display:inline-flex;align-items:center;gap:10px;min-height:52px;padding:0 26px;border:0;border-radius:64px;background:linear-gradient(90deg,#E4AA7C,#F4AF56);color:#0A0908;font-weight:700;font-size:15px;cursor:pointer;box-shadow:0 14px 34px -12px rgba(244,175,86,.6);transition:transform .25s,box-shadow .25s}
+.dl:hover{transform:translateY(-1px);box-shadow:0 18px 44px -12px rgba(244,175,86,.75)}
+.dl svg{transition:transform .3s}.dl:hover svg{transform:translateY(2px)}
+.lib-empty{padding:48px 32px;text-align:center}
+.devices-box{margin-top:26px}
+.devices-box .devices{padding:28px 30px;border-radius:24px;background:linear-gradient(180deg,rgba(254,251,241,.05),rgba(254,251,241,.015));border:1px solid rgba(254,251,241,.08)}
+.devices-box .h3{font-size:22px;font-weight:500}
+.acct-note{margin-top:26px;font-size:13px;color:#7E8A93}
+html[lang=he] .acct-kick,html[lang=he] .lib .tg{letter-spacing:.04em}
+@media (max-width:820px){.lib{grid-template-columns:minmax(0,1fr);gap:18px;padding:14px 14px 22px}.lib .ph{aspect-ratio:16/9}.lib > div:nth-child(2),.lib .dl{margin:0 10px}.dl{justify-content:center}.who{flex-wrap:wrap}#signed-out.glass{padding:28px 22px}}
+@media (prefers-reduced-motion:reduce){.lib,.acct-hero .bg{animation:none;opacity:1;transform:none}}
+</style>"""
+
 page("account.html", "My downloads · MWP",
  "Sign in with your email to download what you've bought.",
- """  <section class="page-hero">
+ """  <section class="acct-hero">
+    <img class="bg" src="assets/pages/img/5275cc7bcd4fb7560d8f7163592e3122.jpg" alt="">
+    <div class="shade"></div>
     <div class="container container--text">
-      <h1 class="display">My downloads</h1>
+      <p class="acct-kick">Your library</p>
+      <h1 class="acct-h1">My <span class="grad">downloads</span></h1>
+      <p class="acct-lead">Everything you own, ready to download. New versions appear here at no cost.</p>
     </div>
   </section>
-  <section class="section--tight">
+  <section class="acct">
     <div class="container container--text">
-      <div id="signed-out" class="panel stack-lg">
+      <div id="signed-out" class="glass stack-lg">
         <div class="stack">
           <h2 class="h3">Sign in with your email</h2>
           <p class="muted">Use the email you paid with. We'll send a one-time sign-in link; there's no password.</p>
@@ -292,16 +340,16 @@ page("account.html", "My downloads · MWP",
         </form>
       </div>
       <div id="signed-in" class="stack-lg" hidden>
-        <div class="row row--between">
-          <p class="muted">Signed in as <b id="who"></b></p>
+        <div class="glass who">
+          <div class="who-l"><span class="avatar" id="avatar" aria-hidden="true"></span><div><p>Signed in as</p><b id="who"></b></div></div>
           <button class="btn btn--sm btn--ghost" id="sign-out" type="button">Sign out</button>
         </div>
         <div class="library" id="library" aria-live="polite"></div>
         <div class="devices-box" id="devices" hidden></div>
-        <p class="meta">Download links are created when you click and expire after 5 minutes. Trouble? <a class="link" href="support.html?topic=download">Contact support</a>.</p>
+        <p class="acct-note">Download links are created when you click and expire after 5 minutes. Trouble? <a class="link" href="support.html?topic=download">Contact support</a>.</p>
       </div>
     </div>
-  </section>""", "account.js", extra_head='\n  <meta name="robots" content="noindex">')
+  </section>""", "account.js", extra_head='\n  <meta name="robots" content="noindex">' + ACCOUNT_CSS)
 
 page("support.html", "Help · MWP",
  "Help with downloading, installing or using MWP products.",
