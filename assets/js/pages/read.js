@@ -1,7 +1,6 @@
 // Read online: the MWP Field Guides, page by page (shop.mw.photography/read.html).
 // Ambassadors can only read the guides here; buyers can too. The pages come from the guide-view function
-// as private links that last 10 minutes. Each page is drawn on a canvas with the reader's name, email
-// and licence ID across it, so a screenshot still says whose copy it was. No download, no print.
+// as private links that last 10 minutes, drawn on a canvas. No download, no print.
 import { initChrome } from "../lib/ui.js";
 import { currentUser, guideView, esc } from "../lib/api.js";
 
@@ -37,29 +36,6 @@ async function fresh() {
   await refreshing;
 }
 
-function stampPage(ctx, w, h, line) {
-  ctx.save();
-  // across the page, faintly, so it can't be cropped out
-  ctx.globalAlpha = 0.085;
-  ctx.fillStyle = "#6b6f73";
-  ctx.font = `600 ${Math.round(w / 52)}px "Google Sans", Heebo, Arial, sans-serif`;
-  ctx.translate(w / 2, h / 2);
-  ctx.rotate(-Math.PI / 6);
-  const tw = ctx.measureText(line).width, across = tw + w / 8, down = Math.round(w / 9);
-  for (let row = 0, y = -h; y < h; y += down, row++) {
-    for (let x = -w * 1.4 + (row % 2) * across / 2; x < w * 1.4; x += across) ctx.fillText(line, x, y);
-  }
-  ctx.restore();
-  // and plainly at the foot
-  ctx.save();
-  ctx.globalAlpha = 0.6;
-  ctx.fillStyle = "#6b6f73";
-  ctx.font = `${Math.round(w / 110)}px "Google Sans", Heebo, Arial, sans-serif`;
-  ctx.textAlign = "center";
-  ctx.fillText(`Licensed to ${line} · Read online only`, w / 2, h - Math.round(h / 140));
-  ctx.restore();
-}
-
 async function draw(el) {
   if (el.dataset.drawn) return;
   el.dataset.drawn = "1";
@@ -77,7 +53,6 @@ async function draw(el) {
       c.width = page.w; c.height = page.h;
       const ctx = c.getContext("2d");
       ctx.drawImage(img, 0, 0, page.w, page.h);
-      stampPage(ctx, page.w, page.h, data.stamp);
       return;
     } catch {
       fetchedAt = 0;   // the link may have run out: get new ones and try once more
@@ -145,8 +120,9 @@ function show(g) {
   const guide = data.guides[g];
   pagesEl().innerHTML = guide.pages.map((p, i) => `
     <div class="rd-page" data-page="${g}:${i}" style="aspect-ratio:${p.w}/${p.h};--ar:${p.w / p.h}">
-      <canvas aria-label="${esc(`${guide.title}, page ${i + 1}`)}"></canvas>
+      <canvas aria-label="${esc(T(`${guide.title}, page ${i + 1}`, `${guide.title}, עמוד ${i + 1}`))}"></canvas>
       <span class="rd-n" dir="ltr">${i + 1} / ${guide.pages.length}</span>
+      <button type="button" class="rd-fs" data-full aria-label="${esc(fullLabel())}">${isFull() ? ICONS.exit : ICONS.full}</button>
     </div>`).join("");
   allPages().forEach((el) => { nearby ? nearby.observe(el) : draw(el); });
   page = 0;
@@ -174,12 +150,12 @@ function toggleFull() {
     if (r && r.catch) r.catch(() => setFull(true));
   } catch { setFull(true); }
 }
+const isFull = () => Boolean(viewer()?.classList.contains("fs"));
+const fullLabel = () => (isFull() ? T("Exit full screen", "יציאה ממסך מלא") : T("Full screen", "מסך מלא"));
 function setFull(on) {
   viewer().classList.toggle("fs", on);
   document.documentElement.classList.toggle("rd-fs-on", on);
-  const b = document.getElementById("rd-full");
-  b.innerHTML = on ? ICONS.exit : ICONS.full;
-  b.setAttribute("aria-label", on ? T("Exit full screen", "יציאה ממסך מלא") : T("Full screen", "מסך מלא"));
+  document.querySelectorAll("[data-full]").forEach((b) => { b.innerHTML = on ? ICONS.exit : ICONS.full; b.setAttribute("aria-label", fullLabel()); });
   go(page, false);
 }
 document.addEventListener("fullscreenchange", () => setFull(Boolean(document.fullscreenElement)));
@@ -206,7 +182,6 @@ function render() {
           <button type="button" class="rd-ic rd-flip" id="rd-prev" aria-label="${esc(T("Previous page", "העמוד הקודם"))}">${ICONS.prev}</button>
           <span class="rd-count" id="rd-count" dir="ltr">1 / 1</span>
           <button type="button" class="rd-ic rd-flip" id="rd-next" aria-label="${esc(T("Next page", "העמוד הבא"))}">${ICONS.next}</button>
-          <button type="button" class="rd-ic" id="rd-full" aria-label="${esc(T("Full screen", "מסך מלא"))}">${ICONS.full}</button>
         </div>
       </div>
       <div class="rd-pages" id="rd-pages"></div>
@@ -218,7 +193,7 @@ function render() {
   });
   document.getElementById("rd-prev").addEventListener("click", () => go(page - 1));
   document.getElementById("rd-next").addEventListener("click", () => go(page + 1));
-  document.getElementById("rd-full").addEventListener("click", toggleFull);
+  pagesEl().addEventListener("click", (e) => { if (e.target.closest("[data-full]")) toggleFull(); });
   // swipe between pages (Page by page)
   let x0 = null;
   pagesEl().addEventListener("touchstart", (e) => { x0 = e.touches[0].clientX; }, { passive: true });

@@ -136,6 +136,26 @@ def guide_lang(name, doc):
     return "he" if hebrew > latin else "en"
 
 
+def guide_title(doc, lang):
+    """The guide's own title, in its own language: the PDF's title property, else the biggest text on the
+    cover. None when neither looks like a title (the file name is used then)."""
+    import re
+    script = r"[\u05D0-\u05EA]" if lang == "he" else r"[A-Za-z]"
+    ok = lambda t: t and 3 <= len(t) <= 70 and re.search(script, t)
+    meta = ((doc.metadata or {}).get("title") or "").strip()
+    if ok(meta) and not re.search(r"\.(pdf|indd|docx?)$|untitled", meta, re.I):
+        return meta
+    try:
+        spans = [s for b in doc[0].get_text("dict")["blocks"] for l in b.get("lines", []) for s in l["spans"] if s["text"].strip()]
+    except Exception:
+        return None
+    if not spans:
+        return None
+    big = max(s["size"] for s in spans)
+    text = re.sub(r"\s+", " ", " ".join(s["text"].strip() for s in spans if s["size"] >= big - 0.5)).strip()
+    return text if ok(text) else None
+
+
 def guide_views():
     """Renders each guide product's current version to page images, once: views/<product>/<version>/<g>-<nnn>.jpg.
     The pages are the plain guides; the reader draws each person's name, email and licence ID over them."""
@@ -147,7 +167,7 @@ def guide_views():
         pf = p.get("product_files"); pf = (pf[0] if isinstance(pf, list) and pf else pf) or {}
         gv = p.get("guide_views"); gv = (gv[0] if isinstance(gv, list) and gv else gv) or {}
         # done already: this version, with each guide's language known (English or Hebrew pages)
-        if not pf.get("path") or (gv.get("version") == pf["version"] and all("lang" in g for g in gv.get("guides") or [{}])):
+        if not pf.get("path") or (gv.get("version") == pf["version"] and all("lang" in g and g.get("titled") for g in gv.get("guides") or [{}])):
             continue
         print(f"Rendering {p['slug']} {pf['version']} for reading online", flush=True)
         old = gv.get("version") if gv.get("version") != pf["version"] else None   # same version: pages are replaced in place
@@ -180,7 +200,8 @@ def guide_views():
                     # upload many pages at once: one by one, a long guide took many minutes
                     with ThreadPoolExecutor(max_workers=12) as pool:
                         list(pool.map(lambda f: upload(f[0], f[1], "image/jpeg", "guide-pages"), files))
-                    guides.append({"title": title, "lang": guide_lang(name, doc), "pages": pages})
+                    lang = guide_lang(name, doc)
+                    guides.append({"title": guide_title(doc, lang) or title, "lang": lang, "titled": True, "pages": pages})
                     print(f"  {title} ({guides[-1]['lang']}): {len(pages)} pages", flush=True)
             S.post(f"{URL}/rest/v1/guide_views", params={"on_conflict": "product_id"},
                    headers={"content-type": "application/json", "prefer": "resolution=merge-duplicates"},
