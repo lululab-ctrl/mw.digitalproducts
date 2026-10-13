@@ -48,6 +48,9 @@ shop.mw.photography. A static site on GitHub Pages, with Supabase, Make.com and 
 ## Cart and header icons
 - `assets/js/lib/cart.js` adds the two header icons on every page: Account (a menu with who is signed in, My downloads, Help and sign in / sign out) and Cart. The sales pages ship the same two icons from `tools/unify_pages.py`.
 
+## Fresh scripts
+- On every deploy, `tools/stamp_scripts.py` stamps each page's scripts with a version (`?v=`) and adds an import map so every imported script (api.js, cart.js, i18n.js …) is versioned too. This stops browsers mixing an old cached script with new code, which blanks pages. It runs on the published copy only; nothing to do by hand.
+
 ## Before pushing
 - Serve the site locally (`python3 -m http.server`) and check the changed pages in English and Hebrew, on desktop and phone widths.
 - Work on a branch and merge to `main` only when it's ready to go live.

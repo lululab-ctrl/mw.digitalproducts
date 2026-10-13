@@ -41,6 +41,8 @@ jobs:
           mkdir _site
           cp *.html robots.txt sitemap.xml .nojekyll _site/
           cp -r assets admin presets panel field-guides beta _site/
+          # Fresh scripts after every deploy: each page asks for the current version of every script it uses.
+          python3 tools/stamp_scripts.py _site
 
       - uses: actions/configure-pages@v5
 
