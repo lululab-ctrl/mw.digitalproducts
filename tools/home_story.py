@@ -40,6 +40,9 @@ HERO = f"""<script>(function(){{var h=document.documentElement;h.classList.add("
 </section>"""
 
 
+SCENES = [home_devices.shoot, home_devices.edit, home_devices.finish]   # the same scene per chapter on phones
+
+
 def _chapter_text(i, c):
     lis = "".join(f"<li>{CHECK}<span>{p}</span></li>" for p in c["points"])
     return f"""<article class="st-art" data-i="{i}">
@@ -49,7 +52,7 @@ def _chapter_text(i, c):
 <p class="st-line">{c["line"]}</p>
 <ul class="st-pts">{lis}</ul>
 <div class="st-acts"><a class="btn" href="{c["href"]}">{c["cta"]} {ARROW}</a></div>
-<img class="st-art-img" src="{IMG}{c["img"]}" alt="{c["alt"]}" loading="lazy" style="object-position: {c["pos"]}">
+<div class="st-mscene"><img class="st-mbg" src="{IMG}{c["img"]}" alt="{c["alt"]}" loading="lazy" style="object-position: {c["pos"]}"><div class="st-mstage" aria-hidden="true" data-no-i18n>{SCENES[i]()}</div></div>
 </article>"""
 
 
@@ -169,7 +172,7 @@ html.st-wait .st-l > span,html.st-wait .st-in,html.st-wait .st-hero-img{animatio
 .st-acts{display:flex;flex-wrap:wrap;gap:12px;margin-top:34px}
 .st-acts .btn svg{margin-inline-start:6px}
 [dir=rtl] .st-acts .btn svg{transform:scaleX(-1)}
-.st-art-img{display:none}
+.st-art-img,.st-mscene{display:none}
 
 /* ---------- landing: closing line ---------- */
 .st-close{padding:clamp(120px,18vh,200px) 0;text-align:center;background:radial-gradient(80% 60% at 50% 100%,rgba(244,175,86,.08),transparent 70%),#0A0908}
@@ -189,9 +192,16 @@ html.st-wait .st-l > span,html.st-wait .st-in,html.st-wait .st-hero-img{animatio
   .st-texts{min-height:0;display:grid;gap:72px}
   .st-art{position:static;opacity:1!important;transform:none!important;pointer-events:auto}
   .st-name{white-space:normal}
-  .st-art-img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:6px;margin-top:28px;order:-1}
   .st-art{display:flex;flex-direction:column}
-  .st-art-img{order:-1;margin:0 0 26px}
+  /* the product scene, as on desktop: drawn 720 x 540 and scaled to the frame (--ms, set by the script) */
+  .st-mscene{display:block;position:relative;order:-1;margin:0 0 26px;aspect-ratio:4/3;border-radius:6px;overflow:hidden;background:#141210}
+  .st-mbg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scale(1.15);filter:blur(7px) brightness(.45) saturate(1.2)}
+  .st-mscene::after{content:"";position:absolute;inset:0;background:radial-gradient(70% 60% at 50% 55%,rgba(10,9,8,0),rgba(10,9,8,.55));pointer-events:none}
+  .st-mstage{position:absolute;left:50%;top:50%;z-index:1;width:720px;height:540px;margin:-270px 0 0 -360px;transform:scale(var(--ms,.45));pointer-events:none}
+  .st-mstage .st-dev{inset:0;opacity:1}
+  .st-mstage .bk-row{--w:150px;height:400px}
+  .st-mstage .bk-brand,.st-mstage .bk-spine span{font-size:8px}.st-mstage .bk-num{font-size:10px}.st-mstage .bk-lab b{font-size:17px}
+  .st-mstage .st-app{font-size:8px}.st-mstage .lrc,.st-mstage .psc{font-size:7px}
 }
 @media (max-width:600px){
   .st-hero-in{padding-top:120px}
@@ -211,7 +221,7 @@ JS = """<script>
   var track = document.querySelector(".st-track"); if (!track) return;
   var imgs = track.querySelectorAll(".st-mimg"), arts = track.querySelectorAll(".st-art"), prog = track.querySelectorAll(".st-prog span");
   var cur = track.querySelector(".st-cur"), n = arts.length;
-  var ghosts = track.querySelectorAll(".st-ghost"), ambs = track.querySelectorAll(".st-amb"), devs = track.querySelectorAll(".st-dev");
+  var ghosts = track.querySelectorAll(".st-ghost"), ambs = track.querySelectorAll(".st-amb"), devs = track.querySelectorAll(".st-media .st-dev"), mdevs = track.querySelectorAll(".st-mstage .st-dev");
   var reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
   var target = 0, shown = 0, running = false, lastIdx = -1;
   var ss = function (a, b, x) { var t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
@@ -246,8 +256,21 @@ JS = """<script>
       if (ghosts[i]) { ghosts[i].style.opacity = op.toFixed(3); ghosts[i].style.transform = "translateY(calc(-50% + " + (-d * 120).toFixed(1) + "px))"; }
       if (ambs[i]) ambs[i].style.opacity = (op * 0.26).toFixed(3);
       if (devs[i]) {
-        var dv = devs[i]; dv.style.opacity = op.toFixed(3);
-        dv.style.transform = "translateY(" + (-d * 60).toFixed(1) + "px) scale(" + (0.94 + 0.06 * op).toFixed(4) + ")";
+        devs[i].style.opacity = op.toFixed(3);
+        devs[i].style.transform = "translateY(" + (-d * 60).toFixed(1) + "px) scale(" + (0.94 + 0.06 * op).toFixed(4) + ")";
+        scene(devs[i], d, op);
+      }
+    }
+    var k = Math.min(n - 1, Math.max(0, Math.round(v)));
+    if (k !== lastIdx) {
+      lastIdx = k;
+      arts.forEach(function (a, i) { a.classList.toggle("on", i === k); a.setAttribute("aria-hidden", i === k ? "false" : "true"); });
+      prog.forEach(function (p, i) { p.classList.toggle("on", i === k); p.classList.toggle("done", i < k); });
+      if (cur) cur.textContent = "0" + (k + 1);
+    }
+  }
+  // One product scene at chapter offset d (<0 upcoming, 0 on screen): mouse, clicks, compare wipe, books fanning out.
+  function scene(dv, d, op) {
         var w = ss(-0.4, 0.34, d);                      // this chapter's own timeline, 0 → 1, tied to the scroll
         var mouse = dv.querySelector(".st-mouse"), app = dv.querySelector(".st-app");
         var rings = dv.querySelectorAll(".st-ring");
@@ -284,15 +307,16 @@ JS = """<script>
           mouse.classList.toggle("click", near); mouse.classList.toggle("press", near || (w > start && w < 0.995));
         }
         dv.style.setProperty("--e", ss(-0.45, 0.2, d).toFixed(3));   // books fan out as the chapter arrives
-      }
-    }
-    var k = Math.min(n - 1, Math.max(0, Math.round(v)));
-    if (k !== lastIdx) {
-      lastIdx = k;
-      arts.forEach(function (a, i) { a.classList.toggle("on", i === k); a.setAttribute("aria-hidden", i === k ? "false" : "true"); });
-      prog.forEach(function (p, i) { p.classList.toggle("on", i === k); p.classList.toggle("done", i < k); });
-      if (cur) cur.textContent = "0" + (k + 1);
-    }
+  }
+  // Phones: each chapter's scene plays as it scrolls up the screen, done by the time it is a little above the middle.
+  function phones() {
+    mdevs.forEach(function (dv) {
+      var stage = dv.parentNode, box = stage.parentNode, r = box.getBoundingClientRect(), vh = window.innerHeight;
+      stage.style.setProperty("--ms", (box.clientWidth / 720).toFixed(4));
+      if (r.bottom < -200 || r.top > vh + 200) return;
+      var p = Math.min(1, Math.max(0, (vh - (r.top + r.height / 2)) / (vh * 0.55)));
+      scene(dv, -0.45 + 0.85 * p, 1);
+    });
   }
   function loop() {
     shown += (target - shown) * (reduce ? 1 : 0.07);
@@ -302,11 +326,11 @@ JS = """<script>
   }
   function onScroll() {
     var m = measure();
-    if (m === null) { arts.forEach(function (a) { a.removeAttribute("aria-hidden"); a.style.opacity = ""; a.style.transform = ""; }); imgs.forEach(function (im) { im.style.clipPath = ""; im.style.transform = ""; }); return; }
+    if (m === null) { arts.forEach(function (a) { a.removeAttribute("aria-hidden"); a.style.opacity = ""; a.style.transform = ""; }); imgs.forEach(function (im) { im.style.clipPath = ""; im.style.transform = ""; }); phones(); return; }
     target = m;
     if (!running) { running = true; requestAnimationFrame(loop); }
   }
-  shown = target = measure() || 0; if (measure() !== null) paint(shown);
+  shown = target = measure() || 0; if (measure() !== null) paint(shown); else phones();
   window.addEventListener("scroll", onScroll, { passive: true });
   window.addEventListener("resize", onScroll);
 })();
