@@ -360,7 +360,7 @@ READ_CSS = """
 .rd-pages{display:flex;flex-direction:column;gap:18px;padding-bottom:110px;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 .rd-page{position:relative;width:100%;border-radius:10px;overflow:hidden;background:#15130f;box-shadow:0 30px 60px -40px rgba(0,0,0,.9)}
 .rd-page canvas{display:block;width:100%;height:100%;pointer-events:none}
-.rd-n{position:absolute;bottom:10px;inset-inline-end:12px;font-size:11.5px;color:rgba(254,251,241,.55);background:rgba(10,9,8,.55);padding:3px 8px;border-radius:64px}
+.rd-n{position:absolute;bottom:12px;left:12px;font-size:11.5px;color:rgba(254,251,241,.55);background:rgba(10,9,8,.55);padding:3px 8px;border-radius:64px}
 .rd-msg{padding:40px 32px;text-align:center;border-radius:24px;background:linear-gradient(180deg,rgba(254,251,241,.05),rgba(254,251,241,.015));border:1px solid rgba(254,251,241,.08);color:#CDD7DD}
 .rd-msg .btn{margin-top:18px}
 .rd-note{margin:0 0 18px;font-size:13px;color:#7E8A93}
@@ -384,11 +384,18 @@ html[dir=rtl] .rd-flip svg{transform:scaleX(-1)}
 .rd-count{min-width:64px;text-align:center;font-size:14px;font-variant-numeric:tabular-nums;color:#CDD7DD}
 .rd-viewer.paged .rd-page{display:none;width:min(100%,calc((100svh - 190px) * var(--ar,.7)));margin:0 auto}
 .rd-viewer.paged .rd-page.cur{display:block}
-.rd-viewer.fs{position:fixed;inset:0;z-index:200;overflow-y:auto;padding:0 16px 24px;background:#0A0908}
-.rd-viewer.fs .rd-bar{top:0;max-width:1000px;margin:0 auto 6px}
-.rd-viewer.fs .rd-pages{max-width:1000px;margin:0 auto;padding-bottom:24px}
-.rd-viewer.fs.paged .rd-page{width:min(100%,calc((100svh - 100px) * var(--ar,.7)))}
+.rd-viewer.fs{position:fixed;inset:0;z-index:200;width:100vw;height:100dvh;overflow-y:auto;background:#0A0908}
+.rd-viewer.fs .rd-bar{top:0}
 .rd-viewer:fullscreen{background:#0A0908}
+.rd-fs{position:absolute;right:12px;bottom:12px;display:grid;place-items:center;width:42px;height:42px;border:0;border-radius:12px;background:rgba(10,9,8,.72);color:#FEFBF1;cursor:pointer;box-shadow:0 6px 18px -6px rgba(0,0,0,.6);transition:background .2s,color .2s;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.rd-fs:hover{background:#F4AF56;color:#0A0908}
+.rd-page canvas{pointer-events:none}
+/* full screen: the whole screen, the page as large as it fits */
+.rd-viewer.fs{padding:0 12px 12px}
+.rd-viewer.fs .rd-bar{max-width:none;padding:10px 4px;margin:0 0 4px}
+.rd-viewer.fs .rd-pages{max-width:none;padding-bottom:12px}
+.rd-viewer.fs:not(.paged) .rd-page{width:min(100%,1200px);margin:0 auto}
+.rd-viewer.fs.paged .rd-page{width:min(100%,calc((100dvh - 84px) * var(--ar,.7)))}
 html.rd-fs-on body{overflow:hidden}
 html[lang=he] .rd-kick{letter-spacing:.04em}
 @media (max-width:820px){.rd-bar{top:56px}.rd-viewer.paged .rd-page{width:min(100%,calc((100svh - 230px) * var(--ar,.7)))}}
@@ -482,7 +489,7 @@ page("read.html", "Field Guides · Read online · MWP",
     <div class="container container--text">
       <p class="rd-kick">Read online</p>
       <h1 class="rd-h1"><span data-no-i18n>MWP</span> <span class="grad" data-no-i18n>Field Guides</span></h1>
-      <p class="rd-lead">Your guides, page by page. They're for your eyes only: every page carries your name and licence.</p>
+      <p class="rd-lead">Your guides, page by page. They're for your eyes only.</p>
     </div>
   </section>
   <section class="rd">
