@@ -33,10 +33,12 @@ Deno.serve(async (req) => {
   const { data: file } = await db.from("product_files").select("version").eq("product_id", product.id).maybeSingle();
   const { data: view } = await db.from("guide_views").select("version, guides").eq("product_id", product.id).maybeSingle();
   if (!file) return fail(req, "The guides are being updated. Please try again shortly.", 503);
-  if (!view || view.version !== file.version) {
+  if (!view) {   // only ever the very first time, before any version has been prepared
     await requestPersonalCopies();
     return json(req, { preparing: true, message: "We're getting the guides ready to read online. It usually takes a few minutes." }, 202);
   }
+  // A new version uploaded: keep showing the current pages while the new ones are made, so nobody waits.
+  if (view.version !== file.version) await requestPersonalCopies();
 
   type Page = { path: string; w: number; h: number };
   const guides = (view.guides ?? []) as { title: string; pages: Page[] }[];
