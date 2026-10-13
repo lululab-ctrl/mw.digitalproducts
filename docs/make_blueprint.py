@@ -431,7 +431,10 @@ blueprint = {
                    product_route, approvals_route, weekly_route, payout_route, ambassador_route, account_route, downloaded_route, ambassador_status_route, terms_pdf_route, tester_route,
                    application_route, applications_request_route, application_decided_route, feedback_route, customer_deleted_route]),
     ],
-    "metadata": {"version": 1, "scenario": {"roundtrips": 1, "maxErrors": 3, "autoCommit": True, "sequential": True,
+    # sequential: False. With it on, one incomplete run (kept for review: dlq) holds every later event until someone
+    # resolves it in Make; that froze the shop's monday sync and emails on 13 Oct 2026. Off, a failed run waits for
+    # review on its own and the rest keep flowing.
+    "metadata": {"version": 1, "scenario": {"roundtrips": 1, "maxErrors": 3, "autoCommit": True, "sequential": False,
                                             "confidential": False, "dataloss": False, "dlq": True}},
 }
 
