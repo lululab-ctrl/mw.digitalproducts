@@ -526,7 +526,7 @@ const HE = {
   "Why would you like to be an MWP ambassador?": "למה תרצו להיות שגרירים של MWP?",
   "What values are important to you in your photography and in the way you share it?": "אילו ערכים חשובים לכם בצילום שלכם ובדרך שבה אתם משתפים אותו?",
   "The program": "התוכנית",
-  "A quick reminder of what we ask: in the first 3 months, 3 posts and 1 reel a month plus 1 story a week, tagging us. After that, just tag us whenever you use the tools and love the result. We'd also love your feedback and bug reports so we can keep improving.": "תזכורת קצרה למה שאנחנו מבקשים: בשלושת החודשים הראשונים, 3 פוסטים ורילס אחד בחודש, וגם סטורי אחד בשבוע, עם תיוג שלנו. אחר כך, פשוט לתייג אותנו בכל פעם שאתם משתמשים בכלים ואוהבים את התוצאה. נשמח מאוד גם לפידבק ולדיווחים על באגים, כדי שנוכל להמשיך להשתפר.",
+  "A quick reminder of what we ask: in the first 3 months, 3 posts and 1 optional reel a month plus 1 story a week, tagging us. After that, just tag us whenever you use the tools and love the result. We'd also love your feedback and bug reports so we can keep improving.": "תזכורת קצרה למה שאנחנו מבקשים: בשלושת החודשים הראשונים, 3 פוסטים בחודש ורילס אחד אם תרצו, וגם סטורי אחד בשבוע, עם תיוג שלנו. אחר כך, פשוט לתייג אותנו בכל פעם שאתם משתמשים בכלים ואוהבים את התוצאה. נשמח מאוד גם לפידבק ולדיווחים על באגים, כדי שנוכל להמשיך להשתפר.",
   "Does this sound good to you?": "זה נשמע לכם טוב?",
   "I have a question": "יש לי שאלה",
   "Are you happy to send us feedback and report bugs when you find them?": "תשמחו לשלוח לנו פידבק ולדווח על באגים כשתנתקלו בהם?",
