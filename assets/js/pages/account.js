@@ -86,6 +86,8 @@ async function showLibrary(user) {
     showSignedTerms();
     // ambassadors and testers (their Field Guides are read online) can send feedback to the team
     document.getElementById("feedback").hidden = !items.some((i) => i.view_only);
+    // ambassadors and testers didn't pay: no "Instant download after payment" bar for them
+    if (items.some((i) => i.view_only)) document.querySelector(".announce")?.remove();
   } catch (err) {
     library.innerHTML = `<p class="empty">${esc(err.message)}</p>`;
   }
