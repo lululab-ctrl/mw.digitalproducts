@@ -122,19 +122,35 @@ def personal_copies():
 PAGE_WIDTH = 1240   # pixels; sharp on a laptop, small enough to load quickly on a phone
 
 
+def guide_lang(name, doc):
+    """'he' for a Hebrew guide, 'en' otherwise: from the file name if it says, else from the text."""
+    import re
+    low = os.path.basename(name).lower()
+    if re.search(r"[\u0590-\u05FF]|(^|[^a-z])(he|heb|hebrew|ivrit)([^a-z]|$)", low):
+        return "he"
+    if re.search(r"(^|[^a-z])(en|eng|english)([^a-z]|$)", low):
+        return "en"
+    text = "".join(doc[i].get_text() for i in range(min(len(doc), 6)))
+    hebrew = len(re.findall(r"[\u05D0-\u05EA]", text))
+    latin = len(re.findall(r"[A-Za-z]", text))
+    return "he" if hebrew > latin else "en"
+
+
 def guide_views():
     """Renders each guide product's current version to page images, once: views/<product>/<version>/<g>-<nnn>.jpg.
     The pages are the plain guides; the reader draws each person's name, email and licence ID over them."""
     import re, zipfile
     import pymupdf
-    products = rest("products", select="id,slug,product_files(path,version),guide_views(version)", category="eq.guide")
+    products = rest("products", select="id,slug,product_files(path,version),guide_views(version,guides)", category="eq.guide")
     failed = 0
     for p in products:
         pf = p.get("product_files"); pf = (pf[0] if isinstance(pf, list) and pf else pf) or {}
         gv = p.get("guide_views"); gv = (gv[0] if isinstance(gv, list) and gv else gv) or {}
-        if not pf.get("path") or gv.get("version") == pf["version"]:
+        # done already: this version, with each guide's language known (English or Hebrew pages)
+        if not pf.get("path") or (gv.get("version") == pf["version"] and all("lang" in g for g in gv.get("guides") or [{}])):
             continue
         print(f"Rendering {p['slug']} {pf['version']} for reading online", flush=True)
+        old = gv.get("version") if gv.get("version") != pf["version"] else None   # same version: pages are replaced in place
         try:
             with tempfile.TemporaryDirectory() as tmp:
                 src = os.path.join(tmp, "base")
@@ -164,13 +180,12 @@ def guide_views():
                     # upload many pages at once: one by one, a long guide took many minutes
                     with ThreadPoolExecutor(max_workers=12) as pool:
                         list(pool.map(lambda f: upload(f[0], f[1], "image/jpeg", "guide-pages"), files))
-                    guides.append({"title": title, "pages": pages})
-                    print(f"  {title}: {len(pages)} pages", flush=True)
+                    guides.append({"title": title, "lang": guide_lang(name, doc), "pages": pages})
+                    print(f"  {title} ({guides[-1]['lang']}): {len(pages)} pages", flush=True)
             S.post(f"{URL}/rest/v1/guide_views", params={"on_conflict": "product_id"},
                    headers={"content-type": "application/json", "prefer": "resolution=merge-duplicates"},
                    json={"product_id": p["id"], "version": pf["version"], "guides": guides,
                          "created_at": datetime.now(timezone.utc).isoformat()}, timeout=60).raise_for_status()
-            old = gv.get("version")
             if old:   # the pages of the version no longer shown
                 old_prefix = f"views/{p['id']}/{re.sub(r'[^A-Za-z0-9._-]', '-', old)}"
                 r = S.post(f"{URL}/storage/v1/object/list/guide-pages", json={"prefix": old_prefix, "limit": 1000}, timeout=60)
