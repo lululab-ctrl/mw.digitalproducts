@@ -11,6 +11,7 @@ each guide version's pages once, privately, for the guide-view function and the 
 Needs SUPABASE_URL and SUPABASE_SERVICE_KEY in the environment. Prints counts only, never emails.
 """
 import os, sys, tempfile, time
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 import requests
 
@@ -57,8 +58,8 @@ def upload(path, src, content_type="application/zip"):
 
 def main():
     failed = signed_terms()        # first: a new ambassador's page is waiting to download it
+    failed += guide_views()        # then the online guides (a reader may be waiting on them)
     failed += personal_copies()
-    failed += guide_views()
     if failed:
         sys.exit(1)
 
@@ -113,7 +114,7 @@ def personal_copies():
 
 
 # ---------------------------------------------------------------- Field Guides to read online
-PAGE_WIDTH = 1400   # pixels; sharp on a laptop, small enough to load quickly
+PAGE_WIDTH = 1240   # pixels; sharp on a laptop, small enough to load quickly on a phone
 
 
 def guide_views():
@@ -147,14 +148,17 @@ def guide_views():
                 for g, (name, data) in enumerate(pdfs, 1):
                     title = re.sub(r"^\d+\s*", "", re.sub(r"[_-]+", " ", os.path.splitext(os.path.basename(name))[0]).strip())
                     doc = pymupdf.open(stream=data, filetype="pdf")
-                    pages = []
+                    pages, files = [], []
                     for i, page in enumerate(doc, 1):
                         pix = page.get_pixmap(matrix=pymupdf.Matrix(PAGE_WIDTH / page.rect.width, PAGE_WIDTH / page.rect.width), alpha=False)
-                        out = os.path.join(tmp, "page.jpg")
-                        pix.save(out, jpg_quality=78)
+                        out = os.path.join(tmp, f"{g}-{i:03d}.jpg")
+                        pix.save(out, jpg_quality=75)
                         path = f"{prefix}/{g}-{i:03d}.jpg"
-                        upload(path, out, "image/jpeg")
+                        files.append((path, out))
                         pages.append({"path": path, "w": pix.width, "h": pix.height})
+                    # upload many pages at once: one by one, a long guide took many minutes
+                    with ThreadPoolExecutor(max_workers=12) as pool:
+                        list(pool.map(lambda f: upload(f[0], f[1], "image/jpeg"), files))
                     guides.append({"title": title, "pages": pages})
                     print(f"  {title}: {len(pages)} pages", flush=True)
             S.post(f"{URL}/rest/v1/guide_views", params={"on_conflict": "product_id"},

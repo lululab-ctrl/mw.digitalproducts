@@ -1,5 +1,5 @@
 """Generates the MWP's static pages with one shared head, header and footer."""
-import os, sys
+import re, os, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from brand import FONTS
 ROOT = sys.argv[1]
@@ -63,6 +63,9 @@ HEADER = f"""<body>
     </nav>
   </div>
 </header>"""
+# Pages with nothing to buy (Read online) leave out the "Instant download after payment" bar.
+NO_ANNOUNCE_HEADER = re.sub(r'<div class="announce">.*?</div>\n</div>\n', "", HEADER, count=1, flags=re.S)
+
 
 FOOTER = f"""<footer class="site-footer">
   <div class="container">
@@ -116,11 +119,11 @@ def ver(script):
         h.update(open(f, "rb").read())
     return h.hexdigest()[:8]
 
-def page(name, title, desc, body, script, extra_head=""):
+def page(name, title, desc, body, script, extra_head="", announce=True):
     if name == "index.html":
         return  # the home page is hand-built in the sales-page look (index.html)
     html = f"""{head(title, desc, name if name != 'index.html' else '', extra_head)}
-{HEADER}
+{HEADER if announce else NO_ANNOUNCE_HEADER}
 <main id="main">
 {body}
 </main>
@@ -463,7 +466,7 @@ page("read.html", "Field Guides · Read online · MWP",
     <div class="container">
       <div id="rd-body" aria-live="polite"><div class="skeleton" style="height:420px;border-radius:10px"></div></div>
     </div>
-  </section>""", "read.js", extra_head='\n  <meta name="robots" content="noindex">' + READ_CSS)
+  </section>""", "read.js", extra_head='\n  <meta name="robots" content="noindex">' + READ_CSS, announce=False)
 
 page("support.html", "Help · MWP",
  "Help with downloading, installing or using MWP products.",
