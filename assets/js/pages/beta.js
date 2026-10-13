@@ -44,7 +44,7 @@ allBtn?.addEventListener("click", () => {
 document.querySelectorAll("[data-open]").forEach((a) => a.addEventListener("click", () => {
   const ch = document.getElementById(`t${a.dataset.open}`);
   if (ch) { setOpen(ch, true); syncAll(); }
-}));
+}));   // (scrolling to it is handled with the pop-ups below)
 if (chapters[0]) setOpen(chapters[0], true);
 
 // ---------------------------------------------------------------- tap to copy the handle and hashtags
@@ -87,24 +87,47 @@ document.getElementById("join-form").addEventListener("input", showSignature);
 document.getElementById("join-form").addEventListener("change", showSignature);
 showSignature();
 
-// ---------------------------------------------------------------- step 1: accept the terms; step 2 opens in a pop-up
+// ---------------------------------------------------------------- pop-ups: the terms (step 1), then the details form (step 2)
 let agreed = false;
-const modal = document.getElementById("join-modal");
+const termsModal = document.getElementById("terms-modal");
+const joinModal = document.getElementById("join-modal");
 let lastFocus = null;
-function openModal() {
-  lastFocus = document.activeElement;
-  modal.hidden = false;
+function openModal(m, focusEl) {
+  if (!document.querySelector(".modal:not([hidden])")) lastFocus = document.activeElement;
+  document.querySelectorAll(".modal").forEach((x) => { if (x !== m) x.hidden = true; });
+  m.hidden = false;
+  m.scrollTop = 0;
   document.documentElement.classList.add("modal-on");
-  setTimeout(() => (document.getElementById("join-done").hidden ? document.getElementById("j-name") : modal.querySelector(".modal-x")).focus(), 60);
+  setTimeout(() => (focusEl || m.querySelector(".modal-x")).focus({ preventScroll: true }), 60);
 }
-function closeModal() {
-  modal.hidden = true;
-  document.documentElement.classList.remove("modal-on");
-  lastFocus?.focus?.({ preventScroll: true });
+function closeModal(m) {
+  m.hidden = true;
+  if (!document.querySelector(".modal:not([hidden])")) {
+    document.documentElement.classList.remove("modal-on");
+    lastFocus?.focus?.({ preventScroll: true });
+  }
 }
-modal.addEventListener("click", (e) => { if (e.target.closest("[data-close]")) closeModal(); });
-document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !modal.hidden) closeModal(); });
-document.getElementById("agree-btn").addEventListener("click", () => { agreed = true; openModal(); });
+document.querySelectorAll(".modal").forEach((m) => m.addEventListener("click", (e) => {
+  if (e.target.closest("[data-close]")) closeModal(m);
+}));
+document.addEventListener("keydown", (e) => {
+  const open = document.querySelector(".modal:not([hidden])");
+  if (e.key === "Escape" && open) closeModal(open);
+});
+document.addEventListener("click", (e) => {
+  if (e.target.closest("[data-terms]")) { e.preventDefault(); openModal(termsModal); }
+});
+// a key fact jumps to its chapter inside the terms
+document.querySelectorAll("[data-open]").forEach((a) => a.addEventListener("click", (e) => {
+  e.preventDefault();
+  document.getElementById(`t${a.dataset.open}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
+}));
+document.getElementById("agree-btn").addEventListener("click", () => {
+  agreed = true;
+  closeModal(termsModal);
+  openModal(joinModal, document.getElementById("join-done").hidden ? document.getElementById("j-name") : null);
+});
+if (location.hash === "#terms") openModal(termsModal);
 
 // ---------------------------------------------------------------- step 2: details, then the download link
 const form = document.getElementById("join-form");

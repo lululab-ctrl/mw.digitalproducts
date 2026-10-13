@@ -291,6 +291,15 @@ html[lang=he] .he-note{display:block}
 .modal{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:20px;overflow-y:auto}
 .modal-back{position:fixed;inset:0;background:rgba(5,4,4,.72);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);animation:fadein .35s both}
 @keyframes fadein{from{opacity:0}}
+.modal-sheet{width:100%;max-width:900px;margin:auto;overflow:clip;animation:modalin .55s cubic-bezier(.16,1,.3,1) both}
+.modal.modal-terms{align-items:start;padding:40px 20px 0}
+.modal-terms .modal-sheet{border-bottom-left-radius:0;border-bottom-right-radius:0;min-height:calc(100svh - 40px)}
+.modal-sheet .modal-x{z-index:3}
+.sh-bar{position:sticky;bottom:0;margin-top:auto;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:18px 64px;background:rgba(13,12,11,.98);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid rgba(244,175,86,.2)}
+.sh-bar p{margin:0;font-size:14px;color:#9CB1C2}
+.sh-bar-b{display:flex;gap:10px}
+.btn-ghost{background:transparent;border:1px solid rgba(254,251,241,.2);color:#FEFBF1;box-shadow:none}
+.btn-ghost:hover{border-color:rgba(254,251,241,.45);box-shadow:none}
 .modal-card{position:relative;width:100%;max-width:560px;margin:auto;padding:44px 44px 38px;text-align:center;background:linear-gradient(180deg,rgba(24,21,18,.96),rgba(12,11,10,.96));animation:modalin .55s cubic-bezier(.16,1,.3,1) both}
 @keyframes modalin{from{opacity:0;transform:translateY(24px) scale(.97)}}
 .modal-card .h2{font-size:clamp(30px,3.4vw,40px)}
@@ -327,6 +336,7 @@ html[dir=rtl] .sig-rule::after{background:linear-gradient(270deg,#F4AF56,rgba(24
 html[lang=he] .sig-l,html[lang=he] .sig-what{letter-spacing:.06em}
 @media (max-width:600px){.sig-in{padding:22px 20px 18px}.sig .sig-in{padding-inline-end:84px}.sig-seal{width:52px;height:52px;top:18px;inset-inline-end:18px}.sig-seal img{width:28px;height:28px}}
 @media (max-width:760px){
+ .modal.modal-terms{padding:10px 10px 0}.modal-terms .modal-sheet{min-height:calc(100svh - 10px)}.sh-bar{padding:14px 16px;flex-direction:column;align-items:stretch;text-align:center;gap:10px}.sh-bar-b{flex-direction:column-reverse}.sh-bar .btn{width:100%;min-height:48px}
  .sh-head{padding:40px 22px 0}.facts{grid-template-columns:repeat(2,minmax(0,1fr));margin:30px 22px 0}
  .fact:nth-child(3){border-inline-start:0}.fact:nth-child(n+3){border-top:1px solid rgba(254,251,241,.08)}
  .sh-body{padding:30px 22px 36px}.t-intro p{font-size:16px}
@@ -391,7 +401,7 @@ html = f"""<!doctype html>
 <div class="wrap">
 <h1 class="h1 hero-h reveal" style="--d:.08s">Create with MWP.<br><span class="grad">Join our Ambassador Program.</span></h1>
 <p class="lead reveal" style="--d:.16s">A small group of selected photographers gets MWP Presets, MWP Panel and the Field Guides free. In return, create with them, share your work and tell us what you think.</p>
-<p class="reveal" style="--d:.24s;margin-top:34px"><a class="btn" href="#terms">Read the terms</a></p>
+<p class="reveal" style="--d:.24s;margin-top:34px"><button type="button" class="btn" data-terms>Read the terms</button></p>
 </div>
 </section>
 
@@ -399,26 +409,6 @@ html = f"""<!doctype html>
 <div class="wrap">
 <div class="head reveal"><p class="kick">What you get</p><h2 class="h2">Everything we make. <span class="grad">Free.</span></h2></div>
 <div class="gifts">{"".join(gift(*p) for p in PRODUCTS)}</div>
-</div>
-</section>
-
-<section class="sec terms" id="terms">
-<div class="wrap">
-<div class="sheet reveal">
-<header class="sh-head">
-<div class="sh-brand"><img src="{IMG}{LOGO}" alt=""><p class="kick">MWP Ambassador Program</p></div>
-<h2 class="sh-title">Terms of Use</h2>
-<p class="sh-meta" data-no-i18n>{TERMS_DATE} · @Matan Wild</p>
-<p class="he-note" lang="he" dir="rtl" data-no-i18n>התנאים זמינים כרגע באנגלית.</p>
-</header>
-<div class="facts">{FACTS_HTML}</div>
-<div class="sh-body" lang="en" dir="ltr" data-no-i18n>
-<div class="t-intro"><p>{TERMS_INTRO[0]}</p><p class="agree">{TERMS_INTRO[1]}</p></div>
-<div class="ch-tools"><p>{len(TERMS)} chapters</p><button type="button" class="ch-all" id="ch-all" aria-expanded="false">Expand all</button></div>
-{T_SECTIONS}
-<div class="sh-foot"><p>Read everything? Accept the terms to join.</p><a class="btn" href="#join">Continue to acceptance</a></div>
-</div>
-</div>
 </div>
 </section>
 
@@ -431,16 +421,38 @@ html = f"""<!doctype html>
 <span class="seal"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.4-3 8.3-7 9.5C8 19.3 5 15.4 5 11V6z"/><path d="M9 12l2 2 4-4"/></svg></span>
 <p class="kick">Step 1 of 2 · Acceptance</p>
 <h2 class="h2">Do you accept <span class="grad">the terms?</span></h2>
-<p class="lead">To join, accept the MWP Ambassador Program Terms of Use above. Then you'll fill in your details and get your tools.</p>
+<p class="lead">To join, read and accept the MWP Ambassador Program Terms of Use. Then you'll fill in your details and get your tools.</p>
 <div class="acc-actions">
-<button class="btn" type="button" id="agree-btn">I've read and accept the terms</button>
-<a class="link-gold" href="#terms">Read the terms</a>
+<button class="btn" type="button" data-terms>Read and accept the terms</button>
 </div>
 </div>
 </div>
 </div>
 </section>
 
+<div class="modal modal-terms" id="terms-modal" hidden>
+<div class="modal-back" data-close></div>
+<div class="sheet modal-sheet" role="dialog" aria-modal="true" aria-labelledby="terms-h">
+<button type="button" class="modal-x" data-close aria-label="Close"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+
+<header class="sh-head">
+<div class="sh-brand"><img src="{IMG}{LOGO}" alt=""><p class="kick">MWP Ambassador Program</p></div>
+<h2 class="sh-title" id="terms-h">Terms of Use</h2>
+<p class="sh-meta" data-no-i18n>{TERMS_DATE} · @Matan Wild</p>
+<p class="he-note" lang="he" dir="rtl" data-no-i18n>התנאים זמינים כרגע באנגלית.</p>
+</header>
+<div class="facts">{FACTS_HTML}</div>
+<div class="sh-body" lang="en" dir="ltr" data-no-i18n>
+<div class="t-intro"><p>{TERMS_INTRO[0]}</p><p class="agree">{TERMS_INTRO[1]}</p></div>
+<div class="ch-tools"><p>{len(TERMS)} chapters</p><button type="button" class="ch-all" id="ch-all" aria-expanded="false">Expand all</button></div>
+{T_SECTIONS}
+</div>
+<div class="sh-bar">
+<p>By accepting, you agree to these terms.</p>
+<div class="sh-bar-b"><button type="button" class="btn btn-ghost" data-close>Close</button><button type="button" class="btn" id="agree-btn">I've read and accept the terms</button></div>
+</div>
+</div>
+</div>
 <div class="modal" id="join-modal" hidden>
 <div class="modal-back" data-close></div>
 <div class="modal-card glass" role="dialog" aria-modal="true" aria-labelledby="details-h">
