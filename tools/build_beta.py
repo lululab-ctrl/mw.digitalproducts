@@ -39,7 +39,7 @@ TERMS = [
     ]),
     ("Tagging and disclosure", [
         ("p", "When you publish work made with the panel or presets:"),
-        ("ul", ["Tag @mw_phototours on Instagram and Matan Wild on Facebook, in the post and on the image",
+        ("ul", ["Tag @mw_phototours on Instagram and MW Photo Tours on Facebook, in the post and on the image",
                 "Use #mwppanel #mwppresets #jointhewildsideofphotography",
                 "Mention the panel or preset by name when you talk about your edit"]),
         ("p", "Because you received the tools for free, your audience must know that. Mark sponsored or gifted content clearly, using the platform's \"Paid partnership\" label or #ad / #gifted at the start of the caption. This is required by consumer-protection rules in Israel and most other countries, and it protects both of us."),
@@ -104,9 +104,15 @@ CROSS = '<svg class="mk" width="14" height="14" viewBox="0 0 24 24" fill="none" 
 COPY = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></svg>'
 
 
+INSTAGRAM = "https://www.instagram.com/mw_phototours"
+OUT = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>'
+
+
 def chips(html):
-    """The handle and hashtags become tap-to-copy chips (the words themselves stay exactly as written)."""
-    return _re.sub(r"(@mw_phototours|#mwppanel|#mwppresets|#jointhewildsideofphotography)",
+    """@mw_phototours links to the Instagram profile; the hashtags are tap-to-copy chips.
+    (The words themselves stay exactly as written.)"""
+    html = html.replace("@mw_phototours", f'<a class="cp" href="{INSTAGRAM}" target="_blank" rel="noopener">@mw_phototours{OUT}</a>')
+    return _re.sub(r"(#mwppanel|#mwppresets|#jointhewildsideofphotography)",
                    lambda m: f'<button type="button" class="cp" data-copy="{m.group(1)}" title="Copy">{m.group(1)}{COPY}</button>', html)
 
 
@@ -253,7 +259,7 @@ html[lang=he] .fact span{letter-spacing:.03em}
 .ch-in ul.no li .mk{color:#F2A0A0;background:rgba(242,160,160,.1)}
 .sh-foot{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-top:40px}
 .sh-foot p{margin:0;font-size:15px;color:#9CB1C2}
-.cp{display:inline-flex;align-items:center;gap:6px;margin:2px 1px;padding:2px 10px;border-radius:64px;border:1px solid rgba(244,175,86,.4);background:rgba(244,175,86,.08);color:#F4AF56;font:inherit;font-size:.92em;font-weight:600;cursor:pointer;vertical-align:baseline;transition:background .25s,transform .2s}
+.cp{text-decoration:none;display:inline-flex;align-items:center;gap:6px;margin:2px 1px;padding:2px 10px;border-radius:64px;border:1px solid rgba(244,175,86,.4);background:rgba(244,175,86,.08);color:#F4AF56;font:inherit;font-size:.92em;font-weight:600;cursor:pointer;vertical-align:baseline;transition:background .25s,transform .2s}
 .cp:hover{background:rgba(244,175,86,.18)}
 .cp:active{transform:scale(.96)}
 .cp svg{opacity:.7}
