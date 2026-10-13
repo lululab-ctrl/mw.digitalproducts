@@ -127,11 +127,11 @@ html[dir=rtl] .input[dir=ltr]{text-align:right}
 /* after unlocking */
 .reveal{opacity:0;transform:translateY(28px);transition:opacity 1s cubic-bezier(.16,1,.3,1),transform 1.1s cubic-bezier(.16,1,.3,1);transition-delay:var(--d,0s)}
 .reveal.on{opacity:1;transform:none}
-.top{position:relative;margin-top:-80px;min-height:100svh;display:flex;align-items:flex-end;padding:180px 0 64px;overflow:hidden}
+.top{position:relative;margin-top:-80px;min-height:100svh;display:flex;align-items:center;padding:120px 0 72px;overflow:hidden}
 .top .bg{opacity:.9}
-.top .shade{background:linear-gradient(180deg,rgba(10,9,8,.55) 0%,rgba(10,9,8,.15) 35%,rgba(10,9,8,.55) 70%,#0A0908 100%),linear-gradient(90deg,rgba(10,9,8,.7),transparent 65%)}
-html[dir=rtl] .top .shade{background:linear-gradient(180deg,rgba(10,9,8,.55) 0%,rgba(10,9,8,.15) 35%,rgba(10,9,8,.55) 70%,#0A0908 100%),linear-gradient(270deg,rgba(10,9,8,.7),transparent 65%)}
-.top .wrap{position:relative}
+.top .shade{background:linear-gradient(180deg,rgba(10,9,8,.55) 0%,rgba(10,9,8,.2) 35%,rgba(10,9,8,.55) 75%,#0A0908 100%),radial-gradient(ellipse at 50% 55%,rgba(10,9,8,.55),transparent 70%)}
+.top .wrap{position:relative;width:100%;display:flex;flex-direction:column;align-items:center;text-align:center}
+.top .hero-h,.top .lead{margin-left:auto;margin-right:auto}
 .badge{display:inline-flex;align-items:center;gap:10px;padding:8px 16px;border-radius:64px;background:rgba(244,175,86,.1);border:1px solid rgba(244,175,86,.4);color:#F4AF56;font-size:12px;font-weight:700;letter-spacing:.2em;text-transform:uppercase}
 .badge::before{content:"";width:7px;height:7px;border-radius:50%;background:#F4AF56;box-shadow:0 0 12px #F4AF56}
 .sec{padding:88px 0}
@@ -324,7 +324,7 @@ html[lang=he] .sig-l,html[lang=he] .sig-what{letter-spacing:.06em}
 .link-gold:hover{text-decoration-color:#F4AF56}
 .foot{padding:56px 0 70px;border-top:1px solid rgba(254,251,241,.06);font-size:13px;color:#7E8A93;text-align:center}
 html[lang=he] .kick,html[lang=he] .field label,html[lang=he] .badge{letter-spacing:.04em}
-@media (max-width:600px){.wrap{padding:0 20px}.glass{padding:34px 22px 28px;border-radius:22px}.top{margin-top:-64px;padding:150px 0 80px}.sec{padding:80px 0}.modal{padding:12px}.modal-card{padding:56px 20px 28px}}
+@media (max-width:600px){.wrap{padding:0 20px}.glass{padding:34px 22px 28px;border-radius:22px}.top{margin-top:-64px;padding:96px 0 64px}.sec{padding:80px 0}.modal{padding:12px}.modal-card{padding:56px 20px 28px}}
 @media (prefers-reduced-motion:reduce){.bg,.glass{animation:none}.reveal{opacity:1;transform:none;transition:none}}
 """
 
