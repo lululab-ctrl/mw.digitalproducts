@@ -276,6 +276,7 @@ html[lang=he] fieldset.field legend{letter-spacing:.04em}
 .field label,fieldset.field legend{line-height:1.45}
 .input.area{height:auto;min-height:96px;padding:14px 18px;line-height:1.5;resize:vertical;font:inherit;font-size:16px}
 .opts{display:flex;flex-wrap:wrap;gap:8px}
+.field[hidden]{display:none}
 .opt{position:relative;display:inline-flex;cursor:pointer;text-transform:none!important;letter-spacing:0!important;font-size:15px!important;font-weight:600!important;color:#FEFBF1!important}
 .opt input{position:absolute;opacity:0;pointer-events:none}
 .opt span{display:inline-flex;align-items:center;min-height:44px;padding:0 18px;border-radius:64px;border:1px solid rgba(254,251,241,.18);background:rgba(10,9,8,.45);transition:all .2s}
@@ -444,8 +445,8 @@ html .nav .wrap,html.nav-scrolled .nav .wrap{{height:80px;transition:none}}
 <h3 class="q-h">The program</h3>
 <p class="q-note">A quick reminder of what we ask: in the first 3 months, 3 posts and 1 reel a month plus 1 story a week, tagging us. After that, just tag us whenever you use the tools and love the result. We'd also love your feedback and bug reports so we can keep improving.</p>
 <fieldset class="field"><legend>Does this sound good to you?</legend><div class="opts"><label class="opt"><input type="radio" name="sounds_good" value="Yes" required><span>Yes</span></label><label class="opt"><input type="radio" name="sounds_good" value="I have a question"><span>I have a question</span></label></div></fieldset>
+<div class="field" id="question-field" hidden><label for="j-question">Your question</label><textarea class="input area" id="j-question" name="question" rows="3"></textarea></div>
 <fieldset class="field"><legend>Are you happy to send us feedback and report bugs when you find them?</legend><div class="opts"><label class="opt"><input type="radio" name="feedback" value="Yes" required><span>Yes</span></label><label class="opt"><input type="radio" name="feedback" value="No"><span>No</span></label></div></fieldset>
-<div class="field"><label for="j-else">Anything you'd like to ask us, or anything else you'd like to share? (optional)</label><textarea class="input area" id="j-else" name="anything_else" rows="3"></textarea></div>
 <div class="sig" id="sig" aria-live="polite">
 <div class="sig-in">
 <p class="sig-l">Signed by</p>
