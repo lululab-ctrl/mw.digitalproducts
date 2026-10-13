@@ -29,7 +29,7 @@ const QUESTIONS: [string, string, boolean][] = [   // [key, label, required]
   ["values", "What values are important to you in your photography and in the way you share it?", true],
   ["sounds_good", "Does this sound good to you?", true],
   ["feedback", "Happy to send feedback and report bugs?", true],
-  ["anything_else", "Anything you'd like to ask us, or anything else you'd like to share?", false],
+  ["question", "Their question (when they chose \"I have a question\")", false],
 ];
 
 // Free text: no control characters, trimmed, capped. Double quotes become typographic ones (it travels inside JSON to monday).
@@ -76,9 +76,11 @@ Deno.serve(async (req) => {
   const answers: Record<string, string> = {};
   for (const [key, , required] of QUESTIONS) {
     const v = text(raw[key]);
-    if (required && !v) return fail(req, "Please answer every question (only the last one is optional).", 400);
+    if (required && !v) return fail(req, "Please answer every question.", 400);
     answers[key] = v;
   }
+  if (answers.sounds_good !== "I have a question") answers.question = "";
+  else if (!answers.question) return fail(req, "Please answer every question.", 400);
 
   await db.from("beta_attempts").insert({ ip_hash: ipHash });
 
@@ -110,7 +112,7 @@ Deno.serve(async (req) => {
     platforms: esc(`@${instagram}${facebook ? ` · Facebook: ${facebook}` : ""} · ${answers.platforms}`.slice(0, 900)),
     work: esc(answers.work.slice(0, 900)),
     applied_on: app.created_at.slice(0, 10),
-    sounds_good: esc(answers.sounds_good),
+    sounds_good: esc(answers.question ? `${answers.sounds_good}: ${answers.question}`.slice(0, 900) : answers.sounds_good),
     feedback: esc(answers.feedback),
     answers_text: esc(lines.join("\n\n")),
   });

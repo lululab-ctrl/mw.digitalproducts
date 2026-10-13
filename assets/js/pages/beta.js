@@ -126,6 +126,13 @@ betaStatus().then((r) => { if (r && r.open === false) showFull(); }).catch(() =>
 // answer (welcome with the tools, or a kind no) once they decide.
 const form = document.getElementById("join-form");
 const msg = document.getElementById("join-msg");
+// "I have a question" opens a box for it
+form.addEventListener("change", (e) => {
+  if (e.target.name !== "sounds_good") return;
+  const asking = e.target.value === "I have a question";
+  document.getElementById("question-field").hidden = !asking;
+  if (asking) document.getElementById("j-question").focus();
+});
 const REQUIRED = ["shoot", "years", "role", "work", "software", "apps", "devices", "used_before", "why", "values", "sounds_good", "feedback"];
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -140,7 +147,8 @@ form.addEventListener("submit", async (e) => {
     return (el.value || "").trim();
   };
   const answers = {};
-  for (const n of [...REQUIRED, "platforms", "anything_else"]) answers[n] = val(n);
+  for (const n of [...REQUIRED, "platforms", "question"]) answers[n] = val(n);
+  if (answers.sounds_good !== "I have a question") answers.question = "";
   const data = {
     name: val("name"),
     email: val("email").toLowerCase(),
@@ -154,12 +162,12 @@ form.addEventListener("submit", async (e) => {
   if (!data.name) { f.name.focus(); msg.textContent = T("Please enter your name.", "נא למלא שם."); return; }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(data.email)) { f.email.focus(); msg.textContent = T("Please enter a valid email.", "נא למלא מייל תקין."); return; }
   if (!data.instagram.replace(/^@+/, "")) { f.instagram.focus(); msg.textContent = T("Please enter your Instagram handle.", "נא למלא את שם המשתמש באינסטגרם."); return; }
-  const missing = REQUIRED.find((n) => !answers[n]);
+  const missing = REQUIRED.find((n) => !answers[n]) || (answers.sounds_good === "I have a question" && !answers.question ? "question" : null);
   if (missing) {
     const el = form.querySelector(`[name="${missing}"]`);
     el?.closest(".field")?.scrollIntoView({ behavior: "smooth", block: "center" });
     if (el && el.type !== "radio" && el.type !== "checkbox") el.focus({ preventScroll: true });
-    msg.textContent = T("Please answer every question (only the last one is optional).", "נא לענות על כל השאלות (רק האחרונה אופציונלית).");
+    msg.textContent = T("Please answer every question.", "נא לענות על כל השאלות.");
     return;
   }
   if (!data.agree) { msg.textContent = T("Please accept the Ambassador Program terms.", "נא לאשר את תנאי תוכנית השגרירים."); return; }   // can't happen: the form opens only after accepting
