@@ -107,6 +107,15 @@ FOOTER = f"""<footer class="site-footer">
   </div>
 </footer>"""
 
+def ver(script):
+    """Short fingerprint of a page script, so browsers fetch the new one after every change."""
+    import hashlib
+    h = hashlib.sha1()
+    for f in [os.path.join(ROOT, "assets/js/pages", script)] + sorted(
+            os.path.join(ROOT, "assets/js/lib", n) for n in os.listdir(os.path.join(ROOT, "assets/js/lib"))):
+        h.update(open(f, "rb").read())
+    return h.hexdigest()[:8]
+
 def page(name, title, desc, body, script, extra_head=""):
     if name == "index.html":
         return  # the home page is hand-built in the sales-page look (index.html)
@@ -116,7 +125,7 @@ def page(name, title, desc, body, script, extra_head=""):
 {body}
 </main>
 {FOOTER}
-<script type="module" src="assets/js/pages/{script}"></script>
+<script type="module" src="assets/js/pages/{script}?v={ver(script)}"></script>
 </body>
 </html>
 """
