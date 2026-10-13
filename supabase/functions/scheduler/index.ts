@@ -70,6 +70,8 @@ Deno.serve(async (req) => {
       case "ambassador_status": return reply(await ambassadorStatus(db, String(body.member_id ?? "")));
       case "tester": return reply(await tester(db, String(body.tester_id ?? ""), String(body.action ?? "")));
       case "applications": return reply(await applications(db, SELF));
+      case "customer_added": return reply(await customerAdded(db, String(body.customer_id ?? "")));
+      case "customer_deleted": return reply(await customerDeleted(String(body.email ?? "")));
       default: return reply({ error: `unknown job ${job}` }, 400);
     }
   } catch (err) {
@@ -327,5 +329,24 @@ async function tester(db: Db, id: string, action: string) {
     removed_on: t.removed_at ? day(new Date(t.removed_at)) : "",
     products: "MWP Presets, MWP Panel, MWP Field Guides",
   });
+  return { ok: true };
+}
+
+// ---------------------------------------------------------------- Supabase ↔ monday mirror (migration 036)
+// A customer added in Supabase (any way) → Shop Customers, unless already there (Make checks by email).
+async function customerAdded(db: Db, id: string) {
+  if (!id) return { skipped: "no customer" };
+  const { data: c } = await db.from("customers").select("email, name, created_at").eq("id", id).maybeSingle();
+  if (!c?.email) return { skipped: "unknown customer" };
+  await notifyMake("MAKE_WEBHOOK_URL", {
+    type: "account", email: c.email, name: plain(c.name || c.email), source: "Shop",
+    joined_on: day(new Date(c.created_at)),
+  });
+  return { ok: true };
+}
+// A customer deleted in Supabase → their rows on every shop board in monday are deleted (to monday's trash).
+async function customerDeleted(email: string) {
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return { skipped: "no email" };
+  await notifyMake("MAKE_WEBHOOK_URL", { type: "customer_deleted", email });
   return { ok: true };
 }
