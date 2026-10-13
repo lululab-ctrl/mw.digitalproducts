@@ -596,23 +596,13 @@ async function loadTesters() {
   tstRows = data;
   $("#tst-count").textContent = `${data.filter((r) => !r.removed_at).length} of 10 places used`;
   $("#tst-table").innerHTML = tableHTML(tstCols, tstRows);
+  loadTesterCode();
 }
-$("#tst-form").addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const f = e.currentTarget;
-  const btn = f.querySelector("button");
-  setBusy(btn, true);
-  const { error } = await supabase.rpc("add_tester", { p_email: f.elements.email.value, p_name: f.elements.name.value });
-  setBusy(btn, false);
-  if (error) {
-    const full = /tester_program_full/.test(error.message);
-    toast(full ? "There are already 10 testers. Remove one first." : error.message, { type: "error", timeout: 7000 });
-    return;
-  }
-  f.reset();
-  toast("Approved. Their copies are being made, and monday is updated. Send them shop.mw.photography/testers/");
-  loadTesters();
-});
+// the current tester code (admins only can read it)
+async function loadTesterCode() {
+  const { data } = await supabase.from("tester_code").select("code").maybeSingle();
+  $("#tst-code-now").textContent = data?.code || "not set yet";
+}
 $("#tst-code-form").addEventListener("submit", async (e) => {
   e.preventDefault();
   const f = e.currentTarget;
@@ -623,6 +613,7 @@ $("#tst-code-form").addEventListener("submit", async (e) => {
   if (error) { toast(error.message, { type: "error", timeout: 7000 }); return; }
   f.reset();
   toast("Tester code saved. The old code no longer works.");
+  loadTesterCode();
 });
 $("#tst-table").addEventListener("click", async (e) => {
   const btn = e.target.closest("[data-remove-tester]");
