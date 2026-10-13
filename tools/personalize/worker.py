@@ -226,9 +226,11 @@ def signed_terms():
     from terms_pdf import terms_pdf
     from terms_pdf_he import terms_pdf_he
     hook = os.environ.get("MAKE_WEBHOOK_URL", "")
-    members = rest("beta_members", select="id,instagram,facebook,agreed_at,terms_version,terms_lang,terms_pdf_at,terms_pdf_made_at,customers(name,email)")
+    members = rest("beta_members", select="id,instagram,facebook,agreed_at,terms_version,terms_lang,terms_pdf_path,terms_pdf_at,terms_pdf_made_at,customers(name,email)")
+    older = lambda m, k: not m.get(k) or m[k] < (m.get("agreed_at") or "")
+    # To do: no stored copy for this acceptance (the download waits for one), or not yet sent to monday.
     todo = [m for m in members if (m.get("customers") or {}).get("email")
-            and (not m.get("terms_pdf_at") or m["terms_pdf_at"] < (m.get("agreed_at") or ""))]
+            and (not m.get("terms_pdf_path") or older(m, "terms_pdf_made_at") or older(m, "terms_pdf_at"))]
     print(f"{len(members)} ambassadors, {len(todo)} signed-terms PDFs to make", flush=True)
     made = failed = 0
     with tempfile.TemporaryDirectory() as tmp:
@@ -244,7 +246,9 @@ def signed_terms():
                                headers={"content-type": "application/pdf", "x-upsert": "true"})
                 r.raise_for_status()
                 sent = False
-                if hook:
+                if not older(m, "terms_pdf_at"):
+                    sent = True   # monday already has this acceptance's copy: don't attach it twice
+                elif hook:
                     r = S.post(f"{URL}/storage/v1/object/sign/documents/{path}", json={"expiresIn": 3600}, timeout=60)
                     r.raise_for_status()
                     link = URL + "/storage/v1" + r.json()["signedURL"]
