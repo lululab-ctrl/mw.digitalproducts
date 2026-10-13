@@ -14,7 +14,7 @@
 import { admin, clientIp, cors, EMAIL_RE, fail, json, notifyMake, requestPersonalCopies, sha256Hex } from "../_shared/http.ts";
 import { grantAmbassador } from "../_shared/ambassador.ts";
 
-const TERMS_VERSION = "2026-10-13.4";   // must match TERMS_VERSION in tools/ambassador_terms.py
+const TERMS_VERSION = "2026-10-13.5";   // must match TERMS_VERSION in tools/ambassador_terms.py
 const MAX_APPLICATIONS_PER_HOUR = 5;  // per IP
 
 // The questionnaire (same order and wording as the page). Answers are kept in English labels for the team.
