@@ -600,7 +600,7 @@ page("testers.html", "Testers · MWP",
         <p class="acct-note">Your copies are made for you and carry your name. Please don't share them. Download links work for 5 minutes. Trouble? <a class="link" href="/support/">Contact support</a>.</p>
       </div>
     </div>
-  </section>""", "testers.js", extra_head='\n  <meta name="robots" content="noindex">' + ACCOUNT_CSS + "<style>.t-hi{margin:0;font-size:18px;color:#CDD7DD}"
+  </section>""", "testers.js", announce=False, extra_head='\n  <meta name="robots" content="noindex">' + ACCOUNT_CSS + "<style>.t-hi{margin:0;font-size:18px;color:#CDD7DD}"
   # testers page: a compact, centered hero and sign-in card (Matan, 13 Oct 2026)
   ".acct-hero{padding:clamp(48px,6vw,80px) 0 clamp(24px,3vw,36px);text-align:center}"
   ".acct-hero .acct-h1{font-size:clamp(40px,5.5vw,76px)}"
