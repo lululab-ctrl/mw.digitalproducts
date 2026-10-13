@@ -123,7 +123,7 @@ async function load() {
           </div>
           <div class="buy-box__price"><span class="price">${priceHTML(p)}</span><span class="meta">${esc(p.currency)}, one-time payment</span></div>
           ${p.checkout_url
-            ? `<a class="btn btn--accent btn--block lemonsqueezy-button" id="buy" href="${esc(checkoutHref(p.checkout_url, { email: user?.email }))}">Buy now</a>`
+            ? `<a class="btn btn--accent btn--block lemonsqueezy-button" id="buy" data-checkout href="${esc(checkoutHref(p.checkout_url, { email: user?.email }))}">Buy now</a>`
             : `<button class="btn btn--block" disabled>Available soon</button>`}
           <button class="btn btn--ghost btn--block" type="button" id="add-to-cart">Add to cart</button>
           <ul class="assure">
