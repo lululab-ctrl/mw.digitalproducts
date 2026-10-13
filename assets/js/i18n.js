@@ -96,7 +96,7 @@ const HE = {
   "The Wild Side of Photography": "דה ווילד סייד אוף פוטוגרפי",
   "Mentoring photographers and content creators": "ליווי צלמים ויוצרי תוכן",
   "Lightroom presets, a Photoshop plugin and field guides by Matan Wild, founder of MWP. Years of leading photography tours and editing alongside photographers of every level, distilled into one signature look: professional colour, natural tones, effortless to use.":
-    "פריסטים ללייטרום, פלאגין לפוטושופ ומדריכי שטח מאת מתן וויילד, מייסד אם־דבליו־פי. שנים של הובלת מסעות צילום ועריכה לצד צלמים בכל הרמות, מזוקקות למראה חתימה אחד: צבעים מקצועיים, גוונים טבעיים, ופשוט להשתמש.",
+    "פריסטים ללייטרום, פלאגין לפוטושופ ומדריכי שטח מאת מתן וויילד, מייסד MWP. שנים של הובלת מסעות צילום ועריכה לצד צלמים בכל הרמות, מזוקקות למראה חתימה אחד: צבעים מקצועיים, גוונים טבעיים, ופשוט להשתמש.",
   "My details": "הפרטים שלי",
   "Used on your receipts and when we help you with an order.": "משמשים לקבלות וכשאנחנו עוזרים לכם עם הזמנה.",
   "Your purchases are tied to this email. To change it,": "הרכישות שלכם קשורות למייל הזה. כדי לשנות אותו,",
@@ -140,11 +140,11 @@ const HE = {
   "Print": "הדפסה",
   "Web": "רשת",
   "Navigator": "ניווט",
-  "MWP 1 Signature": "אם־דבליו־פי 1 חתימה",
-  "MWP 2 Light & Scene": "אם־דבליו־פי 2 אור וסצנה",
-  "MWP 3 Mono": "אם־דבליו־פי 3 מונו",
-  "MWP 4 Adaptive": "אם־דבליו־פי 4 אדפטיבי",
-  "MWP 5 Tools": "אם־דבליו־פי 5 כלים",
+  "MWP 1 Signature": "MWP 1 חתימה",
+  "MWP 2 Light & Scene": "MWP 2 אור וסצנה",
+  "MWP 3 Mono": "MWP 3 מונו",
+  "MWP 4 Adaptive": "MWP 4 אדפטיבי",
+  "MWP 5 Tools": "MWP 5 כלים",
   "Basic": "בסיסי",
   "Treatment": "טיפול",
   "Color": "צבע",
@@ -662,18 +662,18 @@ function translate(text) {
 }
 
 
-// Names in Hebrew (Matan: everything in Hebrew; the header logo stays MWP). Same list as tools/he_names.py.
+// Names in Hebrew (Matan: everything in Hebrew, except MWP, which always stays in Latin letters). Same list as tools/he_names.py.
 const NAMES = [
-  ["MWP - PS Panel", "הפאנל של אם־דבליו־פי"],
-  ["MWP - Signature Preset Pack", "הפריסטים של אם־דבליו־פי"],
-  ["MWP Field Guides", "מדריכי השטח של אם־דבליו־פי"],
-  ["MWP FIELD GUIDES", "מדריכי השטח של אם־דבליו־פי"],
-  ["MWP Field Guide", "מדריך השטח של אם־דבליו־פי"],
-  ["MWP FIELD GUIDE", "מדריך השטח של אם־דבליו־פי"],
-  ["MWP Presets", "הפריסטים של אם־דבליו־פי"],
-  ["MWP PRESETS", "הפריסטים של אם־דבליו־פי"],
-  ["MWP Panel", "הפאנל של אם־דבליו־פי"],
-  ["MWP PANEL", "הפאנל של אם־דבליו־פי"],
+  ["MWP - PS Panel", "הפאנל של MWP"],
+  ["MWP - Signature Preset Pack", "הפריסטים של MWP"],
+  ["MWP Field Guides", "מדריכי השטח של MWP"],
+  ["MWP FIELD GUIDES", "מדריכי השטח של MWP"],
+  ["MWP Field Guide", "מדריך השטח של MWP"],
+  ["MWP FIELD GUIDE", "מדריך השטח של MWP"],
+  ["MWP Presets", "הפריסטים של MWP"],
+  ["MWP PRESETS", "הפריסטים של MWP"],
+  ["MWP Panel", "הפאנל של MWP"],
+  ["MWP PANEL", "הפאנל של MWP"],
   ["MW Photo Tours", "אם־דבליו פוטו טורס"],
   ["MW PHOTO TOURS", "אם־דבליו פוטו טורס"],
   ["Matan Wild Photography", "מתן וויילד צילום"],
@@ -701,7 +701,6 @@ const NAMES = [
   ["MailerLite", "מיילרלייט"],
   ["Make.com", "מייק"],
   ["monday.com", "מאנדיי"],
-  ["MWP", "אם־דבליו־פי"],
 ].map(([en, he]) => [new RegExp("(?<![A-Za-z0-9@._/])" + en.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "(?![A-Za-z0-9])", "g"), he]);
 // "ל-Lightroom" → "ללייטרום": a one-letter Hebrew prefix joins the now-Hebrew word.
 const PREFIX = /(?<![\u05D0-\u05EA])(ו?[בלכמשה]|ו)[-־](?=[\u05D0-\u05EA])/g;
@@ -723,8 +722,8 @@ function hebrew(text) {
 }
 
 // A product name split over two elements ("MWP" + <span class="grad">Presets</span>) becomes
-// "הפריסטים של" + <span class="grad">אם־דבליו־פי</span>, so the gold stays on the name.
-const MWP_HE = "אם־דבליו־פי";
+// "הפריסטים של" + <span class="grad">MWP</span>, so the gold stays on the name (MWP stays in Latin letters).
+const MWP_HE = "MWP";
 function productName(el) {
   // only a short name: some text plus one gold <span class="grad"> word, nothing else inside
   const g = el.children && el.children.length === 1 ? el.children[0] : null;
