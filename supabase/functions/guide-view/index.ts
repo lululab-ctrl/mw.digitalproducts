@@ -22,16 +22,19 @@ Deno.serve(async (req) => {
   if (!user?.email) return fail(req, "Please sign in again.", 401);
   const email = user.email.toLowerCase();
 
-  const { data: customer } = await db.from("customers").select("id, name").eq("email", email).maybeSingle();
-  const { data: product } = await db.from("products").select("id").eq("slug", SLUG).maybeSingle();
+  // Asked at the same time (faster than one after another).
+  const [{ data: customer }, { data: product }] = await Promise.all([
+    db.from("customers").select("id, name").eq("email", email).maybeSingle(),
+    db.from("products").select("id").eq("slug", SLUG).maybeSingle(),
+  ]);
   if (!customer || !product) return fail(req, "The Field Guides aren't in your library.", 403);
 
-  const { data: ent } = await db.from("entitlements").select("id, revoked_at")
-    .eq("customer_id", customer.id).eq("product_id", product.id).maybeSingle();
+  const [{ data: ent }, { data: file }, { data: view }] = await Promise.all([
+    db.from("entitlements").select("id, revoked_at").eq("customer_id", customer.id).eq("product_id", product.id).maybeSingle(),
+    db.from("product_files").select("version").eq("product_id", product.id).maybeSingle(),
+    db.from("guide_views").select("version, guides").eq("product_id", product.id).maybeSingle(),
+  ]);
   if (!ent || ent.revoked_at) return fail(req, "The Field Guides aren't in your library.", 403);
-
-  const { data: file } = await db.from("product_files").select("version").eq("product_id", product.id).maybeSingle();
-  const { data: view } = await db.from("guide_views").select("version, guides").eq("product_id", product.id).maybeSingle();
   if (!file) return fail(req, "The guides are being updated. Please try again shortly.", 503);
   if (!view) {   // only ever the very first time, before any version has been prepared
     await requestPersonalCopies();

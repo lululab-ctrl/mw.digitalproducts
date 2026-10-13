@@ -29,6 +29,12 @@
 .rd-pages{display:flex;flex-direction:column;gap:18px;padding-bottom:110px;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 .rd-page{position:relative;width:100%;border-radius:10px;overflow:hidden;background:#15130f;box-shadow:0 30px 60px -40px rgba(0,0,0,.9)}
 .rd-page canvas{display:block;width:100%;height:100%;pointer-events:none}
+.rd-page:not(.ok)::after{content:"Loading…";position:absolute;inset:0;display:grid;place-items:center;color:#9CB1C2;font-size:15px;letter-spacing:.02em;background:linear-gradient(100deg,#15130f 30%,#1d1a15 50%,#15130f 70%) 0 0/300% 100%;animation:rdload 1.4s linear infinite}
+html[lang=he] .rd-page:not(.ok)::after{content:"טוען…"}
+@keyframes rdload{to{background-position:-150% 0}}
+.rd-loading{display:flex;align-items:center;gap:12px;justify-content:center}
+.rd-loading::before{content:"";width:18px;height:18px;border-radius:50%;border:2px solid rgba(244,175,86,.25);border-top-color:#F4AF56;animation:rdspin .8s linear infinite}
+@keyframes rdspin{to{transform:rotate(360deg)}}
 .rd-n{position:absolute;bottom:12px;left:12px;font-size:11.5px;color:rgba(254,251,241,.55);background:rgba(10,9,8,.55);padding:3px 8px;border-radius:64px}
 .rd-msg{padding:40px 32px;text-align:center;border-radius:24px;background:linear-gradient(180deg,rgba(254,251,241,.05),rgba(254,251,241,.015));border:1px solid rgba(254,251,241,.08);color:#CDD7DD}
 .rd-msg .btn{margin-top:18px}
@@ -162,6 +168,6 @@ html[lang=he] body,html[lang=he] body *:not(svg):not(svg *),html body [lang=he],
     </div>
   </div>
 </footer>
-<script type="module" src="assets/js/pages/read.js?v=3601c8ad"></script>
+<script type="module" src="assets/js/pages/read.js?v=0ad23910"></script>
 </body>
 </html>

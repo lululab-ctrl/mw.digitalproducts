@@ -71,10 +71,12 @@ Deno.serve(async (req) => {
     // The code signs them in right here (Matan: no email step for testers). The page gets a one-time token and
     // turns it into a session. Exception: an email that is the admin's, a buyer's or an ambassador's. The shared
     // code mustn't open those accounts, so they get the usual emailed link instead.
-    const { data: cust } = await db.from("customers").select("id, beta_members(id), orders(id)").eq("email", email).maybeSingle();
     const many = (v: unknown) => Array.isArray(v) ? v.length > 0 : Boolean(v);
-    const { data: adm } = await db.from("admin_allowlist").select("email").eq("email", email).maybeSingle();
-    const { data: adm2 } = await db.from("admins").select("user_id").eq("email", email).maybeSingle();
+    const [{ data: cust }, { data: adm }, { data: adm2 }] = await Promise.all([   // at the same time: faster
+      db.from("customers").select("id, beta_members(id), orders(id)").eq("email", email).maybeSingle(),
+      db.from("admin_allowlist").select("email").eq("email", email).maybeSingle(),
+      db.from("admins").select("user_id").eq("email", email).maybeSingle(),
+    ]);
     const protectedAccount = Boolean(adm || adm2 || many(cust?.beta_members) || many(cust?.orders));
     const lang = body.lang === "he" ? "he" : "en";
     if (protectedAccount) {

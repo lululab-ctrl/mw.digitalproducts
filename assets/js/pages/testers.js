@@ -46,14 +46,16 @@ $("t-form").addEventListener("submit", async (e) => {
   if (!code) { setStatus(status, T("Please enter your tester code.", "נא למלא את קוד הבודקים."), "error"); return; }
   const btn = form.querySelector("button[type=submit]");
   setBusy(btn, true, T("Signing in…", "נכנסים…"));
+  setStatus(status, T("Checking your code…", "בודקים את הקוד…"), "");
   try {
     const lang = he() ? "he" : "en";
     // the code signs them in right here: no email step
     const r = await testerJoin({ name, email, code, lang });
     if (r.token_hash) {
+      setStatus(status, T("Opening your downloads…", "פותחים את ההורדות שלכם…"), "");
       const { error } = await supabase.auth.verifyOtp({ token_hash: r.token_hash, type: "magiclink" });
       if (error) throw error;
-      await start();
+      location.replace("/account/");   // they're a tester now: no need to ask again
       return;
     }
     // an email that already has a protected account (admin, buyer, ambassador): an emailed link instead

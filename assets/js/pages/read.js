@@ -18,6 +18,7 @@ let data = null, fetchedAt = 0, current = 0, refreshing = null;
 
 async function load() {
   const started = Date.now();
+  message(`<p class="rd-loading">${esc(T("Loading your guides…", "טוענים את המדריכים…"))}</p>`);
   let r = await guideView();
   while (r.preparing && Date.now() - started < 15 * 60000) {
     message(`<p>${esc(T("We're getting the guides ready to read online. This page will open them as soon as they're ready (usually a few minutes).",
@@ -53,6 +54,7 @@ async function draw(el) {
       c.width = page.w; c.height = page.h;
       const ctx = c.getContext("2d");
       ctx.drawImage(img, 0, 0, page.w, page.h);
+      el.classList.add("ok");   // hides its "Loading…"
       return;
     } catch {
       fetchedAt = 0;   // the link may have run out: get new ones and try once more
