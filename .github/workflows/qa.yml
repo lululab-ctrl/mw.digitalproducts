@@ -1,0 +1,47 @@
+# ============================================================================
+# Site QA: tests the site before it goes live.
+#   - On every pull request: tests the changed site and shows the result on the PR.
+#   - Before every deploy: deploy.yml runs this first and stops if it fails.
+#   - By hand: Actions → Site QA → Run workflow.
+# What it checks and how to read the report: qa/README.md.
+# The full report is attached to each run as "qa-report".
+# ============================================================================
+name: Site QA
+
+on:
+  pull_request:
+  workflow_dispatch:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  qa:
+    name: Test the site
+    runs-on: ubuntu-24.04   # same as deploy.yml
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install the test tools
+        run: |
+          npm ci --prefix qa --no-audit --no-fund
+          cd qa && npx playwright install --with-deps chromium firefox webkit
+
+      - name: Test the site
+        id: qa
+        run: node qa/run.mjs
+
+      - name: Show the summary on this run
+        if: always()
+        run: cat qa/report/summary.md >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || echo "The test run stopped before writing a report; see the 'Test the site' step." >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Attach the full report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: qa-report
+          path: qa/report/
+          retention-days: 30
+          if-no-files-found: warn

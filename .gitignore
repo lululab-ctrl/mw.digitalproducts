@@ -9,3 +9,7 @@ supabase/.temp
 node_modules/
 .DS_Store
 __pycache__/
+qa/node_modules/
+qa/.site/
+qa/report/
+qa/code-review.json
