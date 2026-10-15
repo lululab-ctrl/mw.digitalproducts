@@ -1,6 +1,7 @@
 // Turns results.json into report.html (for people) and summary.md (for GitHub).
 import fs from "node:fs";
 import path from "node:path";
+import zlib from "node:zlib";
 import { CATEGORIES, SEVERITIES } from "./rules.mjs";
 
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -166,7 +167,12 @@ ${sections}
       "",
     );
   }
+  // A compressed, machine-readable copy of the results, hidden in the text (invisible on GitHub), for tools
+  // that can read the Checks tab but can't download the attached report (e.g. Claude rebuilding report.html).
+  const data = zlib.gzipSync(JSON.stringify({ ...r, visited: undefined, headers: undefined })).toString("base64");
+  const hidden = data.length < 30000 ? `\n<!-- qa-results:${data} -->\n` : "";
   let text = parts.join("\n");
-  if (text.length > 60000) text = text.slice(0, 60000).replace(/\n[^\n]*$/, "") + "\n\n*…the rest is in the full report (qa-report on this run).*";
-  fs.writeFileSync(path.join(outDir, "details.md"), text + "\n");
+  const room = 64000 - hidden.length;
+  if (text.length > room) text = text.slice(0, room - 100).replace(/\n[^\n]*$/, "") + "\n\n*…the rest is in the full report (qa-report on this run).*";
+  fs.writeFileSync(path.join(outDir, "details.md"), text + hidden);
 }
