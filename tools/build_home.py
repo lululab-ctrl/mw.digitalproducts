@@ -260,5 +260,7 @@ html = f'''<!doctype html>
 from brand import GOLD
 for a, b in GOLD:
     html = html.replace(a, b)
+from img_loading import prioritize   # hero photo first, the rest when it's near the screen
+html = prioritize(html, '<section class="st-hero"', "st-hero-img")
 open("index.html", "w", encoding="utf-8").write(html)
 print("index.html written", len(html))

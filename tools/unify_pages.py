@@ -5,6 +5,7 @@ import re, sys, os
 sys.path.insert(0, os.path.dirname(__file__))
 from brand import gold, NAV_CSS, FONTS, BUNDLE_CSS
 from sales_he import hebrew
+from img_loading import prioritize
 
 PAGES = {
     "presets/index.html": "en", "presets/he.html": "he",
@@ -85,6 +86,8 @@ for path, lang in PAGES.items():
     # Image addresses filled in by the runtime ({{cur.before}} …): keep them out of src, or the browser asks
     # the server for the literal "{{cur.before}}" (a 404) before dc-lite.js renders the page.
     s = re.sub(r'(<img\b[^>]*?)\ssrc="(\{\{[^"]*\}\})"', r'\1 data-dc-src="\2"', s)
+    # hero photo first, everything below the first screen only when it's needed
+    s = prioritize(s, '<section class="hero"', "hero-bg")
     slots = iter(PRICE_SLOTS[path.split("/")[0]])
     def slot(m):
         k = next(slots, None)

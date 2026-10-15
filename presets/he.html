@@ -402,7 +402,7 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 </nav>
 
 <section class="hero" id="top">
-<img class="hero-bg" src="../assets/pages/img/1a2e3ed3f44db1f671babb09a599b29f.jpg" alt="אריה שואג. צילום: מתן וויילד">
+<img class="hero-bg" fetchpriority="high" src="../assets/pages/img/1a2e3ed3f44db1f671babb09a599b29f.jpg" alt="אריה שואג. צילום: מתן וויילד">
 <div class="hero-shade"></div>
 <div class="wrap" style="position: relative; width: 100%">
 <div class="hero-grid">
@@ -460,8 +460,8 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 </sc-for>
 </div>
 <div class="ba">
-<img data-dc-src="{{cur.before}}" alt="לפני: קובץ ה-RAW כפי שצולם">
-<img data-dc-src="{{cur.after}}" alt="אחרי: עם פריסט של MWP" style="clip-path: inset(0 0 0 {{pos}}%)">
+<img loading="lazy" data-dc-src="{{cur.before}}" alt="לפני: קובץ ה-RAW כפי שצולם">
+<img loading="lazy" data-dc-src="{{cur.after}}" alt="אחרי: עם פריסט של MWP" style="clip-path: inset(0 0 0 {{pos}}%)">
 <div class="line" style="left: {{pos}}%"></div>
 <div class="knob" style="left: {{pos}}%" aria-hidden="true">
 <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0A0908" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l-6 6 6 6"></path><path d="M15 6l6 6-6 6"></path></svg>
@@ -484,11 +484,11 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 <p class="lead">מאור זהוב מאחור ועד השעה הכחולה, משמש מדברית ועד צל רך. כל אחד מתחיל מההגדרות שאנחנו משתמשים בהן בעבודה של MWP.</p>
 </div>
 <div class="cols" data-cnt="cd">
-<div class="card"><img src="../assets/pages/img/6fbe4f2a1e8774797e76a9165fd05e51.jpg" alt="לביאה בעשב זהוב"><div class="ov"><div class="num grad">{{cnt.cd0}}</div><h3 class="h3">חתימה</h3><p class="body">המראה של MWP והגרסאות שלו, מרך ועד עמוק.</p></div></div>
-<div class="card"><img src="../assets/pages/img/e83b19474f1b5e07f6d6edc06ca91eb0.jpg" alt="הר געש מתפרץ בלילה"><div class="ov"><div class="num grad">{{cnt.cd1}}</div><h3 class="h3">אור וסצנה</h3><p class="body">אור זהוב, שעה כחולה, מדבר, מים ולילה.</p></div></div>
-<div class="card"><img src="../assets/pages/img/f424f86bc52a764b29bb6c0ea50eb225.jpg" alt="אריה הולך, שחור-לבן"><div class="ov"><div class="num grad">{{cnt.cd2}}</div><h3 class="h3">מונו</h3><p class="body">שחור-לבן בגוונים של MWP.</p></div></div>
-<div class="card"><img src="../assets/pages/img/e55ba13821bd5c715d0a939a1cb10893.jpg" alt="שועל אדום מביט למצלמה"><div class="ov"><div class="num grad">{{cnt.cd3}}</div><h3 class="h3">אדפטיבי</h3><p class="body">מסכות AI לנושא, לשמיים ולרקע.</p></div></div>
-<div class="card"><img src="../assets/pages/img/ff95ea5c7aba4eba92df5afc39ee9eb7.jpg" alt="נמר יוצא מהיער"><div class="ov"><div class="num grad">{{cnt.cd4}}</div><h3 class="h3">כלים</h3><p class="body">חשיפה, פרטי פרווה, וינייט וגרעין.</p></div></div>
+<div class="card"><img loading="lazy" src="../assets/pages/img/6fbe4f2a1e8774797e76a9165fd05e51.jpg" alt="לביאה בעשב זהוב"><div class="ov"><div class="num grad">{{cnt.cd0}}</div><h3 class="h3">חתימה</h3><p class="body">המראה של MWP והגרסאות שלו, מרך ועד עמוק.</p></div></div>
+<div class="card"><img loading="lazy" src="../assets/pages/img/e83b19474f1b5e07f6d6edc06ca91eb0.jpg" alt="הר געש מתפרץ בלילה"><div class="ov"><div class="num grad">{{cnt.cd1}}</div><h3 class="h3">אור וסצנה</h3><p class="body">אור זהוב, שעה כחולה, מדבר, מים ולילה.</p></div></div>
+<div class="card"><img loading="lazy" src="../assets/pages/img/f424f86bc52a764b29bb6c0ea50eb225.jpg" alt="אריה הולך, שחור-לבן"><div class="ov"><div class="num grad">{{cnt.cd2}}</div><h3 class="h3">מונו</h3><p class="body">שחור-לבן בגוונים של MWP.</p></div></div>
+<div class="card"><img loading="lazy" src="../assets/pages/img/e55ba13821bd5c715d0a939a1cb10893.jpg" alt="שועל אדום מביט למצלמה"><div class="ov"><div class="num grad">{{cnt.cd3}}</div><h3 class="h3">אדפטיבי</h3><p class="body">מסכות AI לנושא, לשמיים ולרקע.</p></div></div>
+<div class="card"><img loading="lazy" src="../assets/pages/img/ff95ea5c7aba4eba92df5afc39ee9eb7.jpg" alt="נמר יוצא מהיער"><div class="ov"><div class="num grad">{{cnt.cd4}}</div><h3 class="h3">כלים</h3><p class="body">חשיפה, פרטי פרווה, וינייט וגרעין.</p></div></div>
 </div>
 </div>
 </section>
@@ -496,7 +496,7 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 <section class="sec alt">
 <div class="wrap split">
 <div class="frame">
-<img src="../assets/pages/img/e55ba13821bd5c715d0a939a1cb10893.jpg" alt="שועל אדום עם אזור הנושא מסומן">
+<img loading="lazy" src="../assets/pages/img/e55ba13821bd5c715d0a939a1cb10893.jpg" alt="שועל אדום עם אזור הנושא מסומן">
 <div class="mask" style="left: 22%; top: 18%; width: 58%; height: 70%"></div>
 <span class="mchip" style="left: 8%; top: 10%">נושא</span>
 <span class="mchip" style="right: 6%; bottom: 8%; background: #F4AF56">רקע</span>
@@ -529,7 +529,7 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 <div class="hd">פריסטים</div>
 <div class="on">MWP 1 חתימה</div><div>MWP 2 אור וסצנה</div><div>MWP 3 מונו</div><div class="on">MWP 4 אדפטיבי</div><div>MWP 5 כלים</div>
 </div>
-<div class="canvasarea"><img src="../assets/pages/img/8726daeb4a1c2551c37d43692b07fa4a.jpg" alt=""></div>
+<div class="canvasarea"><img loading="lazy" src="../assets/pages/img/8726daeb4a1c2551c37d43692b07fa4a.jpg" alt=""></div>
 <div class="lrp">
 <div class="hd">בסיסי</div>
 <div class="row"><span>ניגודיות</span><div class="bar"><i style="left: 58%"></i></div></div>
@@ -543,7 +543,7 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 </div>
 <div class="basebar"></div>
 </div>
-<div class="phone"><img src="../assets/pages/img/49caac68a148e8a94f554155c537cf56.jpg" alt=""></div>
+<div class="phone"><img loading="lazy" src="../assets/pages/img/49caac68a148e8a94f554155c537cf56.jpg" alt=""></div>
 </div>
 </div>
 </section>
@@ -557,8 +557,8 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 </div>
 <div class="combo">
 <div class="shot">
-<img src="../assets/pages/img/9a95f4aafdcef50170f5aa90a3945504.jpg" alt="שועל אדום, קובץ ה-RAW לפני עריכה">
-<img src="../assets/pages/img/3435b57c94c21180053de328ef05f972.jpg" alt="שועל אדום אחרי הפריסט והפאנל של MWP" style="opacity: {{fxOpacity}}; transition: opacity .6s ease">
+<img loading="lazy" src="../assets/pages/img/9a95f4aafdcef50170f5aa90a3945504.jpg" alt="שועל אדום, קובץ ה-RAW לפני עריכה">
+<img loading="lazy" src="../assets/pages/img/3435b57c94c21180053de328ef05f972.jpg" alt="שועל אדום אחרי הפריסט והפאנל של MWP" style="opacity: {{fxOpacity}}; transition: opacity .6s ease">
 <div class="hud"><span class="{{st1}}">RAW</span><span class="{{st2}}">פריסט MWP</span><span class="{{st3}}">הפאנל של MWP</span></div>
 <div class="ph">ממלא מקום: הפריים הסופי הוא העריכה של מתן. מחליפים באותו RAW אחרי הפריסט והפאנל בלבד.</div>
 <div class="plabel">{{fxLabel}}</div>
@@ -605,12 +605,12 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 <h2 class="h2">נבנה בשטח. <span class="b grad">עכשיו אצלכם.</span></h2>
 <p class="lead">אם־דבליו פוטו טורס מובילה מסעות צילום, ואת כל הפריימים אנחנו עורכים בעצמנו. הפריסטים האלה מגיעים ישר מקטלוג הלייטרום של MWP: ההגדרות שאנחנו חוזרים אליהן באור זהוב, בצל, מעל מים ובמדבר.</p>
 <div class="thumbs">
-<img src="../assets/pages/img/8be22742a3e020062bfe042419b7e7f7.jpg" alt="דיונה בדמדומים">
-<img src="../assets/pages/img/0015a37d9647a275fec7fcd23aa228d9.jpg" alt="שני פילים בשקיעה">
-<img src="../assets/pages/img/07a726e1ad5390d3edaefb6d26df5150.jpg" alt="קרחון באור סערה">
+<img loading="lazy" src="../assets/pages/img/8be22742a3e020062bfe042419b7e7f7.jpg" alt="דיונה בדמדומים">
+<img loading="lazy" src="../assets/pages/img/0015a37d9647a275fec7fcd23aa228d9.jpg" alt="שני פילים בשקיעה">
+<img loading="lazy" src="../assets/pages/img/07a726e1ad5390d3edaefb6d26df5150.jpg" alt="קרחון באור סערה">
 </div>
 </div>
-<div class="frame"><img src="../assets/pages/img/928a86d8f814d3f9272b1b0dc34da084.jpg" alt="צלם עם עדשה ארוכה בהרים"></div>
+<div class="frame"><img loading="lazy" src="../assets/pages/img/928a86d8f814d3f9272b1b0dc34da084.jpg" alt="צלם עם עדשה ארוכה בהרים"></div>
 </div>
 </section>
 
@@ -676,7 +676,7 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 </section>
 
 <section class="final" id="buy">
-<img class="final-bg" src="../assets/pages/img/fbaf19aea2af10f26b2949ab31fff094.jpg" alt="">
+<img loading="lazy" class="final-bg" src="../assets/pages/img/fbaf19aea2af10f26b2949ab31fff094.jpg" alt="">
 <div class="final-shade"></div>
 <div class="wrap" style="position: relative; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 28px">
 <div class="kick">הפריסטים של MWP</div>
