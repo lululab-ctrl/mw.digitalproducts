@@ -6,6 +6,8 @@ import html as html_lib
 from he_names import names
 
 EXACT = {
+    # page titles (TITLES in tools/unify_pages.py)
+    "Lightroom presets for wildlife and landscapes · MWP Presets": "פריסטים ללייטרום לצילומי חיות בר ונופים · הפריסטים של MWP",
     # search descriptions (DESC in tools/unify_pages.py)
     "50 Lightroom presets and 33 video LUTs built from the MWP edits of wildlife and landscapes. For Lightroom Classic, Lightroom, Lightroom Mobile and Camera Raw.":
         "50 פריסטים ללייטרום ו־33 קובצי LUT לווידאו, שנבנו מתוך העריכות של MWP לצילומי חיות בר ונופים. ללייטרום קלאסיק, ללייטרום, ללייטרום מובייל ולקאמרה ראו.",

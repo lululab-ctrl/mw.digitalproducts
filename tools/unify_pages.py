@@ -57,6 +57,11 @@ DESC = {
     "field-guides": "MWP Field Guides: four visual guides with 137 short lessons on composition, colour, light and planning, each one a real photo from the field.",
 }
 
+# Page titles where the design's own title is too short for search results (English pages only).
+TITLES = {
+    "presets/index.html": "Lightroom presets for wildlife and landscapes · MWP Presets",
+}
+
 # Matan's placeholder note under the bundle cards is not shown on the site.
 BUNDLE_NOTE = re.compile(r'<p[^>]*>\[(?:Bundle prices and discounts: (?:Matan to decide|for Matan to set)|מחירים והנחות לחבילות: לקביעת מתן)\]</p>\s*')
 
@@ -118,6 +123,8 @@ for path, lang in PAGES.items():
                if lang == "en" else
                '<script id="mwp-lang">try{localStorage.setItem("mwp_lang","he")}catch(e){}</script>')
     s = re.sub(r"(<head[^>]*>)", lambda m: m.group(1) + "\n" + LANG_JS, s, count=1)
+    if path in TITLES:
+        s = re.sub(r"<title>[^<]*</title>", f"<title>{TITLES[path]}</title>", s, count=1)
     s = re.sub(r'<meta name="description"[^>]*>\n?', '', s)
     s = s.replace("</title>", f'</title>\n<meta name="description" content="{DESC[path.split("/")[0]]}">', 1)
     # set up for phones (the designs already have their phone layouts in @media rules)
