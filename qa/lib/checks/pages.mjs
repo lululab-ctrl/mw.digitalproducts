@@ -148,7 +148,7 @@ export async function visit(ctx, { url, base, device, lang, browserName, shotDir
     const text = await page.evaluate(() => document.body?.innerText ?? "");
     for (const r of rules) {
       const m = text.match(new RegExp(`.{0,40}(?:${r.pattern}).{0,80}`, r.caseSensitive ? "" : "i"));
-      if (m) add(r.rule ?? "visible-placeholder", `Shows ${r.label}: "${m[0].replace(/\s+/g, " ").trim()}"`, r.severity ? { severity: r.severity } : {});
+      if (m) add(r.rule ?? "visible-placeholder", `Shows ${r.label}: "${m[0].replace(/\s+/g, " ").trim()}"`, { kind: r.label, ...(r.severity ? { severity: r.severity } : {}) });
     }
 
     dom = await page.evaluate(() => {

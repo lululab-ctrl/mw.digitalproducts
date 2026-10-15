@@ -201,7 +201,11 @@ for (const f of findings) {
     && (!d.browser || d.browser === f.browser));
   const severity = dg ? dg.to : (f.severity ?? rule.severity);
   if (dg) f.note = dg.reason;
-  const sameness = f.axeId ? `axe:${f.axeId}` : f.id ? `review:${f.id}` : f.detail.replace(/\d+px too wide/, "").replace(/\(\d+ places?:.*$/, "");
+  // What makes two findings "the same issue" (and gives it a stable id for the known-issues list).
+  const sameness = f.axeId ? `axe:${f.axeId}` : f.id ? `review:${f.id}`
+    : f.rule === "flow-failed" ? `flow:${f.page}|${f.detail.split(" failed:")[0]}`
+    : f.kind ? `kind:${f.kind}`
+    : f.detail.replace(/\d+px too wide/, "").replace(/\(\d+ places?:.*$/, "");
   const key = `${f.rule}|${severity}|${sameness}`;
   const g = groups.get(key) ?? { key, rule: f.rule, severity, category: rule.category, title: f.custom?.title ?? f.ruleTitle ?? rule.title,
     ruleTitle: rule.title, why: f.custom?.why ?? rule.why, fix: f.custom?.fix ?? rule.fix, learnMore: f.learnMore, note: f.note,
