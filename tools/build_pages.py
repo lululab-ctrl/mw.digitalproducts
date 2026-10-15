@@ -441,7 +441,7 @@ html[lang=he] .rd-kick{letter-spacing:.04em}
 page("account.html", "My downloads · MWP",
  "Sign in with your email to download what you've bought.",
  """  <section class="acct-hero">
-    <img class="bg" src="assets/pages/img/5275cc7bcd4fb7560d8f7163592e3122.jpg" alt="">
+    <img class="bg" src="assets/pages/img/5275cc7bcd4fb7560d8f7163592e3122.jpg" srcset="assets/pages/img/5275cc7bcd4fb7560d8f7163592e3122-1200.webp 1200w, assets/pages/img/5275cc7bcd4fb7560d8f7163592e3122.jpg 2000w" sizes="100vw" fetchpriority="high" alt="">
     <div class="shade"></div>
     <div class="container container--text">
       <p class="acct-kick">Your library</p>
