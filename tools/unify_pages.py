@@ -101,6 +101,9 @@ for path, lang in PAGES.items():
     s = re.sub(r"(<head[^>]*>)", lambda m: m.group(1) + "\n" + LANG_JS, s, count=1)
     if 'id="mwp-fonts"' not in s:
         s = s.replace("</head>", FONTS + "\n</head>", 1)
+    # Phones: without this tag, phones show a shrunken desktop page with tiny text. The designs already adapt to phone widths.
+    if 'name="viewport"' not in s:
+        s = re.sub(r"(<head[^>]*>)", lambda m: m.group(1) + '\n<meta name="viewport" content="width=device-width, initial-scale=1">', s, count=1)
     s = re.sub(r'<style id="mwp-unify">.*?</style>\n?', '', s, flags=re.S)
     s = s.replace("</head>", CSS + "\n</head>", 1)
     if "initCart" not in s:
