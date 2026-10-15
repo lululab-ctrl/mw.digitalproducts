@@ -15,6 +15,7 @@ on:
 
 permissions:
   contents: read
+  checks: write   # to show the report on the pull request's Checks tab
 
 jobs:
   qa:
@@ -36,6 +37,22 @@ jobs:
       - name: Show the summary on this run
         if: always()
         run: cat qa/report/summary.md >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || echo "The test run stopped before writing a report; see the 'Test the site' step." >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Show the report on the pull request
+        # Appears as "Site QA report" in the pull request's Checks tab.
+        if: always() && github.event_name == 'pull_request' && hashFiles('qa/report/details.md') != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          REPO: ${{ github.repository }}
+          RESULT: ${{ steps.qa.outcome }}
+        run: |
+          title=$([ "$RESULT" = "success" ] && echo "No new serious issues" || echo "New serious issues: not ready to go live")
+          jq -n --arg sha "$HEAD_SHA" --arg title "$title" --rawfile summary qa/report/summary.md --rawfile text qa/report/details.md \
+            '{name: "Site QA report", head_sha: $sha, status: "completed", conclusion: "neutral",
+              output: {title: $title, summary: $summary, text: $text}}' \
+          | curl -sS --fail-with-body -o /dev/null -X POST "https://api.github.com/repos/$REPO/check-runs" \
+              -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" -H "Content-Type: application/json" -d @-
 
       - name: Attach the full report
         if: always()

@@ -36,6 +36,9 @@ jobs:
     name: Site QA
     if: ${{ !inputs.skip_qa }}
     uses: ./.github/workflows/qa.yml
+    permissions:
+      contents: read
+      checks: write
 
   website:
     name: Website to GitHub Pages

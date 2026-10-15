@@ -142,4 +142,31 @@ ${sections}
     "The full report with explanations and fixes is attached to this run as **qa-report** (download, unzip, open report.html).",
   ].join("\n");
   fs.writeFileSync(path.join(outDir, "summary.md"), md + "\n");
+
+  // The whole report as text, shown on the pull request's Checks tab (GitHub allows about 65,000 characters).
+  const parts = [
+    `**Tested:** ${plural(r.coverage.pages, "page")} in ${r.coverage.languages.join(" and ")} · ${r.coverage.devices.join(", ")} · ${r.coverage.browsers.join(", ")} · ${plural(r.coverage.links, "link")} · ${plural(r.coverage.flows, "visitor journey")}`,
+    ...(r.notes.length ? ["", ...r.notes.map((n) => `> ${n}`)] : []),
+    "",
+    ...(flowsOk.length ? ["**Visitor journeys that work:** " + flowsOk.join(" · "), ""] : []),
+    ...(r.perf.length ? ["### Speed on a phone", "", "| Page | Score | LCP | CLS | TBT |", "|---|---|---|---|---|",
+      ...r.perf.map((p) => p.error ? `| ${p.page} | couldn't measure | | | |` : `| ${p.page} | ${p.score} | ${(p.lcp / 1000).toFixed(1)}s | ${p.cls.toFixed(2)} | ${Math.round(p.tbt)}ms |`), ""] : []),
+  ];
+  for (const i of r.issues) {
+    parts.push(
+      `### ${i.severity}${i.blocking ? " · blocks deploy" : i.known ? " · known" : ""}: ${i.title}`,
+      `*${CATEGORIES[i.category]}*${i.pages.length ? ` · **Where:** ${i.pages.slice(0, 8).join(", ")}${i.pages.length > 8 ? ` +${i.pages.length - 8} more` : ""}` : ""}${i.devices.length ? ` · **Screens:** ${listOrAll(i.devices, r.coverage.devices.length, "screen sizes")}` : ""}${i.browsers.length ? ` · **Browsers:** ${listOrAll(i.browsers, r.coverage.browsers.length, "browsers")}` : ""}${i.langs.length ? ` · **Language:** ${i.langs.join(", ")}` : ""}`,
+      "",
+      ...i.details.slice(0, 5).map((d) => `- \`${d.replace(/`/g, "'")}\``),
+      ...(i.details.length > 5 || i.moreDetails ? [`- …and ${i.details.length - 5 + i.moreDetails} more like this`] : []),
+      "",
+      `**Why it matters:** ${i.why}`,
+      "",
+      `**How to fix it:** ${i.fix}${i.learnMore ? ` [Guide](${i.learnMore})` : ""}`,
+      "",
+    );
+  }
+  let text = parts.join("\n");
+  if (text.length > 60000) text = text.slice(0, 60000).replace(/\n[^\n]*$/, "") + "\n\n*…the rest is in the full report (qa-report on this run).*";
+  fs.writeFileSync(path.join(outDir, "details.md"), text + "\n");
 }
