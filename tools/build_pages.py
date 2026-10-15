@@ -40,13 +40,13 @@ def head(title, desc, path, extra=""):
 
 HEADER = f"""<body>
 <a class="skip-link" href="#main">Skip to content</a>
-<div class="announce">
+<aside class="announce">
   <div class="container">
     <span>{ICON['download']}Instant download after payment</span>
     <span>{ICON['lock']}Secure card checkout</span>
     <span>{ICON['refresh']}Free updates to everything you buy</span>
   </div>
-</div>
+</aside>
 <header class="site-header">
   <div class="container">
     <a class="brand" href="/" aria-label="MWP, home">MWP</a>
@@ -64,7 +64,7 @@ HEADER = f"""<body>
   </div>
 </header>"""
 # Pages with nothing to buy (Read online) leave out the "Instant download after payment" bar.
-NO_ANNOUNCE_HEADER = re.sub(r'<div class="announce">.*?</div>\n</div>\n', "", HEADER, count=1, flags=re.S)
+NO_ANNOUNCE_HEADER = re.sub(r'<aside class="announce">.*?</aside>\n', "", HEADER, count=1, flags=re.S)
 
 
 FOOTER = f"""<footer class="site-footer">

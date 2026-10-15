@@ -93,6 +93,11 @@ for path, lang in PAGES.items():
     # Image addresses filled in by the runtime ({{cur.before}} …): keep them out of src, or the browser asks
     # the server for the literal "{{cur.before}}" (a 404) before dc-lite.js renders the page.
     s = re.sub(r'(<img\b[^>]*?)\ssrc="(\{\{[^"]*\}\})"', r'\1 data-dc-src="\2"', s)
+    # the page content (between the header and the footer) is the main landmark, for screen readers
+    if "<main" not in s:
+        nav = s.index("</nav>", s.index('<nav class="nav"')) + len("</nav>")
+        foot = s.index("<footer", nav)
+        s = s[:nav] + '\n<main id="main">' + s[nav:foot] + "</main>\n" + s[foot:]
     # hero photo first, everything below the first screen only when it's needed
     s = prioritize(s, '<section class="hero"', "hero-bg")
     slots = iter(PRICE_SLOTS[path.split("/")[0]])
