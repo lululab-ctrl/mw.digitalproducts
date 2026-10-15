@@ -52,7 +52,8 @@ export function writeReport(r, outDir) {
   const byCat = Object.entries(CATEGORIES).map(([k, name]) => {
     const list = r.issues.filter((i) => i.category === k);
     const worst = SEVERITIES.find((s) => list.some((i) => i.severity === s));
-    return `<a class="cat-tile" href="#c-${k}"><span>${esc(name)}</span><b class="${worst ? "sev-" + worst.toLowerCase() : "clean"}">${list.length ? plural(list.length, "issue") : "All clear"}</b></a>`;
+    const untested = k === "performance" && !r.perf.length;
+    return `<a class="cat-tile" href="#c-${k}"><span>${esc(name)}</span><b class="${worst ? "sev-" + worst.toLowerCase() : untested ? "untested" : "clean"}">${list.length ? plural(list.length, "issue") : untested ? "Not tested" : "All clear"}</b></a>`;
   }).join("");
   const sections = Object.entries(CATEGORIES).map(([k, name]) => {
     const list = r.issues.filter((i) => i.category === k);
@@ -82,7 +83,7 @@ h3{font-size:17px;margin:8px 0 2px}h4{font-size:12px;text-transform:uppercase;le
 .count.c-critical b{color:var(--crit)}.count.c-high b{color:var(--high)}.count.c-medium b{color:var(--med)}.count.c-low b{color:var(--low)}
 .cats{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px}
 .cat-tile{display:flex;justify-content:space-between;gap:8px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;text-decoration:none;color:var(--ink);font-size:14px}
-.cat-tile b{font-weight:600;white-space:nowrap}.clean{color:var(--good)}
+.cat-tile b{font-weight:600;white-space:nowrap}.clean{color:var(--good)}.untested{color:var(--mute);font-weight:400}
 b.sev-critical{color:var(--crit)}b.sev-high{color:var(--high)}b.sev-medium{color:var(--med)}b.sev-low{color:var(--low)}
 .issue{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--low);border-radius:12px;padding:16px 18px;margin:12px 0}
 .issue.sev-critical{border-left-color:var(--crit)}.issue.sev-high{border-left-color:var(--high)}.issue.sev-medium{border-left-color:var(--med)}
@@ -99,7 +100,7 @@ code{background:var(--code);border-radius:4px;padding:1px 4px;font:12.5px/1.5 ui
 table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;font-size:14px}
 th,td{padding:8px 12px;border-bottom:1px solid var(--line);text-align:left}th{font-size:12px;color:var(--mute);font-weight:600}td.num{text-align:right;font-variant-numeric:tabular-nums}
 td.good{color:var(--good);font-weight:700}td.ok{color:var(--med);font-weight:700}td.bad{color:var(--crit);font-weight:700}
-.passed{columns:2;padding-left:18px}.passed li{break-inside:avoid;margin:2px 0}
+.passed{columns:2;padding-left:0;list-style:none}.passed li{break-inside:avoid;margin:2px 0}
 .notes{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px 12px 34px;font-size:14px;color:var(--mute)}
 .legend{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:14px}
 @media (max-width:700px){.cols{grid-template-columns:1fr}.counts{grid-template-columns:repeat(2,1fr)}.passed{columns:1}.cat{margin-left:0;width:100%}}

@@ -6,7 +6,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { newContext } from "./pages.mjs";
 
-export async function runFlows(browser, browserName, { config, base, offline, shotDir }) {
+export async function runFlows(browser, browserName, { config, base, offline, localUrl, shotDir }) {
   const found = [];
   const passed = [];
   const devices = [config.devices.find((d) => d.mobile) ?? config.devices[0], config.devices.find((d) => !d.mobile) ?? config.devices.at(-1)];
@@ -14,7 +14,7 @@ export async function runFlows(browser, browserName, { config, base, offline, sh
     if (flow.needsNetwork && offline) continue;
     for (const device of devices) {
       const lang = config.languages?.[0] ?? { code: "en", label: "English" };
-      const ctx = await newContext(browser, { device, lang, base, offline });
+      const ctx = await newContext(browser, { device, lang, base, offline, localUrl });
       const page = await ctx.newPage();
       let stepNo = 0;
       try {
@@ -66,5 +66,6 @@ async function runStep(page, s, base) {
     await page.waitForFunction(([sel, a, v]) => document.querySelector(sel)?.getAttribute(a) === v, [selector, attr, value], { timeout: t })
       .catch(async () => { throw new Error(`${selector} has ${attr}="${await page.locator(selector).first().getAttribute(attr)}", expected "${value}"`); });
   }
-  if (s.expectUrlContains && !page.url().includes(s.expectUrlContains)) throw new Error(`Ended up on ${page.url()}`);
+  if (s.expectUrlContains) await page.waitForURL((u) => u.href.includes(s.expectUrlContains), { timeout: t })
+    .catch(() => { throw new Error(`Ended up on ${page.url()}`); });
 }

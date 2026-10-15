@@ -56,6 +56,9 @@ if (!base) {
   log(`Serving ${config.serveDir} at ${base}`);
 }
 base = base.replace(/\/$/, "");
+// Browsers visit the live address; requests to it are answered from the local copy (see newContext).
+const localUrl = server && config.liveUrl ? base : null;
+const pageBase = localUrl ? new URL(config.liveUrl).origin : base;
 if (offline) notes.push("Run without internet access: outside services (fonts, the database, payment links, outside links) weren't reached, so problems involving them can't show up in this run. The GitHub run tests them.");
 
 // ── 2. Browsers ───────────────────────────────────────────────────────────
@@ -89,11 +92,12 @@ async function pool(items, size, fn) {
 
 async function pass(browserName, devs, { deep = false, shotsOn = [] } = {}, pages) {
   const b = browsers[browserName];
-  const jobs = pages.flatMap((p) => langs.flatMap((lang) => devs.map((device) => ({ p, lang, device }))));
+  const jobs = pages.flatMap((p) => langs.filter((l) => !(l.skipPages ?? []).some((x) => p.startsWith(x)))
+    .flatMap((lang) => devs.map((device) => ({ p, lang, device }))));
   await pool(jobs, 4, async ({ p, lang, device }) => {
-    const ctx = await newContext(b, { device, lang, base, offline });
+    const ctx = await newContext(b, { device, lang, base: pageBase, offline, localUrl });
     const r = await visit(ctx, {
-      url: base + p, base, device, lang, browserName, deep,
+      url: pageBase + p, base: pageBase, device, lang, browserName, deep,
       shotDir: shotsOn.includes(device.name) ? SHOTS : null,
     });
     await ctx.close();
@@ -118,7 +122,7 @@ if (config.crawl?.enabled) {
   const more = [];
   for (const l of linkMap.keys()) {
     const u = new URL(l);
-    if (u.origin !== base && !(config.liveUrl && u.origin === new URL(config.liveUrl).origin)) continue;
+    if (u.origin !== base && u.origin !== pageBase) continue;
     const p = u.pathname.replace(/\/index\.html$/, "/") + u.search;
     if (isPageLink(u) && !pages.includes(p) && !more.includes(p)) more.push(p);
   }
@@ -143,7 +147,7 @@ for (const name of ["firefox", "webkit"]) {
 const flowsPassed = [];
 for (const [name, b] of Object.entries(browsers)) {
   log(`Running ${config.flows?.length ?? 0} visitor journeys in ${label[name]}…`);
-  const r = await runFlows(b, name, { config, base, offline, shotDir: SHOTS });
+  const r = await runFlows(b, name, { config, base: pageBase, offline, localUrl, shotDir: SHOTS });
   findings.push(...r.found);
   flowsPassed.push(...r.passed);
 }
@@ -159,7 +163,7 @@ try { const r = await fetch(base + "/robots.txt"); if (r.ok) robotsTxt = await r
 findings.push(...seoChecks(pagesDom, { robotsTxt, config }));
 
 log("Security checks…");
-findings.push(...domSecurityChecks(pagesDom, base));
+findings.push(...domSecurityChecks(pagesDom, pageBase));
 if (siteDir && fs.existsSync(siteDir)) findings.push(...scanSecrets(siteDir));
 else notes.push("The published files weren't available locally, so the secret-key scan was skipped.");
 findings.push(...dependencyAudit(ROOT));

@@ -8,7 +8,7 @@ import { AxeBuilder } from "@axe-core/playwright";
 const SAME = (u, base) => { try { return new URL(u).origin === new URL(base).origin; } catch { return false; } };
 const short = (u, base) => (SAME(u, base) ? new URL(u).pathname + new URL(u).search : u);
 
-export async function newContext(browser, { device, lang, base, offline }) {
+export async function newContext(browser, { device, lang, base, offline, localUrl }) {
   const ctx = await browser.newContext({
     viewport: { width: device.width, height: device.height },
     isMobile: browser.browserType().name() !== "firefox" && !!device.mobile,
@@ -18,6 +18,25 @@ export async function newContext(browser, { device, lang, base, offline }) {
   });
   if (lang.localStorage) {
     await ctx.addInitScript((pairs) => { for (const [k, v] of Object.entries(pairs)) try { localStorage.setItem(k, v); } catch {} }, lang.localStorage);
+  }
+  // Scripts that fail to load (a missing file, or a broken import inside it) fire an error event on their <script> tag.
+  await ctx.addInitScript(() => {
+    window.__qaScriptErrors = [];
+    window.addEventListener("error", (e) => {
+      const t = e.target;
+      if (t && t.tagName === "SCRIPT") window.__qaScriptErrors.push(t.src || "(inline module script)");
+    }, true);
+  });
+  if (localUrl) {
+    // The browser visits the live address, but every page and file comes from the copy being tested.
+    // Servers that only answer the real site (CORS) then behave exactly as they will after publishing.
+    await ctx.route((url) => SAME(url.href, base), async (route) => {
+      const u = new URL(route.request().url());
+      try {
+        const res = await route.fetch({ url: localUrl + u.pathname + u.search, maxRedirects: 0 });
+        await route.fulfill({ response: res });
+      } catch { await route.abort("failed"); }
+    });
   }
   if (offline) {
     // This machine can't reach the internet: skip outside requests instead of reporting them as failures.
@@ -89,7 +108,9 @@ export async function visit(ctx, { url, base, device, lang, browserName, shotDir
     const links = [...document.querySelectorAll("a[href]")].map((a) => a.href).filter((h) => /^https?:/.test(h));
     return {
       scrollWidth: de.scrollWidth, vw, worst, imgs, links,
-      dir: (de.getAttribute("dir") || getComputedStyle(de).direction || "ltr").toLowerCase(),
+      // Reading direction of the main text (a page may set it on a wrapper rather than on <html>).
+      dir: getComputedStyle(document.querySelector("main h1, h1, main p, p") ?? document.body).direction,
+      scriptErrors: window.__qaScriptErrors ?? [],
       viewport: !!document.querySelector('meta[name="viewport"]'),
     };
   });
@@ -97,7 +118,8 @@ export async function visit(ctx, { url, base, device, lang, browserName, shotDir
   if (info.worst) add("horizontal-scroll", `${info.scrollWidth - info.vw}px too wide; widest part: ${info.worst.sel}${info.worst.text ? ` ("${info.worst.text}")` : ""}`);
   for (const src of info.imgs) add("broken-image", short(src, base));
   if (!info.viewport && device.mobile) add("viewport-missing", "No viewport tag");
-  if (lang.expectDir && info.dir !== lang.expectDir && status < 400) add("wrong-direction", `Expected ${lang.expectDir}, page is ${info.dir}`);
+  if (lang.expectDir && info.dir !== lang.expectDir && status < 400) add("wrong-direction", `Expected ${lang.expectDir}, the main text is ${info.dir}`);
+  for (const src of new Set(info.scriptErrors)) add("js-crash", `A script didn't load or one of the files it imports failed: ${short(src, base)}`);
 
   let dom = null;
   if (deep) {

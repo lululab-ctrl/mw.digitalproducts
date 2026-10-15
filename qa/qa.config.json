@@ -14,7 +14,7 @@
 
   "languages": [
     { "code": "en", "label": "English" },
-    { "code": "he", "label": "Hebrew", "localStorage": { "mwp_lang": "he" }, "expectDir": "rtl" }
+    { "code": "he", "label": "Hebrew", "localStorage": { "mwp_lang": "he" }, "expectDir": "rtl", "skipPages": ["/admin/"] }
   ],
 
   "devices": [
@@ -66,6 +66,16 @@
         { "click": "a[href='#buy']" },
         { "expectVisible": ".cart-panel" },
         { "expectVisible": ".cart-row" }
+      ]
+    },
+    {
+      "name": "The shop page lists the products, and a product opens its own page",
+      "needsNetwork": true,
+      "steps": [
+        { "goto": "/shop/" },
+        { "expectVisible": "#shop-grid .product-card" },
+        { "click": "#shop-grid .product-card" },
+        { "expectUrlContains": "/product/" }
       ]
     },
     {
