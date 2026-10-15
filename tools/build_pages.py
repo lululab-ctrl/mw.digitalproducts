@@ -75,7 +75,7 @@ FOOTER = f"""<footer class="site-footer">
         <p class="muted" style="max-width:34ch">Editing tools and guides from wildlife photographer Matan Wild.</p>
       </div>
       <div>
-        <h3>Shop</h3>
+        <h2>Shop</h2>
         <ul role="list">
           <li><a href="/shop/">All products</a></li>
           <li><a href="presets/">Presets</a></li>
@@ -85,7 +85,7 @@ FOOTER = f"""<footer class="site-footer">
         </ul>
       </div>
       <div>
-        <h3>Help</h3>
+        <h2>Help</h2>
         <ul role="list">
           <li><a href="/account/">My downloads</a></li>
           <li><a href="/support/">Contact support</a></li>
@@ -95,7 +95,7 @@ FOOTER = f"""<footer class="site-footer">
         </ul>
       </div>
       <div>
-        <h3>MWP</h3>
+        <h2>MWP</h2>
         <ul role="list">
           <li><a href="https://mw.photography" rel="noopener">Matan Wild</a></li>
           <li><a href="https://mw-phototours.com" rel="noopener">MW Photo Tours</a></li>
