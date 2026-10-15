@@ -34,6 +34,11 @@ export const RULES = {
     why: "Visitors who click it land on an error page. Broken links also make search engines trust the site less.",
     fix: "Update the link to the right address, or remove it.",
   },
+  "visible-placeholder": {
+    category: "errors", severity: "High", title: "Visitors can see unfinished text",
+    why: "Notes meant for the team, filler text or template fields look unprofessional and make visitors doubt the shop is real or finished.",
+    fix: "Replace the text (or the image or price it refers to) with the final version, then check the page again.",
+  },
   "broken-image": {
     category: "errors", severity: "Medium", title: "An image doesn't show",
     why: "Visitors see an empty box or a broken-image icon, which looks unfinished and can hide important content.",

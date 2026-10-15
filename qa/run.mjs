@@ -97,7 +97,7 @@ async function pass(browserName, devs, { deep = false, shotsOn = [] } = {}, page
   await pool(jobs, 4, async ({ p, lang, device }) => {
     const ctx = await newContext(b, { device, lang, base: pageBase, offline, localUrl });
     const r = await visit(ctx, {
-      url: pageBase + p, base: pageBase, device, lang, browserName, deep,
+      url: pageBase + p, base: pageBase, device, lang, browserName, deep, contentRules: (config.contentRules ?? []).filter((c) => !(offline && c.needsNetwork)),
       shotDir: shotsOn.includes(device.name) ? SHOTS : null,
     });
     await ctx.close();
@@ -196,11 +196,15 @@ if (server) await server.close();
 const groups = new Map();
 for (const f of findings) {
   const rule = RULES[f.rule];
-  const severity = f.severity ?? rule.severity;
+  // Reviewed exceptions from qa.config.json ("downgrade"): a known, explained cause at a lower level.
+  const dg = (config.downgrade ?? []).find((d) => (!d.rule || d.rule === f.rule) && f.detail.includes(d.match)
+    && (!d.browser || d.browser === f.browser));
+  const severity = dg ? dg.to : (f.severity ?? rule.severity);
+  if (dg) f.note = dg.reason;
   const sameness = f.axeId ? `axe:${f.axeId}` : f.id ? `review:${f.id}` : f.detail.replace(/\d+px too wide/, "").replace(/\(\d+ places?:.*$/, "");
   const key = `${f.rule}|${severity}|${sameness}`;
   const g = groups.get(key) ?? { key, rule: f.rule, severity, category: rule.category, title: f.custom?.title ?? f.ruleTitle ?? rule.title,
-    ruleTitle: rule.title, why: f.custom?.why ?? rule.why, fix: f.custom?.fix ?? rule.fix, learnMore: f.learnMore,
+    ruleTitle: rule.title, why: f.custom?.why ?? rule.why, fix: f.custom?.fix ?? rule.fix, learnMore: f.learnMore, note: f.note,
     details: new Set(), pages: new Set(), devices: new Set(), browsers: new Set(), langs: new Set(), shots: new Set() };
   g.details.add(f.detail);
   if (f.page) g.pages.add(f.page);

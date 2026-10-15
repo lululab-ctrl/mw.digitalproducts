@@ -36,6 +36,7 @@ function issueCard(i, r) {
     <h3>${esc(i.title)}</h3>
     ${i.title !== i.ruleTitle && i.rule !== "code-review" ? `<p class="kind">${esc(i.ruleTitle)}</p>` : ""}
     <dl class="where">${where}</dl>
+    ${i.note ? `<p class="note">Reviewed: ${esc(i.note)}</p>` : ""}
     <div class="cols">
       <section><h4>What we found</h4><ul class="details">${i.details.map((d) => `<li><code>${esc(d)}</code></li>`).join("")}${i.moreDetails ? `<li>…and ${i.moreDetails} more like this</li>` : ""}</ul></section>
       <section><h4>Why it matters</h4><p>${esc(i.why)}</p><h4>How to fix it</h4><p>${esc(i.fix)}</p>${i.learnMore ? `<p><a href="${esc(i.learnMore)}" target="_blank" rel="noopener">Step-by-step guide →</a></p>` : ""}</section>
@@ -101,7 +102,7 @@ table{width:100%;border-collapse:collapse;background:var(--card);border:1px soli
 th,td{padding:8px 12px;border-bottom:1px solid var(--line);text-align:left}th{font-size:12px;color:var(--mute);font-weight:600}td.num{text-align:right;font-variant-numeric:tabular-nums}
 td.good{color:var(--good);font-weight:700}td.ok{color:var(--med);font-weight:700}td.bad{color:var(--crit);font-weight:700}
 .passed{columns:2;padding-left:0;list-style:none}.passed li{break-inside:avoid;margin:2px 0}
-.notes{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px 12px 34px;font-size:14px;color:var(--mute)}
+.note{font-size:13px;color:var(--mute);border-left:2px solid var(--line);padding-left:10px;margin:10px 0 0}.notes{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px 12px 34px;font-size:14px;color:var(--mute)}
 .legend{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:14px}
 @media (max-width:700px){.cols{grid-template-columns:1fr}.counts{grid-template-columns:repeat(2,1fr)}.passed{columns:1}.cat{margin-left:0;width:100%}}
 </style></head><body><main>
@@ -158,6 +159,7 @@ ${sections}
     parts.push(
       `### ${i.severity}${i.blocking ? " · blocks deploy" : i.known ? " · known" : ""}: ${i.title}`,
       `*${CATEGORIES[i.category]}*${i.pages.length ? ` · **Where:** ${i.pages.slice(0, 8).join(", ")}${i.pages.length > 8 ? ` +${i.pages.length - 8} more` : ""}` : ""}${i.devices.length ? ` · **Screens:** ${listOrAll(i.devices, r.coverage.devices.length, "screen sizes")}` : ""}${i.browsers.length ? ` · **Browsers:** ${listOrAll(i.browsers, r.coverage.browsers.length, "browsers")}` : ""}${i.langs.length ? ` · **Language:** ${i.langs.join(", ")}` : ""}`,
+      ...(i.note ? ["", `> Reviewed: ${i.note}`] : []),
       "",
       ...i.details.slice(0, 5).map((d) => `- \`${d.replace(/`/g, "'")}\``),
       ...(i.details.length > 5 || i.moreDetails ? [`- …and ${i.details.length - 5 + i.moreDetails} more like this`] : []),

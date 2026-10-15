@@ -5,9 +5,10 @@ export function seoChecks(pagesDom, { robotsTxt, config }) {
   const isPrivate = (p) => priv.some((x) => p.startsWith(x));
   const titles = new Map();
 
-  if (config.searchEngines?.launched && robotsTxt && /^\s*Disallow:\s*\/\s*$/im.test(robotsTxt.replace(/#.*$/gm, ""))
-      && /User-agent:\s*\*/i.test(robotsTxt)) {
-    found.push({ rule: "robots-blocks-all", detail: 'robots.txt has "Disallow: /" for every search engine', page: "/robots.txt" });
+  if (robotsTxt && /^\s*Disallow:\s*\/\s*$/im.test(robotsTxt.replace(/#.*$/gm, "")) && /User-agent:\s*\*/i.test(robotsTxt)) {
+    const launched = config.searchEngines?.launched !== false;
+    found.push({ rule: "robots-blocks-all", page: "/robots.txt", ...(launched ? {} : { severity: "Low" }),
+      detail: `robots.txt has "Disallow: /" for every search engine${launched ? "" : ". Fine before launch (the settings say the site isn't launched yet); change it on launch day."}` });
   }
 
   for (const { page, lang, dom } of pagesDom) {

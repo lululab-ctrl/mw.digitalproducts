@@ -34,8 +34,20 @@
   "searchEngines": {
     "$comment": "Pages that should never be indexed. Everything else is expected to be findable once the site is launched.",
     "private": ["/admin/", "/account/", "/thank-you/", "/beta/", "/testers/", "/read/"],
-    "launched": true
+    "launched": false,
+    "$launched": "Set to true on launch day: from then on, robots.txt blocking search engines counts as a serious issue."
   },
+
+  "contentRules": [
+    { "pattern": "[$₪]\\s?0\\.00", "label": "a price of 0.00 (no price set for this product in the admin)", "severity": "High", "needsNetwork": true }
+  ],
+
+  "downgrade": [
+    {
+      "rule": "request-failed", "match": "/npm/", "browser": "webkit", "to": "Low",
+      "reason": "Safari's engine makes an extra request for the database library's parts at the wrong address. The library itself loads (no script fails, and every journey passes in Safari), so visitors aren't affected. Goes away when the library is copied into the site (see the security item about it)."
+    }
+  ],
 
   "flows": [
     {

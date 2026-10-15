@@ -46,7 +46,16 @@ export async function newContext(browser, { device, lang, base, offline, localUr
 }
 
 /** Visit one page in one setup and return findings + data for other checks. */
-export async function visit(ctx, { url, base, device, lang, browserName, shotDir, deep }) {
+// Text that should never reach visitors. Sites can add their own under "contentRules" in qa.config.json.
+const PLACEHOLDERS = [
+  { pattern: "lorem ipsum", label: "Lorem ipsum filler text" },
+  { pattern: "\\bPLACEHOLDER\\b", label: "a placeholder note" },
+  { pattern: "\\b(TODO|FIXME|TBD|XXX)\\b[:\\s]", label: "a to-do note" },
+  { pattern: "\\{\\{\\s*[\\w.]+\\s*\\}\\}", label: "an unfilled template field like {{name}}" },
+  { pattern: "\\b(undefined|NaN|\\[object Object\\])\\b", label: "a programming value (undefined / NaN)" },
+];
+
+export async function visit(ctx, { url, base, device, lang, browserName, shotDir, deep, contentRules = [] }) {
   const page = await ctx.newPage();
   const found = [];
   const where = { page: short(url, base), device: device.name, browser: browserName, lang: lang.label };
@@ -134,6 +143,13 @@ export async function visit(ctx, { url, base, device, lang, browserName, shotDir
         });
       }
     } catch (e) { add("console-error", `Accessibility scan couldn't run: ${e.message.split("\n")[0]}`, { severity: "Low" }); }
+
+    const rules = [...PLACEHOLDERS, ...contentRules];
+    const text = await page.evaluate(() => document.body?.innerText ?? "");
+    for (const r of rules) {
+      const m = text.match(new RegExp(`.{0,40}(?:${r.pattern}).{0,80}`, r.caseSensitive ? "" : "i"));
+      if (m) add(r.rule ?? "visible-placeholder", `Shows ${r.label}: "${m[0].replace(/\s+/g, " ").trim()}"`, r.severity ? { severity: r.severity } : {});
+    }
 
     dom = await page.evaluate(() => {
       const meta = (sel) => document.querySelector(sel)?.getAttribute("content")?.trim() ?? null;

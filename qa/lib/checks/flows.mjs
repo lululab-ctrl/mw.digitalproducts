@@ -30,9 +30,12 @@ export async function runFlows(browser, browserName, { config, base, offline, lo
           shot = `flow_${flow.name.replace(/[^a-z0-9]+/gi, "_").slice(0, 50)}__${device.name.replace(/\s+/g, "-")}__${browserName}.jpg`;
           await page.screenshot({ path: path.join(shotDir, shot), type: "jpeg", quality: 55 }).catch(() => { shot = undefined; });
         }
+        // What the visitor saw at that moment, to tell a real failure from a slow or empty page.
+        const saw = await page.evaluate(() => (document.querySelector("main") ?? document.body)?.innerText ?? "")
+          .then((t) => t.replace(/\s+/g, " ").trim().slice(0, 220)).catch(() => "");
         found.push({
           rule: "flow-failed", page: flow.name, device: device.name, browser: browserName, shot,
-          detail: `Step ${stepNo} (${describe(flow.steps[stepNo - 1])}) failed: ${String(e.message).split("\n")[0].slice(0, 200)}`,
+          detail: `Step ${stepNo} (${describe(flow.steps[stepNo - 1])}) failed: ${String(e.message).split("\n")[0].slice(0, 200)}${saw ? ` · The page showed: "${saw}"` : ""}`,
           severity: flow.severity,
         });
       }
