@@ -32,6 +32,7 @@ def navr(lang, btn=""):
 # Same header look as the home page. "html " prefix so it wins over the page styles the runtime moves into <head>.
 CSS = """<style id="mwp-unify">
 html .ba{direction:ltr}
+html .lrp .hd{color:#a8a8a8}
 """ + NAV_CSS + BUNDLE_CSS + """</style>"""
 
 SCRIPT = """<script src="../assets/js/lib/nav.js" defer></script>
