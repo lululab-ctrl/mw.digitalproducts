@@ -613,7 +613,7 @@ page("testers.html", "Testers · MWP",
   "@media (max-width:600px){#t-out.glass{padding:28px 20px}}"
   "</style>")
 
-page("support.html", "Help · MWP",
+page("support.html", "Help with downloads, installing and refunds · MWP",
  "Help with downloading, installing or using MWP products.",
  """  <section class="page-hero">
     <div class="container container--text stack">
