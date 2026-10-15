@@ -82,6 +82,9 @@ for path, lang in PAGES.items():
     # no arrows on the outlined buttons
     s = re.sub(r'(<a class="ghost"[^>]*>[^<]*?)\s*[→←]\s*<', r'\1<', s)
     s = BUNDLE_NOTE.sub("", s)
+    # Image addresses filled in by the runtime ({{cur.before}} …): keep them out of src, or the browser asks
+    # the server for the literal "{{cur.before}}" (a 404) before dc-lite.js renders the page.
+    s = re.sub(r'(<img\b[^>]*?)\ssrc="(\{\{[^"]*\}\})"', r'\1 data-dc-src="\2"', s)
     slots = iter(PRICE_SLOTS[path.split("/")[0]])
     def slot(m):
         k = next(slots, None)

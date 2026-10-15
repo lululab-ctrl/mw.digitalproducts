@@ -414,7 +414,7 @@ a{color:#F4AF56}a:hover{color:#F8D29C}
 <button type="button" class="{{g.cls}}" onClick="{{g.pick}}">{{g.label}}</button>
 </sc-for>
 </div>
-<div class="viewer"><img src="{{cur.src}}" alt="{{cur.alt}}"></div>
+<div class="viewer"><img data-dc-src="{{cur.src}}" alt="{{cur.alt}}"></div>
 <div class="pager">
 <sc-for list="{{pages}}" as="p" hint-placeholder-count="2">
 <button type="button" class="{{p.cls}}" onClick="{{p.pick}}" aria-label="{{p.aria}}">{{p.label}}</button>
