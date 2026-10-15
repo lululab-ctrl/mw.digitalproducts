@@ -281,6 +281,7 @@ page("product.html", "MWP",
  """  <div class="container"><nav class="crumbs" id="crumbs" aria-label="Breadcrumb"><a href="/shop/">Shop</a></nav></div>
   <section class="section--tight" style="padding-top:var(--s-5)">
     <div class="container" id="product-root" aria-live="polite">
+      <h1 class="visually-hidden">Product details</h1>
       <div class="product-layout" aria-hidden="true">
         <div class="skeleton" style="aspect-ratio:3/2"></div>
         <div class="skeleton" style="height:420px"></div>

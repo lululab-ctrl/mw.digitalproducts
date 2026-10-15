@@ -262,6 +262,7 @@ const HE = {
   "Guide": "מדריך",
   "Bundle": "חבילה",
   "Product": "מוצר",
+  "Product details": "פרטי המוצר",
   "More": "עוד",
   "Lightroom and Camera Raw looks for real field light": "מראות ללייטרום ול-Camera Raw לאור אמיתי בשטח",
   "Our photo editing plugin": "פלאגין העריכה שלנו",
