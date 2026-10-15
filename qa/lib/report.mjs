@@ -112,7 +112,7 @@ td.good{color:var(--good);font-weight:700}td.ok{color:var(--med);font-weight:700
 
 <div class="verdict ${blocked ? "blocked" : ""}"><span class="dot"></span><div>
 ${blocked
-    ? `<b>Not ready to go live: ${plural(nBlock, "new serious issue")}</b>These are ${r.blockOn.join(" or ")} issues that weren't there before. Fix them, or ask a reviewer to accept them as known.`
+    ? `<b>Not ready to go live: ${plural(nBlock, "new serious issue")}</b>These are ${r.blockOn.join(" or ")} issues that aren't on the known-issues list. Fix them, or ask a reviewer to accept them as known.`
     : `<b>No new serious issues</b>Nothing new at ${r.blockOn.join(" or ")} level. ${r.issues.some((i) => i.known) ? "Issues already known are still listed below to work through." : ""}`}
 </div></div>
 
