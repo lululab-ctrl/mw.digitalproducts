@@ -50,6 +50,13 @@ WORDS = {
            (">לפני ואחרי<", ">מ-RAW לתמונה הסופית<"), (">לראות לפני ואחרי ←<", ">מ-RAW לתמונה הסופית ←<")],
 }
 
+# Search descriptions (from each page's own copy). The Hebrew pages get them in Hebrew from EXACT in tools/sales_he.py.
+DESC = {
+    "presets": "50 Lightroom presets and 33 video LUTs built from the MWP edits of wildlife and landscapes. For Lightroom Classic, Lightroom, Lightroom Mobile and Camera Raw.",
+    "panel": "MWP Panel, a Photoshop plugin: the way we edit on our expeditions, built in as simple buttons. Pick the animal or the sky, pick an effect, set how strong.",
+    "field-guides": "MWP Field Guides: four visual guides with 137 short lessons on composition, colour, light and planning, each one a real photo from the field.",
+}
+
 # Matan's placeholder note under the bundle cards is not shown on the site.
 BUNDLE_NOTE = re.compile(r'<p[^>]*>\[(?:Bundle prices and discounts: (?:Matan to decide|for Matan to set)|מחירים והנחות לחבילות: לקביעת מתן)\]</p>\s*')
 
@@ -106,6 +113,8 @@ for path, lang in PAGES.items():
                if lang == "en" else
                '<script id="mwp-lang">try{localStorage.setItem("mwp_lang","he")}catch(e){}</script>')
     s = re.sub(r"(<head[^>]*>)", lambda m: m.group(1) + "\n" + LANG_JS, s, count=1)
+    s = re.sub(r'<meta name="description"[^>]*>\n?', '', s)
+    s = s.replace("</title>", f'</title>\n<meta name="description" content="{DESC[path.split("/")[0]]}">', 1)
     # set up for phones (the designs already have their phone layouts in @media rules)
     if 'name="viewport"' not in s:
         s = s.replace('<meta charset="utf-8">', '<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">', 1)
