@@ -276,7 +276,7 @@ page("shop.html", "All products · MWP",
     </div>
   </section>""", "shop.js")
 
-page("product.html", "MWP",
+page("product.html", "Product details · Editing tools from the field · MWP",
  "A digital product by Matan Wild for Lightroom and Photoshop.",
  """  <div class="container"><nav class="crumbs" id="crumbs" aria-label="Breadcrumb"><a href="/shop/">Shop</a></nav></div>
   <section class="section--tight" style="padding-top:var(--s-5)">

@@ -263,6 +263,7 @@ const HE = {
   "Bundle": "חבילה",
   "Product": "מוצר",
   "Product details": "פרטי המוצר",
+  "Product details · Editing tools from the field · MWP": "פרטי המוצר · כלי עריכה מהשטח · MWP",
   "More": "עוד",
   "Lightroom and Camera Raw looks for real field light": "מראות ללייטרום ול-Camera Raw לאור אמיתי בשטח",
   "Our photo editing plugin": "פלאגין העריכה שלנו",
