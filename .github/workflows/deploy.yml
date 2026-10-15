@@ -1,6 +1,7 @@
 # ============================================================================
 # Automatic deployment. Every push to main:
 #   1. publishes the website to GitHub Pages
+#   0. tests the site first (qa.yml); a new serious issue stops the deploy
 #   2. applies new database migrations, sets function secrets and deploys the
 #      Edge Functions to Supabase (runs from GitHub; skipped with a warning
 #      until SUPABASE_ACCESS_TOKEN and SUPABASE_DB_PASSWORD are set)
@@ -12,6 +13,11 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+    inputs:
+      skip_qa:
+        description: "Emergency only: publish without running the site tests first"
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -26,8 +32,19 @@ env:
   SUPABASE_PROJECT_REF: tkkpxsyioetzexgbmbqy
 
 jobs:
+  qa:
+    name: Site QA
+    if: ${{ !inputs.skip_qa }}
+    uses: ./.github/workflows/qa.yml
+    permissions:
+      contents: read
+      checks: write
+
   website:
     name: Website to GitHub Pages
+    needs: qa
+    # Publishes only when the tests passed (or were skipped on purpose with the emergency switch).
+    if: ${{ !cancelled() && (needs.qa.result == 'success' || needs.qa.result == 'skipped') }}
     runs-on: ubuntu-24.04   # pinned: ubuntu-latest moves to Ubuntu 26 on 19 Oct 2026
     environment:
       name: github-pages
@@ -56,6 +73,8 @@ jobs:
 
   supabase:
     name: Database and server functions to Supabase
+    needs: qa
+    if: ${{ !cancelled() && (needs.qa.result == 'success' || needs.qa.result == 'skipped') }}
     runs-on: ubuntu-24.04   # pinned: ubuntu-latest moves to Ubuntu 26 on 19 Oct 2026
     env:
       SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}

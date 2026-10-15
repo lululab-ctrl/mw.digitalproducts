@@ -1,0 +1,123 @@
+{
+  "$comment": "Settings for this site. The engine in qa/ is the same for every website; only this file changes.",
+  "site": "MWP Shop",
+  "liveUrl": "https://shop.mw.photography",
+
+  "build": "rm -rf qa/.site && mkdir qa/.site && cp *.html robots.txt sitemap.xml .nojekyll qa/.site/ && cp -r assets admin presets panel field-guides beta account shop product support legal thank-you read testers qa/.site/ && python3 tools/stamp_scripts.py qa/.site",
+  "serveDir": "qa/.site",
+
+  "pages": [
+    "/", "/shop/", "/product/?p=mwp-presets", "/presets/", "/panel/", "/field-guides/",
+    "/account/", "/support/", "/legal/", "/thank-you/", "/beta/", "/testers/", "/read/", "/admin/"
+  ],
+  "crawl": { "enabled": true, "maxPages": 40, "exclude": ["/presets/personal/", "/admin/"] },
+
+  "languages": [
+    { "code": "en", "label": "English" },
+    { "code": "he", "label": "Hebrew", "localStorage": { "mwp_lang": "he" }, "expectDir": "rtl", "skipPages": ["/admin/"] }
+  ],
+
+  "devices": [
+    { "name": "iPhone SE", "width": 375, "height": 667, "mobile": true },
+    { "name": "iPhone 15", "width": 393, "height": 852, "mobile": true },
+    { "name": "Galaxy S23", "width": 360, "height": 780, "mobile": true },
+    { "name": "iPad Mini", "width": 768, "height": 1024, "mobile": true },
+    { "name": "iPad Pro landscape", "width": 1366, "height": 1024, "mobile": true },
+    { "name": "Laptop", "width": 1280, "height": 800 },
+    { "name": "Desktop", "width": 1920, "height": 1080 }
+  ],
+  "browsers": ["chromium", "firefox", "webkit"],
+
+  "performancePages": ["/", "/shop/", "/presets/", "/account/"],
+  "performanceBudget": { "score": 70, "lcpMs": 2500, "cls": 0.1, "tbtMs": 300 },
+
+  "searchEngines": {
+    "$comment": "Pages that should never be indexed. Everything else is expected to be findable once the site is launched.",
+    "private": ["/admin/", "/account/", "/thank-you/", "/beta/", "/testers/", "/read/"],
+    "launched": false,
+    "$launched": "Set to true on launch day: from then on, robots.txt blocking search engines counts as a serious issue."
+  },
+
+  "contentRules": [
+    { "pattern": "[$₪]\\s?0\\.00", "label": "a price of 0.00 (no price set for this product in the admin)", "severity": "High", "needsNetwork": true }
+  ],
+
+  "downgrade": [
+    {
+      "rule": "request-failed", "match": "/npm/", "browser": "webkit", "to": "Low",
+      "reason": "Safari's engine makes an extra request for the database library's parts at the wrong address. The library itself loads (no script fails, and every journey passes in Safari), so visitors aren't affected. Goes away when the library is copied into the site (see the security item about it)."
+    }
+  ],
+
+  "flows": [
+    {
+      "name": "Switching to Hebrew flips the page to right-to-left",
+      "steps": [
+        { "goto": "/" },
+        { "click": ".lang-toggle [data-lang=he]" },
+        { "waitForLoad": true },
+        { "expectAttr": { "selector": "html", "attr": "dir", "value": "rtl" } },
+        { "expectAttr": { "selector": "html", "attr": "lang", "value": "he" } }
+      ]
+    },
+    {
+      "name": "The cart opens from the header and closes again",
+      "steps": [
+        { "goto": "/" },
+        { "click": "[data-cart]" },
+        { "expectVisible": ".cart-panel" },
+        { "click": ".cart-x" },
+        { "expectHidden": ".cart-panel" }
+      ]
+    },
+    {
+      "name": "A buy button puts that product in the cart",
+      "needsNetwork": true,
+      "steps": [
+        { "goto": "/presets/" },
+        { "click": "a[href='#buy']" },
+        { "expectVisible": ".cart-panel" },
+        { "expectVisible": ".cart-row" }
+      ]
+    },
+    {
+      "name": "The shop page lists the products, and a product opens its own page",
+      "needsNetwork": true,
+      "steps": [
+        { "goto": "/shop/" },
+        { "expectVisible": "#shop-grid .product-card" },
+        { "click": "#shop-grid .product-card" },
+        { "expectUrlContains": "/product/" }
+      ]
+    },
+    {
+      "name": "My downloads shows the sign-in form, and Create account switches to the sign-up form",
+      "steps": [
+        { "goto": "/account/" },
+        { "expectVisible": "#signin-form" },
+        { "goto": "/account/?mode=signup" },
+        { "expectVisible": "#signup-form" }
+      ]
+    },
+    {
+      "name": "A missing page shows the 404 page with a way back",
+      "steps": [
+        { "goto": "/this-page-does-not-exist/", "expectStatus": 404 },
+        { "expectVisible": "a[href='/'], a[href='./'], a[href='/#shop']" }
+      ]
+    },
+    {
+      "name": "The sign-in form refuses an empty submit without calling the server",
+      "steps": [
+        { "goto": "/account/" },
+        { "click": "#signin-form button[type=submit]" },
+        { "expectUrlContains": "/account/" }
+      ]
+    }
+  ],
+
+  "gate": {
+    "$comment": "New issues at these levels stop a deploy. Issues already listed in qa/baseline.json are reported but don't block.",
+    "blockOn": ["Critical", "High"]
+  }
+}

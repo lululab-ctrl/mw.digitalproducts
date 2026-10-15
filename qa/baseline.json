@@ -1,0 +1,34 @@
+{
+  "$comment": "Serious issues that existed before the tests started. They're still reported, but don't stop a deploy. A reviewer decides what goes here; remove an entry once it's fixed.",
+  "updated": "2026-10-15",
+  "known": [
+    {
+      "id": "0a29026d07",
+      "severity": "High",
+      "title": "The page isn't set up for phones",
+      "what": "No viewport tag",
+      "where": "/presets/, /panel/, /field-guides/, /presets/he/"
+    },
+    {
+      "id": "ad31373b78",
+      "severity": "High",
+      "title": "Visitors can see unfinished text",
+      "what": "\"PLACEHOLDER: the after here is Matan's finished edit…\" under the RAW/final comparison",
+      "where": "/presets/, /panel/ (English)"
+    },
+    {
+      "id": "b608610639",
+      "severity": "High",
+      "title": "Visitors can see unfinished text",
+      "what": "Prices show $0.00 / ₪0.00",
+      "where": "/, /presets/, /panel/, /field-guides/ (English and Hebrew)"
+    },
+    {
+      "id": "d285a2fe97",
+      "severity": "High",
+      "title": "Something a visitor does doesn't work",
+      "what": "Step 2 (expectVisible #shop-grid .product-card) failed: locator.waitFor: Timeout 8000ms exceeded. · The page showed: \"All products All products Search products ",
+      "where": "The shop page lists the products, and a product opens its own page"
+    }
+  ]
+}
