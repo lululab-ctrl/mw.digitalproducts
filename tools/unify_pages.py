@@ -127,6 +127,10 @@ for path, lang in PAGES.items():
         s = re.sub(r"<title>[^<]*</title>", f"<title>{TITLES[path]}</title>", s, count=1)
     s = re.sub(r'<meta name="description"[^>]*>\n?', '', s)
     s = s.replace("</title>", f'</title>\n<meta name="description" content="{DESC[path.split("/")[0]]}">', 1)
+    # the page's own clean address (the Hebrew page's he.html and he/ copies both point to /<folder>/he/)
+    folder = path.split("/")[0]
+    s = re.sub(r'<link rel="canonical"[^>]*>\n?', '', s)
+    s = s.replace("</title>", f'</title>\n<link rel="canonical" href="https://shop.mw.photography/{folder}/{"he/" if lang == "he" else ""}">', 1)
     # set up for phones (the designs already have their phone layouts in @media rules)
     if 'name="viewport"' not in s:
         s = s.replace('<meta charset="utf-8">', '<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">', 1)
