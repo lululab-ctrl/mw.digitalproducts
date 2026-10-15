@@ -4,7 +4,7 @@ import lighthouse from "lighthouse";
 import { launch } from "chrome-launcher";
 import { chromium } from "playwright";
 
-export async function runPerformance(pages, { base, budget }) {
+export async function runPerformance(pages, { base, budget, local = false }) {
   const found = [];
   const scores = [];
   const chrome = await launch({ chromePath: chromium.executablePath(), chromeFlags: ["--headless=new", "--no-sandbox", "--disable-gpu"] });
@@ -23,11 +23,13 @@ export async function runPerformance(pages, { base, budget }) {
       const fcp = a["first-contentful-paint"]?.numericValue ?? 0;
       const weight = a["total-byte-weight"]?.numericValue ?? 0;
       // The biggest savings Lighthouse suggests, in plain words.
+      const saving = (x) => x.details?.overallSavingsMs ?? Math.max(x.metricSavings?.LCP ?? 0, x.metricSavings?.FCP ?? 0);
       const tips = Object.values(a)
-        .filter((x) => x.details?.type === "opportunity" && (x.details.overallSavingsMs ?? 0) >= 300)
-        .sort((x, y) => y.details.overallSavingsMs - x.details.overallSavingsMs)
+        .filter((x) => x.score !== null && x.score < 1 && saving(x) >= 300)
+        .filter((x) => !(local && /cache/i.test(x.id)))   // the local test server doesn't send the host's cache settings
+        .sort((x, y) => saving(y) - saving(x))
         .slice(0, 3)
-        .map((x) => `${x.title} (saves about ${(x.details.overallSavingsMs / 1000).toFixed(1)}s)`);
+        .map((x) => `${x.title} (about ${(saving(x) / 1000).toFixed(1)}s faster)`);
       scores.push({ page: p, score, lcp, cls, tbt, fcp, weight, tips });
       const where = { page: p, device: "Mid-range phone, 4G", browser: "chromium" };
       const tipText = tips.length ? ` Biggest wins: ${tips.join("; ")}.` : "";

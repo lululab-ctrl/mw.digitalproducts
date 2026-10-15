@@ -186,7 +186,7 @@ let perf = { scores: [] };
 if (!quick && !flag("--skip-perf")) {
   log(`Speed test on ${config.performancePages?.length ?? 0} pages…`);
   const { runPerformance } = await import("./lib/checks/performance.mjs");
-  perf = await runPerformance(config.performancePages ?? ["/"], { base, budget: config.performanceBudget ?? { score: 70, lcpMs: 2500, cls: 0.1, tbtMs: 300 } });
+  perf = await runPerformance(config.performancePages ?? ["/"], { base, budget: config.performanceBudget ?? { score: 70, lcpMs: 2500, cls: 0.1, tbtMs: 300 }, local: !!server });
   findings.push(...perf.found);
   if (offline || server) notes.push("Speed was measured on a local copy of the site. Real visitors also wait for the host, so live numbers are usually somewhat slower.");
 }
