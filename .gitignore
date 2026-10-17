@@ -9,3 +9,5 @@ supabase/.temp
 node_modules/
 .DS_Store
 __pycache__/
+# Temporary copy made by the site tests (webtester)
+qa-site/

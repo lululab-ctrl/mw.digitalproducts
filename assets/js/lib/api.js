@@ -2,7 +2,7 @@
 // Data layer: one Supabase client, catalogue queries, Edge Function calls and
 // formatting helpers. Pages import from here and never talk to Supabase directly.
 // ============================================================================
-import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+import { createClient } from "../vendor/supabase-js-2.118.0.js";
 import { CONFIG, FUNCTIONS_URL, IS_CONFIGURED } from "../config.js";
 
 export const supabase = IS_CONFIGURED
