@@ -1,9 +1,13 @@
 // ============================================================================
 // subscribe — free sampler / newsletter sign-up. Stores the address with its
 // consent, then Make.com adds it to the MailerLite group that sends the sampler.
-// Repeat sign-ups are harmless (upsert) and still re-send the sampler via Make.
+// Repeat sign-ups are harmless (upsert). The sampler is re-sent at most once a day per
+// address, and one IP can sign up 10 times an hour, so a script can't use up the Make.com
+// operations or send the sampler to strangers over and over.
 // ============================================================================
-import { admin, cors, EMAIL_RE, fail, json, notifyMake } from "../_shared/http.ts";
+import { admin, clientIp, cors, EMAIL_RE, fail, json, notifyMake, sha256Hex } from "../_shared/http.ts";
+
+const PER_IP_PER_HOUR = 10;
 
 const SOURCES = new Set(["free-sampler", "newsletter", "launch-waitlist"]);
 
@@ -19,6 +23,21 @@ Deno.serve(async (req) => {
   if (!EMAIL_RE.test(email)) return fail(req, "Please enter a valid email address.");
 
   const db = admin();
+  const salt = Deno.env.get("IP_HASH_SALT") ?? "";
+  const ip = clientIp(req);
+  const ipHash = ip ? await sha256Hex(salt + ip) : null;
+  const emailHash = await sha256Hex(salt + email);
+  const hourAgo = new Date(Date.now() - 3600 * 1000).toISOString();
+  const dayAgo = new Date(Date.now() - 24 * 3600 * 1000).toISOString();
+  if (ipHash) {
+    const { count } = await db.from("form_attempts").select("id", { count: "exact", head: true })
+      .eq("form", "subscribe").eq("ip_hash", ipHash).gte("created_at", hourAgo);
+    if ((count ?? 0) >= PER_IP_PER_HOUR) return fail(req, "Too many sign-ups from here. Please try again in an hour.", 429);
+  }
+  const { count: recent } = await db.from("form_attempts").select("id", { count: "exact", head: true })
+    .eq("form", "subscribe").eq("email_hash", emailHash).gte("created_at", dayAgo);
+  await db.from("form_attempts").insert({ form: "subscribe", ip_hash: ipHash, email_hash: emailHash });
+
   const { error } = await db.from("subscribers")
     .upsert({ email, source, consent: true }, { onConflict: "email", ignoreDuplicates: false });
   if (error) {
@@ -26,6 +45,7 @@ Deno.serve(async (req) => {
     return fail(req, "Couldn't sign you up just now. Please try again.", 500);
   }
 
-  await notifyMake("MAKE_SUBSCRIBE_WEBHOOK", { type: "subscribe", email, source });
+  // Already signed up in the last day: keep the answer the same, but don't send the sampler again.
+  if ((recent ?? 0) === 0) await notifyMake("MAKE_SUBSCRIBE_WEBHOOK", { type: "subscribe", email, source });
   return json(req, { ok: true });
 });

@@ -237,7 +237,16 @@ library.addEventListener("click", async (e) => {
 const params = new URLSearchParams(location.search);
 // Where to go after signing in (e.g. back to checkout). Same-site paths only.
 const nextRaw = params.get("next");
-const next = nextRaw && /^\/(?!\/)/.test(nextRaw) ? nextRaw : null;
+const next = safeNext(nextRaw);
+// Only addresses on this site. Resolving with URL() catches tricks like "/\\evil.com" or "/%09/evil.com",
+// which browsers treat as another website.
+function safeNext(raw) {
+  if (!raw || !raw.startsWith("/")) return null;
+  try {
+    const u = new URL(raw, location.origin);
+    return u.origin === location.origin ? u.pathname + u.search + u.hash : null;
+  } catch { return null; }
+}
 const resetting = params.has("reset");
 const T = (en, hb) => (he() ? hb : en);
 const MIN_PW = 8;
