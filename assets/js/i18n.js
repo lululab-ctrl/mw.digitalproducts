@@ -262,6 +262,8 @@ const HE = {
   "Guide": "מדריך",
   "Bundle": "חבילה",
   "Product": "מוצר",
+  "Product details": "פרטי המוצר",
+  "Product details · Editing tools from the field · MWP": "פרטי המוצר · כלי עריכה מהשטח · MWP",
   "More": "עוד",
   "Lightroom and Camera Raw looks for real field light": "מראות ללייטרום ול-Camera Raw לאור אמיתי בשטח",
   "Our photo editing plugin": "פלאגין העריכה שלנו",
@@ -327,7 +329,7 @@ const HE = {
   "Preparing…": "מכינים…",
 
   // support
-  "Help · MWP": "עזרה · MWP",
+  "Help with downloads, installing and refunds · MWP": "עזרה בהורדה, בהתקנה ובהחזרים · MWP",
   "Help with downloading, installing or using MWP products.": "עזרה בהורדה, בהתקנה או בשימוש במוצרי MWP.",
   "How can we help?": "איך אפשר לעזור?",
   "A person answers within one business day.": "אדם אמיתי עונה תוך יום עסקים אחד.",

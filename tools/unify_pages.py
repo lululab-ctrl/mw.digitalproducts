@@ -5,6 +5,7 @@ import re, sys, os
 sys.path.insert(0, os.path.dirname(__file__))
 from brand import gold, NAV_CSS, FONTS, BUNDLE_CSS
 from sales_he import hebrew
+from img_loading import prioritize
 
 PAGES = {
     "presets/index.html": "en", "presets/he.html": "he",
@@ -32,6 +33,7 @@ def navr(lang, btn=""):
 # Same header look as the home page. "html " prefix so it wins over the page styles the runtime moves into <head>.
 CSS = """<style id="mwp-unify">
 html .ba{direction:ltr}
+html .lrp .hd{color:#a8a8a8}
 """ + NAV_CSS + BUNDLE_CSS + """</style>"""
 
 SCRIPT = """<script src="../assets/js/lib/nav.js" defer></script>
@@ -46,6 +48,18 @@ WORDS = {
            (">Before and after<", ">From RAW to final<"), (">See before and after<", ">Compare RAW and final<"), (">See before and after →<", ">Compare RAW and final →<"), ("'BEFORE'", "'RAW'"), ("'AFTER'", "'FINAL · MWP PANEL'"), ("'AFTER · MWP PRESET'", "'FINAL · MWP PRESET'")],
     "he": [(">לפני<", ">RAW<"), (">אחרי · פריסט MWP<", ">סופי · פריסט MWP<"), (">אחרי<", ">סופי · MWP Panel<"),
            (">לפני ואחרי<", ">מ-RAW לתמונה הסופית<"), (">לראות לפני ואחרי ←<", ">מ-RAW לתמונה הסופית ←<")],
+}
+
+# Search descriptions (from each page's own copy). The Hebrew pages get them in Hebrew from EXACT in tools/sales_he.py.
+DESC = {
+    "presets": "50 Lightroom presets and 33 video LUTs built from the MWP edits of wildlife and landscapes. For Lightroom Classic, Lightroom, Lightroom Mobile and Camera Raw.",
+    "panel": "MWP Panel, a Photoshop plugin: the way we edit on our expeditions, built in as simple buttons. Pick the animal or the sky, pick an effect, set how strong.",
+    "field-guides": "MWP Field Guides: four visual guides with 137 short lessons on composition, colour, light and planning, each one a real photo from the field.",
+}
+
+# Page titles where the design's own title is too short for search results (English pages only).
+TITLES = {
+    "presets/index.html": "Lightroom presets for wildlife and landscapes · MWP Presets",
 }
 
 # Matan's placeholder note under the bundle cards is not shown on the site.
@@ -81,6 +95,16 @@ for path, lang in PAGES.items():
     # no arrows on the outlined buttons
     s = re.sub(r'(<a class="ghost"[^>]*>[^<]*?)\s*[→←]\s*<', r'\1<', s)
     s = BUNDLE_NOTE.sub("", s)
+    # Image addresses filled in by the runtime ({{cur.before}} …): keep them out of src, or the browser asks
+    # the server for the literal "{{cur.before}}" (a 404) before dc-lite.js renders the page.
+    s = re.sub(r'(<img\b[^>]*?)\ssrc="(\{\{[^"]*\}\})"', r'\1 data-dc-src="\2"', s)
+    # the page content (between the header and the footer) is the main landmark, for screen readers
+    if "<main" not in s:
+        nav = s.index("</nav>", s.index('<nav class="nav"')) + len("</nav>")
+        foot = s.index("<footer", nav)
+        s = s[:nav] + '\n<main id="main">' + s[nav:foot] + "</main>\n" + s[foot:]
+    # hero photo first, everything below the first screen only when it's needed
+    s = prioritize(s, '<section class="hero"', "hero-bg")
     slots = iter(PRICE_SLOTS[path.split("/")[0]])
     def slot(m):
         k = next(slots, None)
@@ -99,6 +123,17 @@ for path, lang in PAGES.items():
                if lang == "en" else
                '<script id="mwp-lang">try{localStorage.setItem("mwp_lang","he")}catch(e){}</script>')
     s = re.sub(r"(<head[^>]*>)", lambda m: m.group(1) + "\n" + LANG_JS, s, count=1)
+    if path in TITLES:
+        s = re.sub(r"<title>[^<]*</title>", f"<title>{TITLES[path]}</title>", s, count=1)
+    s = re.sub(r'<meta name="description"[^>]*>\n?', '', s)
+    s = s.replace("</title>", f'</title>\n<meta name="description" content="{DESC[path.split("/")[0]]}">', 1)
+    # the page's own clean address (the Hebrew page's he.html and he/ copies both point to /<folder>/he/)
+    folder = path.split("/")[0]
+    s = re.sub(r'<link rel="canonical"[^>]*>\n?', '', s)
+    s = s.replace("</title>", f'</title>\n<link rel="canonical" href="https://shop.mw.photography/{folder}/{"he/" if lang == "he" else ""}">', 1)
+    # set up for phones (the designs already have their phone layouts in @media rules)
+    if 'name="viewport"' not in s:
+        s = s.replace('<meta charset="utf-8">', '<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">', 1)
     if 'id="mwp-fonts"' not in s:
         s = s.replace("</head>", FONTS + "\n</head>", 1)
     s = re.sub(r'<style id="mwp-unify">.*?</style>\n?', '', s, flags=re.S)

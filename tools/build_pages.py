@@ -40,13 +40,13 @@ def head(title, desc, path, extra=""):
 
 HEADER = f"""<body>
 <a class="skip-link" href="#main">Skip to content</a>
-<div class="announce">
+<aside class="announce">
   <div class="container">
     <span>{ICON['download']}Instant download after payment</span>
     <span>{ICON['lock']}Secure card checkout</span>
     <span>{ICON['refresh']}Free updates to everything you buy</span>
   </div>
-</div>
+</aside>
 <header class="site-header">
   <div class="container">
     <a class="brand" href="/" aria-label="MWP, home">MWP</a>
@@ -64,7 +64,7 @@ HEADER = f"""<body>
   </div>
 </header>"""
 # Pages with nothing to buy (Read online) leave out the "Instant download after payment" bar.
-NO_ANNOUNCE_HEADER = re.sub(r'<div class="announce">.*?</div>\n</div>\n', "", HEADER, count=1, flags=re.S)
+NO_ANNOUNCE_HEADER = re.sub(r'<aside class="announce">.*?</aside>\n', "", HEADER, count=1, flags=re.S)
 
 
 FOOTER = f"""<footer class="site-footer">
@@ -75,7 +75,7 @@ FOOTER = f"""<footer class="site-footer">
         <p class="muted" style="max-width:34ch">Editing tools and guides from wildlife photographer Matan Wild.</p>
       </div>
       <div>
-        <h3>Shop</h3>
+        <h2>Shop</h2>
         <ul role="list">
           <li><a href="/shop/">All products</a></li>
           <li><a href="presets/">Presets</a></li>
@@ -85,7 +85,7 @@ FOOTER = f"""<footer class="site-footer">
         </ul>
       </div>
       <div>
-        <h3>Help</h3>
+        <h2>Help</h2>
         <ul role="list">
           <li><a href="/account/">My downloads</a></li>
           <li><a href="/support/">Contact support</a></li>
@@ -95,7 +95,7 @@ FOOTER = f"""<footer class="site-footer">
         </ul>
       </div>
       <div>
-        <h3>MWP</h3>
+        <h2>MWP</h2>
         <ul role="list">
           <li><a href="https://mw.photography" rel="noopener">Matan Wild</a></li>
           <li><a href="https://mw-phototours.com" rel="noopener">MW Photo Tours</a></li>
@@ -276,11 +276,12 @@ page("shop.html", "All products · MWP",
     </div>
   </section>""", "shop.js")
 
-page("product.html", "MWP",
+page("product.html", "Product details · Editing tools from the field · MWP",
  "A digital product by Matan Wild for Lightroom and Photoshop.",
  """  <div class="container"><nav class="crumbs" id="crumbs" aria-label="Breadcrumb"><a href="/shop/">Shop</a></nav></div>
   <section class="section--tight" style="padding-top:var(--s-5)">
     <div class="container" id="product-root" aria-live="polite">
+      <h1 class="visually-hidden">Product details</h1>
       <div class="product-layout" aria-hidden="true">
         <div class="skeleton" style="aspect-ratio:3/2"></div>
         <div class="skeleton" style="height:420px"></div>
@@ -440,7 +441,7 @@ html[lang=he] .rd-kick{letter-spacing:.04em}
 page("account.html", "My downloads · MWP",
  "Sign in with your email to download what you've bought.",
  """  <section class="acct-hero">
-    <img class="bg" src="assets/pages/img/5275cc7bcd4fb7560d8f7163592e3122.jpg" alt="">
+    <img class="bg" src="assets/pages/img/5275cc7bcd4fb7560d8f7163592e3122.jpg" srcset="assets/pages/img/5275cc7bcd4fb7560d8f7163592e3122-1200.webp 1200w, assets/pages/img/5275cc7bcd4fb7560d8f7163592e3122.jpg 2000w" sizes="100vw" fetchpriority="high" alt="">
     <div class="shade"></div>
     <div class="container container--text">
       <p class="acct-kick">Your library</p>
@@ -612,7 +613,7 @@ page("testers.html", "Testers · MWP",
   "@media (max-width:600px){#t-out.glass{padding:28px 20px}}"
   "</style>")
 
-page("support.html", "Help · MWP",
+page("support.html", "Help with downloads, installing and refunds · MWP",
  "Help with downloading, installing or using MWP products.",
  """  <section class="page-hero">
     <div class="container container--text stack">

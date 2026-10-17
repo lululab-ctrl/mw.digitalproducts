@@ -6,6 +6,15 @@ import html as html_lib
 from he_names import names
 
 EXACT = {
+    # page titles (TITLES in tools/unify_pages.py)
+    "Lightroom presets for wildlife and landscapes · MWP Presets": "פריסטים ללייטרום לצילומי חיות בר ונופים · הפריסטים של MWP",
+    # search descriptions (DESC in tools/unify_pages.py)
+    "50 Lightroom presets and 33 video LUTs built from the MWP edits of wildlife and landscapes. For Lightroom Classic, Lightroom, Lightroom Mobile and Camera Raw.":
+        "50 פריסטים ללייטרום ו־33 קובצי LUT לווידאו, שנבנו מתוך העריכות של MWP לצילומי חיות בר ונופים. ללייטרום קלאסיק, ללייטרום, ללייטרום מובייל ולקאמרה ראו.",
+    "MWP Panel, a Photoshop plugin: the way we edit on our expeditions, built in as simple buttons. Pick the animal or the sky, pick an effect, set how strong.":
+        "הפאנל של MWP, פלאגין לפוטושופ: הדרך שבה אנחנו עורכים במסעות שלנו, בכפתורים פשוטים. בוחרים את החיה או את השמיים, בוחרים אפקט וקובעים עוצמה.",
+    "MWP Field Guides: four visual guides with 137 short lessons on composition, colour, light and planning, each one a real photo from the field.":
+        "מדריכי השטח של MWP: ארבעה מדריכים חזותיים עם 137 שיעורים קצרים על קומפוזיציה, צבע, אור ותכנון. כל שיעור הוא צילום אמיתי מהשטח.",
     # product labels and mockups
     "PRESETS": "פריסטים", "לייטרום PRESETS": "פריסטים ללייטרום", "FIELD GUIDES": "מדריכי שטח", "פוטושופ PLUGIN": "פלאגין לפוטושופ",
     "Presets": "פריסטים", "Panel": "פאנל", "Field Guides": "מדריכי שטח",

@@ -339,7 +339,7 @@ main { flex: 1; }
 /* ---------- Footer ---------- */
 .site-footer { border-top: 1px solid var(--c-line); padding-block: var(--s-8) var(--s-6); margin-top: var(--s-9); background: var(--c-surface); }
 .site-footer__top { display: grid; grid-template-columns: 1.4fr repeat(3, 1fr); gap: var(--s-6); }
-.site-footer h3 { font-size: var(--fs-sm); font-weight: var(--fw-semibold); margin-bottom: var(--s-3); }
+.site-footer h2 { font-size: var(--fs-sm); font-weight: var(--fw-semibold); margin-bottom: var(--s-3); }
 .site-footer ul { list-style: none; padding: 0; display: grid; gap: var(--s-2); }
 .site-footer a { text-decoration: none; color: var(--c-ink-2); font-size: var(--fs-sm); }
 .site-footer a:hover { color: var(--c-ink); text-decoration: underline; }

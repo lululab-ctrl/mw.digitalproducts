@@ -87,7 +87,8 @@
         const whole = WHOLE.exec(a.value);
         const v = whole ? lookup(whole[1], scope) : interp(a.value, scope);
         if (v === false || v == null) continue;
-        el.setAttribute(name, v === true ? "" : String(v));
+        // data-dc-src="{{…}}" (see tools/unify_pages.py) becomes the real src once the value is known
+        el.setAttribute(name === "data-dc-src" ? "src" : name, v === true ? "" : String(v));
       }
       if (tag === "template") el.innerHTML = node.innerHTML;
       else build(node, scope, el);
